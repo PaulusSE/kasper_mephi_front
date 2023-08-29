@@ -1,0 +1,97 @@
+:root {
+  --color-white: FFFFFF;
+  --color-grey: A3A1A1;
+  --color-blue: 0055BB;
+  --color_white2: F3F5F6;
+}
+
+.largeLogo {
+  margin-top: 10rem;
+  text-align: center;
+  width: 300px;
+  height: 300px;
+}
+
+.textMainPage {
+  text-align: center;
+  font-size: x-large;
+  font-family: "Raleway", sans-serif;
+  color: #a3a1a1;
+  font-weight: 600;
+}
+
+.text {
+  font-family: "Raleway", sans-serif;
+  color: #7c7f86;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.loggining {
+  font-size: 25px !important;
+  height: 70px !important;
+  width: 140px !important;
+  background-color: #0055bb !important;
+  font-weight: 300 !important;
+  border-radius: 0.7em !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+
+
+.mainPage {
+  width: 40%;
+  max-width: ;
+  height: 80%;
+  background: rgba(255, 255, 255, 1);
+  opacity: 1;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+  margin: auto auto 5%;
+}
+
+div input {
+  border-width: 0.15em !important;
+  height: 60px !important;
+  border-radius: 0.7em !important;
+  width: 100% !important;
+}
+
+.inputBlocks {
+  margin:auto !important;
+  width:85% !important;
+}
+
+.btnBlock {
+  padding:3em !important;
+  padding-bottom:2.5em !important;
+}
+
+#img {
+  width: 350px;
+  height: 350px;
+  text-align: center
+}
+
+.descriptionBlock {
+  margin-bottom: 3rem !important;
+  width: 85% !important;
+}
+
+.authorization {
+  margin:auto !important;
+  width:85% !important;
+}
+
+.wrongPassword {
+  color: red;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 2%;
+}
