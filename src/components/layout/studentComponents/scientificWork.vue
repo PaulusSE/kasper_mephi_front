@@ -326,6 +326,7 @@ export default {
           this.generalArrayOfArticles[i] = Object.assign({}, this.generalArrayOfArticlesCopy[i]);
         }
       }
+      
     },
 
     buttonSmallTableAdd(n){
