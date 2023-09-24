@@ -245,6 +245,7 @@
 import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 import tabOfArticles from "@/components/layout/studentComponents/tabOfArticles.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 export default {
   name: "scientificWork",
   components: {
@@ -373,7 +374,7 @@ export default {
     }
 
   },
-  beforeMount() {
+  async beforeMount() {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }

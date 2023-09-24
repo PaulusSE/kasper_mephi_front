@@ -91,7 +91,8 @@ export default {
       if (this.login === this.currentLogin && this.password === this.currentPassword){
           this.status = true;
           this.type = 'student';
-        this.$router.push('/users')
+        localStorage.setItem("access_token","I'm token")
+        this.$router.push('/')
       }
       else {
         this.showWrongAnswerString = true;
@@ -105,13 +106,18 @@ export default {
   },
     async beforeMount() {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+        const response = await axios.get('http://localhost:8081/students/info/1860261c-5deb-44d6-80c8-bee65dbb20be')
         this.data = await response.data
+        console.log(this.data.email)
+        console.log(this.data.enrollment_order)
+        console.log(response.status)
       }
       catch (e) {
         console.log(e)
       }
-}
+},
+  mounted() {
+  }
 }
 
 
