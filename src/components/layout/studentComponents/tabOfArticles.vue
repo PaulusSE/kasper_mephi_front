@@ -93,11 +93,11 @@
 
           <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.state" readonly></textarea>
+              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type" readonly></textarea>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.state"></textarea>
+              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type"></textarea>
             </div>
 
           </div>
@@ -114,11 +114,11 @@
 
           <div class="rightLine textMiniTable" style="width: 25.07%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.comeOutData" readonly></textarea>
+              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data" readonly></textarea>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.comeOutData"></textarea>
+              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data"></textarea>
             </div>
           </div>
 
@@ -203,11 +203,11 @@
 
           <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.state" readonly></textarea>
+              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.state"></textarea>
+              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type"></textarea>
             </div>
 
           </div>
@@ -224,11 +224,11 @@
 
           <div class="rightLine textMiniTable" style="width: 24.07%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.comeOutData" readonly></textarea>
+              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.comeOutData"></textarea>
+              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data"></textarea>
             </div>
           </div>
 
@@ -311,6 +311,9 @@ export default {
     deleteArticle(myIndex){
       this.$emit('deleteArticle', myIndex)
     }
+  },
+
+  beforeMount() {
   }
 }
 </script>

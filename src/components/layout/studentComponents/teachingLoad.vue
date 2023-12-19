@@ -399,7 +399,7 @@ export default {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
-  }
+  },
 }
 </script>
 

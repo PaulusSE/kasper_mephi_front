@@ -267,43 +267,53 @@ export default {
       isTableEditing: false,
       arrayOfArticlesCopy: [],
       arrayOfArticles: [
-          [{
-            name:"Статься «Суслики и их виды»",
-            state:"UBC",
-            impact: 0.67,
-            comeOutData: "В мире детей, №5(29), 2012. c26-28",
-            volume: 3,
-            co_authors: "Ванко А.А, Буйко В.В",
-          },],
-          [
-            {
-              name:"123Статься «Суслики и их виды» 123Статься «Суслики и их виды» 123Статься «Суслики и их виды»",
-              state:"UBC",
-              impact: 0.67,
-              comeOutData: "В мире детей, №5(29), 2012. c26-28",
-              volume: 3,
-              co_authors: "Ванко А.А, Буйко В.В",
-            },
-            {
-              name:"Бла бла бла 128",
-              state:"вы",
-              impact: 0.2,
-              comeOutData: "с23",
-              volume: 15,
-              co_authors: "БуБУ",
-            }
-          ],
-          [
-        {
-          name:"Статься «Суслики и их виды»",
-          state:"ВАК",
-          impact: 0.35,
-          comeOutData: "В мире животных, №1(29), 2012. c26-28",
-          volume: 3,
-          co_authors: "Петров А.А, Сидоров В.В",
-        },],
-          [],
-      ]
+        //   [{
+        //     name:"Статься «Суслики и их виды»",
+        //     state:"UBC",
+        //     impact: 0.67,
+        //     comeOutData: "В мире детей, №5(29), 2012. c26-28",
+        //     volume: 3,
+        //     co_authors: "Ванко А.А, Буйко В.В",
+        //     semestr : 1,
+        //   },],
+        //   [
+        //     {
+        //       name:"123Статься «Суслики и их виды» 123Статься «Суслики и их виды» 123Статься «Суслики и их виды»",
+        //       state:"UBC",
+        //       impact: 0.67,
+        //       comeOutData: "В мире детей, №5(29), 2012. c26-28",
+        //       volume: 3,
+        //       co_authors: "Ванко А.А, Буйко В.В",
+        //       semestr : 2,
+        //     },
+        //     {
+        //       name:"Бла бла бла 128",
+        //       state:"вы",
+        //       impact: 0.2,
+        //       comeOutData: "с23",
+        //       volume: 15,
+        //       co_authors: "БуБУ",
+        //       semestr : 2,
+        //     }
+        //   ],
+        //   [
+        // {
+        //   name:"Статься «Суслики и их виды»",
+        //   state:"ВАК",
+        //   impact: 0.35,
+        //   comeOutData: "В мире животных, №1(29), 2012. c26-28",
+        //   volume: 3,
+        //   co_authors: "Петров А.А, Сидоров В.В",
+        //   semestr : 3,
+        // },],
+        //   [],
+        //
+        //   [],
+        //   [],
+        //   [],
+        //   [],
+      ],
+      arrayDeleteWorkId : []
     }
   },
 
@@ -327,17 +337,18 @@ export default {
           this.generalArrayOfArticles[i] = Object.assign({}, this.generalArrayOfArticlesCopy[i]);
         }
       }
-      
+
     },
 
     buttonSmallTableAdd(n){
       let newArticle = {
         name: '',
-        state: '',
+        work_type: '',
         impact: '',
-        comeOutData: '',
-        volume: '',
-        co_authors: ''
+        output_data: '',
+        volume: null,
+        co_authors: '',
+        semester : n + 1,
       }
       this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
     },
@@ -350,11 +361,67 @@ export default {
 
 
     },
-    saveArticles(){
-      if (this.arrayOfArticles !== this.arrayOfArticlesCopy) {
-        this.makeCopy()
-        //saving
+
+    async saveArticles(){
+
+      if (this.arrayOfArticles.toString() === this.arrayOfArticlesCopy.toString()) {
+        return
       }
+
+      this.makeCopy()
+      var saveData = new Array()
+
+      for (var i = 0; i < this.arrayOfArticles.length; i++){
+        for (var j = 0; j < this.arrayOfArticles[i].length; j++){
+          saveData.push(
+              {
+                name: this.arrayOfArticles[i][j].name,
+                work_type: this.arrayOfArticles[i][j].work_type,
+                impact: parseFloat(this.arrayOfArticles[i][j].impact),
+                output_data: this.arrayOfArticles[i][j].output_data,
+                volume: parseInt(this.arrayOfArticles[i][j].volume),
+                co_authors: this.arrayOfArticles[i][j].co_authors,
+                work_id: this.arrayOfArticles[i][j].work_id,
+                semester : this.arrayOfArticles[i][j].semester
+              }
+          )
+        }
+      }
+
+      try {
+        const response = await axios.post("http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002",
+            {"works" : saveData}
+        )
+        
+
+        if (this.arrayDeleteWorkId.length === 0){
+          this.data = response.data;
+          this.fillArrayOfArticles(this.data)
+          return
+        }
+
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+
+      try {
+        const response = await axios.delete("http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002",
+            {data : {
+          "ids" : this.arrayDeleteWorkId
+          }
+            }
+        )
+        this.data = response.data;
+        this.fillArrayOfArticles(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      this.arrayDeleteWorkId = []
 
     },
     makeCopy(){
@@ -365,12 +432,51 @@ export default {
     },
     deleteArticle(index,n){
 
+
       var tempData = this.arrayOfArticles[index]
+      this.arrayDeleteWorkId.push(tempData[n].work_id)
       tempData.splice(n,1)
+
+
+
     },
     cancelChangeHighTable() {
       this.makeCopyGeneralArrays(0)
       this.isTableEditing = !this.isTableEditing;
+    },
+    fillArrayOfArticles(data){
+      this.arrayOfArticles.length = 0
+      this.arrayOfArticles = Array(4)
+      for (var i = 0; i < this.arrayOfArticles.length; i++){
+        this.arrayOfArticles[i] = new Array()
+      }
+
+      for (var i = 0; i < this.data.length; i++){
+        if (data[i].semester === 1) {
+          this.arrayOfArticles[0].push(this.data[i])
+        }
+        if (data[i].semester === 2) {
+          this.arrayOfArticles[1].push(this.data[i])
+        }
+        if (data[i].semester === 3) {
+          this.arrayOfArticles[2].push(this.data[i])
+        }
+        if (data[i].semester === 4) {
+          this.arrayOfArticles[3].push(this.data[i])
+        }
+      }
+    },
+
+    async loadScientificWorks() {
+      try {
+        const response = await axios.get('http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002')
+        console.log(response)
+        this.data = await response.data;
+        this.fillArrayOfArticles(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
     }
 
   },
@@ -378,6 +484,9 @@ export default {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.loadScientificWorks()
+
+
   }
 }
 

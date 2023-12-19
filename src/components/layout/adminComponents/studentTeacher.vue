@@ -192,7 +192,7 @@ export default {
   padding: 0 1% 1%;
 }
 .myBox {
-  width: 80%;
+  width: 90%;
   margin: auto;
 }
 
@@ -209,7 +209,7 @@ export default {
 .mainText{
   color:#7C7F86;
   font-weight: 300;
-  font-size:23px !important;
+  font-size:18px !important;
   text-align: center;
 }
 

@@ -28,7 +28,7 @@
       <div class="roundBlock p-0 pb-1" v-if="arrayOfStudents.length !== 0">
 
           <div style="margin-left: 0" class="mainText text-start d-flex justify-content-between" :class="{underline:index !== arrayOfStudents.length - 1}"  v-for="(student,index) in arrayOfStudents">
-            <p class="ps-4 pt-2" style="padding-bottom: 0.75rem">{{index + 1}}. {{student.fullName}}</p>
+            <router-link class="ps-4 pt-2" style="padding-bottom: 0.75rem; text-decoration: none; color:#005faf " to="/user">{{index + 1}}. {{student.fullName}}</router-link>
             <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteStudent(index)" :disabled="stateOfStudents">
               <img class="trashLogo" src="static/figures/trash.png" alt="trashLogo">
             </button>
@@ -56,7 +56,7 @@
 
       <div class="roundBlock p-0 pb-1"  v-if="arrayOfTeachers.length !== 0">
         <div style="margin-left: 0" class="mainText text-start d-flex justify-content-between" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
-          <p class="ps-4 pt-2" style="padding-bottom: 0.75rem">{{index + 1}}. {{teacher.fullName}}</p>
+          <router-link class="ps-4 pt-2" style="padding-bottom: 0.75rem; text-decoration: none; color: #005faf " to="/user1">{{index + 1}}. {{teacher.fullName}}</router-link>
           <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteTeacher(index)" :disabled="stateOfTeachers">
             <img class="trashLogo" src="static/figures/trash.png" alt="trashLogo">
           </button>

@@ -15,7 +15,7 @@
       </div>
 
       <div v-else style="margin-top: 1%">
-        <router-link style="text-decoration:none" to='user1'>
+        <router-link style="text-decoration:none" to='user'>
           <p class="textOfHeaders">{{ fullName}} {{group}}</p>
         </router-link>
       </div>

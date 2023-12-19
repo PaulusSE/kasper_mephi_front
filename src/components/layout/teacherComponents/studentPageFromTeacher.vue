@@ -84,27 +84,27 @@
 
 
 
-        <div class="d-flex" :class="{underline:index !== 10}" v-for="(element,index) in array">
+        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,key) in array">
           <div class="col-6 textTable rightLine">
-            {{element.name}}
+            {{key}}
           </div>
           <div class="col-1 mainText myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=element.id11 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id1 disabled>
           </div>
           <div class="col-1 mainText myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=element.id12 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id2 disabled>
           </div>
           <div class="col-1 mainText myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=element.id13 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id3 disabled>
           </div>
           <div class="col-1 mainText myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=element.id14 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id4 disabled>
           </div>
           <div class="col-1 mainText myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=element.id15 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id5 disabled>
           </div>
           <div class="col-1 mainText myInput">
-            <input type="checkbox" class="myCheckBox" v-model=element.id16 disabled>
+            <input type="checkbox" class="myCheckBox" v-model=value.id6 disabled>
           </div>
 
         </div>
@@ -112,51 +112,12 @@
 
     </div>
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between" style="height:4em">
-        <nav class="checkboxBlock">
-          <p class="mainText">Файлы</p>
-        </nav>
-        <nav class="checkboxBlock justify-content-start col-3">
+    <student-page-from-teacher-status-tab v-for="(files, index) in arrayWithLinksToFiles"
+                                          :id = index
+                                          :files = files
+                                          :state-of-work = stateOfWork
 
-          <div class="mySelectedField2 gap-3 d-flex">
-            <p class="textResult" style="font-weight: 400;">Статус</p>
-            <select class="form-select" id="inputGroupSelect02" v-model="stateOfWork" :class="{textResult1: stateOfWork === 'Проверено', textResult2: stateOfWork === 'На доработку', textResult3: stateOfWork === 'Не сдано'}">
-
-              <option  class="textResult">Выбрать статус</option>
-              <option  class="textResult1">Проверено</option>
-              <option  class="textResult2">На доработку</option>
-              <option  class="textResult3">Не сдано</option>
-            </select>
-
-          </div>
-
-        </nav>
-
-      </div>
-
-      <div class="roundBlock" style="height: 5em">
-        <ul>
-          <p style="font-family: 'Raleway', 'sans-serif';">Титульный лист</p>
-        </ul>
-        <ul class="selectedFileMessage">
-          Файлы не выбраны:
-        </ul>
-      </div>
-
-      <div class="roundBlock" style="height: 5em">
-        <ul>
-          <p>Титульный лист</p>
-        </ul>
-        <ul class="selectedFileMessage" v-if="filesFinish.length === 0">
-          Файлы не выбраны:
-        </ul>
-        <ul class="selectedFileMessage" v-else v-for="file in filesOrder">
-          {{ file.name }} : {{ file.type }}
-        </ul>
-      </div>
-
-    </div>
+    ></student-page-from-teacher-status-tab>
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
@@ -189,119 +150,139 @@
 <script>
 import header from "@/components/layout/header.vue";
 import store from "@/store/index.js";
+import studentPageFromTeacherStatusTab from "@/components/layout/teacherComponents/studentPageFromTeacherStatusTab.vue";
 export default {
   name: "studentPageFromTeacher",
   components : {
-    "pageHeader" : header
+    "pageHeader" : header,
+    'studentPageFromTeacherStatusTab' : studentPageFromTeacherStatusTab
+
   },
   data(){
     return {
       filesFinish : [],
       editingReview : false,
-      array: [
+      arrayWithLinksToFiles : [
         {
-          name: "Введение",
-          id11:true,
-          id12:false,
-          id13:false,
-          id14:true,
-          id15:false,
-          id16:false
+          TitleList : "/link1",
+          ExplanationaryNote : '/link2'
         },
         {
-          name: "Основная часть",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:true,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Глава 1",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:true,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Глава 2",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:true,
-          id16:false
-        },
-        {
-          name: "Глава 3",
-          id11:false,
-          id12:true,
-          id13:false,
-          id14:true,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Глава 4",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:true,
-          id16:false
-        },
-        {
-          name: "Глава 5 (при необоходимости)",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Глава 6 (при необоходимости)",
-          id11:false,
-          id12:true,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Заключение",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Список литературы",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:true,
-          id15:false,
-          id16:false
-        },
-        {
-          name: "Автореферат",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:false,
-          id16:true
+          TitleList : '',
+          ExplanationaryNote : ''
         },
       ],
+      array: {
+
+        "Введение": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+        "Основная часть": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Глава 1": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: true,
+          id5: false,
+          id6: false
+        },
+
+
+        "Глава 2": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Глава 3": {
+          id1: false,
+          id2: false,
+          id3: true,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Глава 4": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Глава 5 (при необоходимости)": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+        "Глава 6 (при необоходимости)": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Заключение": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        }
+        ,
+
+        "Список литературы": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+
+        "Автореферат": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        },
+
+      },
       stateOfWork: '',
-      stateOfPart1: '',
-      stateOfPart2: '',
       textOfReview: '',
       theme : "Разработка клиентской части системы деятельности аспирантов",
       teacherFullName: "Тихомирова Анна Николаевна",
@@ -316,7 +297,7 @@ export default {
     }
   },
   beforeMount() {
-    if (store.getters.getType !== "teacher"){
+    if (store.getters.getType === "student"){
       this.$router.push('/wrongAccess')
     }
   }
@@ -358,32 +339,14 @@ export default {
   height: 10rem;
 }
 
-.textResult1 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#6BDB6B;
-}
 
-.textResult2 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#FFC009
-}
-
-.textResult3 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#FF3333;
-}
 
 
 .myCheckBox{
-  zoom: 2;
+  zoom: 0.5;
   accent-color: white;
   background-color: green;
+
 
 
 }

@@ -59,6 +59,12 @@ export default {
       this.stateOfAdminPage = index
     },
 
+    },
+  async beforeMount() {
+
+    const stateOfLogining = await store.dispatch("checkIfLogined")
+    if (!stateOfLogining)
+      this.$router.push('/auth')
     }
 
 }

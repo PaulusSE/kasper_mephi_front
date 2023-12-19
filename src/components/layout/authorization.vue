@@ -1,5 +1,3 @@
-
-
 <template>
   <link href="../../../static/css/authorization.css" rel="stylesheet">
   <link href="../../../static/css/bootstap.css" rel="stylesheet">
@@ -46,6 +44,10 @@
           <div v-show="showWrongAnswerString" class = "wrongPassword">Неверный пароль</div>
         </transition>
 
+        <transition name="slide-fade">
+          <div v-show="showEmptyfieldError" class = "wrongPassword">Поля не должны быть пустыми</div>
+        </transition>
+
       </div>
     </div>
 
@@ -71,6 +73,7 @@
 
 
 import axios from "axios";
+import store from "@/store/index.js";
 
 export default {
 
@@ -80,6 +83,7 @@ export default {
       password: '',
       status: false,
       showWrongAnswerString: false,
+      showEmptyfieldError : false,
       currentLogin: '123',
       currentPassword: '123',
       type: '',
@@ -87,34 +91,60 @@ export default {
     }
   },
   methods: {
-    authorizate(){
-      if (this.login === this.currentLogin && this.password === this.currentPassword){
-          this.status = true;
-          this.type = 'student';
-        localStorage.setItem("access_token","I'm token")
-        this.$router.push('/')
+    async authorizate(){
+
+      if (this.login.length === 0 || this.password.length === 0){
+        this.showEmptyfieldError = true
+        return
       }
-      else {
+
+      try {
+        const response = await axios.post("http://localhost:8081/authorize/",
+            {
+              login : this.login,
+              password : this.password
+                }
+        )
+
+        if (response.status === 200){
+          this.data = await response.data
+          localStorage.setItem("access_token", this.data.access_token)
+          this.$store.dispatch("updateUserType", this.data.user_type)
+          this.$store.dispatch("updateUserId", this.data.user_id)
+          this.$router.push('/')
+        }
+
+      }
+      catch (e) {
         this.showWrongAnswerString = true;
       }
     },
+
+
     inputEvent(){
       if (this.showWrongAnswerString === true){
         this.showWrongAnswerString = false
       }
+
+      if (this.showEmptyfieldError === true){
+        this.showEmptyfieldError = false
+      }
+
+
     },
   },
     async beforeMount() {
-      try {
-        const response = await axios.get('http://localhost:8081/students/info/1860261c-5deb-44d6-80c8-bee65dbb20be')
-        this.data = await response.data
-        console.log(this.data.email)
-        console.log(this.data.enrollment_order)
-        console.log(response.status)
-      }
-      catch (e) {
-        console.log(e)
-      }
+      // try {
+      //   const response = await axios.get('http://localhost:8081/students/info/1860261c-5deb-44d6-80c8-bee65dbb20be')
+      //   this.data = await response.data
+      //   console.log(this.data.email)
+      //   console.log(response)
+      // }
+      // catch (e) {
+      //   console.log(e)
+      // }
+      localStorage.setItem("access_token", 123)
+
 },
   mounted() {
   }

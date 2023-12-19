@@ -45,21 +45,21 @@
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav style="width: 100%;">
           <label class="text">ФИО преподователя</label>
-          <input type="text" class="textInput" :disabled="!editingInfo"  v-model="teacherFullName">
+          <input type="text" class="textInput" disabled  v-model="teacherFullName">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav style="width: 100%;">
           <label class="text">Номер приказа об утверждении</label>
-          <input type="text" class="textInput" :disabled="!editingInfo"  v-model="numberOfOrderOfStatement">
+          <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav style="width: 100%;">
           <label class="text">Дата приказа об утверждении</label>
-          <input type="text" class="textInput" :disabled="!editingInfo" v-model="dateOfOrderOfStatement">
+          <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
         </nav>
       </div>
 
@@ -114,25 +114,25 @@
 
       <div class="d-flex" :class="{underline:index !== 10}" v-for="(element,index) in array">
         <div class="col-6 textTable rightLine">
-          {{element.name}}
+          {{index}}
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id11 :disabled="!(actualSemestr === 1) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id1 :disabled="!(actualSemestr === 1) || !editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id12 :disabled="!(actualSemestr === 2) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id2 :disabled="!(actualSemestr === 2) || !editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id13 :disabled="!(actualSemestr === 3) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id3 :disabled="!(actualSemestr === 3) || !editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id14 :disabled="!(actualSemestr === 4) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id4 :disabled="!(actualSemestr === 4) || !editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id15 :disabled="!(actualSemestr === 5) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id5 :disabled="!(actualSemestr === 5) || !editingCheckbox">
         </div>
         <div class="col-1 mainText myInput">
-          <input type="checkbox" class="myCheckBox" v-model=element.id16 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+          <input type="checkbox" class="myCheckBox" v-model=element.id6 :disabled="!(actualSemestr === 6) || !editingCheckbox">
         </div>
 
       </div>
@@ -141,93 +141,20 @@
     </div>
 
     <div class="roundBlock">
-      <div class="d-flex justify-content-between" style="height:4em">
+
+      <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Файлы</p>
+          <p class="mainText">Отчетные файлы</p>
         </nav>
-        <nav class="checkboxBlock">
-          <p class="mainText" style="font-size: 20px; display: inline">Статус: </p><p style="display: inline" class="stateOfFiles">На доработку</p>
-        </nav>
-
       </div>
 
-
-
-      <div class="roundBlock m-auto mt-4">
-
-        <div class="ms-3 mt-2">
-          <p class="loadText">Титульный лист:</p>
-        </div>
-
-        <div v-if="titlePage.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
-        </div>
-
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ titlePage.name }} загружен</p>
-        </div>
-
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteTitlePage">
-              <img v-if="titlePage.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="static/figures/trashActive.png" alt="trashFilesLogo">
-            </button>
-          </div>
-
-          <div class="image-upload">
-            <label for="file-input1">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input1" type="file" @input="inputTitlePage"/>
-          </div>
-        </div>
-      </div>
-
-
-
-      <div class="roundBlock m-auto mt-4">
-
-        <div class="ms-3 mt-2">
-          <p class="loadText">Пояснительная записка:</p>
-        </div>
-
-        <div v-if="explanatoryNote.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
-        </div>
-
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ explanatoryNote.name }} загружен</p>
-        </div>
-
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteExplanatoryNote">
-              <img v-if="explanatoryNote.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="static/figures/trashActive.png" alt="trashFilesLogo">
-            </button>
-          </div>
-
-          <div class="image-upload">
-            <label for="file-input2">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input2" type="file" @input="inputExplanatoryFile"/>
-          </div>
-        </div>
-      </div>
-
-      <div style="text-align: right;">
-        <button class="sendFilesBtn" @click="sendFiles" :disabled="!(titlePage.length !==0 || explanatoryNote.length !==0)">
-          <div class="d-flex justify-content-around">
-            <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
-            <p style="font-size: 16px">
-              Отправить
-            </p>
-          </div>
-        </button>
-
-      </div>
+      <dissertation-tab v-for="(files,index) in arrayWithLinksToFiles"
+                        :id=index
+                        :job-status = statusOfJob[jobStatus]
+                        :files = files
+                        :state-of-sending = this.stateOfSending
+                        @makeNotification="makeNotification()"
+      ></dissertation-tab>
 
     </div>
 
@@ -262,15 +189,17 @@ import sendingFilesNotification
   from "@/components/layout/notifications/studentNotifications/sendingFilesNotification.vue";
 import SendingFilesNotification
   from "@/components/layout/notifications/studentNotifications/sendingFilesNotification.vue";
+import dissertationTab from "@/components/layout/studentComponents/dissertationTab.vue";
 import store from "@/store/index.js";
-
+import axios from "axios";
 
 
 export default {
   name: "dissertation",
-  components: {SendingFilesNotification, headerOfStudent, PageNotFound},
+  components: {SendingFilesNotification, headerOfStudent, PageNotFound, dissertationTab},
   "headerOfStudent":headerOfStudent,
   "notification":sendingFilesNotification,
+  "dissertationTab" : dissertationTab,
   props: ["stateOfStudentPage", "educationTime"],
 
   data(){
@@ -279,117 +208,143 @@ export default {
       explanatoryNote: [],
       editingInfo : false,
       editingCheckbox : false,
-      theme : "Бу",
-      teacherFullName : "Бубу",
-      numberOfOrderOfStatement : 123,
-      dateOfOrderOfStatement : "12.05.2021",
+      theme : "",
+      teacherFullName : "",
+      numberOfOrderOfStatement : '',
+      dateOfOrderOfStatement : "",
       actualSemestr: 3,
-      jobStatus:1,
+      jobStatus:'',
       stateOfSending:false,
-      resultOfsending:false,
+      resultOfsending:true,
+      arrayWithLinksToFiles : [
+        {
+          TitleList : "",
+          ExplanationaryNote : ''
+        },
+        {
+          TitleList : '',
+          ExplanationaryNote : ''
+        },
+      ],
       feedback: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
           "\n ",
-      array: [
-        {
-          name: "Введение",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+      array: {
+
+        "Введение": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Основная часть",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+        "Основная часть": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 1",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Глава 1": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: true,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 2",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Глава 2": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 3",
-          id11:false,
-          id12:false,
-          id13:true,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Глава 3": {
+          id1: false,
+          id2: false,
+          id3: true,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 4",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Глава 4": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 5 (при необоходимости)",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Глава 5 (при необоходимости)": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Глава 6 (при необоходимости)",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+        "Глава 6 (при необоходимости)": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Заключение",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Заключение": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
+        }
+        ,
+
+        "Список литературы": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Список литературы",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
+
+
+        "Автореферат": {
+          id1: false,
+          id2: false,
+          id3: false,
+          id4: false,
+          id5: false,
+          id6: false
         },
-        {
-          name: "Автореферат",
-          id11:false,
-          id12:false,
-          id13:false,
-          id14:false,
-          id15:false,
-          id16:false
-        },
-      ]
+
+      },
+      progressMap : new Map(),
+      statusOfJob : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Сдано',
+        'empty': ''
+      }
     }
 
   }
@@ -399,8 +354,63 @@ export default {
     editInformation() {
       this.editingInfo = !this.editingInfo
     },
-    editCheckBox() {
+    async editCheckBox() {
+
+      //todo отправлять токен в хедере, не отправлять student_id, client_id
+
       this.editingCheckbox = !this.editingCheckbox;
+      var client_id = '7becb1de-7349-11ee-b962-0242ac120002'
+      var student_id = '0c23146e-734a-11ee-b962-0242ac120002'
+      var semestr_id = 10
+
+      var requestPlan = {
+        "Введение" : 'intro',
+        "Основная часть" : 'main',
+        "Глава 1" : 'ch. 1',
+        "Глава 2" : 'ch. 2',
+        "Глава 3" : 'ch. 3',
+        "Глава 4" : 'ch. 4',
+        "Глава 5 (при необоходимости)" : 'ch. 5',
+        "Глава 6 (при необоходимости)" : 'ch. 6',
+        "Заключение" : 'end',
+        "Список литературы" : 'literature',
+        "Автореферат" : 'abstract',
+      }
+
+      const keys = new Map(Object.entries(requestPlan));
+
+      var data = []
+
+      for (var [key, value] of keys) {
+        data.push({
+          clientID : client_id,
+          studentID : student_id,
+          first : this.array[key].id1,
+          second : this.array[key].id2,
+          third : this.array[key].id3,
+          forth : this.array[key].id4,
+          fifth : this.array[key].id5,
+          sixth : this.array[key].id6,
+          progressName : value,
+          semesterProgressID : semestr_id
+        })
+        semestr_id = semestr_id + 1
+      }
+
+      try {
+        const response = await axios.post("http://localhost:8080/students/dissertation/progress",
+            {"progress" : data
+            }
+        )
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+
+
+
     },
     async fileInputChange() {
       let files = Array.from(event.target.files);
@@ -410,6 +420,13 @@ export default {
       for (let item of files) {
         await this.uploadFile(item);
       }
+    },
+
+    makeNotification() {
+      this.stateOfSending = true
+      setTimeout(() => {
+        this.stateOfSending = false
+      }, 5000);
     },
 
     async uploadFile() {
@@ -432,32 +449,52 @@ export default {
         console.log(error);
       })
     },
-    deleteExplanatoryNote() {
-      this.explanatoryNote = []
-    },
-    deleteTitlePage(){
-      this.titlePage = []
-    },
-    inputTitlePage(){
-      this.titlePage = event.target.files[0]
-    },
-    inputExplanatoryFile(){
-      this.explanatoryNote = event.target.files[0]
-    },
-    sendFiles(){
-      this.stateOfSending = true
-      this.titlePage = []
-      this.explanatoryNote = []
-      setTimeout(() => {
-        this.stateOfSending = false
-      }, 5000);
-    },
 
   },
-  beforeMount() {
+  async beforeMount() {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
+
+    try {
+      const response = await axios.get('http://localhost:8080/students/dissertation/4a90979c-734c-11ee-b962-0242ac120002')
+      this.data = await response.data
+      this.theme = this.data.commonInfo.theme
+      this.teacherFullName = this.data.commonInfo.teacherFullName
+      this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
+
+      this.jobStatus = this.data.commonInfo.jobStatus
+      this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
+      this.feedback = this.data.commonInfo.feedback
+      let objectDate = this.data.commonInfo.dateOfOrderOfStatement
+
+      const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
+      var key = ''
+      for (var i = 0; i < keys.length; i++) {
+        key = 'intro'
+        this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
+        this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
+        this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
+        this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
+        this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
+        this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
+      }
+      this.array['Введение'] = this.data.dissertationPlan['intro']
+      const year = (objectDate.slice(0,4))
+      const month = (objectDate.slice(5,7))
+      const day = (objectDate.slice(8,10))
+
+      this.dateOfOrderOfStatement = day + '.' + month + '.' + year
+      this.actualSemestr = this.data.commonInfo.actualSemestr
+
+
+    }
+    catch (e) {
+      console.log(e)
+    }
+    this.jobStatus = 'todo'
+
+
   }
 }
 </script>
@@ -553,6 +590,9 @@ export default {
   background:white;
 }
 
+.chosen_box{
+background-color: red;
+}
 
 .mainText{
   color:#7C7F86;

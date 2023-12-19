@@ -28,6 +28,12 @@ export default {
     "studentProfile" : studentProfile,
     "teacherProfile" : teacherProfile,
     "pageHeader" : header,
+  },
+  async beforeMount() {
+
+    const stateOfLogining = await store.dispatch("checkIfLogined")
+    if (!stateOfLogining)
+      this.$router.push('/auth')
   }
 }
 </script>

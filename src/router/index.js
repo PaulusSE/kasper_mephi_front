@@ -10,7 +10,6 @@ import registration from "@/components/layout/registration.vue";
 import forgetPassword from "@/components/layout/forgetPassword.vue";
 
 
-
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -27,7 +26,7 @@ const router = createRouter({
             path: '/profile', component: profile
         },
         {
-          path: '/user1', component: studentPageFromTeacher
+          path: '/user', component: studentPageFromTeacher
         },
         {
             path: '/passwordrecovery', component: forgetPassword
