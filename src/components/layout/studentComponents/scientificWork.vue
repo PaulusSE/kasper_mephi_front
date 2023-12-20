@@ -363,8 +363,7 @@ export default {
     },
 
     async saveArticles(){
-
-      if (this.arrayOfArticles.toString() === this.arrayOfArticlesCopy.toString()) {
+      if (JSON.stringify(this.arrayOfArticles) === JSON.stringify(this.arrayOfArticlesCopy)) {
         return
       }
 
@@ -389,9 +388,10 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002",
+        const response = await axios.post('http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002',
             {"works" : saveData}
         )
+        console.log(response)
         
 
         if (this.arrayDeleteWorkId.length === 0){
@@ -424,12 +424,13 @@ export default {
       this.arrayDeleteWorkId = []
 
     },
-    makeCopy(){
 
-      for (var i = 0; i < this.arrayOfArticles.length; i++)
-        this.arrayOfArticlesCopy[i] = this.arrayOfArticles[i].slice();
+    makeCopy(){
+      this.arrayOfArticlesCopy.length = 0
+      this.arrayOfArticlesCopy = JSON.parse(JSON.stringify(this.arrayOfArticles));
 
     },
+
     deleteArticle(index,n){
 
 
@@ -440,10 +441,12 @@ export default {
 
 
     },
+
     cancelChangeHighTable() {
       this.makeCopyGeneralArrays(0)
       this.isTableEditing = !this.isTableEditing;
     },
+
     fillArrayOfArticles(data){
       this.arrayOfArticles.length = 0
       this.arrayOfArticles = Array(4)
@@ -470,7 +473,7 @@ export default {
     async loadScientificWorks() {
       try {
         const response = await axios.get('http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002')
-        console.log(response)
+
         this.data = await response.data;
         this.fillArrayOfArticles(this.data)
       }
