@@ -42,7 +42,7 @@
           <div class="image-upload">
             <button class="btnAddDeleteFiles" @click="deleteStudentFile">
               <img v-if="studentsFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="static/figures/trashActive.png">
+              <img v-else src="../../../../static/figures/trashActive.png">
             </button>
           </div>
 
@@ -75,7 +75,7 @@
           <div class="image-upload">
             <button class="btnAddDeleteFiles" @click="deleteTeacherFile">
               <img v-if="teachersFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="static/figures/trashActive.png">
+              <img v-else src="../../../../static/figures/trashActive.png">
             </button>
           </div>
 

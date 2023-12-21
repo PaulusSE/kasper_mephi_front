@@ -367,6 +367,7 @@ export default {
         return
       }
 
+
       this.makeCopy()
       var saveData = new Array()
 
@@ -388,11 +389,11 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002',
+        const response = await axios.post('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"),
             {"works" : saveData}
         )
         console.log(response)
-        
+
 
         if (this.arrayDeleteWorkId.length === 0){
           this.data = response.data;
@@ -408,7 +409,7 @@ export default {
 
 
       try {
-        const response = await axios.delete("http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002",
+        const response = await axios.delete("http://localhost:8080/students/scientific_works/" + localStorage.getItem("access_token"),
             {data : {
           "ids" : this.arrayDeleteWorkId
           }
@@ -448,7 +449,8 @@ export default {
     },
 
     fillArrayOfArticles(data){
-      this.arrayOfArticles.length = 0
+      console.log("Here")
+      this.arrayOfArticles.length
       this.arrayOfArticles = Array(4)
       for (var i = 0; i < this.arrayOfArticles.length; i++){
         this.arrayOfArticles[i] = new Array()
@@ -472,7 +474,7 @@ export default {
 
     async loadScientificWorks() {
       try {
-        const response = await axios.get('http://localhost:8080/students/scientific_works/f7efdfbc-813c-11ee-b962-0242ac120002')
+        const response = await axios.get('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"))
 
         this.data = await response.data;
         this.fillArrayOfArticles(this.data)

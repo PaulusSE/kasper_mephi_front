@@ -11,7 +11,7 @@
     <div class="container-fluid head-top d-flex justify-content-between">
       <nav >
         <router-link to="/" @click="redirectToMainPage">
-          <img src="static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center">
+          <img src="../../../static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center">
         </router-link>
 
       </nav>

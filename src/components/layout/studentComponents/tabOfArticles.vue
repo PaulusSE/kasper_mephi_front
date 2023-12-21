@@ -254,7 +254,7 @@
 
           <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
             <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
-              <img class="trashLogo" src="static/figures/trashActive.png" alt="trashLogo">
+              <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
             </button>
           </div>
 

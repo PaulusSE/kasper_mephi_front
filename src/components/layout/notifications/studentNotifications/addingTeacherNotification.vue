@@ -8,11 +8,11 @@
   <Transition name="slide-fade">
     <div class="v-notification">
       <div class="alert alert-success" role="alert" v-if="resultOfSending">
-        <img src="static/figures/check.svg" alt="successSending" class="successSendingImage">
+        <img src="../../../../../static/figures/check.svg" alt="successSending" class="successSendingImage">
         Отправлено
       </div>
       <div class="alert alert-danger" role="alert" v-if="!resultOfSending">
-        <img src="static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
+        <img src="../../../../../static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
         Что-то пошло не так
       </div>
     </div>

@@ -48,6 +48,10 @@
           <div v-show="showEmptyfieldError" class = "wrongPassword">Поля не должны быть пустыми</div>
         </transition>
 
+        <transition name="slide-fade">
+          <div v-show="showEmptyfieldErrorLanguage" class = "wrongPassword">Поля должны содержать символы латинского алфавита</div>
+        </transition>
+
       </div>
     </div>
 
@@ -84,6 +88,7 @@ export default {
       status: false,
       showWrongAnswerString: false,
       showEmptyfieldError : false,
+      showEmptyfieldErrorLanguage : false,
       currentLogin: '123',
       currentPassword: '123',
       type: '',
@@ -92,28 +97,35 @@ export default {
   },
   methods: {
     async authorizate(){
-
       if (this.login.length === 0 || this.password.length === 0){
         this.showEmptyfieldError = true
         return
       }
 
+      // if (!/[a-z]/i.test(this.login) || !/[a-z]/i.test(this.password)){
+      //   this.showEmptyfieldErrorLanguage = true
+      //   return
+      // }
+
       try {
-        const response = await axios.post("http://localhost:8081/authorize/",
+        const response = await axios.post("http://localhost:8080/authorization/authorize",
             {
-              login : this.login,
+              email : this.login,
               password : this.password
                 }
         )
-
         if (response.status === 200){
           this.data = await response.data
-          localStorage.setItem("access_token", this.data.access_token)
-          this.$store.dispatch("updateUserType", this.data.user_type)
-          this.$store.dispatch("updateUserId", this.data.user_id)
+          console.log(response)
+
+          localStorage.setItem("access_token", this.data.token)
+          localStorage.setItem("userType", this.data.client_type)
+
+          this.$store.dispatch("updateUserType", localStorage.getItem("userType"))
+          // this.$store.dispatch("updateUserId", this.data.user_id)
+
           this.$router.push('/')
         }
-
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -130,21 +142,16 @@ export default {
         this.showEmptyfieldError = false
       }
 
+      if (this.showEmptyfieldErrorLanguage === true){
+        this.showEmptyfieldErrorLanguage = false
+      }
+
 
     },
   },
     async beforeMount() {
-      // try {
-      //   const response = await axios.get('http://localhost:8081/students/info/1860261c-5deb-44d6-80c8-bee65dbb20be')
-      //   this.data = await response.data
-      //   console.log(this.data.email)
-      //   console.log(response)
-      // }
-      // catch (e) {
-      //   console.log(e)
-      // }
       localStorage.setItem("access_token", 123)
-
+      localStorage.setItem("userType", 'admin')
 },
   mounted() {
   }

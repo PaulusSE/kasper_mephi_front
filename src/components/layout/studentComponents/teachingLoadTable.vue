@@ -208,7 +208,7 @@
 
           <div class="textMiniTable ps-3 pt-2" style="width: 5%; text-align: center">
             <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
-              <img class="trashLogo" src="static/figures/trashActive.png" alt="trashLogo">
+              <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
             </button>
           </div>
         </div>

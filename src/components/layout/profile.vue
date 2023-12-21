@@ -30,11 +30,16 @@ export default {
     "pageHeader" : header,
   },
   async beforeMount() {
-
-    const stateOfLogining = await store.dispatch("checkIfLogined")
-    if (!stateOfLogining)
+    this.$store.dispatch("updateUserType", localStorage.getItem("userType"))
+    const stateOfLogining =await store.dispatch("checkIfLogined")
+    if (!stateOfLogining){
       this.$router.push('/auth')
+    }
+  },
+  beforeCreate() {
+    this.$store.dispatch("updateUserType", localStorage.getItem("userType"))
   }
+
 }
 </script>
 

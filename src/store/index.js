@@ -5,7 +5,7 @@ import axios from "axios";
 export default createStore({
     state () {
         return {
-            type : 'student',
+            type : '',
             checked_student_id:'',
 
         }
@@ -13,12 +13,7 @@ export default createStore({
     mutations: {
 
         setUserType(state, type){
-            if (type === '1')
-                state.type = "admin"
-            if (type === '2')
-                state.type = "student"
-            if (type === '3')
-                state.type = "teacher"
+            state.type = type
         },
 
         setUserId(state, id){
