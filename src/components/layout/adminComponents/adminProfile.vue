@@ -6,63 +6,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
 
 
-  <div class="mainPage">
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="margin-left: 3em;">
-        <p class="text" style="font-size: 29px; margin-top: 1em;">Основная информация</p>
-      </nav>
-
-      <nav>
-        <button v-if="!stateOfEditing" type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="editProfile()">Редактировать</button>
-        <button v-if="stateOfEditing" type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="cancelChange()">Отменить</button>
-        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="saveChange()">Сохранить</button>
-
-      </nav>
-    </div>
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text">Почта</label>
-        <input type="text" class="col-12" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text">Ученая степень</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
-      </nav>
-
-    </div>
-
-
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-
-    </div>
-
-
-  </div>
-
   <div class="mainPage mb-3">
     <div class="container-fluid justify-content-between d-flex">
       <nav style="margin-left: 3em;">
@@ -85,15 +28,11 @@
       <nav>
         <label class="text">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4" style="width: 100%">
-          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 52%">
+          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 51.2%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
-
       </nav>
-
     </div>
-
-
   </div>
 
 
@@ -161,7 +100,7 @@ export default {
     }
   },
   beforeMount() {
-    if (store.getters.getType !== "supervisor"){
+    if (store.getters.getType !== "admin"){
       this.$router.push('/wrongAccess')
     }
   }
@@ -219,14 +158,16 @@ header .head-top nav a:nth-of-type(2) {
 }
 
 div nav {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-left: 7%;
+  margin-right: 7%;
   margin-bottom: 1%;
   height: 5em;
 
 }
 
-
+div div {
+  margin-left: 10px;
+}
 
 div nav button {
   background-color: white !important;
@@ -246,7 +187,6 @@ div nav input {
   border-radius: 0.7em;
   height: 3em;
   font-size: medium;
-  padding-left: 0.5rem;
 }
 
 div nav label {

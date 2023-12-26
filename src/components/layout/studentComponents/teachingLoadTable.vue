@@ -41,7 +41,7 @@
     <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
       <div v-if="!deleteState">
         <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-          <div class="rightLine textMiniTable ps-3" style="width: 34%; text-align: center;">
+          <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
             Дисциплина
           </div>
 
@@ -59,14 +59,14 @@
             Тип занятий
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 7.3%; text-align: center">
+          <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
             Кол-во<br>часов<br>сем.
           </div>
 
         </div>
 
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
-          <div class="rightLine textMiniTable ps-3" style="width: 34.0%; text-align: center">
+          <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model=element.subject readonly ></textarea>
             </div>
@@ -110,7 +110,7 @@
 
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 7.3%; text-align: center">
+          <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly ></textarea>
             </div>
@@ -125,7 +125,7 @@
 
       <div v-if="deleteState">
         <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-          <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
+          <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
             Дисциплина
           </div>
 
@@ -147,14 +147,14 @@
             Кол-во<br>часов<br>сем.
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 5%; text-align: center">
+          <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
 
           </div>
 
         </div>
 
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
-          <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
+          <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model="element.subject" readonly></textarea>
             </div>
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          <div class="textMiniTable ps-3 pt-2" style="width: 5%; text-align: center">
+          <div class="textMiniTable ps-3 pt-2" style="width: 7%; text-align: center">
             <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
               <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
             </button>

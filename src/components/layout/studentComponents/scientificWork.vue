@@ -14,212 +14,7 @@
         :state-of-student-page = stateOfStudentPage
     ></header-of-student>
 
-    <div class="roundBlock pb-0" v-if="educationTime === 3">
-      <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">Публикации в журналах/участие в конференциях</p>
-        <div v-if="!isTableEditing">
-          <button @click="editTable" class="editBtn2">Редактировать</button>
-        </div>
-        <div v-else>
-          <button @click="cancelChangeHighTable" class="editBtn2 me-3">Отменить</button>
-          <button @click="editTable" class="editBtn2">Сохранить</button>
-        </div>
 
-
-
-      </div>
-
-      <div class=" py-5 pb-3">
-
-        <div class="roundBlock p-0">
-          <div class="d-flex justify-content-center underline">
-            <div class="bigBox textTableUp rightLine ">
-
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              ВАК
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              WoS/
-              Scopus
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              РИНЦ
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Тезиы в сборниках конф
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Очное участие в конф
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Патенты
-            </div>
-
-            <div class="smallBox textTableUp">
-              Всего за семетр
-            </div>
-
-          </div>
-
-          <div class="d-flex justify-content-center"  :class="{ underline: index !== 7 }" v-for="(element,index) in generalArrayOfArticles">
-            <div class="bigBox textTableUp rightLine pt-3">
-              <div v-if="index === 0">
-                До поступления
-              </div>
-
-              <div v-if="index > 0 && index < 7">
-                {{index}}-ый семестр
-              </div>
-
-              <div v-if="index === 7">
-                Текущий итог
-              </div>
-
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id1" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id2" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id3" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id4" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id5" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id6" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp">
-              <input class="text inputBox" v-model="element.id7" :disabled="!isTableEditing">
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="roundBlock pb-0" v-if="educationTime === 2">
-      <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">Публикации в журналах/участие в конференциях</p>
-
-        <div v-if="!isTableEditing">
-          <button  @click="editTable" class="editBtn2">Редактировать</button>
-        </div>
-        <div v-else>
-          <button  @click="cancelChangeHighTable" class="editBtn2 me-3">Отменить</button>
-          <button  @click="editTable" class="editBtn2">Сохранить</button>
-        </div>
-
-      </div>
-
-      <div class=" py-5 pb-3">
-
-        <div class="roundBlock p-0">
-          <div class="d-flex justify-content-center underline">
-            <div class="bigBox textTableUp rightLine ">
-
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              ВАК
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              WoS/
-              Scopus
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              РИНЦ
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Тезиы в сборниках конф
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Очное участие в конф
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              Патенты
-            </div>
-
-            <div class="smallBox textTableUp">
-              Всего за семетр
-            </div>
-
-          </div>
-
-          <div class="d-flex justify-content-center"  :class="{ underline: index !== 5 }" v-for="(element,index) in generalArrayOfArticles">
-            <div class="bigBox textTableUp rightLine pt-3">
-              <div v-if="index === 0">
-                До поступления
-              </div>
-
-              <div v-if="index > 0 && index < 5">
-                {{index}}-ый семестр
-              </div>
-
-              <div v-if="index === 5">
-                Текущий итог
-              </div>
-
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id1" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id2" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id3" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id4" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id5" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp rightLine">
-              <input class="text inputBox" v-model="element.id6" :disabled="!isTableEditing">
-            </div>
-
-            <div class="smallBox textTableUp">
-              <input class="text inputBox" v-model="element.id7" :disabled="!isTableEditing">
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
 
     <tab-of-articles v-for="(articles,index) in arrayOfArticles"
     :id = index
@@ -392,19 +187,16 @@ export default {
         const response = await axios.post('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"),
             {"works" : saveData}
         )
-        console.log(response)
 
-
-        if (this.arrayDeleteWorkId.length === 0){
-          this.data = response.data;
-          this.fillArrayOfArticles(this.data)
-          return
-        }
-
-
+        this.data = response.data;
       }
       catch (e) {
         console.log(e)
+      }
+
+      if (this.arrayDeleteWorkId.length === 0){
+        this.fillArrayOfArticles(this.data)
+        return
       }
 
 
@@ -439,8 +231,6 @@ export default {
       this.arrayDeleteWorkId.push(tempData[n].work_id)
       tempData.splice(n,1)
 
-
-
     },
 
     cancelChangeHighTable() {
@@ -449,8 +239,8 @@ export default {
     },
 
     fillArrayOfArticles(data){
-      console.log("Here")
-      this.arrayOfArticles.length
+
+
       this.arrayOfArticles = Array(4)
       for (var i = 0; i < this.arrayOfArticles.length; i++){
         this.arrayOfArticles[i] = new Array()
@@ -475,7 +265,7 @@ export default {
     async loadScientificWorks() {
       try {
         const response = await axios.get('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"))
-
+        console.log(response)
         this.data = await response.data;
         this.fillArrayOfArticles(this.data)
       }

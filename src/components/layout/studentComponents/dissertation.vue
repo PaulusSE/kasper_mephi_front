@@ -1,13 +1,8 @@
 <template>
-
-
-
     <sending-files-notification
         v-if="stateOfSending"
         :result-of-sending = resultOfsending
     ></sending-files-notification>
-
-
 
   <div class="mainPage">
     <header-of-student
@@ -67,8 +62,8 @@
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
         <p class="mainText" style="text-align: left">План подготовки рукописи диссертаций и автореферата</p>
-        <button v-if="!editingCheckbox" @click="editCheckBox" class="editBtn2">Редактировать</button>
-        <button v-else @click="editCheckBox" class="editBtn2">Сохранить</button>
+        <button v-if="!editingCheckbox" @click="editTables" class="editBtn2">Редактировать</button>
+        <button v-else @click="saveTables" class="editBtn2">Сохранить</button>
       </div>
 
     <div class="myBox roundBlock p-0">
@@ -145,12 +140,13 @@
         </nav>
       </div>
 
-      <dissertation-tab v-for="(files,index) in arrayWithLinksToFiles"
+      <dissertation-tab v-for="(ids,index) in arrayWithFilesId"
                         :id=index
                         :job-status = statusOfJob[jobStatus]
-                        :files = files
+                        :ids = ids
                         :state-of-sending = this.stateOfSending
-                        @makeNotification="makeNotification()"
+                        @makeNotification="(resultStatus) => makeNotification(resultStatus)"
+                        :actual-semester = this.actualSemestr
       ></dissertation-tab>
 
     </div>
@@ -212,128 +208,12 @@ export default {
       actualSemestr: 3,
       jobStatus:'',
       stateOfSending:false,
-      resultOfsending:true,
-      arrayWithLinksToFiles : [
-        {
-          TitleList : "",
-          ExplanationaryNote : ''
-        },
-        {
-          TitleList : '',
-          ExplanationaryNote : ''
-        },
-      ],
+      resultOfsending: '',
+      arrayWithFilesId: [],
+
       feedback: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
           "\n ",
       array: {
-
-        "Введение": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-        "Основная часть": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 1": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: true,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 2": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 3": {
-          id1: false,
-          id2: false,
-          id3: true,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 4": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 5 (при необоходимости)": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-        "Глава 6 (при необоходимости)": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Заключение": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        }
-        ,
-
-        "Список литературы": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Автореферат": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
       },
       progressMap : new Map(),
       statusOfJob : {
@@ -351,14 +231,12 @@ export default {
     editInformation() {
       this.editingInfo = !this.editingInfo
     },
-    async editCheckBox() {
-
-      //todo отправлять токен в хедере, не отправлять student_id, client_id
-
+    editTables() {
       this.editingCheckbox = !this.editingCheckbox;
-      var client_id = '7becb1de-7349-11ee-b962-0242ac120002'
-      var student_id = '0c23146e-734a-11ee-b962-0242ac120002'
-      var semestr_id = 10
+    },
+
+    createSaveData() {
+      var saveData = new Array()
 
       var requestPlan = {
         "Введение" : 'intro',
@@ -367,8 +245,8 @@ export default {
         "Глава 2" : 'ch. 2',
         "Глава 3" : 'ch. 3',
         "Глава 4" : 'ch. 4',
-        "Глава 5 (при необоходимости)" : 'ch. 5',
-        "Глава 6 (при необоходимости)" : 'ch. 6',
+        "Глава 5 (При необходимости)" : 'ch. 5',
+        "Глава 6 (При необходимости)" : 'ch. 6',
         "Заключение" : 'end',
         "Список литературы" : 'literature',
         "Автореферат" : 'abstract',
@@ -376,12 +254,8 @@ export default {
 
       const keys = new Map(Object.entries(requestPlan));
 
-      var data = []
-
       for (var [key, value] of keys) {
-        data.push({
-          clientID : client_id,
-          studentID : student_id,
+        saveData.push({
           first : this.array[key].id1,
           second : this.array[key].id2,
           third : this.array[key].id3,
@@ -389,25 +263,50 @@ export default {
           fifth : this.array[key].id5,
           sixth : this.array[key].id6,
           progressName : value,
-          semesterProgressID : semestr_id
         })
-        semestr_id = semestr_id + 1
       }
 
+
+      return saveData
+    },
+
+    fillArrayOfFilesID(data) {
+      this.arrayWithFilesId = Array(this.actualSemestr)
+      for (var i = 0; i < this.arrayWithFilesId.length; i++){
+        this.arrayWithFilesId[i] = new Array()
+      }
+      for (var i = 0; i < data.length; i++){
+        if (data[i].semester === 1) {
+          this.arrayWithFilesId[0].push(data[i])
+        }
+        if (data[i].semester === 2) {
+          this.arrayWithFilesId[1].push(data[i])
+        }
+        if (data[i].semester === 3) {
+          this.arrayWithFilesId[2].push(data[i])
+        }
+        if (data[i].semester === 4) {
+          this.arrayWithFilesId[3].push(data[i])
+        }
+      }
+    },
+
+    async saveTables() {
+      this.editingCheckbox = !this.editingCheckbox;
+
+
+    var saveData = this.createSaveData()
+
+
       try {
-        const response = await axios.post("http://localhost:8080/students/dissertation/progress",
-            {"progress" : data
+        const response = await axios.post("http://localhost:8080/students/dissertation/progress/" + localStorage.getItem("access_token"),
+            {"progress" : saveData
             }
         )
       }
       catch (e) {
         this.showWrongAnswerString = true;
       }
-
-
-
-
-
     },
     async fileInputChange() {
       let files = Array.from(event.target.files);
@@ -419,32 +318,19 @@ export default {
       }
     },
 
-    makeNotification() {
-      this.stateOfSending = true
+    makeNotification(resultStatus) {
+      if (resultStatus === 200)
+        this.resultOfsending = true
+      else
+        this.resultOfsending = false
+            this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
     },
 
     async uploadFile() {
-      let form = new FormData();
-      form.append("file",item)
 
-      await axios.post('', form, {
-        onUploadProgress: (itemUpload) => {
-          this.fileProgress = Math.round((item.loaded / itemUpload.total) * 100);
-          this.fileCurrent = item.name + '' + this.fileProgress;
-        }
-      })
-          .then(response => {
-            this.fileProgress = 0;
-            this.fileCurrent = '';
-            this.filesFinish.push(item);
-            this.filesOrder.splice(item,1);
-          })
-          .catch(error => {
-        console.log(error);
-      })
     },
 
   },
@@ -454,21 +340,23 @@ export default {
     }
 
     try {
-      const response = await axios.get('http://localhost:8080/students/dissertation/4a90979c-734c-11ee-b962-0242ac120002')
+      const response = await axios.get('http://localhost:8080/students/dissertation/' + localStorage.getItem("access_token"))
       this.data = await response.data
+
       this.theme = this.data.commonInfo.theme
       this.teacherFullName = this.data.commonInfo.teacherFullName
       this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
-
       this.jobStatus = this.data.commonInfo.jobStatus
       this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
       this.feedback = this.data.commonInfo.feedback
       let objectDate = this.data.commonInfo.dateOfOrderOfStatement
 
       const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
+      const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
       var key = ''
       for (var i = 0; i < keys.length; i++) {
-        key = 'intro'
+        key = keys[i]
+
         this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
         this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
         this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
@@ -476,7 +364,10 @@ export default {
         this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
         this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
       }
-      this.array['Введение'] = this.data.dissertationPlan['intro']
+      for (var i = 0; i < keys.length; i++){
+        this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
+      }
+
       const year = (objectDate.slice(0,4))
       const month = (objectDate.slice(5,7))
       const day = (objectDate.slice(8,10))
@@ -484,12 +375,15 @@ export default {
       this.dateOfOrderOfStatement = day + '.' + month + '.' + year
       this.actualSemestr = this.data.commonInfo.actualSemestr
 
+      this.fillArrayOfFilesID(this.data.ids)
 
     }
     catch (e) {
       console.log(e)
     }
+
     this.jobStatus = 'todo'
+    this.files = new Array(this.actualSemestr)
 
 
   }
@@ -598,7 +492,7 @@ background-color: red;
 .mainText{
   color:#7C7F86;
   font-weight: 300;
-  font-size:30px;
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -614,6 +508,7 @@ background-color: red;
   border: 0;
   margin-top: 5%;
   margin-right: 1%;
+  background-color: white;
 }
 
 .editBtn2 {

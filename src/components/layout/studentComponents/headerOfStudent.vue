@@ -55,14 +55,14 @@ export default {
 
 .myContainer {
   width: 60%;
-  padding-top: 1.5%;
-  gap:1px;
+  padding-top: 0.7rem;
+  padding-bottom: 1rem;
 }
 
 .btn_active {
   font-family: "Raleway", sans-serif !important;
   font-weight: 500 !important;
-  font-size: 20px !important;
+  font-size: 1.05rem !important;
   border: solid 0.12em #0055BB !important;
   border-radius: 11px !important;
   color: #0055BB !important;
@@ -73,7 +73,7 @@ export default {
 .btn_disactive {
   font-family: "Raleway", sans-serif !important;
   font-weight: 500 !important;
-  font-size: 20px !important;
+  font-size: 1.05rem !important;
   border: solid 0.10em #7C7F86 !important;
   border-radius: 11px !important;
   color: #7C7F86 !important;
@@ -81,12 +81,13 @@ export default {
 }
 
 nav {
-  margin-right: 2%;
+  margin-right: 0.6rem;
 }
 
 .btnBox {
   width: 95%;
   margin:auto;
+
 
 }
 

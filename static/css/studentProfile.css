@@ -42,14 +42,10 @@ header .head-top nav a:nth-of-type(2) {
 }
 
 div nav {
-  margin-left: 7%;
-  margin-right: 7%;
+  margin-left: 1.5rem !important;
+  margin-right: 1.5rem !important;;
   margin-bottom: 1%;
   height: 5em;
-}
-
-div div {
-  margin-left: 10px;
 }
 
 div nav button {

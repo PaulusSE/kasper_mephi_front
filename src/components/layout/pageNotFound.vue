@@ -51,7 +51,7 @@ export default {
   font-family: "Raleway", sans-serif;
   color: #7c7f86;
   font-size: 25px;
-  font-weight: 800;
+  font-weight: 500;
 }
 
 </style>

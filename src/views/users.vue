@@ -8,7 +8,7 @@
   :state-of-student-page = stateOfStudentPage
   @buttonManageStudentPageClicked ="(index) => buttonManageStudentPageClicked(index)"
   ></student-view>
-  <teacher-view v-if="this.type==='teacher'"></teacher-view>
+  <teacher-view v-if="this.type==='supervisor'"></teacher-view>
   <admin v-if="this.type==='admin'"
   :state-of-admin-page = stateOfAdminPage
   @buttonManageAdminPageClicked = "(index) => buttonManageAdminPageClicked(index)"
@@ -56,17 +56,15 @@ export default {
 
     },
   async beforeMount() {
-
     const stateOfLogining = await store.dispatch("checkIfLogined")
     if (!stateOfLogining){
       this.$router.push('/auth')
       return
     }
 
-    this.$store.dispatch("updateUserType", localStorage.getItem("userType"))
     },
   beforeCreate() {
-    this.$store.dispatch("updateUserType", localStorage.getItem("userType"))
+    this.$store.dispatch("updateUserType", localStorage.getItem('user_type'))
   }
 }
 

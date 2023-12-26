@@ -15,7 +15,7 @@
       </div>
 
       <div v-else style="margin-top: 1%">
-        <router-link style="text-decoration:none" to='user'>
+        <router-link style="text-decoration:none" to='user' @click="pushUserIdToStore">
           <p class="textOfHeaders">{{ fullName}} {{group}}</p>
         </router-link>
       </div>
@@ -53,7 +53,7 @@
 
 export default {
   name: "tabOfStudent",
-  props: ["fullName", "group", "topic", "numberOfOrderOfStatement", "dateOfStatement", "id"],
+  props: ["fullName", "group", "topic", "numberOfOrderOfStatement", "dateOfStatement", "student_id"],
   data() {
     return {
       buttonIsOpened : false
@@ -62,6 +62,10 @@ export default {
   methods: {
     buttonClicked() {
       this.buttonIsOpened = !this.buttonIsOpened
+    },
+    pushUserIdToStore() {
+      this.$store.dispatch("updateUserId", this.student_id)
+      localStorage.setItem("studentID", this.student_id)
     }
   },
 

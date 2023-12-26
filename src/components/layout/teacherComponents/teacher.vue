@@ -19,7 +19,7 @@
       :topic = student.topic
       :date-of-statement = student.dateOfStatement
       :number-of-order-of-statement = student.numberOfOrderOfStatement
-      :id = student.id
+      :student_id = student.studentID
       ></tab-of-student>
 
   </div>
@@ -33,6 +33,7 @@
 import tabOfStudent from "@/components/layout/studentComponents/tabOfStudent.vue";
 import store from "@/store/index.js";
 import router from "@/router/index.js";
+import axios from "axios";
 export default {
   name: "teacher",
   components: {
@@ -40,34 +41,31 @@ export default {
   },
   data(){
     return {
-      arrayOfStudents : [
-        {
-          fullName : "Петров П.П", group: "Б20-504", link: "student123/", topic : "Разработка клиентской части системы деятельности аспирантов", numberOfOrderOfStatement : "123/435/123", dateOfStatement : "12-05-2021", id:1
-        },
-        {
-          fullName : "Сидоров С.С", group: "Б15-555", link: "student124/", topic : "Разработка серверной части системы деятельности аспирантов", numberOfOrderOfStatement : "2641/33-7", dateOfStatement : "23-09-2022", id:2
-        },
-        {
-          fullName : "Иванов И.И", group: "Б18-504", link: "student125/", topic : "topic3", numberOfOrderOfStatement : "2123/33-1", dateOfStatement : "13-11-2021", id:3
-        },
-        {
-          fullName : "Петрова П.П", group: "Б20-504", link: "student126/", topic : "topic4", numberOfOrderOfStatement : "5471/33-3", dateOfStatement : "15-12-2022", id:4
-        },
-        {
-          fullName : "Львов П.П", group: "Б20-504", link: "student127/", topic : "topic5", numberOfOrderOfStatement : "645/33-2", dateOfStatement : "12-03-2023", id:5
-        },
-      ]
+      arrayOfStudents : []
     }
   },
   methods: {
     router() {
       return router
     },
+    async getStudents(){
+      try {
+        const response = await axios.get('http://localhost:8080/supervisors/list_of_students/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+        this.arrayOfStudents = this.data.array
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
   },
-  beforeMount() {
-    if (store.getters.getType !== "teacher"){
+  async beforeMount() {
+    if (store.getters.getType !== "supervisor"){
       this.$router.push('/wrongAccess')
     }
+    await this.getStudents()
+
   }
 }
 </script>

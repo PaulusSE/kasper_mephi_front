@@ -40,18 +40,18 @@
           <p class="loadText">Титульный лист:</p>
         </div>
 
-        <div v-if="files['TitleList'] === '' " class="ms-5 mt-2">
+        <div v-if="this.tittlePageID === '' " class="ms-5 mt-2">
           <p class="loadTextState">Файл не выбран</p>
         </div>
 
         <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ files["TitleList"]}} загружен</p>
+          <p class="loadTextState">Файл {{ this.tittlePageID}} загружен</p>
         </div>
 
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteTitlePage">
-              <img v-if="files['TitleList'] === '' " src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteTitlePage">
+              <img v-if="this.tittlePageID === '' || this.id + 1 !== this.actualSemester || this.id + 1 !== this.actualSemester" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
               <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
             </button>
           </div>
@@ -60,7 +60,7 @@
             <label for="file-input1">
               <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input1" type="file" @input="inputTitlePage"/>
+            <input id="file-input1" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputTitlePage($event)"/>
           </div>
         </div>
       </div>
@@ -73,18 +73,18 @@
           <p class="loadText">Пояснительная записка:</p>
         </div>
 
-        <div v-if="files['ExplanationaryNote'] === '' " class="ms-5 mt-2">
+        <div v-if="this.explanationaryNoteID === '' " class="ms-5 mt-2">
           <p class="loadTextState">Файл не выбран</p>
         </div>
 
         <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ files['explanatoryNote'] }} загружен</p>
+          <p class="loadTextState">Файл {{ this.explanationaryNoteID }} загружен</p>
         </div>
 
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteExplanatoryNote">
-              <img v-if="files['ExplanationaryNote'] === '' " src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteExplanatoryNote">
+              <img v-if="this.explanationaryNoteID === '' || this.id + 1 !== this.actualSemester" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
               <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
             </button>
           </div>
@@ -93,13 +93,13 @@
             <label for="file-input2">
               <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
       <div style="text-align: right;">
-        <button class="sendFilesBtn" @click="sendFiles" :disabled="!(files.explanatoryNote !== '' || files.titlePage !== '')">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id + 1 !== this.actualSemester">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p style="font-size: 16px">
@@ -117,14 +117,20 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "dissertationTab",
   data()  {
     return {
       buttonIsOpened : false,
+      tittlePageFile : '',
+      explanationaryNoteFile : '',
+      tittlePageID : '',
+      explanationaryNoteID : '',
     }
   },
-  props : ['id','jobStatus', 'files', 'stateOfSending'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)
@@ -133,27 +139,66 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
     deleteExplanatoryNote() {
+      console.log("Deleting")
+      this.explanationaryNoteFile = ''
+      this.explanationaryNoteID = ''
 
+      //todo
     },
     deleteTitlePage(){
-
+      this.tittlePageFile = ''
+      this.tittlePageID = ''
+      //todo
     },
-    inputTitlePage(){
-      this.files["TitleList"] = '123'
-      console.log(this.files)
-      //todo сделать запрос отправки файл на сервер
+    async inputTitlePage(){
+      this.tittlePageFile = event.target.files[0]
     },
     inputExplanatoryFile(){
-
-      this.explanatoryNote = event.target.files[0]
+      this.explanationaryNoteFile = event.target.files[0]
     },
-    sendFiles(){
-      this.$emit("makeNotification")
+    async sendFiles(){
+      const obj = {
+        'semester': this.actualSemester
+      };
+      const json = JSON.stringify(obj);
+      const blob = new Blob([json], {
+        type: 'application/json'
+      });
+
+      let formData = new FormData();
+      if (this.tittlePageFile !== ''){
+        formData.append('titul', this.tittlePageFile);
+      }
+
+      if (this.explanationaryNoteFile !== ''){
+        formData.append('pz', this.explanationaryNoteFile);
+      }
+
+      formData.append('semester', blob);
+
+      var resultStatus = ''
+      try {
+        const response = await axios.post("http://localhost:8080/students/dissertation/file/" + localStorage.getItem("access_token"),formData,
+            {
+              headers : {
+                "Content-Type": "multipart/form-data"
+              }
+            }
+        )
+        resultStatus = response.status
+        console.log(response)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+      this.$emit("makeNotification", resultStatus)
 
     },
   },
   beforeMount() {
-
+    this.explanationaryNoteID = this.ids[0].id
   }
 }
 </script>

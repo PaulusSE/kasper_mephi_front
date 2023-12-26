@@ -84,7 +84,7 @@
 
 
 
-        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,key) in array">
+        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,key, index) in array">
           <div class="col-6 textTable rightLine">
             {{key}}
           </div>
@@ -126,7 +126,7 @@
         </nav>
         <nav>
           <button v-if="!editingReview" class="editBtn pt-1 ps-0" @click="buttonClicked">Редактировать</button>
-          <button v-else class="editBtn pt-1 ps-0" @click="buttonClicked">Сохранить</button>
+          <button v-else class="editBtn pt-1 ps-1" @click="buttonClicked">Сохранить</button>
         </nav>
       </div>
 
@@ -151,6 +151,7 @@
 import header from "@/components/layout/header.vue";
 import store from "@/store/index.js";
 import studentPageFromTeacherStatusTab from "@/components/layout/teacherComponents/studentPageFromTeacherStatusTab.vue";
+import axios from "axios";
 export default {
   name: "studentPageFromTeacher",
   components : {
@@ -173,133 +174,86 @@ export default {
         },
       ],
       array: {
-
-        "Введение": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-        "Основная часть": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 1": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: true,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 2": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 3": {
-          id1: false,
-          id2: false,
-          id3: true,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 4": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Глава 5 (при необоходимости)": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-        "Глава 6 (при необоходимости)": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Заключение": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        }
-        ,
-
-        "Список литературы": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
-
-        "Автореферат": {
-          id1: false,
-          id2: false,
-          id3: false,
-          id4: false,
-          id5: false,
-          id6: false
-        },
-
       },
       stateOfWork: '',
       textOfReview: '',
-      theme : "Разработка клиентской части системы деятельности аспирантов",
-      teacherFullName: "Тихомирова Анна Николаевна",
-      numberOfOrderOfStatement: "123/435/123",
-      dateOfOrderOfStatement: "12-05-2021"
+      theme : "",
+      teacherFullName: "",
+      numberOfOrderOfStatement: "",
+      dateOfOrderOfStatement: ""
     }
 
   },
   methods : {
     buttonClicked() {
       this.editingReview = !this.editingReview
+    },
+    async getStudentCommonInfo() {
+      try {
+        const response = await axios.put("http://localhost:8080/supervisors/student/" + localStorage.getItem("access_token"), {
+            "studentID" : this.$store.getters.getuserId
+            }
+        )
+
+
+        this.data = await response.data
+        console.log(this.data)
+        this.theme = this.data.theme
+        this.teacherFullName = this.data.commonInfo.teacherFullName
+        this.jobStatus = this.data.commonInfo.jobStatus
+        this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
+        this.textOfReview = this.data.commonInfo.feedback
+        let objectDate = this.data.commonInfo.dateOfOrderOfStatement
+
+        const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
+        const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
+        var key = ''
+        for (var i = 0; i < keys.length; i++) {
+          key = keys[i]
+
+          this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
+          this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
+          this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
+          this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
+          this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
+          this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
+        }
+        for (var i = 0; i < keys.length; i++){
+          this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
+        }
+
+        const year = (objectDate.slice(0,4))
+        const month = (objectDate.slice(5,7))
+        const day = (objectDate.slice(8,10))
+
+        this.dateOfOrderOfStatement = day + '.' + month + '.' + year
+        this.actualSemestr = this.data.commonInfo.actualSemestr
+
+
+      }
+
+
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
     }
   },
-  beforeMount() {
+
+  async beforeMount() {
     if (store.getters.getType === "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.getStudentCommonInfo()
+
+  },
+  beforeUnmount() {
+    this.$store.dispatch("updateUserId", '')
+    localStorage.setItem('studentID', '')
+  },
+
+  beforeCreate() {
+    this.$store.dispatch("updateUserId", localStorage.getItem("studentID"))
   }
 }
 </script>
@@ -343,7 +297,7 @@ export default {
 
 
 .myCheckBox{
-  zoom: 0.5;
+  zoom: 0.4;
   accent-color: white;
   background-color: green;
 

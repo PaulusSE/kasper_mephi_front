@@ -15,225 +15,6 @@
 
     ></header-of-student>
 
-    <div class="roundBlock pb-0" v-if="educationTime === 2">
-      <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">Педагогическая нагрузка</p>
-        <div v-if="!isTableEditing">
-          <button @click="editTable" class="editBtn2">Редактировать</button>
-        </div>
-
-        <div v-else>
-          <button @click="cancelChangeHighTable" class="editBtn2 pe-2">Отменить</button>
-          <button @click="editTable" class="editBtn2">Сохранить</button>
-        </div>
-
-      </div>
-
-      <div class=" py-3 pb-3">
-
-        <div class="roundBlock p-0">
-          <div class="d-flex justify-content-center underline" style="height: 3.5rem">
-            <div class="col-4 textTableUp rightLine pt-2">
-                № семестра
-            </div>
-
-            <div class="col-4  textTableUp rightLine pt-2">
-              Кол-во аудит. часов
-            </div>
-
-            <div class="col-4  textTableUp pt-2">
-              Иная педагогическая практика
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline" >
-            <div class="col-4 textTableUp rightLine pt-2">
-                1-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[0].hours1" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[0].otherLoad1" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              2-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[1].hours2" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[1].otherLoad2" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              3-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine" >
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[2].hours3" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp" >
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[2].otherLoad3" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center">
-            <div class="col-4 textTableUp rightLine pt-2">
-              4-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[3].hours4" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp ">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[3].otherLoad4" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="roundBlock pb-0" v-if="educationTime === 3">
-      <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">Педагогическая нагрузка</p>
-
-        <div v-if="!isTableEditing">
-          <button @click="editTable" class="editBtn2">Редактировать</button>
-        </div>
-
-        <div v-else>
-          <button @click="cancelChangeHighTable" class="editBtn2 pe-2">Отменить</button>
-          <button @click="editTable" class="editBtn2">Сохранить</button>
-        </div>
-
-      </div>
-
-      <div class=" py-3 pb-3">
-
-        <div class="roundBlock p-0">
-          <div class="d-flex justify-content-center underline" style="height: 3.5rem">
-            <div class="col-4 textTableUp rightLine pt-2">
-              № семестра
-            </div>
-
-            <div class="col-4  textTableUp rightLine pt-2">
-              Кол-во аудит. часов
-            </div>
-
-            <div class="col-4  textTableUp pt-2">
-              Иная педагогическая практика
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline" >
-            <div class="col-4 textTableUp rightLine pt-2">
-              1-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[0].hours1" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[0].otherLoad1" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              2-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[1].hours2" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[1].otherLoad2" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              3-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine" >
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[2].hours3" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp" >
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[2].otherLoad3" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              4-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[3].hours4" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp ">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[3].otherLoad4" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center underline">
-            <div class="col-4 textTableUp rightLine pt-2">
-              5-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[4].hours5" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[4].otherLoad5" :disabled="!isTableEditing">
-
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center">
-            <div class="col-4 textTableUp rightLine pt-2">
-              6-ый семестр
-            </div>
-
-            <div class="col-4  textTableUp rightLine">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[5].hours6" :disabled="!isTableEditing">
-            </div>
-
-            <div class="col-4  textTableUp">
-              <input type="text"  class="inputBox" v-model="arrayOfTeachingLoad[5].otherLoad6" :disabled="!isTableEditing">
-            </div>
-          </div>
-
-
-
-        </div>
-
-      </div>
-
-    </div>
 
 
     <teaching-load-table v-for="(elements,index) in arrayOfTeachingLoadByPeriod "
@@ -260,6 +41,7 @@
 import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 import teachingLoadTable from "@/components/layout/studentComponents/teachingLoadTable.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 export default {
   name: "teachingLoad",
   components: {
@@ -332,6 +114,7 @@ export default {
         }
       ],
       arrayOfTeachingLoadCopy: [],
+      arrayDeleteTeachingLoadId : []
     }
   },
 
@@ -347,7 +130,8 @@ export default {
         numberOfGroup: '',
         mainTeacher: '',
         typeOfClasses: '',
-        numberOfHours: ''
+        numberOfHours: '',
+        semester:n + 1
       }
       this.arrayOfTeachingLoadByPeriod[n] = this.arrayOfTeachingLoadByPeriod[n].concat(newLoad)
     },
@@ -363,15 +147,71 @@ export default {
       this.makeCopyGeneralArrays(0)
     },
 
-    saveTeachingLoad(){
-      if (this.arrayOfTeachingLoadByPeriod !== this.arrayOfTeachingLoadByPeriodCopy){
-        this.makeCopy()
-        //saving
+    async saveTeachingLoad(){
+      if (JSON.stringify(this.arrayOfTeachingLoadByPeriod) === JSON.stringify(this.arrayOfTeachingLoadByPeriodCopy)){
+        return
       }
+        this.makeCopy()
+
+        var saveData = new Array()
+        for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
+          for (var j = 0; j < this.arrayOfTeachingLoadByPeriod[i].length; j++){
+            saveData.push(
+                {
+                  subject: this.arrayOfTeachingLoadByPeriod[i][j].subject,
+                  student_id: this.arrayOfTeachingLoadByPeriod[i][j].student_id,
+                  typeOfClasses: this.arrayOfTeachingLoadByPeriod[i][j].typeOfClasses,
+                  semester: parseInt(this.arrayOfTeachingLoadByPeriod[i][j].semester),
+                  numberOfHours: parseInt(this.arrayOfTeachingLoadByPeriod[i][j].numberOfHours),
+                  mainTeacher: this.arrayOfTeachingLoadByPeriod[i][j].mainTeacher,
+                  numberOfGroup: this.arrayOfTeachingLoadByPeriod[i][j].numberOfGroup,
+                  loadID: this.arrayOfTeachingLoadByPeriod[i][j].loadID,
+                  additional_load: this.arrayOfTeachingLoadByPeriod[i][j].additional_load,
+
+                }
+            )
+          }
+        }
+
+
+        try {
+          const response = await axios.post('http://localhost:8080/students/teaching_load/' + localStorage.getItem("access_token"),
+              {"array" : saveData}
+          )
+
+          this.data = response.data;
+          this.fillArrayOfTeachingLoad(this.data)
+        }
+        catch (e) {
+          console.log(e)
+        }
+
+      if (this.arrayDeleteTeachingLoadId.length === 0){
+        return
+      }
+      console.log(this.arrayDeleteTeachingLoadId)
+      try {
+        const response = await axios.delete("http://localhost:8080/students/teaching_load/" + localStorage.getItem("access_token"),
+            {data : {
+                "ids" : this.arrayDeleteTeachingLoadId
+              }
+            }
+        )
+        this.data = response.data;
+        this.fillArrayOfTeachingLoad(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      this.arrayDeleteTeachingLoadId = []
+
+
     },
     makeCopy(){
-      for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++)
-        this.arrayOfTeachingLoadByPeriodCopy[i] = this.arrayOfTeachingLoadByPeriod[i].slice();
+      this.arrayOfTeachingLoadByPeriodCopy.length = 0
+      this.arrayOfTeachingLoadByPeriodCopy = JSON.parse(JSON.stringify(this.arrayOfTeachingLoadByPeriod));
+
     },
     makeCopyGeneralArrays(reverse = 1) {
       if (reverse){
@@ -390,15 +230,56 @@ export default {
     deleteTeachingLoad(index, n){
 
       var tempData = this.arrayOfTeachingLoadByPeriod[index]
-      tempData.splice(n,1)
+      if (tempData[n].loadID === undefined){
+        tempData.splice(n,1)
+        return
+      }
 
+      this.arrayDeleteTeachingLoadId.push(tempData[n].loadID)
+      tempData.splice(n,1)
+    },
+
+    fillArrayOfTeachingLoad(data) {
+
+      this.arrayOfTeachingLoadByPeriod = Array(4)
+
+      for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
+        this.arrayOfTeachingLoadByPeriod[i] = new Array()
+      }
+
+      for (var i = 0; i < data.array.length; i++){
+        if (data.array[i].semester === 1) {
+          this.arrayOfTeachingLoadByPeriod[0].push(data.array[i])
+        }
+        if (data.array[i].semester === 2) {
+          this.arrayOfTeachingLoadByPeriod[1].push(data.array[i])
+        }
+        if (data.array[i].semester === 3) {
+          this.arrayOfTeachingLoadByPeriod[2].push(data.array[i])
+        }
+        if (data.array[i].semester === 4) {
+          this.arrayOfTeachingLoadByPeriod[3].push(data.array[i])
+        }
+      }
+    },
+
+    async loadTeachingLoad() {
+      try {
+        const response = await axios.get('http://localhost:8080/students/teaching_load/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fillArrayOfTeachingLoad(this.data)
     }
 
   },
-  beforeMount() {
+  async beforeMount() {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.loadTeachingLoad()
   },
 }
 </script>

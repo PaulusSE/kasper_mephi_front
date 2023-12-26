@@ -6,7 +6,7 @@ export default createStore({
     state () {
         return {
             type : '',
-            checked_student_id:'',
+            user_id : ''
 
         }
     },
@@ -31,6 +31,7 @@ export default createStore({
         },
 
         async updateUserType(ctx, type) {
+
             await ctx.commit("setUserType", type)
         },
 
@@ -44,6 +45,9 @@ export default createStore({
     getters : {
         getType(state) {
             return state.type
+        },
+        getuserId(state) {
+            return state.user_id
         }
 
     },
