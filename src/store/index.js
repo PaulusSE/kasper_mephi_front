@@ -5,7 +5,7 @@ import axios from "axios";
 export default createStore({
     state () {
         return {
-            type : '',
+            type : 'admin',
             user_id : ''
 
         }

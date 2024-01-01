@@ -1,18 +1,12 @@
 <template>
-<!--  <link href="../../static/css/studentProfile.css" rel="stylesheet">-->
-<!--  <link href="static/css/bootstap.css" rel="stylesheet">-->
-<!--  <link rel="preconnect" href="https://fonts.googleapis.com">-->
-<!--  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
-<!--  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">-->
-
   <Transition name="slide-fade">
     <div class="v-notification">
       <div class="alert alert-success" role="alert" v-if="resultOfSending">
-        <img src="../../../../../static/figures/check.svg" alt="successSending" class="successSendingImage">
-        Отправлено
+        <img src="../../../../static/figures/check.svg" alt="successSending" class="successSendingImage">
+        Пароль изменен
       </div>
       <div class="alert alert-danger" role="alert" v-if="!resultOfSending">
-        <img src="../../../../../static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
+        <img src="../../../../static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
         Что-то пошло не так
       </div>
     </div>
@@ -22,7 +16,7 @@
 
 <script>
 export default {
-  name: "addingTeacherNotification",
+  name: "changePasswordNotification",
   props : ["resultOfSending"],
   data() {
     return {

@@ -1,34 +1,33 @@
 <template>
-  <link href="../../../../static/css/studentProfile.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet">
 
+  <change-password-notification
+      v-if="stateOfSending"
+      :result-of-sending = resultOfSending
+  ></change-password-notification>
 
-  <div class="mainPage mb-3">
+  <div class="mainPage mb-2">
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="margin-left: 3em;">
-        <p class="text" style="font-size: 29px; margin-top: 1em;">Смена пароля</p>
+      <nav>
+        <p class="mainText">Смена пароля</p>
       </nav>
 
 
     </div>
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
-        <label class="text">Старый пароль</label>
+        <label class="text ms-5">Старый пароль</label>
         <input type="text" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
-        <label class="text">Новый пароль</label>
+        <label class="text ms-5">Новый пароль</label>
         <input type="text" @input="inputEvent" v-model="newPassword">
       </nav>
 
-      <nav>
-        <label class="text">Подтверждение нового пароля</label>
-        <div class="d-flex m-0 justify-content gap-4" style="width: 100%">
-          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 51.2%">
+      <nav style="width: 100%">
+        <label class="text ms-5">Подтверждение нового пароля</label>
+        <div class="d-flex m-0 justify-content gap-4">
+          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
@@ -41,9 +40,12 @@
 
 <script>
 import store from "@/store/index.js";
+import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 
 export default {
   name: "teacherProfile",
+  components : {changePasswordNotification},
+  "changePasswordNotification" : changePasswordNotification,
   data() {
     return {
       fullName: '1',
@@ -61,6 +63,8 @@ export default {
       currentPassword: '',
       newPassword: '',
       newPasswordAgain: '',
+      stateOfSending:false,
+      resultOfSending: '',
     }
   },
   methods : {
@@ -80,6 +84,21 @@ export default {
     },
     changePassword(){
       //todo Сделать
+      // if (resultStatus === 200)
+      //   this.resultOfSending = true
+      // else
+      //   this.resultOfSending = false
+      // this.stateOfSending = true
+      // setTimeout(() => {
+      //   this.stateOfSending = false
+      // }, 5000);
+      //todo Сделать
+
+      this.resultOfSending = false
+      this.stateOfSending = true
+      setTimeout(() => {
+        this.stateOfSending = false
+      }, 5000);
     },
     cancelChange(){
       this.stateOfEditing = !this.stateOfEditing
@@ -107,7 +126,13 @@ export default {
 }
 </script>
 
+
 <style scoped>
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
+
 * {
   margin: 0;
   padding: 0;
@@ -123,6 +148,13 @@ header .head-top nav {
   margin-top: 2px;
   margin-left: 20%;
   margin-right: 20%;
+}
+
+.mainText {
+  margin-top: 1rem;
+  color:#7C7F86;
+  font-weight: 300;
+  font-size: 1.2rem;
 }
 
 header .head-top nav a {
@@ -145,7 +177,6 @@ header .head-top nav a:nth-of-type(2) {
 
 .mainPage {
   width: 60%;
-
   background: rgba(255, 255, 255, 1);
   opacity: 1;
   border-top-left-radius: 25px;
@@ -158,16 +189,12 @@ header .head-top nav a:nth-of-type(2) {
 }
 
 div nav {
-  margin-left: 7%;
-  margin-right: 7%;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
   margin-bottom: 1%;
   height: 5em;
-
 }
 
-div div {
-  margin-left: 10px;
-}
 
 div nav button {
   background-color: white !important;
@@ -189,10 +216,6 @@ div nav input {
   font-size: medium;
 }
 
-div nav label {
-  display: block;
-  margin-left: 5%;
-}
 
 .text {
   font-family: "Raleway", sans-serif;

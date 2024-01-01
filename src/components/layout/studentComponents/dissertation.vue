@@ -1,7 +1,7 @@
 <template>
     <sending-files-notification
         v-if="stateOfSending"
-        :result-of-sending = resultOfsending
+        :result-of-sending = resultOfSending
     ></sending-files-notification>
 
   <div class="mainPage">
@@ -13,7 +13,7 @@
     ></header-of-student>
 
     <div class="roundBlock">
-    <div class="d-flex justify-content-between" style="height:3.5em">
+    <div class="d-flex justify-content-between">
       <nav class="checkboxBlock">
         <p class="mainText">Общая информация</p>
       </nav>
@@ -28,28 +28,28 @@
     </div>
     <div>
       <div class="container-fluid justify-content-between d-flex mb-3">
-        <nav style="width: 100%;">
+        <nav class="inputWidth">
           <label class="text">Тема</label>
           <input type="text" class="textInput" :disabled="!editingInfo"  v-model="theme">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
-        <nav style="width: 100%;">
+        <nav class="inputWidth">
           <label class="text">ФИО преподователя</label>
           <input type="text" class="textInput" disabled  v-model="teacherFullName">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
-        <nav style="width: 100%;">
+        <nav class="inputWidth">
           <label class="text">Номер приказа об утверждении</label>
           <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
-        <nav style="width: 100%;">
+        <nav class="inputWidth">
           <label class="text">Дата приказа об утверждении</label>
           <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
         </nav>
@@ -61,7 +61,7 @@
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">План подготовки рукописи диссертаций и автореферата</p>
+        <p class="mainText">План подготовки рукописи диссертаций и автореферата</p>
         <button v-if="!editingCheckbox" @click="editTables" class="editBtn2">Редактировать</button>
         <button v-else @click="saveTables" class="editBtn2">Сохранить</button>
       </div>
@@ -161,9 +161,11 @@
       </div>
 
       <div>
-        <p v-if="feedback === ''" class="mainText" style="text-align: left; margin-left: 5%; font-size: 25px">Рецензия отсутствует</p>
-        <p v-else style="font-size:20px; font-weight: 350">
-          <textarea disabled v-model="feedback" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+
+        <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
+
+        <p v-else class="">
+          <textarea disabled v-model="feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
         </p>
       </div>
     </div>
@@ -205,10 +207,10 @@ export default {
       teacherFullName : "",
       numberOfOrderOfStatement : '',
       dateOfOrderOfStatement : "",
-      actualSemestr: 3,
+      actualSemestr: '',
       jobStatus:'',
       stateOfSending:false,
-      resultOfsending: '',
+      resultOfSending: '',
       arrayWithFilesId: [],
 
       feedback: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
@@ -271,7 +273,7 @@ export default {
     },
 
     fillArrayOfFilesID(data) {
-      this.arrayWithFilesId = Array(this.actualSemestr)
+      this.arrayWithFilesId = Array(data.length)
       for (var i = 0; i < this.arrayWithFilesId.length; i++){
         this.arrayWithFilesId[i] = new Array()
       }
@@ -320,9 +322,9 @@ export default {
 
     makeNotification(resultStatus) {
       if (resultStatus === 200)
-        this.resultOfsending = true
+        this.resultOfSending = true
       else
-        this.resultOfsending = false
+        this.resultOfSending = false
             this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
@@ -344,7 +346,6 @@ export default {
       this.data = await response.data
 
       this.theme = this.data.commonInfo.theme
-      this.teacherFullName = this.data.commonInfo.teacherFullName
       this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
       this.jobStatus = this.data.commonInfo.jobStatus
       this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
@@ -381,8 +382,7 @@ export default {
     catch (e) {
       console.log(e)
     }
-
-    this.jobStatus = 'todo'
+    this.jobStatus = 'todo' //todo this and feedback
     this.files = new Array(this.actualSemestr)
 
 
@@ -395,7 +395,6 @@ export default {
 @import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
 @import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
 
-@import '../../../../static/css/dissertation.css';
 
 
 * {
@@ -411,26 +410,10 @@ export default {
   padding-bottom: 2%;
 }
 
-.sendFilesBtn{
-  margin-right: 2.5%;
-  width: 13%;
-  height: 2.2em;
-  background-color: #0055BB;
-  font-family: "Raleway", sans-serif;
-  font-size:22px;
-  padding: 5px;
-  border-radius: 10px;
-  color:white;
-  font-weight: 400;
-  border: 0;
-  margin-bottom: 1%;
-  margin-top: 1%;
-}
-
 
 
 .myCheckBox{
-  zoom: 0.4;
+  zoom: 0.25;
   accent-color: white;
   background-color: green;
 }
@@ -451,23 +434,18 @@ export default {
 
 }
 
-.stateOfFiles{
-  font-size: 18px;
-  color:#FFC009;
-
-
-}
-
-.imgUploadFile {
-  width: 30px;
-  height: 30px;
-}
-
 
 .myBox {
   width: 80%;
   margin: auto;
 
+}
+
+div input {
+  border-width: 0.15em !important;
+  height: 2.5rem !important;
+  border-radius: 0.7em !important;
+  width: 100% !important;
 }
 
 .underline {
@@ -477,29 +455,20 @@ export default {
 
 .rightLine {
   border-right:  solid 0.12em #DEDEDE !important;
-  font-size: 25px !important;
 }
 
-.btnAddDeleteFiles {
-  border:0;
-  background:white;
-}
-
-.chosen_box{
-background-color: red;
-}
 
 .mainText{
   color:#7C7F86;
   font-weight: 300;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-align: center;
 }
 
 .textTable{
   color:#7C7F86;
   font-weight: 400;
-  font-size:21px;
+  font-size:1rem;
   text-align: center;
 }
 
@@ -507,7 +476,7 @@ background-color: red;
   color:#0055BB;
   border: 0;
   margin-top: 5%;
-  margin-right: 1%;
+  margin-right: 5%;
   background-color: white;
 }
 
@@ -521,39 +490,8 @@ ul p{
   color: #000000;
   font-family: "Raleway", sans-serif;
   font-weight: 600;
-  font-size:22px;
-  margin-left: 2%;
-}
+  font-size:1rem;
 
-.ext{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 600;
-  font-size:22px;
-  margin-left: 2%;
-}
-
-.text2 {
-  display: inline;
-  font-weight: 400;
-  margin-left:0.35%;
-}
-
-.text3 {
-  display: inline;
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 18px;
-  height: 2.2em !important;
-  border-radius: 0.3rem !important;
-}
-
-.selectedFileMessage {
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 15px;
-  margin-left:2%;
-  color: #7C7F86;
 }
 
 .mainPage {
@@ -567,38 +505,24 @@ ul p{
   border-bottom-right-radius: 25px;
   box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
   margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
+  padding: 0 0 0.5%;
 }
 
-.loadText {
-  font-family: 'Raleway', 'sans-serif';
-  font-size: 22px;
-  font-weight: 500;
-}
 
 .image-upload>input {
   display: none;
 }
 
-.textWithCarry{
-  border: 0 !important;
-  resize: none;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y:scroll;
-  font-size: 25px;
-  outline: none;
-}
 
 .text {
   font-family: "Raleway", sans-serif;
   color: #7c7f86;
-  font-size: 22px;
+  font-size: 1rem;
   font-weight: 450;
 }
 
 .textInput {
-  font-size: 20px;
+  font-size: 1rem;
   border-top-left-radius: 10px !important;
   border-top-right-radius: 10px !important;
   border-bottom-left-radius: 10px !important;
@@ -606,10 +530,28 @@ ul p{
   font-weight: 400;
   border-width: 2px 2px 2px 2px !important;
   border-color: #7c7f86 !important;
-
+  height: 2rem !important;
+  padding-left:0.5rem;
 }
 
+.inputWidth {
+  width: 100%;
+}
 
+.noFeedBack{
+  text-align: left;
+  margin-left: 5%;
+  font-size: 1rem
+}
+
+.feedback {
+  border: solid 0.12em #DEDEDE;
+  border-radius: 20px;
+  font-size: 1rem !important;
+  resize: none !important;
+  background-color: white !important;
+  font-weight: 350;
+}
 
 
 </style>

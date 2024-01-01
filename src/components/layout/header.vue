@@ -6,20 +6,20 @@
       <div class="myHeader d-flex justify-content-between">
         <nav>
           <router-link to="/" @click="redirectToMainPage" >
-            <img src="../../../static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center">
+            <img src="../../../static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center imageButtons">
           </router-link>
 
         </nav>
         <div class="d-flex justify-content-end gap-3">
           <nav class="align-items-center justify-content-center me-">
             <router-link to="/profile">
-              <img style="margin-top: 0.5em; color:black" src="../../../static/figures/man_logo.png" alt="logo">
+              <img class= "imageButtons" src="../../../static/figures/man_logo.png" alt="logo">
             </router-link>
           </nav>
 
           <nav class="align-items-center justify-content-center">
             <router-link to="/auth" @click="logout">
-              <img style="margin-top: 0.5em; color:black; width: 40px" src="../../../static/figures/logout.png" alt="logo">
+              <img class= "imageButtons" style="width: 40px" src="../../../static/figures/logout.png" alt="logo">
             </router-link>
           </nav>
         </div>
@@ -99,6 +99,11 @@ div nav input {
 div nav label {
   display: block;
   margin-left: 5%;
+}
+
+.imageButtons {
+  margin-top: 0.5em;
+  color:black
 }
 
 

@@ -1,8 +1,5 @@
 <template>
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
 
   <sending-files-notification
       v-if="stateOfSending"
@@ -18,10 +15,10 @@
         :state-of-admin-page = stateOfAdminPage
     ></header-of-admin>
 
-    <div class="roundBlock pt-2 ps-4">
+    <div class="roundBlock pt-2">
 
-      <div class="mt-2 ms-3">
-        <p class="headerText text-start">Загрузить</p>
+      <div>
+        <p class="mainText text-start">Загрузить</p>
       </div>
 
       <div class="roundBlock m-auto mt-4">
@@ -88,11 +85,11 @@
         </div>
       </div>
 
-      <div style="text-align: right; margin-right: 2.5%; margin-left: 2.5%">
+      <div class="myBtn" >
         <button class="sendFilesBtn p-2" @click="sendFiles">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
-            <p>
+            <p class="loadText">
               Сохранить
             </p>
           </div>
@@ -160,6 +157,10 @@ export default {
 </script>
 
 <style scoped>
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
 
 * {
   margin:0;
@@ -167,10 +168,14 @@ export default {
   box-sizing: border-box;
 }
 
-.headerText{
-  font-family: Raleway,serif;
-  font-size: 24px;
-  font-weight: 400;
+.mainText {
+  margin-left: 2.5% ;
+  /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  margin-top: 1rem;
+  color:#7C7F86;
+  font-weight: 300;
+  font-size: 1.2rem;
+
 }
 
 .mainPage {
@@ -187,6 +192,12 @@ export default {
   padding: 0 0 1.5%;
 }
 
+.myBtn {
+  margin-right: 2.5%;
+  text-align: right
+}
+
+
 .roundBlock {
   border: solid 0.12em #DEDEDE;
   border-radius: 20px;
@@ -198,7 +209,7 @@ export default {
 
 .loadText {
   font-family: 'Raleway', 'sans-serif';
-  font-size: 22px;
+  font-size: 1rem;
   font-weight: 500;
 }
 

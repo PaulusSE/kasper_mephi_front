@@ -1,36 +1,32 @@
 <template>
-  <link href="../../../../static/css/authorization.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
 
 
   <div class="roundBlock">
-    <div class="d-flex justify-content-between"  style="height: 3.5em;">
+    <div class="d-flex justify-content-between" >
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester ">{{id + 1}} семестр</p>
 
-      <div v-if="buttonIsOpened" style="margin-right: 3%">
+      <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">
         </button>
 
       </div>
-      <div v-else style="margin-right: 3%">
+      <div v-else>
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowdown.png" class="semestrImgActive">
         </button>
       </div>
 
     </div>
-    <div v-if="buttonIsOpened" class="text-end" style="margin-right: 3%">
-      <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2" style="margin-top: 5%">Редактировать</button>
+    <div v-if="buttonIsOpened" class="text-end" style="margin-right: 2.5%">
+      <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2 mt-3">Редактировать</button>
       <div v-else>
-        <button class="editBtn2" @click="deleteButton"  style="margin-top: 5%;margin-right: 1%" v-if="!deleteState">Удалить</button>
-        <button class="editBtn2" @click="this.$emit('buttonSmallTableAdd')"  style="margin-top: 5%;margin-right: 1%" v-if="!deleteState">Добавить</button>
-        <button class="editBtn2" @click="cancelChange" style="margin-top: 5%;margin-right: 1%">Отменить</button>
-        <button class="editBtn2" @click="buttonSaveLoad" style="margin-top: 5%">Сохранить</button>
+        <button class="editBtn2 mt-3 me-2" @click="deleteButton" v-if="!deleteState">Удалить</button>
+        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')"  v-if="!deleteState">Добавить</button>
+        <button class="editBtn2 mt-3 me-2" @click="cancelChange" >Отменить</button>
+        <button class="editBtn2 mt-3 me-2" @click="buttonSaveLoad" >Сохранить</button>
       </div>
 
     </div>
@@ -60,7 +56,7 @@
           </div>
 
           <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
-            Кол-во<br>часов<br>сем.
+            Кол-во<br>часов
           </div>
 
         </div>
@@ -270,6 +266,10 @@ export default {
 </script>
 
 <style scoped>
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
 * {
   margin:0;
   padding:0;
@@ -280,6 +280,7 @@ export default {
 .headingSemester {
 
   margin-top:1%;
+  margin-left: 1%;
   color: #7C7F86;
   font-family: "Raleway", sans-serif;
   font-weight: 400;
@@ -293,6 +294,7 @@ export default {
   max-width: 42px;
   margin-top: 0 !important;
   background-color: white;
+  margin-right: 3rem;
 }
 
 
@@ -326,9 +328,8 @@ export default {
   border-radius: 20px;
   width: 95%;
   margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
-
+  padding: 0 !important;
+  margin-bottom: 2%;
 }
 
 

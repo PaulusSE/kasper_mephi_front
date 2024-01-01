@@ -10,7 +10,7 @@
 
     <div class="roundBlock pt-2 ps-4">
 
-      <div class="mt-2 ms-3 mb-3">
+      <div class="mt-2 mb-3">
         <p class="headerText text-start">Аспиранты</p>
       </div>
 
@@ -27,8 +27,8 @@
 
       <div class="roundBlock p-0 pb-1" v-if="arrayOfStudents.length !== 0">
 
-          <div style="margin-left: 0" class="mainText text-start d-flex justify-content-between" :class="{underline:index !== arrayOfStudents.length - 1}"  v-for="(student,index) in arrayOfStudents">
-            <router-link class="ps-4 pt-2" style="padding-bottom: 0.75rem; text-decoration: none; color:#005faf " to="/user">{{index + 1}}. {{student.fullName}}</router-link>
+          <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfStudents.length - 1}"  v-for="(student,index) in arrayOfStudents">
+            <router-link class="ps-4 pt-2 linkStyle" to="/user">{{index + 1}}. {{student.fullName}}</router-link>
             <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteStudent(index)" :disabled="stateOfStudents">
               <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
             </button>
@@ -36,9 +36,9 @@
       </div>
     </div>
 
-    <div class="roundBlock pt-2 ps-4" style="margin-top: 4rem">
+    <div class="roundBlock pt-2 ps-4 mt-5">
 
-      <div class="mt-2 ms-3 mb-3">
+      <div class="mt-2 mb-3">
         <p class="headerText text-start">Научные руководители</p>
       </div>
 
@@ -55,8 +55,8 @@
 
 
       <div class="roundBlock p-0 pb-1"  v-if="arrayOfTeachers.length !== 0">
-        <div style="margin-left: 0" class="mainText text-start d-flex justify-content-between" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
-          <router-link class="ps-4 pt-2" style="padding-bottom: 0.75rem; text-decoration: none; color: #005faf " to="/user1">{{index + 1}}. {{teacher.fullName}}</router-link>
+        <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
+          <router-link class="ps-4 pt-2 linkStyle" to="/user1">{{index + 1}}. {{teacher.fullName}}</router-link>
           <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteTeacher(index)" :disabled="stateOfTeachers">
             <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
           </button>
@@ -197,9 +197,12 @@ export default {
 }
 
 .headerText{
-  font-family: Raleway,serif;
-  font-size: 24px;
-  font-weight: 400;
+  margin-top: 1rem;
+  color:#7C7F86;
+  font-weight: 300;
+  font-size: 1.2rem;
+  margin-left: 2.5% ;
+  /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
 }
 
 .roundBlock {
@@ -216,7 +219,6 @@ export default {
   font-weight: 450;
   font-size:23px !important;
   text-align: start;
-  margin-left:1rem;
 }
 
 .underline {
@@ -231,6 +233,12 @@ export default {
 .trashLogo{
   width:40px !important;
   height: 40px !important;
+}
+
+.linkStyle {
+  padding-bottom: 0.75rem;
+  text-decoration: none;
+  color: #005faf
 }
 
 </style>

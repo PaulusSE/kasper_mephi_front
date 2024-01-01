@@ -1,30 +1,27 @@
-
 <template>
-
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
+  <change-password-notification
+      v-if="stateOfSending"
+      :result-of-sending = resultOfSending
+  ></change-password-notification>
 
   <page-header></page-header>
 
   <div class="mainPage">
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="margin-left: 3em;">
-        <p class="text" style="font-size: 29px; margin-top: 1em;">Основная информация</p>
+      <nav>
+        <p class="mainText">Основная информация</p>
       </nav>
 
       <nav>
-        <button type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="editProfile()" v-if="!stateOfEditing">
+        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">
           <p>Редактировать</p>
         </button>
 
-        <button type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="cancelChange()" v-if="stateOfEditing">
+        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">
           <p>Отменить</p>
         </button>
 
-        <button type="button" class="btn btn-primar" style="margin-top: 1em; font-size: larger;" @click="saveChange()" v-if="stateOfEditing && stateOfWriting">
+        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">
           <p>Сохранить</p>
         </button>
 
@@ -34,22 +31,22 @@
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">ФИО</label>
+        <label class="text ms-5">ФИО</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 70%; margin-right:0">
-        <div style="width: 100%; padding: 0; margin:0;">
-          <label class="text" style="margin-left: 7.5%">Почта</label>
+      <nav style="width: 70%">
+        <div style="width: 100%">
+          <label class="text ms-5">Почта</label>
           <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
         </div>
 
       </nav>
-      <nav style="width: 30%; margin-left: 1%" >
-        <div style="width: 100%; padding: 0; margin:0">
-          <label class="text" >Группа</label>
+      <nav style="width: 30%;">
+        <div style="width: 100%">
+          <label class="text ms-5" >Группа</label>
           <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="group">
         </div>
       </nav>
@@ -57,23 +54,23 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Научная специальность</label>
+        <label class="text ms-5">Научная специальность</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="speciality">
       </nav>
 
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 50%; margin-right:0">
-        <div style="width: 100%; padding: 0; margin:0">
-          <label class="text" style="margin-left: 9.5%">Срок обучения</label>
+      <nav style="width: 50%">
+        <div style="width: 100%">
+          <label class="text ms-5">Срок обучения</label>
           <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="studyingTime">
         </div>
 
       </nav>
-      <nav style="width: 50%; margin-left: 1%" >
-        <div style="width: 100%; padding: 0; margin:0">
-          <label class="text" >Дата начала обучения</label>
+      <nav style="width: 50%" >
+        <div style="width: 100%">
+          <label class="text ms-5" >Дата начала обучения</label>
           <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="startDateStudying">
         </div>
       </nav>
@@ -81,7 +78,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Кафедра</label>
+        <label class="text ms-5">Кафедра</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
       </nav>
 
@@ -89,7 +86,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Факультет</label>
+        <label class="text ms-5">Факультет</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
 
@@ -97,7 +94,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Приказ о зачислении</label>
+        <label class="text ms-5">Приказ о зачислении</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
       </nav>
     </div>
@@ -106,30 +103,29 @@
 
   <div class="mainPage mb-3">
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="margin-left: 3em;">
-        <p class="text" style="font-size: 29px; margin-top: 1em;">Смена пароля</p>
+      <nav>
+        <p class="mainText">Смена пароля</p>
       </nav>
 
 
     </div>
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
-        <label class="text">Старый пароль</label>
+        <label class="text ms-5">Старый пароль</label>
         <input type="text" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
-        <label class="text">Новый пароль</label>
+        <label class="text ms-5">Новый пароль</label>
         <input type="text" @input="inputEvent" v-model="newPassword">
       </nav>
 
-      <nav>
-        <label class="text">Подтверждение нового пароля</label>
-        <div class="d-flex m-0 justify-content gap-4" style="width: 100%">
-          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 51.2%">
+      <nav style="width: 100%">
+        <label class="text ms-5">Подтверждение нового пароля</label>
+        <div class="d-flex m-0 justify-content gap-4">
+          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
-
       </nav>
 
     </div>
@@ -142,9 +138,12 @@
 
 <script>
 import store from "@/store/index.js";
+import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 
 export default {
   name: "studentsMainPage",
+  components : {changePasswordNotification},
+  "changePasswordNotification" : changePasswordNotification,
   data(){
     return {
       fullName: '1',
@@ -168,6 +167,8 @@ export default {
       currentPassword: '',
       newPassword: '',
       newPasswordAgain: '',
+      stateOfSending:false,
+      resultOfSending: '',
 
       stateOfEditing: false,
       stateOfWriting: false,
@@ -194,7 +195,23 @@ export default {
       }
     },
     changePassword(){
+      // if (resultStatus === 200)
+      //   this.resultOfSending = true
+      // else
+      //   this.resultOfSending = false
+      // this.stateOfSending = true
+      // setTimeout(() => {
+      //   this.stateOfSending = false
+      // }, 5000);
       //todo Сделать
+
+      this.resultOfSending = false
+      this.stateOfSending = true
+      setTimeout(() => {
+        this.stateOfSending = false
+      }, 5000);
+
+
     },
     cancelChange(){
       this.stateOfEditing = !this.stateOfEditing
@@ -228,6 +245,16 @@ export default {
 </script>
 
 <style scoped>
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
+
+* {
+  margin:0;
+  padding: 0;
+}
+
 
 .loggining {
   font-size: 1.2rem !important;
@@ -241,9 +268,11 @@ export default {
   color:white !important;
 }
 
-header .head-top {
-  background-color: #005faf;
-  height: 4em;
+.mainText {
+  margin-top: 1rem;
+  color:#7C7F86;
+  font-weight: 300;
+  font-size: 1.2rem;
 }
 
 header .head-top nav {
@@ -303,6 +332,11 @@ div nav button:hover {
   background-color: #7c7f86;
 }
 
+.btnedit{
+  margin-top: 1em;
+  font-size: larger;
+}
+
 div nav input {
   width: 100%;
   border-color: #7c7f86 !important;
@@ -323,6 +357,9 @@ div nav label {
   font-weight: 450;
 }
 
+input {
+  padding-left : 0.5rem;
+}
 
 
 </style>

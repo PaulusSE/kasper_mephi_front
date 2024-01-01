@@ -1,15 +1,9 @@
 <template>
-  <link href="../../../../static/css/authorization.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
   <div class="btnBox">
     <div class="d-flex myContainer">
       <nav>
         <router-link to="#">
-          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')" style="width: max-content;">Аспирант - преподователь
+          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')">Аспирант - преподователь
           </button>
         </router-link>
       </nav>
@@ -17,21 +11,21 @@
 
       <nav>
         <router-link to="#">
-          <button class="btn" :class="{btn_active: stateOfAdminPage === 2, btn_disactive: stateOfAdminPage !==2}" @click="$emit('btnAddUsersButtonClicked')" style="width: max-content;">Добавить пользователя
+          <button class="btn" :class="{btn_active: stateOfAdminPage === 2, btn_disactive: stateOfAdminPage !==2}" @click="$emit('btnAddUsersButtonClicked')">Добавить пользователя
           </button>
         </router-link>
       </nav>
 
       <nav>
         <router-link to="#">
-          <button class="btn" :class="{btn_active: stateOfAdminPage === 3, btn_disactive: stateOfAdminPage !==3}" @click="$emit('btnEditUsersButtonClicked')" style="width: max-content;">Редактировать
+          <button class="btn" :class="{btn_active: stateOfAdminPage === 3, btn_disactive: stateOfAdminPage !==3}" @click="$emit('btnEditUsersButtonClicked')">Редактировать
           </button>
         </router-link>
       </nav>
 
       <nav>
         <router-link to="#">
-          <button class="btn" :class="{btn_active: stateOfAdminPage === 4, btn_disactive: stateOfAdminPage !==4}" @click="$emit('btnReportButtonClicked')" style="width: max-content;">Отчетность
+          <button class="btn" :class="{btn_active: stateOfAdminPage === 4, btn_disactive: stateOfAdminPage !==4}" @click="$emit('btnReportButtonClicked')">Отчетность
           </button>
         </router-link>
       </nav>

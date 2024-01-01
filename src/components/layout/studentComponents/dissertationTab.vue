@@ -1,69 +1,63 @@
 <template>
-  <link href="../../../../static/css/authorization.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
 
   <div class="roundBlock">
-    <div class="d-flex justify-content-between"  style="height: 3.5em;">
+    <div class="d-flex justify-content-between">
 
       <p class="headingSemester">{{id + 1}} семестр</p>
 
-      <div v-if="buttonIsOpened" style="margin-right: 3%">
+      <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">
+          <img src="../../../../static/figures/arrowleft.png">
         </button>
 
       </div>
-      <div v-else style="margin-right: 3%">
+      <div v-else>
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img src="../../../../static/figures/arrowdown.png" class="semestrImgActive">
+          <img src="../../../../static/figures/arrowdown.png">
         </button>
       </div>
     </div>
     <div v-if="buttonIsOpened">
-      <div class="d-flex justify-content-between" style="height:4em">
+      <div class="d-flex justify-content-between">
 
         <nav class="checkboxBlock ms-4">
-          <div class="mainText" style="font-size: 20px; display: inline"> Статус: </div> <p style="display: inline" class="stateOfFiles align">{{jobStatus}}</p>
+          <div class="mainText statusLine d-flex gap-2"> Статус: <p class="stateOfFiles align">{{jobStatus}}</p></div>
         </nav>
 
       </div>
 
 
 
-      <div class="roundBlock m-auto mt-0">
+<!--      <div class="roundBlock m-auto mt-0">-->
 
-        <div class="ms-3 mt-2">
-          <p class="loadText">Титульный лист:</p>
-        </div>
+<!--        <div class="ms-3 mt-2">-->
+<!--          <p class="loadText">Титульный лист:</p>-->
+<!--        </div>-->
 
-        <div v-if="this.tittlePageID === '' " class="ms-5 mt-2">
-          <p class="loadTextState">Файл не выбран</p>
-        </div>
+<!--        <div v-if="this.tittlePageID === '' " class="ms-5 mt-2">-->
+<!--          <p class="loadTextState">Файл не выбран</p>-->
+<!--        </div>-->
 
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ this.tittlePageID}} загружен</p>
-        </div>
+<!--        <div v-else class="ms-5 mt-2">-->
+<!--          <p class="loadTextState">Файл {{ this.tittlePageID}} загружен</p>-->
+<!--        </div>-->
 
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteTitlePage">
-              <img v-if="this.tittlePageID === '' || this.id + 1 !== this.actualSemester || this.id + 1 !== this.actualSemester" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
-            </button>
-          </div>
+<!--        <div class="justify-content-end d-flex gap-1 image-upload">-->
+<!--          <div class="image-upload">-->
+<!--            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteTitlePage">-->
+<!--              <img v-if="(this.tittlePageID === '' || this.id + 1 !== this.actualSemester) && !(this.tittlePageFile.length !== 0)" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>-->
+<!--              <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">-->
+<!--            </button>-->
+<!--          </div>-->
 
-          <div class="image-upload">
-            <label for="file-input1">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input1" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputTitlePage($event)"/>
-          </div>
-        </div>
-      </div>
+<!--          <div class="image-upload">-->
+<!--            <label for="file-input1">-->
+<!--              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>-->
+<!--            </label>-->
+<!--            <input id="file-input1" accept="application/pdf" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputTitlePage($event)"/>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
 
 
@@ -78,13 +72,18 @@
         </div>
 
         <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ this.explanationaryNoteID }} загружен</p>
+          <p class="loadTextState">
+
+            <a href="static/figures/check.svg" download="">Скачать файл</a>
+            <button class="downloadFile">Скачать файл</button>
+
+          </p>
         </div>
 
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
             <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteExplanatoryNote">
-              <img v-if="this.explanationaryNoteID === '' || this.id + 1 !== this.actualSemester" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+              <img v-if="(this.explanationaryNoteID === '' || this.id + 1 !== this.actualSemester) && !(this.explanationaryNoteFile.length !== 0)" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
               <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
             </button>
           </div>
@@ -93,16 +92,16 @@
             <label for="file-input2">
               <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id + 1 !== this.actualSemester" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
-      <div style="text-align: right;">
+      <div class="text-end">
         <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id + 1 !== this.actualSemester">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
-            <p style="font-size: 16px">
+            <p class="loadText">
               Отправить
             </p>
           </div>
@@ -139,7 +138,7 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
     deleteExplanatoryNote() {
-      console.log("Deleting")
+
       this.explanationaryNoteFile = ''
       this.explanationaryNoteID = ''
 
@@ -151,30 +150,32 @@ export default {
       //todo
     },
     async inputTitlePage(){
-      this.tittlePageFile = event.target.files[0]
+      if ( event.target.files[0].type === 'application/pdf' ) {
+        this.tittlePageFile = event.target.files[0]
+      }
     },
     inputExplanatoryFile(){
-      this.explanationaryNoteFile = event.target.files[0]
+      if ( event.target.files[0].type === 'application/pdf' ) {
+        this.explanationaryNoteFile = event.target.files[0]
+      }
     },
+
     async sendFiles(){
+
+      // if (this.tittlePageFile.length === 0 && this.explanationaryNoteFile.length === 0)
+      //   return
+
+      if (this.explanationaryNoteFile.length === 0)
+        return
+
       const obj = {
         'semester': this.actualSemester
       };
       const json = JSON.stringify(obj);
-      const blob = new Blob([json], {
-        type: 'application/json'
-      });
 
       let formData = new FormData();
-      if (this.tittlePageFile !== ''){
-        formData.append('titul', this.tittlePageFile);
-      }
-
-      if (this.explanationaryNoteFile !== ''){
-        formData.append('pz', this.explanationaryNoteFile);
-      }
-
-      formData.append('semester', blob);
+      formData.append('upload', this.explanationaryNoteFile);
+      formData.append('semester', json);
 
       var resultStatus = ''
       try {
@@ -196,14 +197,26 @@ export default {
       this.$emit("makeNotification", resultStatus)
 
     },
+
+    getFiles() {
+      this.explanationaryNoteID = this.ids[this.id].id
+
+    }
   },
   beforeMount() {
-    this.explanationaryNoteID = this.ids[0].id
+    this.getFiles()
+
   }
 }
 </script>
 
 <style scoped>
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
+
+
 * {
   margin:0;
   padding:0;
@@ -217,73 +230,31 @@ export default {
   color: #7C7F86;
   font-family: "Raleway", sans-serif;
   font-weight: 400;
-  font-size:22px;
+  font-size:1.2rem;
 }
 
 .semestrButtonActive {
   border:0 !important;
   width: 3%;
   height: 100%;
-  max-width: 42px;
+  max-width: 1rem;
   margin-top: 0 !important;
   background-color: white;
+  margin-right: 3rem;
 }
 
-
-.trashLogo{
-  width:35px !important;
-  height: 35px !important;
-}
-
-.textMiniTable{
-  color: #7C7F86;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  font-size:18px;
-  text-align: center;
-
-}
-
-.textWithCarry{
-  border: 0 !important;
-  resize: none;
-  width: 100%;
-  overflow-x:hidden;
-  overflow-y:hidden;
-}
-
-.inputBox {
-  border: 0 !important;
-  font-weight: 400;
-  text-align: center;
-  border-radius: 0 !important;
-  color:#000000;
-  background-color: white;
-  outline: none !important;
-
-
-}
 
 
 
 .roundBlock {
   border: solid 0.12em #DEDEDE;
   border-radius: 20px;
-  width: 95%;
+  width: 100% !important;
   margin:auto;
   margin-bottom: 2% !important;
   padding: 0 1% 1%;
+  ;
 
-}
-
-
-.underline {
-  border-bottom: solid 0.12em #DEDEDE;
-
-}
-
-.rightLine {
-  border-right:  solid 0.12em #DEDEDE !important;
 }
 
 .btnAddDeleteFiles {
@@ -291,88 +262,40 @@ export default {
   background:white !important;
 }
 
-
-.editBtn2 {
-  color:#0055BB;
-  border: 0;
-  background-color: white;
-}
-
 ul p{
   color: #000000;
   font-family: "Raleway", sans-serif;
   font-weight: 900;
-  font-size:22px;
+  font-size:1rem;
   margin-left: 2%;
 
 }
 
 .loadText {
   font-family: 'Raleway', 'sans-serif';
-  font-size: 22px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
-.textWithCarry{
-  border: 0 !important;
-  resize: none;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y:scroll;
-  font-size: 25px;
-  outline: none;
-}
-
-.ext{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 600;
-  font-size:22px;
-  margin-left: 2%;
-}
-
-.text2 {
-  display: inline;
-  font-weight: 400;
-  margin-left:0.35%;
-}
-
-.text3 {
-  display: inline;
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 18px;
-  height: 2.2em !important;
-  border-radius: 0.3rem !important;
-}
-
-.selectedFileMessage {
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 15px;
-  margin-left:2%;
-  color: #7C7F86;
-}
 
 .btnAddDeleteFiles {
   border:0;
   background:white;
 }
 
-.chosen_box{
-  background-color: red;
-}
-
 .stateOfFiles{
-  font-size: 20px;
+  font-size: 1rem;
   color:#FFC009;
 
 
 }
-
 .imgUploadFile {
-  width: 30px;
-  height: 30px;
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.loadTextState{
+  font-size: 0.95rem;
 }
 
 .sendFilesBtn{
@@ -381,8 +304,8 @@ ul p{
   height: 2.2em;
   background-color: #0055BB;
   font-family: "Raleway", sans-serif;
-  font-size:22px;
-  padding: 5px;
+  font-size:1.4rem;
+  padding: 0.2rem;
   border-radius: 10px;
   color:white;
   font-weight: 400;
@@ -393,6 +316,17 @@ ul p{
 
 .image-upload>input {
   display: none;
+}
+
+.statusLine {
+  font-size: 1rem;
+}
+
+.downloadFile{
+  border: none;
+  background-color: white;
+  color: #0b5ed7;
+
 }
 
 </style>
