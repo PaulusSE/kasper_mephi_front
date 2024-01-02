@@ -3,7 +3,7 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester">{{id}} семестр</p>
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -21,7 +21,9 @@
       <div class="d-flex justify-content-between">
 
         <nav class="checkboxBlock ms-4">
-          <div class="mainText statusLine d-flex gap-2"> Статус: <p class="stateOfFiles align">{{jobStatus}}</p></div>
+          <div class="mainText statusLine d-flex gap-2"> Статус:
+            <p class="stateOfFiles align" :class="{textResult1:jobStatus === 'Сдано', textResult2:jobStatus === 'На доработку', textResult3 : jobStatus === 'Не сдано'}">{{jobStatus}}</p>
+          </div>
         </nav>
 
       </div>
@@ -67,23 +69,22 @@
           <p class="loadText">Пояснительная записка:</p>
         </div>
 
-        <div v-if="this.explanationaryNoteID === '' " class="ms-5 mt-2">
+        <div v-if="this.explanationaryNoteFile === '' " class="ms-5 mt-2">
           <p class="loadTextState">Файл не выбран</p>
         </div>
 
         <div v-else class="ms-5 mt-2">
           <p class="loadTextState">
 
-            <a href="static/figures/check.svg" download="">Скачать файл</a>
-            <button class="downloadFile">Скачать файл</button>
+            <button class="downloadFile" @click="downloadFile">{{this.explanationaryNoteFilename}}</button>
 
           </p>
         </div>
 
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
-            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteExplanatoryNote">
-              <img v-if="(this.explanationaryNoteID === '' || this.id + 1 !== this.actualSemester) && !(this.explanationaryNoteFile.length !== 0)" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+            <button class="btnAddDeleteFiles" :disabled = "(this.explanationaryNoteFile === '' || this.actualSemester !== this.id)" @click="deleteExplanatoryNote">
+              <img v-if="this.explanationaryNoteFile === '' || this.actualSemester !== this.id" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
               <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
             </button>
           </div>
@@ -92,13 +93,13 @@
             <label for="file-input2">
               <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id + 1 !== this.actualSemester" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
       <div class="text-end">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id + 1 !== this.actualSemester">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id !== this.actualSemester">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
@@ -126,7 +127,7 @@ export default {
       tittlePageFile : '',
       explanationaryNoteFile : '',
       tittlePageID : '',
-      explanationaryNoteID : '',
+      explanationaryNoteFilename : '',
     }
   },
   props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
@@ -138,12 +139,31 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
     deleteExplanatoryNote() {
-
       this.explanationaryNoteFile = ''
-      this.explanationaryNoteID = ''
+      this.explanationaryNoteFilename = ''
+
 
       //todo
     },
+    downloadFile(){
+      // var fileURL = window.URL.createObjectURL(new Blob([this.explanationaryNoteFile]));
+      // var fURL = document.createElement('a');
+      //
+      // fURL.href = fileURL;
+      // fURL.setAttribute('download', 'dissertation.pdf');
+      // document.body.appendChild(fURL);
+      // fURL.click();
+
+      const blob = new Blob([this.explanationaryNoteFile]);
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = this.explanationaryNoteFilename;
+      link.click()
+
+
+
+    },
+
     deleteTitlePage(){
       this.tittlePageFile = ''
       this.tittlePageID = ''
@@ -155,6 +175,7 @@ export default {
       }
     },
     inputExplanatoryFile(){
+      this.explanationaryNoteFilename = event.target.files[0].name
       if ( event.target.files[0].type === 'application/pdf' ) {
         this.explanationaryNoteFile = event.target.files[0]
       }
@@ -169,7 +190,7 @@ export default {
         return
 
       const obj = {
-        'semester': this.actualSemester
+        'semester': this.id
       };
       const json = JSON.stringify(obj);
 
@@ -187,7 +208,7 @@ export default {
             }
         )
         resultStatus = response.status
-        console.log(response)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -198,8 +219,30 @@ export default {
 
     },
 
-    getFiles() {
-      this.explanationaryNoteID = this.ids[this.id].id
+    async getFiles() {
+
+      try {
+        const response = await axios.put("http://localhost:8080/students/dissertation/file/" + localStorage.getItem("access_token"),
+            {
+              "semester" : this.id
+            },
+            {
+              responseType: 'blob',
+            }
+        )
+        if (response.status === 200) {
+
+          console.log(response)
+          this.explanationaryNoteFilename = response.headers["content-disposition"]
+          this.explanationaryNoteFile = response.data
+        }
+
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
 
     }
   },
@@ -225,12 +268,10 @@ export default {
 
 
 .headingSemester {
-
-  margin-top:1%;
-  color: #7C7F86;
-  font-family: "Raleway", sans-serif;
-  font-weight: 400;
-  font-size:1.2rem;
+  color:#7C7F86;
+  font-weight: 300;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 .semestrButtonActive {
@@ -249,7 +290,7 @@ export default {
 .roundBlock {
   border: solid 0.12em #DEDEDE;
   border-radius: 20px;
-  width: 100% !important;
+  width: 95% !important;
   margin:auto;
   margin-bottom: 2% !important;
   padding: 0 1% 1%;
@@ -299,7 +340,7 @@ ul p{
 }
 
 .sendFilesBtn{
-  margin-right: 2.5%;
+  margin-right: 0;
   width: 16%;
   height: 2.2em;
   background-color: #0055BB;
@@ -326,7 +367,27 @@ ul p{
   border: none;
   background-color: white;
   color: #0b5ed7;
+}
 
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  font-size:17px;
+  color:#6BDB6B;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  font-size:17px;
+  color:#FFC009
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  font-size:17px;
+  color:#FF3333;
 }
 
 </style>

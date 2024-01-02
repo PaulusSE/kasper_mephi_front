@@ -140,10 +140,9 @@
         </nav>
       </div>
 
-      <dissertation-tab v-for="(ids,index) in arrayWithFilesId"
+      <dissertation-tab v-for="index in actualSemestr"
                         :id=index
-                        :job-status = statusOfJob[jobStatus]
-                        :ids = ids
+                        :job-status = statusOfJob[this.statuses[index-1][0].status]
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemestr
@@ -208,11 +207,11 @@ export default {
       numberOfOrderOfStatement : '',
       dateOfOrderOfStatement : "",
       actualSemestr: '',
-      jobStatus:'',
+      statuses : [],
       stateOfSending:false,
       resultOfSending: '',
       arrayWithFilesId: [],
-
+      jobStatus : '',
       feedback: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
           "\n ",
       array: {
@@ -223,7 +222,8 @@ export default {
         'failed' : 'Не сдано',
         'passed' : 'Сдано',
         'empty': ''
-      }
+      },
+
     }
 
   }
@@ -291,6 +291,28 @@ export default {
           this.arrayWithFilesId[3].push(data[i])
         }
       }
+
+    },
+
+    fillArrayOfStatuses(data) {
+      this.statuses = Array(data.length)
+      for (var i = 0; i < this.statuses.length; i++){
+        this.statuses[i] = new Array()
+      }
+      for (var i = 0; i < data.length; i++){
+        if (data[i].semester === 1) {
+          this.statuses[0].push(data[i])
+        }
+        if (data[i].semester === 2) {
+          this.statuses[1].push(data[i])
+        }
+        if (data[i].semester === 3) {
+          this.statuses[2].push(data[i])
+        }
+        if (data[i].semester === 4) {
+          this.statuses[3].push(data[i])
+        }
+      }
     },
 
     async saveTables() {
@@ -344,7 +366,6 @@ export default {
     try {
       const response = await axios.get('http://localhost:8080/students/dissertation/' + localStorage.getItem("access_token"))
       this.data = await response.data
-
       this.theme = this.data.commonInfo.theme
       this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
       this.jobStatus = this.data.commonInfo.jobStatus
@@ -375,16 +396,15 @@ export default {
 
       this.dateOfOrderOfStatement = day + '.' + month + '.' + year
       this.actualSemestr = this.data.commonInfo.actualSemestr
-
-      this.fillArrayOfFilesID(this.data.ids)
+      this.fillArrayOfStatuses(this.data.statuses)
+      // this.fillArrayOfFilesID(this.data.ids)
 
     }
     catch (e) {
       console.log(e)
     }
-    this.jobStatus = 'todo' //todo this and feedback
     this.files = new Array(this.actualSemestr)
-
+    console.log(this.statuses)
 
   }
 }

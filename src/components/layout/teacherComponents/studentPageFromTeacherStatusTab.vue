@@ -1,23 +1,17 @@
 <template>
-  <link href="../../../../static/css/authorization.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
 
   <div class="roundBlock">
-    <div class="d-flex justify-content-between"  style="height: 3.5em;">
+    <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester">{{id}} семестр</p>
 
-      <div v-if="buttonIsOpened" style="margin-right: 3%">
+      <div v-if="buttonIsOpened" class="semestrButtonActive">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">
         </button>
 
       </div>
-      <div v-else style="margin-right: 3%">
+      <div v-else class="semestrButtonActive">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowdown.png" class="semestrImgActive">
         </button>
@@ -26,42 +20,43 @@
     <div v-if="buttonIsOpened">
 
       <div class="roundBlock ">
-        <div class="d-flex justify-content-between mt-3" style="height:5em">
+        <div class="d-flex justify-content-between mt-3">
           <nav class="checkboxBlock justify-content-start col-3 ms-0">
             <div class="mySelectedField2 gap-3 d-flex">
-              <p class="mainText" style="font-weight: 400; margin-top: 0.1em">Статус</p>
-              <select class="form-select" id="inputGroupSelect02" style="width: 180px" v-model="stateOfWork" :class="{textResult1: stateOfWork === 'Проверено', textResult2: stateOfWork === 'На доработку', textResult3: stateOfWork === 'Не сдано'}">
+              <p class="mainText">Статус</p>
+              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
                 <option  class="textResult">Выбрать статус</option>
-                <option  class="textResult1">Проверено</option>
+                <option  class="textResult1">Принято</option>
                 <option  class="textResult2">На доработку</option>
                 <option  class="textResult3">Не сдано</option>
               </select>
             </div>
           </nav>
 
+
         </div>
 
-        <div class="roundBlock" style="height: 5em">
-          <ul class="pt-1">
-            <p style="font-family: 'Raleway', 'sans-serif';" class="loadText">Титульный лист</p>
-          </ul>
-          <ul class="selectedFileMessage" v-if="files['ExplanationaryNote'] === ''">
-            Файлы отсутствуют
-          </ul>
-          <ul class="selectedFileMessage" v-else>
-            {{files['TitleList']}}
-          </ul>
-        </div>
+<!--        <div class="roundBlock" style="height: 5em">-->
+<!--          <ul class="pt-1">-->
+<!--            <p style="font-family: 'Raleway', 'sans-serif';" class="loadText">Титульный лист</p>-->
+<!--          </ul>-->
+<!--          <ul class="selectedFileMessage" v-if="true">-->
+<!--            Файлы отсутствуют-->
+<!--          </ul>-->
+<!--          <ul class="selectedFileMessage" v-else>-->
+<!--            {{}}-->
+<!--          </ul>-->
+<!--        </div>-->
 
-        <div class="roundBlock" style="height: 5em">
+        <div class="roundBlock">
           <ul>
             <p class="loadText">Пояснительная записка</p>
           </ul>
-          <ul class="selectedFileMessage" v-if="files['TitleList'] === ''">
+          <ul class="selectedFileMessage" v-if="this.explanationaryNoteFilename === ''">
             Файлы отсутствуют
           </ul>
           <ul class="selectedFileMessage" v-else>
-            {{files['TitleList']}}
+            <button class="downloadFile" @click="downloadFile">{{this.explanationaryNoteFilename}}</button>
           </ul>
         </div>
 
@@ -76,22 +71,77 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "studentPageFromTeacherStatusTab",
-  props : ["files", "id"],
+  props : ["id", "jobStatus"],
   data()  {
     return {
       buttonIsOpened : false,
-      stateOfWork : "'Проверено'"
+      status : '',
+      explanationaryNoteFile : '',
+      tittlePageID : '',
+      explanationaryNoteFilename : '',
     }
   },
   methods : {
     buttonClicked() {
       this.buttonIsOpened = !this.buttonIsOpened
+    },
+    async getFiles() {
+
+      try {
+        const response = await axios.put("http://localhost:8080/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
+            {
+              "semester" : this.id,
+              "studentID" : localStorage.getItem("studentID")
+            },
+            {
+              responseType: 'blob',
+            }
+        )
+        if (response.status === 200) {
+          this.explanationaryNoteFilename = response.headers["content-disposition"]
+          this.explanationaryNoteFile = response.data
+        }
+
+      }
+      catch (e) {
+
+        this.showWrongAnswerString = true;
+      }
+    },
+    downloadFile() {
+      const blob = new Blob([this.explanationaryNoteFile]);
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = this.explanationaryNoteFilename;
+      link.click()
+    },
+    async updateState() {
+      setTimeout(async () => {
+
+        try {
+          const response = await axios.post("http://localhost:8080/supervisor/students/set_status/" + localStorage.getItem("access_token"),
+              {
+                "semester": this.id,
+                "studentID": localStorage.getItem("studentID"),
+                "status": this.status
+              },
+          )
+        } catch (e) {
+          console.log(e)
+        }
+
+      }, 100);
+
+
     }
   },
   beforeMount() {
-
+    this.getFiles()
+    this.status = this.jobStatus
   }
 }
 </script>
@@ -125,6 +175,18 @@ export default {
   font-size:22px;
 }
 
+.mySelectedField {
+  width: 12rem !important;
+  margin-bottom: 1rem;
+}
+
+.downloadFile{
+  border: none;
+  background-color: white;
+  color: #0b5ed7;
+}
+
+
 .textResult1 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
@@ -146,6 +208,8 @@ export default {
   color:#FF3333;
 }
 
+
+
 .mainText{
   color:#7C7F86;
   font-weight: 300;
@@ -157,6 +221,16 @@ export default {
   font-family: 'Raleway', 'sans-serif';
   font-size: 22px;
   font-weight: 500;
+}
+
+.semestrButtonActive {
+  border:0 !important;
+  width: 3%;
+  height: 100%;
+  max-width: 1rem;
+  margin-top: 0 !important;
+  background-color: white;
+  margin-right: 3rem;
 }
 
 

@@ -16,22 +16,27 @@
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <label class="text ms-5">Старый пароль</label>
-        <input type="text" @input="inputEvent" v-model="currentPassword">
+        <input type="password" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
         <label class="text ms-5">Новый пароль</label>
-        <input type="text" @input="inputEvent" v-model="newPassword">
+        <input type="password" @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%">
         <label class="text ms-5">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
-          <input type="text" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
+          <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
     </div>
+
+    <transition name="slide-fade">
+      <div v-if="errorText!==''" class = "wrongPassword">{{errorText}}</div>
+    </transition>
+
   </div>
 
 
@@ -41,6 +46,7 @@
 <script>
 import store from "@/store/index.js";
 import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
+import axios from "axios";
 
 export default {
   name: "teacherProfile",
@@ -65,6 +71,7 @@ export default {
       newPasswordAgain: '',
       stateOfSending:false,
       resultOfSending: '',
+      errorText : ''
     }
   },
   methods : {
@@ -78,28 +85,46 @@ export default {
       this.academicDegreeCopy = this.academicDegree
     },
     inputEvent(){
+      if (this.errorText !== '')
+        this.errorText = ''
       if(!this.stateOfWriting){
         this.stateOfWriting = !this.stateOfWriting
       }
     },
-    changePassword(){
-      //todo Сделать
-      // if (resultStatus === 200)
-      //   this.resultOfSending = true
-      // else
-      //   this.resultOfSending = false
-      // this.stateOfSending = true
-      // setTimeout(() => {
-      //   this.stateOfSending = false
-      // }, 5000);
-      //todo Сделать
 
-      this.resultOfSending = false
+    async changePassword(){
+      if (this.currentPassword.length === 0 || this.newPassword.length === 0 || this.newPasswordAgain.length === 0){
+        this.errorText = "Поля не должны быть пустыми"
+        return
+      }
+
+      if (this.newPassword !== this.newPasswordAgain){
+        this.errorText = "Пароли не совпадают"
+        return
+      }
+
+      var resultState = ''
+      try {
+        const response = await axios.post("http://localhost:8080/authorization/change_password/" + localStorage.getItem("access_token"),
+            {
+              "oldPassword": this.currentPassword,
+              "newPassword": this.newPassword,
+            }
+        )
+        resultState = response.status
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+      this.resultOfSending = (resultState === 200)
       this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
     },
+
     cancelChange(){
       this.stateOfEditing = !this.stateOfEditing
       this.fullName = this.fullNameCopy
@@ -214,6 +239,7 @@ div nav input {
   border-radius: 0.7em;
   height: 3em;
   font-size: medium;
+  padding-left: 0.5rem;
 }
 
 
@@ -236,5 +262,26 @@ div nav input {
   color:white !important;
 }
 
+.wrongPassword {
+  color: red;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-align: center;
+  padding-top: 2%;
+}
+
+.slide-fade-enter-active {
+  transition: all .3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all .8s
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+}
 
 </style>

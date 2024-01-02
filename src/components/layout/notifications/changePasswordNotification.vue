@@ -7,7 +7,7 @@
       </div>
       <div class="alert alert-danger" role="alert" v-if="!resultOfSending">
         <img src="../../../../static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
-        Что-то пошло не так
+        Не удалось изменить пароль
       </div>
     </div>
   </Transition>

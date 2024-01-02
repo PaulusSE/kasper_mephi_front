@@ -56,15 +56,11 @@ export default {
 
     },
   async beforeMount() {
-    const stateOfLogining = await store.dispatch("checkIfLogined")
-    if (!stateOfLogining){
-      this.$router.push('/auth')
-      return
-    }
+
 
     },
   beforeCreate() {
-    this.$store.dispatch("updateUserType", localStorage.getItem('user_type'))
+
   }
 }
 

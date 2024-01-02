@@ -12,6 +12,7 @@ import teacherProfile from "@/components/layout/teacherComponents/teacherProfile
 import header from "@/components/layout/header.vue"
 import store from "@/store/index.js";
 import adminProfile from "@/components/layout/adminComponents/adminProfile.vue";
+import axios from "axios";
 export default {
   name: "profile",
 
@@ -26,15 +27,32 @@ export default {
     "pageHeader" : header,
     "adminProfile" : adminProfile
   },
-  async beforeMount() {
-    const stateOfLogining =await store.dispatch("checkIfLogined")
-    if (!stateOfLogining){
-      this.$router.push('/auth')
-    }
+  methods : {
+    async checkAuth() {
+      try {
+        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+        console.log(response)
+        if (response.status === 200){
+          this.$store.dispatch("updateUserType", response.data.userType)
+        }
+        else {
+          this.$router.push('/auth')
+        }
+
+      } catch (e) {
+        console.log(e)
+        this.$router.push('/auth')
+      }
+    },
   },
-  beforeCreate() {
-    this.$store.dispatch("updateUserType", localStorage.getItem('user_type'))
-  }
+  async beforeMount() {
+    this.$store.dispatch("updateUserType", 'admin')
+
+  },
+  async beforeCreate() {
+    this.$store.dispatch("updateUserType", 'admin')
+  },
+
 
 }
 </script>

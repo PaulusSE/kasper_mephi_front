@@ -1,11 +1,4 @@
 <template>
-  <link href="../../../../static/css/dissertation.css" rel="stylesheet">
-  <link href="../../../../static/css/bootstap.css" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <link href="../../../../static/css/studentProfile.css" rel="stylesheet">
-  <link href="../../../../static/css/dissertation.css" rel="stylesheet">
 
 
 
@@ -14,7 +7,7 @@
   <div class="mainPage">
     <div class="pt-4">
       <div class="roundBlock">
-        <div class="d-flex justify-content-between" style="height:3.5em">
+        <div class="d-flex justify-content-between">
           <nav class="checkboxBlock">
             <p class="mainText">Общая информация</p>
           </nav>
@@ -42,41 +35,41 @@
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText" style="text-align: left">План подготовки рукописи диссертаций и автореферата</p>
+        <p class="mainText">План подготовки рукописи диссертаций и автореферата</p>
 
       </div>
 
       <div class="myBox roundBlock p-0">
         <div class="d-flex underline" >
-          <div class="rightLine col-6 mainText">
+          <div class="rightLine col-6 textTable">
             Этап
           </div>
-          <div class="col-6 mainText" >
+          <div class="col-6 textTable" >
             Семестр
           </div>
         </div>
 
 
         <div class="d-flex underline">
-          <div class="col-6 mainText rightLine">
+          <div class="col-6 textTable rightLine">
 
           </div>
-          <div class="col-1 mainText rightLine">
+          <div class="col-1 textTable rightLine">
             1
           </div>
-          <div class="col-1 mainText rightLine">
+          <div class="col-1 textTable rightLine">
             2
           </div>
-          <div class="col-1 mainText rightLine">
+          <div class="col-1 textTable rightLine">
             3
           </div>
-          <div class="col-1 mainText rightLine">
+          <div class="col-1 textTable rightLine">
             4
           </div>
-          <div class="col-1 mainText rightLine">
+          <div class="col-1 textTable rightLine">
             5
           </div>
-          <div class="col-1 mainText">
+          <div class="col-1 textTable">
             6
           </div>
 
@@ -88,22 +81,22 @@
           <div class="col-6 textTable rightLine">
             {{key}}
           </div>
-          <div class="col-1 mainText myInput rightLine">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id1 disabled>
           </div>
-          <div class="col-1 mainText myInput rightLine">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id2 disabled>
           </div>
-          <div class="col-1 mainText myInput rightLine">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id3 disabled>
           </div>
-          <div class="col-1 mainText myInput rightLine">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id4 disabled>
           </div>
-          <div class="col-1 mainText myInput rightLine">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id5 disabled>
           </div>
-          <div class="col-1 mainText myInput">
+          <div class="col-1 textTable myInput">
             <input type="checkbox" class="myCheckBox" v-model=value.id6 disabled>
           </div>
 
@@ -112,10 +105,9 @@
 
     </div>
 
-    <student-page-from-teacher-status-tab v-for="(files, index) in arrayWithLinksToFiles"
+    <student-page-from-teacher-status-tab v-for="index in this.actualSemestr"
                                           :id = index
-                                          :files = files
-                                          :state-of-work = stateOfWork
+                                          :job-status = statusOfJob[this.statuses[index-1][0].status]
 
     ></student-page-from-teacher-status-tab>
 
@@ -126,7 +118,7 @@
         </nav>
         <nav>
           <button v-if="!editingReview" class="editBtn pt-1 ps-0" @click="buttonClicked">Редактировать</button>
-          <button v-else class="editBtn pt-1 ps-1" @click="buttonClicked">Сохранить</button>
+          <button v-else class="editBtn pt-1 ps-1" @click="saveReview">Сохранить</button>
         </nav>
       </div>
 
@@ -173,14 +165,20 @@ export default {
           ExplanationaryNote : ''
         },
       ],
-      array: {
-      },
+      array: {},
       stateOfWork: '',
       textOfReview: '',
       theme : "",
       teacherFullName: "",
       numberOfOrderOfStatement: "",
-      dateOfOrderOfStatement: ""
+      dateOfOrderOfStatement: "",
+      statuses : [],
+      statusOfJob : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Принято',
+        'empty': ''
+      }
     }
 
   },
@@ -188,13 +186,28 @@ export default {
     buttonClicked() {
       this.editingReview = !this.editingReview
     },
+    async saveReview(){
+      this.editingReview = !this.editingReview
+      console.log(this.textOfReview)
+      try {
+        const response = await axios.post("http://localhost:8080/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
+              "studentID" : this.$store.getters.getuserId,
+              "feedback" : this.textOfReview
+            }
+        )
+        console.log(response)
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
     async getStudentCommonInfo() {
       try {
         const response = await axios.put("http://localhost:8080/supervisors/student/" + localStorage.getItem("access_token"), {
             "studentID" : this.$store.getters.getuserId
             }
         )
-
 
         this.data = await response.data
         console.log(this.data)
@@ -228,16 +241,35 @@ export default {
 
         this.dateOfOrderOfStatement = day + '.' + month + '.' + year
         this.actualSemestr = this.data.commonInfo.actualSemestr
-
+        this.fillArrayOfStatuses(response.data.statuses)
+        console.log(response)
 
       }
-
-
 
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
-    }
+    },
+    fillArrayOfStatuses(data) {
+      this.statuses = Array(data.length)
+      for (var i = 0; i < this.statuses.length; i++){
+        this.statuses[i] = new Array()
+      }
+      for (var i = 0; i < data.length; i++){
+        if (data[i].semester === 1) {
+          this.statuses[0].push(data[i])
+        }
+        if (data[i].semester === 2) {
+          this.statuses[1].push(data[i])
+        }
+        if (data[i].semester === 3) {
+          this.statuses[2].push(data[i])
+        }
+        if (data[i].semester === 4) {
+          this.statuses[3].push(data[i])
+        }
+      }
+    },
   },
 
   async beforeMount() {
@@ -273,31 +305,11 @@ export default {
   padding-bottom: 2%;
 }
 
-.mySelectedField {
-  width: 19% !important;
-  margin-left: 75.5% !important;
-}
-
-.mySelectedField2 {
-  padding-left: 0 !important;
-  width: 100% !important;
-  font-size: 22px !important;
-  font-weight: 500 !important;
-}
-
-.reviewInput {
-  border: 0.2 !important;
-  width: 100%;
-  text-align: center !important;
-  font-size:18px !important;
-  height: 10rem;
-}
-
 
 
 
 .myCheckBox{
-  zoom: 0.4;
+  zoom: 1.2;
   accent-color: white;
   background-color: green;
 
@@ -348,9 +360,9 @@ export default {
 
 .mainText{
   color:#7C7F86;
-  font-weight: 300;
   font-size:30px;
   text-align: center;
+  font-weight: 400;
 
 
 
@@ -370,6 +382,7 @@ export default {
   border: 0 !important;
   margin-top: 15% !important;
   margin-right: 1.5rem !important;
+  background-color: white;
 }
 
 

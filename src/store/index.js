@@ -5,7 +5,7 @@ import axios from "axios";
 export default createStore({
     state () {
         return {
-            type : 'admin',
+            type : '',
             user_id : ''
 
         }
@@ -14,6 +14,7 @@ export default createStore({
 
         setUserType(state, type){
             state.type = type
+            console.log("Type is changed")
         },
 
         setUserId(state, id){
@@ -22,13 +23,6 @@ export default createStore({
 
     },
     actions: {
-        async checkIfLogined() {
-            if (localStorage.length === 0) // Todo Поправить на проверку именно токена
-                return false
-
-            //Запрос на сервер на актуальность токена
-            return true
-        },
 
         async updateUserType(ctx, type) {
 
