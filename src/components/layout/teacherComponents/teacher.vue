@@ -4,7 +4,6 @@
     <div class="aspirantText">
       <p>Аспиранты</p>
     </div>
-
     <div v-for="student in arrayOfStudents">
       <tab-of-student
       :full-name = student.fullName

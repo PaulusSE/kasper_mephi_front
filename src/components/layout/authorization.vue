@@ -96,6 +96,7 @@ export default {
         return
       }
 
+      //todo проверка на соответствие логина и пароля форматам
       // if (!(this.checkPassword(this.password) && !this.isEmailValid(this.login))){
       //   this.showEmptyfieldErrorLanguage = true
       //   return
@@ -109,7 +110,7 @@ export default {
                 }
 
         )
-
+        console.log(response)
         if (response.status === 200){
           this.data = await response.data
 
@@ -117,7 +118,6 @@ export default {
           localStorage.setItem("access_token", this.data.token)
           this.$store.dispatch("updateUserType", this.data.client_type)
           this.$router.push('/')
-          localStorage.setItem("user_type", this.data.client_type)
         }
       }
       catch (e) {

@@ -4,7 +4,18 @@
 
 <page-header></page-header>
 
+
+
   <div class="mainPage">
+
+    <header-of-student
+        @btnDissertationClicked="$emit('btnDissertationClicked')"
+        @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
+        @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
+        :state-of-student-page = stateOfStudentPage
+    ></header-of-student>
+
+
     <div class="pt-4">
       <div class="roundBlock">
         <div class="d-flex justify-content-between">
@@ -144,11 +155,13 @@ import header from "@/components/layout/header.vue";
 import store from "@/store/index.js";
 import studentPageFromTeacherStatusTab from "@/components/layout/teacherComponents/studentPageFromTeacherStatusTab.vue";
 import axios from "axios";
+import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 export default {
   name: "studentPageFromTeacher",
   components : {
     "pageHeader" : header,
-    'studentPageFromTeacherStatusTab' : studentPageFromTeacherStatusTab
+    'studentPageFromTeacherStatusTab' : studentPageFromTeacherStatusTab,
+    'headerOfStudent' : headerOfStudent
 
   },
   data(){

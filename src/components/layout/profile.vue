@@ -34,6 +34,7 @@ export default {
         console.log(response)
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
+          this.type = response.data.userType
         }
         else {
           this.$router.push('/auth')
@@ -46,12 +47,15 @@ export default {
     },
   },
   async beforeMount() {
-    this.$store.dispatch("updateUserType", 'admin')
+    this.checkAuth()
+
 
   },
   async beforeCreate() {
-    this.$store.dispatch("updateUserType", 'admin')
+
   },
+  mounted() {
+  }
 
 
 }

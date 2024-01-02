@@ -150,8 +150,6 @@
 
     </div>
 
-
-
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
@@ -168,7 +166,6 @@
         </p>
       </div>
     </div>
-
 
 
   </div>

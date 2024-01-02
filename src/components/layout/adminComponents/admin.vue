@@ -56,14 +56,6 @@ export default {
   },
   async beforeMount() {
 
-    const stateOfLogining = await store.dispatch("checkIfLogined")
-    if (!stateOfLogining)
-      this.$router.push('/auth')
-
-
-    if (store.getters.getType !== "admin"){
-      this.$router.push('/wrongAccess')
-    }
   }
 }
 </script>

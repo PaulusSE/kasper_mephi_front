@@ -22,6 +22,7 @@ import student from "@/components/layout/studentComponents/student.vue";
 import teacher from "@/components/layout/teacherComponents/teacher.vue";
 import admin from "@/components/layout/adminComponents/admin.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 export default {
   name: "mainPage",
   components: {
@@ -53,13 +54,30 @@ export default {
     buttonManageAdminPageClicked(index){
       this.stateOfAdminPage = index
     },
+    async checkAuth() {
+      try {
+        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+        console.log(response)
+        if (response.status === 200){
+          this.$store.dispatch("updateUserType", response.data.userType)
+          this.type = response.data.userType
+        }
+        else {
+          this.$router.push('/auth')
+        }
+
+      } catch (e) {
+        console.log(e)
+        this.$router.push('/auth')
+      }
+    },
 
     },
   async beforeMount() {
-
-
+    this.checkAuth()
     },
   beforeCreate() {
+
 
   }
 }

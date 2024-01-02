@@ -14,7 +14,6 @@ export default createStore({
 
         setUserType(state, type){
             state.type = type
-            console.log("Type is changed")
         },
 
         setUserId(state, id){
