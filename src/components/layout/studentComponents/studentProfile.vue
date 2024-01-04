@@ -12,7 +12,8 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-      <nav>
+      <nav v-if="false">
+        <!--todo решить с возможностью редактирования-->
         <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">
           <p>Редактировать</p>
         </button>
@@ -24,29 +25,28 @@
         <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">
           <p>Сохранить</p>
         </button>
-
-
-
       </nav>
+
+
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">ФИО</label>
+        <label class="text ms-0">ФИО</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 70%">
+      <nav style="width: 60%">
         <div style="width: 100%">
-          <label class="text ms-5">Почта</label>
+          <label class="text ms-0">Почта</label>
           <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
         </div>
 
       </nav>
       <nav style="width: 30%;">
         <div style="width: 100%">
-          <label class="text ms-5" >Группа</label>
+          <label class="text ms-0" >Группа</label>
           <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="group">
         </div>
       </nav>
@@ -54,23 +54,23 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Научная специальность</label>
+        <label class="text ms-0">Научная специальность</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="speciality">
       </nav>
 
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
+    <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <div style="width: 100%">
-          <label class="text ms-5">Срок обучения</label>
+          <label class="text ms-0">Срок обучения</label>
           <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="studyingTime">
         </div>
 
       </nav>
       <nav style="width: 50%" >
         <div style="width: 100%">
-          <label class="text ms-5" >Дата начала обучения</label>
+          <label class="text ms-0" >Дата начала обучения</label>
           <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="startDateStudying">
         </div>
       </nav>
@@ -78,7 +78,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Кафедра</label>
+        <label class="text ms-0">Кафедра</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
       </nav>
 
@@ -86,7 +86,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Факультет</label>
+        <label class="text ms-0">Факультет</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
 
@@ -94,7 +94,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Приказ о зачислении</label>
+        <label class="text ms-0">Приказ о зачислении</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
       </nav>
     </div>
@@ -111,17 +111,17 @@
     </div>
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
-        <label class="text ms-5">Старый пароль</label>
+        <label class="text ms-0">Старый пароль</label>
         <input type="password" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
-        <label class="text ms-5">Новый пароль</label>
+        <label class="text ms-0">Новый пароль</label>
         <input type="password" @input="inputEvent" v-model="newPassword">
       </nav>
 
-      <nav style="width: 100%">
-        <label class="text ms-5">Подтверждение нового пароля</label>
+      <nav style="width: 100%" class="mb-1">
+        <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
           <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
@@ -280,118 +280,245 @@ export default {
 }
 
 
-.loggining {
-  font-size: 1.2rem !important;
-  height: 3rem !important;
-  width: 6rem !important;
-  background-color: #0055bb !important;
-  font-weight: 300 !important;
-  border-radius: 0.7em !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  color:white !important;
+
+
+@media (min-width: 800px) {
+  .loggining {
+    font-size: 1.2rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.5rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+
+  header .head-top nav {
+    margin-top: 2px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  header .head-top nav a {
+    height: 20px;
+    width: 20px;
+  }
+
+  header .head-top nav a:nth-of-type(1) {
+    width: 10px;
+    height: 10px;
+    margin: 0 auto;
+  }
+
+  header .head-top nav a:nth-of-type(2) {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1rem !important;
+    font-weight: 450;
+  }
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;;
+    margin-bottom: 1%;
+    height: 5em;
+  }
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  .btnedit{
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: medium;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+
+
+  input {
+    padding-left : 0.5rem;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 2%;
+  }
 }
 
-.mainText {
-  margin-top: 1rem;
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
-}
+@media (max-width: 800px) {
+  .loggining {
+    font-size: 1rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
 
-header .head-top nav {
-  margin-top: 2px;
-  margin-left: 20%;
-  margin-right: 20%;
-}
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
 
-header .head-top nav a {
-  height: 20px;
-  width: 20px;
-}
+  header .head-top nav {
+    margin-top: 2px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
 
-header .head-top nav a:nth-of-type(1) {
-  width: 10px;
-  height: 10px;
-  margin: 0 auto;
-}
+  header .head-top nav a {
+    height: 20px;
+    width: 20px;
+  }
 
-header .head-top nav a:nth-of-type(2) {
-  width: 30px;
-  height: 30px;
-  margin: 0 auto;
-  margin-top: 10px;
-}
+  header .head-top nav a:nth-of-type(1) {
+    width: 10px;
+    height: 10px;
+    margin: 0 auto;
+  }
 
-.mainPage {
-  width: 60%;
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem !important;
+    font-weight: 450;
 
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto auto;
-  padding-bottom: 1.5%;
-}
+  }
 
-div nav {
-  margin-left: 1.5rem !important;
-  margin-right: 1.5rem !important;;
-  margin-bottom: 1%;
-  height: 5em;
-}
+  header .head-top nav a:nth-of-type(2) {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
 
-div nav button {
-  background-color: white !important;
-  border-color: white !important;
-  color: #0055bb !important;
-  transition: 0.5s all ease;
-}
+  .mainPage {
+    width: 80%;
 
-div nav button:hover {
-  color: darkblue;
-  background-color: #7c7f86;
-}
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
 
-.btnedit{
-  margin-top: 1em;
-  font-size: larger;
-}
+  div nav {
+    margin-left: 1.5rem !important;
+    margin-right: 1.5rem !important;;
+    margin-bottom: 1%;
+    height: 5em;
+  }
 
-div nav input {
-  width: 100%;
-  border-color: #7c7f86 !important;
-  border-radius: 0.7em;
-  height: 3em;
-  font-size: medium;
-}
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
 
-div nav label {
-  display: block;
-  margin-left: 5%;
-}
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
 
-.text {
-  font-family: "Raleway", sans-serif;
-  color: #7c7f86;
-  font-size: 22px;
-  font-weight: 450;
-}
+  .btnedit{
+    margin-top: 1rem;
+    font-size: 0.8rem;
 
-input {
-  padding-left : 0.5rem;
-}
+  }
 
-.wrongPassword {
-  color: red;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  font-size: 1.2rem;
-  text-align: center;
-  padding-top: 2%;
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: medium;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 22px;
+    font-weight: 450;
+  }
+
+  input {
+    padding-left : 0.5rem;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: center;
+    padding-top: 2%;
+  }
 }
 
 .slide-fade-enter-active {

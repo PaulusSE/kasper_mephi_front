@@ -21,13 +21,7 @@
     @saveArticles = saveArticles()
     @makeCopy = makeCopy
     @deleteArticle="(n) => deleteArticle(index, n)"
-    v-if="educationTime * 2 === arrayOfArticles.length"
     ></tab-of-articles>
-
-
-
-
-
   </div>
 
 
@@ -59,53 +53,8 @@ export default {
       isTableEditing: false,
       arrayOfArticlesCopy: [],
       arrayOfArticles: [
-        //   [{
-        //     name:"Статься «Суслики и их виды»",
-        //     state:"UBC",
-        //     impact: 0.67,
-        //     comeOutData: "В мире детей, №5(29), 2012. c26-28",
-        //     volume: 3,
-        //     co_authors: "Ванко А.А, Буйко В.В",
-        //     semestr : 1,
-        //   },],
-        //   [
-        //     {
-        //       name:"123Статься «Суслики и их виды» 123Статься «Суслики и их виды» 123Статься «Суслики и их виды»",
-        //       state:"UBC",
-        //       impact: 0.67,
-        //       comeOutData: "В мире детей, №5(29), 2012. c26-28",
-        //       volume: 3,
-        //       co_authors: "Ванко А.А, Буйко В.В",
-        //       semestr : 2,
-        //     },
-        //     {
-        //       name:"Бла бла бла 128",
-        //       state:"вы",
-        //       impact: 0.2,
-        //       comeOutData: "с23",
-        //       volume: 15,
-        //       co_authors: "БуБУ",
-        //       semestr : 2,
-        //     }
-        //   ],
-        //   [
-        // {
-        //   name:"Статься «Суслики и их виды»",
-        //   state:"ВАК",
-        //   impact: 0.35,
-        //   comeOutData: "В мире животных, №1(29), 2012. c26-28",
-        //   volume: 3,
-        //   co_authors: "Петров А.А, Сидоров В.В",
-        //   semestr : 3,
-        // },],
-        //   [],
-        //
-        //   [],
-        //   [],
-        //   [],
-        //   [],
       ],
-      arrayDeleteWorkId : []
+      arrayDeleteWorkId : [],
     }
   },
 
@@ -141,6 +90,7 @@ export default {
         volume: null,
         co_authors: '',
         semester : n + 1,
+        numberOfSemesters : ''
       }
       this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
     },
@@ -193,7 +143,7 @@ export default {
       }
 
       if (this.arrayDeleteWorkId.length === 0){
-        this.fillArrayOfArticles(this.data)
+        this.fillArrayOfArticles(this.data, this.numberOfSemesters)
         return
       }
 
@@ -206,7 +156,7 @@ export default {
             }
         )
         this.data = response.data;
-        this.fillArrayOfArticles(this.data)
+        this.fillArrayOfArticles(this.data, this.numberOfSemesters)
       }
       catch (e) {
         console.log(e)
@@ -236,28 +186,41 @@ export default {
       this.isTableEditing = !this.isTableEditing;
     },
 
-    fillArrayOfArticles(data){
+    fillArrayOfArticles(data, numberOfSemesters){
 
-
-      this.arrayOfArticles = Array(4)
+      this.arrayOfArticles = Array(parseInt(numberOfSemesters))
       for (var i = 0; i < this.arrayOfArticles.length; i++){
         this.arrayOfArticles[i] = new Array()
       }
 
-      for (var i = 0; i < this.data.length; i++){
+      for (var i = 0; i < data.length; i++){
         if (data[i].semester === 1) {
-          this.arrayOfArticles[0].push(this.data[i])
+          this.arrayOfArticles[0].push(data[i])
         }
         if (data[i].semester === 2) {
-          this.arrayOfArticles[1].push(this.data[i])
+          this.arrayOfArticles[1].push(data[i])
         }
         if (data[i].semester === 3) {
-          this.arrayOfArticles[2].push(this.data[i])
+          this.arrayOfArticles[2].push(data[i])
         }
         if (data[i].semester === 4) {
-          this.arrayOfArticles[3].push(this.data[i])
+          this.arrayOfArticles[3].push(data[i])
         }
+        if (data[i].semester === 5) {
+          this.arrayOfArticles[4].push(data[i])
+        }
+        if (data[i].semester === 6) {
+          this.arrayOfArticles[5].push(data[i])
+        }
+        if (data[i].semester === 7) {
+          this.arrayOfArticles[6].push(data[i])
+        }
+        if (data[i].semester === 8) {
+          this.arrayOfArticles[7].push(data[i])
+        }
+
       }
+      console.log(this.arrayOfArticles)
     },
 
     async loadScientificWorks() {
@@ -265,7 +228,9 @@ export default {
         const response = await axios.get('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"))
         console.log(response)
         this.data = await response.data;
-        this.fillArrayOfArticles(this.data)
+        this.fillArrayOfArticles(this.data.works, this.data.years * 2)
+        this.numberOfSemesters = this.data.years * 2
+
       }
       catch (e) {
         console.log(e)
@@ -297,109 +262,219 @@ export default {
   box-sizing: border-box;
 }
 
-.bigBox{
-  width: 22%;
+@media (min-width: 800px) {
+  .bigBox{
+    width: 22%;
+  }
+
+  .smallBox{
+    width: 10.85%;
+
+  }
+
+
+
+
+  .textTableUp{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:17px;
+    text-align: center;
+
+  }
+
+
+
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:30px;
+    text-align: center;
+
+
+
+
+
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+
+  }
+
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
 }
 
-.smallBox{
-  width: 10.85%;
+@media (max-width: 800px) {
+  .bigBox{
+    width: 22%;
+  }
 
+  .smallBox{
+    width: 10.85%;
+
+  }
+
+
+
+
+  .textTableUp{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:17px;
+    text-align: center;
+
+  }
+
+
+
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:30px;
+    text-align: center;
+
+
+
+
+
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+
+  }
+
+
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
 }
 
-
-
-
-.textTableUp{
-  color: #7C7F86;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  font-size:17px;
-  text-align: center;
-
-}
-
-
-
-.checkboxBlock{
-  padding-top: 0.8%;
-  padding-left: 0.8%;
-  padding-bottom: 2%;
-}
-
-.inputBox {
-  border: 0 !important;
-  font-weight: 400;
-  text-align: center;
-  border-radius: 0 !important;
-  color:#000000;
-  background-color: white;
-  outline: none !important;
-
-
-}
-
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
-
-}
-
-
-.underline {
-  border-bottom: solid 0.12em #DEDEDE;
-
-}
-
-.rightLine {
-  border-right:  solid 0.12em #DEDEDE !important;
-}
-
-
-
-.mainText{
-  color:#7C7F86;
-  font-weight: 300;
-  font-size:30px;
-  text-align: center;
-
-
-
-
-
-}
-
-.editBtn2 {
-  color:#0055BB;
-  border: 0;
-  background-color: white;
-}
-
-ul p{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 900;
-  font-size:22px;
-  margin-left: 2%;
-
-}
-
-
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
-}
 
 </style>

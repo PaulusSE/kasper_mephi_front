@@ -8,6 +8,9 @@ import profile from "@/components/layout/profile.vue";
 import studentPageFromTeacher from "@/components/layout/teacherComponents/studentPageFromTeacher.vue";
 import registration from "@/components/layout/registration.vue";
 import forgetPassword from "@/components/layout/forgetPassword.vue";
+import teacherPageForAdmin from "@/components/layout/adminComponents/teacherPageForAdmin.vue";
+import studentPageMainComponent from "@/components/layout/teacherComponents/studentPageMainComponent.vue";
+
 
 
 const router = createRouter({
@@ -26,7 +29,10 @@ const router = createRouter({
             path: '/profile', component: profile
         },
         {
-          path: '/user', component: studentPageFromTeacher
+          path: '/user', component: studentPageMainComponent
+        },
+        {
+            path: '/user2', component: teacherPageForAdmin
         },
         {
             path: '/passwordrecovery', component: forgetPassword

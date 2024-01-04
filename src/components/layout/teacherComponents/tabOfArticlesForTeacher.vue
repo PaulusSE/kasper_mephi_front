@@ -21,18 +21,6 @@
       </div>
 
     </div>
-    <div v-if="buttonIsOpened" class="text-end" style="margin-right: 2.5%">
-      <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2 mt-3">Редактировать</button>
-      <div v-else>
-        <button class="editBtn2 mt-3 me-2" @click="deleteButton" v-if="!deleteState">Удалить</button>
-        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')" v-if="!deleteState">Добавить</button>
-        <button class="editBtn2 mt-3 me-2" @click="cancelChange">Отменить</button>
-        <button class="editBtn2 mt-3 " @click="saveArticles">Сохранить</button>
-      </div>
-    </div>
-
-
-
 
     <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
       <div v-if="!deleteState">
@@ -281,31 +269,7 @@ export default {
 
       this.buttonIsOpened = !this.buttonIsOpened
     },
-    buttonSmallTableClicked(){
-      this.smallTableEditing = !this.smallTableEditing
-      this.$emit("makeCopy")
-    },
-    saveArticles(){
-      this.smallTableEditing = !this.smallTableEditing
-      this.$emit('saveArticles')
 
-      if (this.deleteState === true)
-        this.deleteState = false
-    },
-    cancelChange(){
-      this.$emit('updatePage')
-      this.smallTableEditing = !this.smallTableEditing
-
-      if (this.deleteState === true)
-        this.deleteState = false
-
-    },
-    deleteButton(){
-      this.deleteState = !this.deleteState
-    },
-    deleteArticle(myIndex){
-      this.$emit('deleteArticle', myIndex)
-    }
   },
 
   beforeMount() {
@@ -322,13 +286,14 @@ export default {
 
 
 
+
 * {
   margin:0;
   padding:0;
   box-sizing: border-box;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 800px){
   .headingSemester {
 
     margin-top:1%;
@@ -336,7 +301,7 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:1.3rem;
+    font-size:22px;
 
   }
 
@@ -360,7 +325,7 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size:1.1rem;
+    font-size:18px;
     text-align: center;
     word-break: break-all;
     padding-left:0.1rem;
@@ -417,7 +382,6 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
-    font-size: 1.1rem;
   }
 
   ul p{
@@ -426,11 +390,12 @@ export default {
     font-weight: 900;
     font-size:22px;
     margin-left: 2%;
-
   }
+
+
 }
 
-@media (max-width: 800px) {
+@media (max-width: 800px){
   .headingSemester {
 
     margin-top:1%;
@@ -439,7 +404,6 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:1.1rem;
-
   }
 
   .semestrImgActive{
@@ -471,6 +435,7 @@ export default {
     word-break: break-all;
     padding-left:0.1rem;
     padding-right: 0.1rem;
+
   }
 
   .textWithCarry{
@@ -522,7 +487,6 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
-    font-size: 0.9rem;
   }
 
   ul p{

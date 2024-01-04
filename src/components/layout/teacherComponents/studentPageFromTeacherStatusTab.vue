@@ -190,21 +190,19 @@ export default {
 .textResult1 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-  font-size:17px;
+
   color:#6BDB6B;
 }
 
 .textResult2 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-  font-size:17px;
   color:#FFC009
 }
 
 .textResult3 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-  font-size:17px;
   color:#FF3333;
 }
 

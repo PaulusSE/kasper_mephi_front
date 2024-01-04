@@ -168,75 +168,154 @@ export default {
   box-sizing: border-box;
 }
 
-.mainText {
-  margin-left: 2.5% ;
-  /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
-  margin-top: 1rem;
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
+@media (min-width: 800px) {
+  .mainText {
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.3rem;
 
+  }
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .myBtn {
+    margin-right: 2.5%;
+    text-align: right;
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+
+    padding: 0.5rem !important;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+  }
+
+  .imgUploadFile {
+    width: 30px;
+    height: 30px;
+  }
+  .loadTextState {
+    font-size: 1.1rem;
+  }
 }
 
-.mainPage {
-  width: 60%;
+@media (max-width: 800px) {
+  .mainText {
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
 
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
+  }
+
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .myBtn {
+    margin-right: 2.5%;
+    text-align: right
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:22px;
+    padding: 5px;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+  }
+
+  .imgUploadFile {
+    width: 30px;
+    height: 30px;
+  }
 }
 
-.myBtn {
-  margin-right: 2.5%;
-  text-align: right
-}
 
-
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
-}
-
-.loadText {
-  font-family: 'Raleway', 'sans-serif';
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.btnAddDeleteFiles {
-  border:0;
-  background:white;
-}
-
-.image-upload>input {
-  display: none;
-}
-
-.sendFilesBtn{
-  background-color: #0055BB;
-  font-family: "Raleway", sans-serif;
-  font-size:22px;
-  padding: 5px;
-  border-radius: 10px;
-  color:white;
-  font-weight: 400;
-  border: 0;
-}
-
-.imgUploadFile {
-  width: 30px;
-  height: 30px;
-}
 
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;

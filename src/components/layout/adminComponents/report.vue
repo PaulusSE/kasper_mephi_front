@@ -15,6 +15,8 @@
       В разработке
     </div>
 
+    <div class="redArea"></div>
+
   </div>
 
 </template>
@@ -47,19 +49,43 @@ export default {
   padding: 0;
 }
 
+@media (min-width: 800px) {
+  .mainPage {
+    width: 50%;
 
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
 }
+
+@media (max-width: 800px) {
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+}
+
+
+
+@media (pointer: coarse)  {
+  /*!* Для проверки телефонов!**/
+}
+
 
 </style>

@@ -56,7 +56,7 @@
 
       <div class="roundBlock p-0 pb-1"  v-if="arrayOfTeachers.length !== 0">
         <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
-          <router-link class="ps-4 pt-2 linkStyle" to="/user1">{{index + 1}}. {{teacher.fullName}}</router-link>
+          <router-link class="ps-4 pt-2 linkStyle" to="/user2">{{index + 1}}. {{teacher.fullName}}</router-link>
           <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteTeacher(index)" :disabled="stateOfTeachers">
             <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
           </button>
@@ -169,76 +169,152 @@ export default {
   box-sizing: border-box;
 }
 
-.editBtnStudents{
-  width: 95%;
-  margin:auto;
-  text-align:right;
+@media (min-width: 800px) {
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+  }
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:40px !important;
+    height: 40px !important;
+  }
+
+  .linkStyle {
+    padding-bottom: 0.75rem;
+    text-decoration: none;
+    color: #005faf
+  }
 }
 
-.editBtn {
-  color:#0055BB;
-  border: 0;
-  margin-right: 1%;
-  background-color: white;
-}
+@media (max-width: 800px) {
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
 
-.mainPage {
-  width: 60%;
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+  }
 
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
-}
+  .mainPage {
+    width: 80%;
 
-.headerText{
-  margin-top: 1rem;
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
-  margin-left: 2.5% ;
-  /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
-}
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
 
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
-}
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
 
-.mainText{
-  color:#7C7F86;
-  font-weight: 450;
-  font-size:23px !important;
-  text-align: start;
-}
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
 
-.underline {
-  border-bottom: solid 0.12em #DEDEDE;
-  margin-left: 0;
-}
-.btnAddDeleteFiles {
-  border:0 !important;
-  background:white !important;
-}
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+  }
 
-.trashLogo{
-  width:40px !important;
-  height: 40px !important;
-}
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
 
-.linkStyle {
-  padding-bottom: 0.75rem;
-  text-decoration: none;
-  color: #005faf
+  .trashLogo{
+    width:40px !important;
+    height: 40px !important;
+  }
+
+  .linkStyle {
+    padding-bottom: 0.75rem;
+    text-decoration: none;
+    color: #005faf
+  }
 }
 
 </style>

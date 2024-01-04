@@ -51,41 +51,82 @@ export default {
   box-sizing: border-box;
 }
 
-.myContainer {
+@media (min-width: 1700px){
+  .myContainer {
 
-  padding-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .btn_active {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1.2rem !important;
+    border: solid 0.12em #0055BB !important;
+    border-radius: 11px !important;
+    color: #0055BB !important;
+    padding: 0.2rem;
+  }
+
+  .btn_disactive {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1.2rem !important;
+    border: solid 0.10em #7C7F86 !important;
+    border-radius: 11px !important;
+    color: #7C7F86 !important;
+    padding: 0.2rem;
+
+  }
+
+  nav {
+    margin-right: 0.6rem;
+
+  }
+
+  .btnBox {
+    width: 95%;
+    margin:auto;
+    margin-bottom: 1rem;
+  }
 }
 
-.btn_active {
-  font-family: "Raleway", sans-serif !important;
-  font-weight: 500 !important;
-  font-size: 1.05rem !important;
-  border: solid 0.12em #0055BB !important;
-  border-radius: 11px !important;
-  color: #0055BB !important;
+@media (max-width: 1700px){
+  .myContainer {
+
+    padding-top: 0.5rem;
+  }
+
+  .btn_active {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    border: solid 0.15em #0055BB !important;
+    border-radius: 11px !important;
+    color: #0055BB !important;
+    padding: 0
+  }
+
+  .btn_disactive {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    border: solid 0.15em #7C7F86 !important;
+    border-radius: 11px !important;
+    color: #7C7F86 !important;
+    padding: 0
+
+  }
+
+  nav {
+    margin-right: 0.2rem;
+
+  }
+
+  .btnBox {
+    margin-left: 2.5%;
+    margin-bottom: 1rem;
+  }
 }
-
-.btn_disactive {
-  font-family: "Raleway", sans-serif !important;
-  font-weight: 500 !important;
-  font-size: 1.05rem !important;
-  border: solid 0.10em #7C7F86 !important;
-  border-radius: 11px !important;
-  color: #7C7F86 !important;
-
-}
-
-nav {
-  margin-right: 0.6rem;
-
-}
-
-.btnBox {
-  width: 95%;
-  margin:auto;
-  margin-bottom: 1rem;
-}
-
 
 
 </style>

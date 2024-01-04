@@ -7,10 +7,8 @@
 
   <page-header></page-header>
   <transition>
-    <student-registration v-if="stateOfPage === 1"
-    @requestToAddTeacher = requestToAddTeacher()
-    ></student-registration>
-    <addTeacher v-else></addTeacher>
+    <student-registration></student-registration>
+<!--    <addTeacher v-else></addTeacher>-->
   </transition>
 
 </template>
@@ -23,8 +21,6 @@ export default {
   name: "registration",
   data() {
     return {
-      type: 'student',
-      stateOfPage: 1,
     }
   },
   components : {
@@ -33,10 +29,6 @@ export default {
     "addTeacher" : studentWriteFullNameOfTeacher
   },
   methods : {
-    requestToAddTeacher(){
-      this.stateOfPage = 2
-
-    }
   }
 }
 </script>

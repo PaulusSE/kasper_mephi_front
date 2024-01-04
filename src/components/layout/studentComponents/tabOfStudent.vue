@@ -80,103 +80,150 @@ export default {
   box-sizing: border-box;
 }
 
-.aspirantText {
-  font-family: "Raleway", sans-serif !important;
-  border: solid 0.12em #0055BB !important;
-  border-radius: 12px;
-  display:inline-block;
-  margin-left: 2.5%;
-  margin-bottom: 3%;
-  color: #0055BB !important;
-  font-weight: 500;
-  font-size:22px;
-  padding-bottom: 0.2%;
-  padding-top: 0.2%;
-  padding-right: 1%;
-  padding-left: 1%;
+@media (min-width: 800px) {
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+  }
+
+  .textOfHeaders {
+    margin-top: 7%;
+    text-decoration: none !important;
+    font-size: 25px;
+  }
+
+  .nameLink {
+    padding-left: 2.5% !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 400 !important;
+
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+  }
+
+
+  .mainText {
+    color: #7C7F86;
+    font-weight: 100;
+    font-size: 30px;
+  }
+
+
+  .textInTheBox {
+
+    color: black !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size:22px !important;
+    margin-left: 2% !important;
+  }
+
+  .dataText{
+    font-weight: 400 !important;
+    display: inline;
+  }
+
+
+
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+  }
+
+
 }
 
-.semestrButtonActive {
-  border:0 !important;
-  width: 3%;
-  height: 100%;
-  max-width: 42px;
-  margin-top: 0 !important;
-  background-color: white;
+@media (max-width: 800px) {
+
+  .semestrImgActive{
+    width: 50px;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+
+  }
+
+  .textOfHeaders {
+    margin-top: 7%;
+    text-decoration: none !important;
+    font-size: 1.2rem;
+  }
+
+  .nameLink {
+    padding-left: 2.5% !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 400 !important;
+
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+  }
+
+
+  .mainText {
+    color: #7C7F86;
+    font-weight: 100;
+    font-size: 1.2rem;
+  }
+
+
+  .textInTheBox {
+
+    color: black !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size:1rem !important;
+    margin-left: 2% !important;
+  }
+
+  .dataText{
+    font-weight: 400 !important;
+    display: inline;
+  }
+
+
+
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+  }
+
 }
 
-.textOfHeaders {
-  margin-top: 7%;
-  text-decoration: none !important;
-  font-size: 25px;
-}
 
-.nameLink {
-  padding-left: 2.5% !important;
-  font-family: "Raleway", sans-serif !important;
-  font-weight: 400 !important;
-
-}
-
-
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-}
-
-
-.mainText {
-  color: #7C7F86;
-  font-weight: 100;
-  font-size: 30px;
-}
-
-
-.textInTheBox {
-
-  color: black !important;
-  font-family: "Raleway", sans-serif !important;
-  font-weight: 500 !important;
-  font-size:22px !important;
-  margin-left: 2% !important;
-}
-
-.dataText{
-  font-weight: 400 !important;
-  display: inline;
-}
-
-
-
-
-
-ul p{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 900;
-  font-size:22px;
-  margin-left: 2%;
-}
-
-
-
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 0.5%;
-  padding-top: 1.5%;
-}
 
 
 </style>

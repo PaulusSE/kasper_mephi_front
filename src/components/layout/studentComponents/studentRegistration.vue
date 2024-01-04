@@ -8,40 +8,69 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">ФИО</label>
-        <select class="form-select blockStyles" v-model="fullName" @input="inputEvent">
-          <option v-for="fullName in arrayOfFullNames" >{{fullName.fullName}}</option>
-        </select>
+        <label class="text m-0">ФИО</label>
+        <input type="text" class="blockStyles" v-model="fullName" @input="inputEvent">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Почта</label>
+        <label class="text m-0">Почта</label>
         <input type="text" class="blockStyles" v-model="email" @input="inputEvent">
       </nav>
     </div>
 
+
+
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Пароль</label>
-        <input type="password" class="blockStyles" v-model="password" @input="inputEvent">
+        <label class="text m-0">Номер группы</label>
+        <input type="text" class="blockStyles" v-model="numberOfGroup" @input="inputEvent">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Пароль</label>
-        <input type="password" class="blockStyles" v-model="passwordCheck" @input="inputEvent">
+        <label class="text m-0">Актуальный семестр</label>
+        <input type="text" class="blockStyles" v-model="actualSemester" @input="inputEvent">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text">Преподователь</label>
+        <label class="text m-0">Специализация</label>
+        <input type="text" class="blockStyles" v-model="specialization" @input="inputEvent">
+      </nav>
+    </div>
+
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Приказ о зачислении</label>
+        <input type="text" class="blockStyles" v-model="enrollmentOrder" @input="inputEvent">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Дата начала обучения</label>
+        <input type="date" class="blockStyles" v-model="dateOfBeginning" @input="inputEvent" >
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Длительность обучения (лет)</label>
+        <input type="text" class="blockStyles" v-model="numberOfYears" @input="inputEvent">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Научный руководитель</label>
         <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
-        <option v-for="teacher in arrayOfTeachers" >{{teacher.fullName}}</option>
-        <option >Моего преподователя нет в списке</option>
+        <option v-for="teacher in arrayOfTeachers" >{{teacher.name}}</option>
+        <option >Нет в списке</option>
         </select>
       </nav>
     </div>
@@ -67,6 +96,7 @@
 
 <script>
 import header from "@/components/layout/header.vue"
+import axios from "axios";
 
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 const regularSymbolForPassword = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -80,31 +110,16 @@ export default {
     return {
       fullName: '',
       email: '',
-      password: '',
-      passwordCheck: '',
       teacher: '',
       errorMessage: '',
-      arrayOfFullNames: [
-        {
-          fullName: "Сафиуллин Ильяс Фанисович",
-          id: 1,
-        },
-        {
-          fullName: "Иван Петрович Павлов",
-          id: 2,
-        },
-      ],
-      arrayOfTeachers: [
-        {
-          fullName: "Тихомирова Анна Николаевна",
-          id: 1,
-        },
-        {
-          fullName: "Рословцев Владимир Владимирович",
-          id: 2,
-        },
-
-      ]
+      department: '',
+      enrollmentOrder: '',
+      specialization: '',
+      dateOfBeginning:'',
+      actualSemester:'',
+      numberOfGroup: '',
+      numberOfYears: '',
+      arrayOfTeachers: []
     }
   },
   methods: {
@@ -116,7 +131,8 @@ export default {
       return regularSymbolForPassword.test(pass);
     },
 
-    registration() {
+    async registration() {
+
 
       if (this.fullName === ''){
         this.errorMessage = 'Поле ФИО не должно быть пустым'
@@ -129,42 +145,80 @@ export default {
         return
       }
 
-      if (this.password === ''){
-        this.errorMessage = "Поле пароль не должно быть пустым"
+
+      if (this.numberOfGroup === ''){
+        this.errorMessage = 'Поле номер группы не должно быть пустым'
         return;
       }
 
-      if (this.password.length < 5){
-        this.errorMessage = "Поле Пароль должно содержать хотя бы 6 символов"
+      if (this.actualSemester === ''){
+        this.errorMessage = 'Поле актуальный семестр не должно быть пустым'
         return;
       }
 
-      if (this.checkPassword(this.password)){
-        this.errorMessage = "Поле пароль содержит недопустимые символы"
-        return;
-      }
-
-      if (this.password !== this.passwordCheck){
-        this.errorMessage = "Пароли не совпадают"
+      if (this.specialization === ''){
+        this.errorMessage = "Поле специализация не должо быть пустым"
         return
       }
 
+      if (this.enrollmentOrder === ''){
+        this.errorMessage = 'Поле приказ о зачислении не должно быть пустым'
+        return;
+      }
+
+      if (this.dateOfBeginning === ''){
+        this.errorMessage = 'Поле дата о зачислении не должно быть пустым'
+        return;
+      }
+
+      if (this.numberOfYears === ''){
+        this.errorMessage = 'Поле длительность обучения не должно быть пустым'
+        return;
+      }
+
       if (this.teacher === ''){
-        this.errorMessage = 'Поле Преподователь не должно быть пустым'
+        this.errorMessage = 'Поле научный руководитель не должно быть пустым'
         return;
       }
-
-      if (this.teacher === 'Моего преподователя нет в списке'){
-        this.$emit("requestToAddTeacher")
-        return;
-      }
-      else {
+      if (await this.requestToRegister() === 200)
+        localStorage.setItem('registered', 'true')
         this.redirectToMain()
+      this.errorMessage = 'Попробуйте еще раз'
+    },
+    async requestToRegister() {
+
+      var supervisorID = ''
+      for (var i = 0; i < this.arrayOfTeachers.length; i++) {
+        if (this.arrayOfTeachers[i].name === this.teacher){
+          supervisorID = this.arrayOfTeachers[i].supervisorID
+          break
+        }
+        }
+
+      console.log(object)
+
+      try {
+        const response = await axios.post("http://localhost:8080/students/registration/" + localStorage.getItem('access_token'),
+            {
+              "fullName" : this.fullName,
+              "numberOfGroup" : this.numberOfGroup,
+              "email" : this.email,
+              "actualSemester" : parseInt(this.actualSemester),
+              "enrollmentOrder" : this.enrollmentOrder,
+              "dateOfBeginning" : this.dateOfBeginning,
+              "specialization" : this.specialization,
+              "numberOfYears" : this.numberOfYears,
+              "supervisorID" : supervisorID,
+            }
+        )
+        console.log(response)
+        return response.status
       }
 
-
-
-
+      catch (e) {
+        console.log(e)
+      }
+      return 400
     },
     inputEvent() {
       this.errorMessage = ''
@@ -172,35 +226,130 @@ export default {
 
     redirectToMain() {
       this.$router.push('/')
-    }
+    },
+    async getListOfTeachers() {
+      try {
+        const response = await axios.get("http://localhost:8080/students/supervisors/" + localStorage.getItem('access_token'),
+        )
+        this.arrayOfTeachers = response.data.supervisors
+
+        }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+    async checkAuth() {
+      try {
+        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+
+        if (response.status === 200){
+          this.$store.dispatch("updateUserType", response.data.userType)
+          this.type = response.data.userType
+        }
+        else {
+          this.$router.push('/auth')
+        }
+
+      } catch (e) {
+        console.log(e)
+        this.$router.push('/auth')
+      }
+    },
+  },
+  async beforeMount() {
+    this.checkAuth()
+    if (localStorage.getItem('registered') !== 'false')
+      this.$router.push('/')
+    await this.getListOfTeachers()
+
   }
 }
 </script>
 
 <style scoped>
 
+@media (min-width: 800px) {
+  .mainPage {
+    width: 50%;
 
-.mainPage {
-  width: 60%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
 
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto auto;
-  padding-bottom: 1.5%;
+  .headerText{
+    font-family: Raleway,serif;
+    padding-top: 1%;
+    margin-left: 2rem;
+    font-size: 1.3rem;
+    font-weight: 400;
+  }
+
+  .text {
+    font-size: 1.1rem;
+  }
+
+  .wrongData{
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 2%;
+  }
 }
 
-.headerText{
-  font-family: Raleway,serif;
-  padding-top: 1%;
-  margin-left: 2rem;
-  font-size: 27px;
-  font-weight: 320;
+@media (max-width: 800px) {
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .headerText{
+    font-family: Raleway,serif;
+    padding-top: 1%;
+    margin-left: 2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+
+  .text {
+    font-size: 0.9rem;
+  }
+
+  .wrongData{
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 2%;
+  }
 }
+
+@media (pointer: coarse)  {
+
+}
+
+
 
 
 div div {
@@ -227,13 +376,7 @@ div div {
   padding: 0.375rem 2.25rem 0.375rem 0.75rem;
 }
 
-.wrongData{
-  color: red;
-  font-family: "Raleway", sans-serif;
-  font-size: 15px;
-  text-align: center;
-  font-weight: 500;
-  padding-top: 2%;
-}
+
+
 
 </style>

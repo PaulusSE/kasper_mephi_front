@@ -47,6 +47,8 @@ export default {
     },
   },
   async beforeMount() {
+    if (localStorage.getItem('registered') === 'false')
+      this.$router.push('/registration')
     this.checkAuth()
 
 

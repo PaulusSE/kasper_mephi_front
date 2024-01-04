@@ -110,13 +110,17 @@ export default {
                 }
 
         )
-        console.log(response)
         if (response.status === 200){
           this.data = await response.data
 
 
           localStorage.setItem("access_token", this.data.token)
+          localStorage.setItem("registered", this.data.registered)
           this.$store.dispatch("updateUserType", this.data.client_type)
+
+          if(!this.data.registered)
+            this.$router.push('/registration')
+
           this.$router.push('/')
         }
       }
@@ -296,7 +300,7 @@ export default {
     text-align: center !important;
     margin: auto !important;
     padding: 0 !important;
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
     font-family: "Raleway", sans-serif;
     color: #a3a1a1;
     font-weight: 600;
@@ -319,8 +323,8 @@ export default {
 
 
   .mainPage {
-    width: 85%;
-    height: 100%;
+    width: 50%;
+
     background: rgba(255, 255, 255, 1);
     opacity: 1;
     border-top-left-radius: 25px;
@@ -328,17 +332,17 @@ export default {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-    margin: 1rem auto auto;
-    margin-left:7.5% !important;
-    padding-bottom: 1.5%;
+    margin: 2rem auto auto !important;
+    margin-left:25% !important;
+    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   div input {
     border-width: 0.15em !important;
-    height: 2.5rem !important;
+
     border-radius: 0.7em !important;
     width: 100% !important;
-
   }
 
 

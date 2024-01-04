@@ -7,22 +7,23 @@
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img src="../../../../static/figures/arrowleft.png">
+          <img  src="../../../../static/figures/arrowleft.png">
         </button>
 
       </div>
       <div v-else>
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img src="../../../../static/figures/arrowdown.png">
+          <img  src="../../../../static/figures/arrowdown.png">
         </button>
       </div>
     </div>
     <div v-if="buttonIsOpened">
       <div class="d-flex justify-content-between">
 
-        <nav class="checkboxBlock ms-4">
-          <div class="mainText statusLine d-flex gap-2"> Статус:
-            <p class="stateOfFiles align" :class="{textResult1:jobStatus === 'Сдано', textResult2:jobStatus === 'На доработку', textResult3 : jobStatus === 'Не сдано'}">{{jobStatus}}</p>
+        <nav class="checkboxBlock">
+          <div class="d-flex gap-2">
+            <p class="statusLine">Статус:</p>
+            <p class="statusLine" :class="{textResult1:jobStatus === 'Сдано', textResult2:jobStatus === 'На доработку', textResult3 : jobStatus === 'Не сдано'}">{{jobStatus}}</p>
           </div>
         </nav>
 
@@ -84,14 +85,14 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
             <button class="btnAddDeleteFiles" :disabled = "(this.explanationaryNoteFile === '' || this.actualSemester !== this.id)" @click="deleteExplanatoryNote">
-              <img v-if="this.explanationaryNoteFile === '' || this.actualSemester !== this.id" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
+              <img class='imgSize1' v-if="this.explanationaryNoteFile === '' || this.actualSemester !== this.id" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+              <img class='imgSize1' v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
             </button>
           </div>
 
           <div class="image-upload">
             <label for="file-input2">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
+              <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
             <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
           </div>
@@ -266,128 +267,255 @@ export default {
   box-sizing: border-box;
 }
 
+@media (min-width: 800px){
+  .headingSemester {
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-align: center;
+  }
 
-.headingSemester {
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
-  text-align: center;
-}
-
-.semestrButtonActive {
-  border:0 !important;
-  width: 3%;
-  height: 100%;
-  max-width: 1rem;
-  margin-top: 0 !important;
-  background-color: white;
-  margin-right: 3rem;
-}
-
-
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 3rem;
+  }
 
 
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95% !important;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95% !important;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
   ;
 
+  }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:1rem;
+    margin-left: 2%;
+
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+
+
+  .imgUploadFile {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .loadTextState{
+    font-size: 1rem;
+  }
+
+  .sendFilesBtn{
+    margin-right: 2.5%;
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:1.4rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+    margin-bottom: 1%;
+    margin-top: 1%;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .statusLine {
+    font-size: 1.2rem !important;
+  }
+
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
+  .textResult1 {
+    font-weight: 550;
+    color:#6BDB6B;
+
+  }
+
+  .textResult2 {
+    font-weight: 550;
+    color:#FFC009
+  }
+
+  .textResult3 {
+    font-weight: 550;
+    color:#FF3333;
+  }
+
+  .checkboxBlock {
+    margin-left: 2.5%;
+  }
+  .imgSize1{
+    width: 45px;
+  }
+
+  .imgSize2{
+    width: 45px;
+  }
 }
 
-.btnAddDeleteFiles {
-  border:0 !important;
-  background:white !important;
-}
+@media (max-width: 800px){
+  .headingSemester {
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1rem;
+    text-align: center;
+  }
 
-ul p{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 900;
-  font-size:1rem;
-  margin-left: 2%;
-
-}
-
-.loadText {
-  font-family: 'Raleway', 'sans-serif';
-  font-size: 1rem;
-  font-weight: 500;
-}
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 3rem;
+  }
 
 
-.btnAddDeleteFiles {
-  border:0;
-  background:white;
-}
-
-.stateOfFiles{
-  font-size: 1rem;
-  color:#FFC009;
 
 
-}
-.imgUploadFile {
-  width: 1.9rem;
-  height: 1.9rem;
-}
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95% !important;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  ;
 
-.loadTextState{
-  font-size: 0.95rem;
-}
+  }
 
-.sendFilesBtn{
-  margin-right: 0;
-  width: 16%;
-  height: 2.2em;
-  background-color: #0055BB;
-  font-family: "Raleway", sans-serif;
-  font-size:1.4rem;
-  padding: 0.2rem;
-  border-radius: 10px;
-  color:white;
-  font-weight: 400;
-  border: 0;
-  margin-bottom: 1%;
-  margin-top: 1%;
-}
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
 
-.image-upload>input {
-  display: none;
-}
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:0.8rem;
+    margin-left: 2%;
 
-.statusLine {
-  font-size: 1rem;
-}
+  }
 
-.downloadFile{
-  border: none;
-  background-color: white;
-  color: #0b5ed7;
-}
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
 
-.textResult1 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#6BDB6B;
-}
 
-.textResult2 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#FFC009
-}
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
 
-.textResult3 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  font-size:17px;
-  color:#FF3333;
+
+
+  .imgUploadFile {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .loadTextState{
+    font-size: 0.8rem;
+  }
+
+  .sendFilesBtn{
+    margin-right: 2.5%;
+
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:1.4rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+    margin-bottom: 1%;
+    margin-top: 1%;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .statusLine {
+    font-size: 1rem !important;
+  }
+
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
+  .textResult1 {
+    font-weight: 550;
+    color:#6BDB6B;
+
+  }
+
+  .textResult2 {
+    font-weight: 550;
+    color:#FFC009
+  }
+
+  .textResult3 {
+    font-weight: 550;
+    color:#FF3333;
+  }
+
+  .checkboxBlock {
+    margin-left: 2.5%;
+  }
+  .imgSize1{
+    width: 45px;
+  }
+
+  .imgSize2{
+    width: 45px;
+  }
 }
 
 </style>

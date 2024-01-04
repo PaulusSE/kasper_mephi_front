@@ -20,16 +20,7 @@
       </div>
 
     </div>
-    <div v-if="buttonIsOpened" class="text-end" style="margin-right: 2.5%">
-      <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2 mt-3">Редактировать</button>
-      <div v-else>
-        <button class="editBtn2 mt-3 me-2" @click="deleteButton" v-if="!deleteState">Удалить</button>
-        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')"  v-if="!deleteState">Добавить</button>
-        <button class="editBtn2 mt-3 me-2" @click="cancelChange" >Отменить</button>
-        <button class="editBtn2 mt-3 me-2" @click="buttonSaveLoad" >Сохранить</button>
-      </div>
 
-    </div>
 
 
 
@@ -219,6 +210,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import store from "@/store/index.js";
+
 export default {
   name: "tabOfArticles",
   props: ["elements", "id"],
@@ -236,32 +230,9 @@ export default {
         this.smallTableEditing = false
       this.buttonIsOpened = !this.buttonIsOpened
     },
-    buttonSmallTableClicked(){
-      this.smallTableEditing = !this.smallTableEditing
-      this.$emit("makeCopy")
-    },
-    buttonSaveLoad(){
-      this.smallTableEditing = !this.smallTableEditing
-      this.$emit('buttonSmallTableSave')
 
-      if (this.deleteState === true)
-        this.deleteState = false
-    },
+  },
 
-    cancelChange(){
-      this.$emit('buttonSmallTableCancel')
-      if (this.deleteState === true)
-        this.deleteState = false
-    },
-
-    deleteButton(){
-      this.deleteState = !this.deleteState
-    },
-    deleteTeachingLoad(myIndex){
-      this.$emit('deleteTeachingLoad', myIndex)
-    }
-
-  }
 }
 </script>
 
@@ -276,6 +247,7 @@ export default {
   box-sizing: border-box;
 }
 
+
 @media (min-width: 800px) {
   .headingSemester {
 
@@ -284,10 +256,8 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:1.3rem;
+    font-size:22px;
   }
-
-
 
   .semestrButtonActive {
     border:0 !important;
@@ -306,12 +276,8 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size:1.1rem;
+    font-size:18px;
     text-align: center;
-    word-break: break-all;
-    padding-left:0.1rem;
-    padding-right: 0.1rem;
-
 
   }
 
@@ -353,7 +319,6 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
-    font-size: 1.1rem;
   }
 
   ul p{
@@ -421,9 +386,8 @@ export default {
     word-break: break-all;
     padding-left:0.1rem;
     padding-right: 0.1rem;
-
-
   }
+
 
 
   .inputBox {
@@ -462,7 +426,6 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
-    font-size: 0.9rem;
   }
 
   ul p{
@@ -492,5 +455,6 @@ export default {
     overflow-y:hidden;
   }
 }
+
 
 </style>

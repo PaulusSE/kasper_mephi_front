@@ -71,32 +71,32 @@
         <div class="rightLine col-6 mainText">
           <p class="mainText">Этап</p>
         </div>
-        <div class="col-6 mainText" >
+        <div class="col-6 textTable" >
           Семестр
         </div>
       </div>
 
 
       <div class="d-flex underline">
-        <div class="col-6 mainText rightLine">
+        <div class="col-6 textTable rightLine">
 
         </div>
-        <div class="col-1 mainText rightLine">
+        <div class="col-1 textTable rightLine">
             1
         </div>
-        <div class="col-1 mainText rightLine">
+        <div class="col-1 textTable rightLine">
             2
         </div>
-        <div class="col-1 mainText rightLine">
+        <div class="col-1 textTable rightLine">
             3
         </div>
-        <div class="col-1 mainText rightLine">
+        <div class="col-1 textTable rightLine">
             4
         </div>
-        <div class="col-1 mainText rightLine">
+        <div class="col-1 textTable rightLine">
             5
         </div>
-        <div class="col-1 mainText">
+        <div class="col-1 textTable">
               6
         </div>
 
@@ -367,9 +367,8 @@ export default {
       this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
       this.jobStatus = this.data.commonInfo.jobStatus
       this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
-      this.feedback = this.data.commonInfo.feedback
+      this.feedback = this.data.commonInfo.feedback === undefined ? '' : this.data.commonInfo.feedback
       let objectDate = this.data.commonInfo.dateOfOrderOfStatement
-
       const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
       const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
       var key = ''
@@ -401,7 +400,7 @@ export default {
       console.log(e)
     }
     this.files = new Array(this.actualSemestr)
-    console.log(this.statuses)
+
 
   }
 }
@@ -421,153 +420,306 @@ export default {
 }
 
 
-.checkboxBlock{
-  padding-top: 0.8%;
-  padding-left: 0.8%;
-  padding-bottom: 2%;
+@media (min-width: 800px) {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+
+
+  .myCheckBox{
+    zoom: 0.5;
+    accent-color: white;
+    background-color: green;
+  }
+
+  .myInput{
+
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .myBox {
+    width: 80%;
+    margin: auto;
+
+  }
+
+  div input {
+    border-width: 0.15em !important;
+    height: 2.5rem !important;
+    border-radius: 0.7em !important;
+    width: 100% !important;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size:1.2rem;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-top: 5%;
+    margin-right: 5%;
+    background-color: white;
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:1rem;
+
+  }
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 0.5%;
+  }
+
+
+  .image-upload>input {
+    display: none;
+  }
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1rem;
+    font-weight: 450;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
+  .inputWidth {
+    width: 100%;
+  }
+
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 1rem
+  }
+
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 1rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
 }
 
+@media (max-width: 800px) {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
 
 
-.myCheckBox{
-  zoom: 0.25;
-  accent-color: white;
-  background-color: green;
-}
 
-.myInput{
+  .myCheckBox{
+    zoom: 0.4;
+    accent-color: white;
+    background-color: green;
+  }
 
-  display: grid !important;
-  place-items: center !important;
-}
+  .myInput{
 
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
+    display: grid !important;
+    place-items: center !important;
+  }
 
-}
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
 
-
-.myBox {
-  width: 80%;
-  margin: auto;
-
-}
-
-div input {
-  border-width: 0.15em !important;
-  height: 2.5rem !important;
-  border-radius: 0.7em !important;
-  width: 100% !important;
-}
-
-.underline {
-  border-bottom: solid 0.12em #DEDEDE;
-
-}
-
-.rightLine {
-  border-right:  solid 0.12em #DEDEDE !important;
-}
+  }
 
 
-.mainText{
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
-  text-align: center;
-}
+  .myBox {
+    width: 80%;
+    margin: auto;
 
-.textTable{
-  color:#7C7F86;
-  font-weight: 400;
-  font-size:1rem;
-  text-align: center;
-}
+  }
 
-.editBtn {
-  color:#0055BB;
-  border: 0;
-  margin-top: 5%;
-  margin-right: 5%;
-  background-color: white;
-}
+  div input {
+    border-width: 0.15em !important;
+    height: 2.5rem !important;
+    border-radius: 0.7em !important;
+    width: 100% !important;
+  }
 
-.editBtn2 {
-  color:#0055BB;
-  border: 0;
-  background-color: white;
-}
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
 
-ul p{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 600;
-  font-size:1rem;
+  }
 
-}
-
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 0.5%;
-}
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
 
 
-.image-upload>input {
-  display: none;
-}
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size:1rem;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-top: 5%;
+    margin-right: 5%;
+    background-color: white;
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:0.8rem;
+
+  }
+
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 0.5%;
+  }
 
 
-.text {
-  font-family: "Raleway", sans-serif;
-  color: #7c7f86;
-  font-size: 1rem;
-  font-weight: 450;
-}
+  .image-upload>input {
+    display: none;
+  }
 
-.textInput {
-  font-size: 1rem;
-  border-top-left-radius: 10px !important;
-  border-top-right-radius: 10px !important;
-  border-bottom-left-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
-  font-weight: 400;
-  border-width: 2px 2px 2px 2px !important;
-  border-color: #7c7f86 !important;
-  height: 2rem !important;
-  padding-left:0.5rem;
-}
 
-.inputWidth {
-  width: 100%;
-}
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 450;
+  }
 
-.noFeedBack{
-  text-align: left;
-  margin-left: 5%;
-  font-size: 1rem
-}
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
 
-.feedback {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  font-size: 1rem !important;
-  resize: none !important;
-  background-color: white !important;
-  font-weight: 350;
+  .inputWidth {
+    width: 100%;
+  }
+
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 0.8rem
+  }
+
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 0.8rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
 }
 
 

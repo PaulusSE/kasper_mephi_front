@@ -15,17 +15,17 @@
     </div>
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
-        <label class="text ms-5">Старый пароль</label>
+        <label class="text ms-0">Старый пароль</label>
         <input type="password" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
-        <label class="text ms-5">Новый пароль</label>
+        <label class="text ms-0">Новый пароль</label>
         <input type="password" @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%">
-        <label class="text ms-5">Подтверждение нового пароля</label>
+        <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
           <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
@@ -164,111 +164,219 @@ export default {
   box-sizing: border-box;
 }
 
-header .head-top {
-  background-color: #005faf;
-  height: 4em;
+@media (min-width: 800px) {
+  header .head-top {
+    background-color: #005faf;
+    height: 4em;
+  }
+
+  header .head-top nav {
+    margin-top: 2px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.3rem;
+  }
+
+  header .head-top nav a {
+    height: 20px;
+    width: 20px;
+  }
+
+  header .head-top nav a:nth-of-type(1) {
+    width: 10px;
+    height: 10px;
+    margin: 0 auto;
+  }
+
+  header .head-top nav a:nth-of-type(2) {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .mainPage {
+    width: 50%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-bottom: 1%;
+    height: 5em;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: medium;
+    padding-left: 0.5rem;
+  }
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1rem;
+    font-weight: 450;
+  }
+
+  .loggining {
+    font-size: 1.2rem !important;
+
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding:0.5rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 2%;
+  }
 }
 
-header .head-top nav {
-  margin-top: 2px;
-  margin-left: 20%;
-  margin-right: 20%;
-}
+@media (max-width: 800px) {
+  header .head-top {
+    background-color: #005faf;
+    height: 4em;
+  }
 
-.mainText {
-  margin-top: 1rem;
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
-}
+  header .head-top nav {
+    margin-top: 2px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
 
-header .head-top nav a {
-  height: 20px;
-  width: 20px;
-}
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.1rem;
+  }
 
-header .head-top nav a:nth-of-type(1) {
-  width: 10px;
-  height: 10px;
-  margin: 0 auto;
-}
+  header .head-top nav a {
+    height: 20px;
+    width: 20px;
+  }
 
-header .head-top nav a:nth-of-type(2) {
-  width: 30px;
-  height: 30px;
-  margin: 0 auto;
-  margin-top: 10px;
-}
+  header .head-top nav a:nth-of-type(1) {
+    width: 10px;
+    height: 10px;
+    margin: 0 auto;
+  }
 
-.mainPage {
-  width: 60%;
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto auto;
-  padding-bottom: 1.5%;
-}
+  header .head-top nav a:nth-of-type(2) {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
 
-div nav {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-bottom: 1%;
-  height: 5em;
-}
+  .mainPage {
+    width: 80%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
 
-
-div nav button {
-  background-color: white !important;
-  border-color: white !important;
-  color: #0055bb !important;
-  transition: 0.5s all ease;
-}
-
-div nav button:hover {
-  color: darkblue;
-  background-color: #7c7f86;
-}
-
-div nav input {
-  width: 100%;
-  border-color: #7c7f86 !important;
-  border-radius: 0.7em;
-  height: 3em;
-  font-size: medium;
-  padding-left: 0.5rem;
-}
+  div nav {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-bottom: 1%;
+    height: 5em;
+  }
 
 
-.text {
-  font-family: "Raleway", sans-serif;
-  color: #7c7f86;
-  font-size: 22px;
-  font-weight: 450;
-}
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
 
-.loggining {
-  font-size: 1.2rem !important;
-  height: 3rem !important;
-  width: 6rem !important;
-  background-color: #0055bb !important;
-  font-weight: 300 !important;
-  border-radius: 0.7em !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  color:white !important;
-}
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
 
-.wrongPassword {
-  color: red;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-  font-size: 1.2rem;
-  text-align: center;
-  padding-top: 2%;
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: medium;
+    padding-left: 0.5rem;
+  }
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.9rem;
+    font-weight: 450;
+  }
+
+  .loggining {
+    font-size: 1.1rem !important;
+    padding:0.25rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-align: center;
+    padding-top: 2%;
+  }
 }
 
 .slide-fade-enter-active {

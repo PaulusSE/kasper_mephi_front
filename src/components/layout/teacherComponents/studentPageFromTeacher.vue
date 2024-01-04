@@ -1,20 +1,15 @@
 <template>
 
 
-
-<page-header></page-header>
-
-
-
   <div class="mainPage">
 
-    <header-of-student
-        @btnDissertationClicked="$emit('btnDissertationClicked')"
-        @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
-        @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
-        :state-of-student-page = stateOfStudentPage
-    ></header-of-student>
-
+  <header-of-student
+      @btnDissertationClicked="$emit('btnDissertationClicked')"
+      @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
+      @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
+      @btnProfileClicked="$emit('btnProfileClicked')"
+      :state-of-student-page = this.stateOfPage
+  ></header-of-student>
 
     <div class="pt-4">
       <div class="roundBlock">
@@ -22,23 +17,41 @@
           <nav class="checkboxBlock">
             <p class="mainText">Общая информация</p>
           </nav>
+          <nav>
+            <button v-if="!commonInfo" class="editBtn pt-1 ps-0" @click="buttonClickedCommonInfo">Редактировать</button>
+            <button v-else class="editBtn pt-1 ps-1" @click="saveCommonInfo">Сохранить</button>
+          </nav>
+
 
 
 
         </div>
-        <div>
-          <ul>
-            <p>Тема: <p class="text2">{{theme}}</p></p>
-          </ul>
-          <ul>
-            <p>ФИО руководителя: <p class="text2">{{teacherFullName}}</p></p>
-          </ul>
-          <ul>
-            <p>Номер приказа об утверждении: <p class="text2">{{numberOfOrderOfStatement}}</p></p>
-          </ul>
-          <ul>
-            <p>Дата приказа об утверждении: <p class="text2">{{dateOfOrderOfStatement}}</p></p>
-          </ul>
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Тема</label>
+            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
+          </nav>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">ФИО преподователя</label>
+            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="teacherFullName">
+          </nav>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Номер приказа об утверждении</label>
+            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="numberOfOrderOfStatement">
+          </nav>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Дата приказа об утверждении</label>
+            <input type="text" class="textInput" :disabled="!commonInfo" v-model="dateOfOrderOfStatement">
+          </nav>
         </div>
       </div>
     </div>
@@ -134,7 +147,7 @@
       </div>
 
       <div v-if="!editingReview">
-        <p v-if="textOfReview === ''" class="mainText" style="text-align: left; margin-left: 5%; font-size: 25px">Рецензия отсутствует</p>
+        <p v-if="textOfReview === ''" class="textTable">Рецензия отсутствует</p>
         <p v-else style="font-size:20px; font-weight: 350">
           <textarea disabled v-model="textOfReview" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </p>
@@ -155,29 +168,21 @@ import header from "@/components/layout/header.vue";
 import store from "@/store/index.js";
 import studentPageFromTeacherStatusTab from "@/components/layout/teacherComponents/studentPageFromTeacherStatusTab.vue";
 import axios from "axios";
-import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
+import HeaderOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 export default {
   name: "studentPageFromTeacher",
   components : {
+    HeaderOfStudent,
     "pageHeader" : header,
     'studentPageFromTeacherStatusTab' : studentPageFromTeacherStatusTab,
-    'headerOfStudent' : headerOfStudent
 
   },
+  props : ["stateOfPage",],
   data(){
     return {
       filesFinish : [],
       editingReview : false,
-      arrayWithLinksToFiles : [
-        {
-          TitleList : "/link1",
-          ExplanationaryNote : '/link2'
-        },
-        {
-          TitleList : '',
-          ExplanationaryNote : ''
-        },
-      ],
+      commonInfo : false,
       array: {},
       stateOfWork: '',
       textOfReview: '',
@@ -191,7 +196,7 @@ export default {
         'failed' : 'Не сдано',
         'passed' : 'Принято',
         'empty': ''
-      }
+      },
     }
 
   },
@@ -201,20 +206,28 @@ export default {
     },
     async saveReview(){
       this.editingReview = !this.editingReview
-      console.log(this.textOfReview)
+
       try {
         const response = await axios.post("http://localhost:8080/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
               "studentID" : this.$store.getters.getuserId,
               "feedback" : this.textOfReview
             }
         )
-        console.log(response)
+
       }
       catch (e) {
         console.log(e)
       }
 
     },
+
+    buttonClickedCommonInfo() {
+      this.commonInfo = !this.commonInfo
+    },
+    saveCommonInfo() {
+      this.commonInfo = !this.commonInfo
+    },
+
     async getStudentCommonInfo() {
       try {
         const response = await axios.put("http://localhost:8080/supervisors/student/" + localStorage.getItem("access_token"), {
@@ -223,7 +236,7 @@ export default {
         )
 
         this.data = await response.data
-        console.log(this.data)
+
         this.theme = this.data.theme
         this.teacherFullName = this.data.commonInfo.teacherFullName
         this.jobStatus = this.data.commonInfo.jobStatus
@@ -255,7 +268,7 @@ export default {
         this.dateOfOrderOfStatement = day + '.' + month + '.' + year
         this.actualSemestr = this.data.commonInfo.actualSemestr
         this.fillArrayOfStatuses(response.data.statuses)
-        console.log(response)
+
 
       }
 
@@ -263,6 +276,7 @@ export default {
         console.log(e)
       }
     },
+
     fillArrayOfStatuses(data) {
       this.statuses = Array(data.length)
       for (var i = 0; i < this.statuses.length; i++){
@@ -283,18 +297,33 @@ export default {
         }
       }
     },
+    async checkAuth() {
+      try {
+        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+
+        if (response.status === 200){
+          this.$store.dispatch("updateUserType", response.data.userType)
+          this.type = response.data.userType
+        }
+        else {
+          this.$router.push('/auth')
+        }
+
+      } catch (e) {
+        console.log(e)
+        this.$router.push('/auth')
+      }
+    },
   },
 
   async beforeMount() {
+    this.checkAuth()
+
     if (store.getters.getType === "student"){
       this.$router.push('/wrongAccess')
     }
     await this.getStudentCommonInfo()
 
-  },
-  beforeUnmount() {
-    this.$store.dispatch("updateUserId", '')
-    localStorage.setItem('studentID', '')
   },
 
   beforeCreate() {
@@ -311,23 +340,294 @@ export default {
   box-sizing: border-box;
 }
 
+@media (min-width: 800px) {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
 
-.checkboxBlock{
-  padding-top: 0.8%;
-  padding-left: 0.8%;
-  padding-bottom: 2%;
+  .myCheckBox{
+    zoom: 0.5;
+    accent-color: white;
+    background-color: green;
+
+  }
+  .myInput{
+
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+
+
+  .myBox {
+    width: 80%;
+    margin: auto;
+
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+    font-size: 25px !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+
+  .mainText{
+    color:#7C7F86;
+    font-size:1.3rem;
+    text-align: center;
+    font-weight: 400;
+
+
+  }
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400 !important;
+    font-size:1.2rem !important;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB !important;
+    border: 0 !important;
+    margin-top: 15% !important;
+    margin-right: 1.5rem !important;
+    background-color: white;
+  }
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:1.2rem;
+    margin-left: 2%;
+
+  }
+
+  .text2 {
+    display: inline;
+    font-weight: 400;
+    margin-left:0.35%;
+  }
+
+  .text3 {
+    display: inline;
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 18px;
+    height: 2.2em !important;
+    border-radius: 0.3rem !important;
+  }
+
+  .selectedFileMessage {
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 15px;
+    margin-left:2%;
+    color: #7C7F86;
+  }
+
+  .mainPage {
+    width: 50% !important;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
 }
 
+@media (max-width: 800px) {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
 
 
 
-.myCheckBox{
-  zoom: 1.2;
-  accent-color: white;
-  background-color: green;
+
+  .myCheckBox{
+    zoom: 1.2;
+    accent-color: white;
+    background-color: green;
 
 
 
+  }
+
+  .myInput{
+
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+
+
+  .myBox {
+    width: 80%;
+    margin: auto;
+
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+    font-size: 25px !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+
+  .mainText{
+    color:#7C7F86;
+    font-size:1.1rem;
+    text-align: center;
+    font-weight: 400;
+
+
+
+
+
+  }
+
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size:1rem !important;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB !important;
+    border: 0 !important;
+    margin-top: 15% !important;
+    margin-right: 1.5rem !important;
+    background-color: white;
+  }
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:1rem;
+    margin-left: 2%;
+
+  }
+
+  .text2 {
+    display: inline;
+    font-weight: 400;
+    margin-left:0.35%;
+  }
+
+  .text3 {
+    display: inline;
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 18px;
+    height: 2.2em !important;
+    border-radius: 0.3rem !important;
+  }
+
+  .selectedFileMessage {
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 15px;
+    margin-left:2%;
+    color: #7C7F86;
+  }
+
+  .mainPage {
+    width: 80% !important;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+}
+
+.inputWidth {
+  width: 100% !important;
 }
 
 .myInput{
@@ -336,113 +636,11 @@ export default {
   place-items: center !important;
 }
 
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
-
-}
-
-
-
-
-.myBox {
-  width: 80%;
-  margin: auto;
-
-}
-
-.underline {
-  border-bottom: solid 0.12em #DEDEDE;
-
-}
-
-.rightLine {
-  border-right:  solid 0.12em #DEDEDE !important;
-  font-size: 25px !important;
-}
-
-.btnAddDeleteFiles {
-  border:0;
-  background:white;
-}
-
-
-.mainText{
-  color:#7C7F86;
-  font-size:30px;
-  text-align: center;
-  font-weight: 400;
-
-
-
-
-
-}
-
-.textTable{
-  color:#7C7F86;
-  font-weight: 400;
-  font-size:21px;
-  text-align: center;
-}
-
-.editBtn {
-  color:#0055BB !important;
-  border: 0 !important;
-  margin-top: 15% !important;
-  margin-right: 1.5rem !important;
-  background-color: white;
-}
-
-
-ul p{
-  color: #000000;
-  font-family: "Raleway", sans-serif;
-  font-weight: 600;
-  font-size:22px;
-  margin-left: 2%;
-
-}
-
-.text2 {
-  display: inline;
-  font-weight: 400;
-  margin-left:0.35%;
-}
-
-.text3 {
-  display: inline;
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 18px;
-  height: 2.2em !important;
-  border-radius: 0.3rem !important;
-}
-
-.selectedFileMessage {
-  font-weight: 400;
-  font-family: "Times New Roman", "Arial", "serif";
-  font-size: 15px;
-  margin-left:2%;
-  color: #7C7F86;
-}
-
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto 1%;
-  padding: 0 0 1.5%;
+div input {
+  border-width: 0.15em !important;
+  height: 2.5rem !important;
+  border-radius: 0.7em !important;
+  width: 100% !important;
 }
 
 </style>
