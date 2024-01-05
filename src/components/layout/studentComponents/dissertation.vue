@@ -18,10 +18,10 @@
         <p class="mainText">Общая информация</p>
       </nav>
       <nav v-if="!editingInfo">
-        <button class="editBtn" @click="editInformation">Редактировать</button>
+        <button class="editBtn" @click="editCommonInfo">Редактировать</button>
       </nav>
       <nav v-else>
-        <button class="editBtn" @click="editInformation">Сохранить</button>
+        <button class="editBtn" @click="saveCommonInfo">Сохранить</button>
       </nav>
 
 
@@ -68,17 +68,17 @@
 
     <div class="myBox roundBlock p-0">
       <div class="d-flex underline" >
-        <div class="rightLine col-6 mainText">
+        <div class="rightLine col-4 mainText">
           <p class="mainText">Этап</p>
         </div>
-        <div class="col-6 textTable" >
+        <div class="col-8 textTable" >
           Семестр
         </div>
       </div>
 
 
       <div class="d-flex underline">
-        <div class="col-6 textTable rightLine">
+        <div class="col-4 textTable rightLine">
 
         </div>
         <div class="col-1 textTable rightLine">
@@ -99,13 +99,19 @@
         <div class="col-1 textTable">
               6
         </div>
+        <div class="col-1 textTable">
+          7
+        </div>
+        <div class="col-1 textTable">
+          8
+        </div>
 
       </div>
 
 
 
       <div class="d-flex" :class="{underline: number < 10}" v-for="(element,index, number) in array">
-        <div class="col-6 textTable rightLine">
+        <div class="col-4 textTable rightLine">
           {{index}}
         </div>
         <div class="col-1 mainText myInput rightLine">
@@ -123,8 +129,14 @@
         <div class="col-1 mainText myInput rightLine">
           <input type="checkbox" class="myCheckBox" v-model=element.id5 :disabled="!(actualSemestr === 5) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput">
+        <div class="col-1 mainText myInput rightLine">
           <input type="checkbox" class="myCheckBox" v-model=element.id6 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+        </div>
+        <div class="col-1 mainText myInput rightLine">
+          <input type="checkbox" class="myCheckBox" v-model=element.id7 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+        </div>
+        <div class="col-1 mainText myInput">
+          <input type="checkbox" class="myCheckBox" v-model=element.id8 :disabled="!(actualSemestr === 6) || !editingCheckbox">
         </div>
 
       </div>
@@ -142,7 +154,7 @@
 
       <dissertation-tab v-for="index in actualSemestr"
                         :id=index
-                        :job-status = statusOfJob[this.statuses[index-1][0].status]
+                        :job-status = statusOfJob[this.statuses[index]]
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemestr
@@ -218,7 +230,8 @@ export default {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
         'passed' : 'Сдано',
-        'empty': ''
+        'empty': '',
+        '' : ''
       },
 
     }
@@ -227,7 +240,21 @@ export default {
 
 ,
   methods: {
-    editInformation() {
+    editCommonInfo() {
+      this.editingInfo = !this.editingInfo
+    },
+    async saveCommonInfo(){
+      try {
+        const response = await axios.post("http://localhost:8080/students/dissertation/theme/" + localStorage.getItem("access_token"),
+            {
+                "theme" : this.theme
+            }
+        )
+        console.log(response)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
       this.editingInfo = !this.editingInfo
     },
     editTables() {
@@ -292,24 +319,21 @@ export default {
     },
 
     fillArrayOfStatuses(data) {
-      this.statuses = Array(data.length)
-      for (var i = 0; i < this.statuses.length; i++){
-        this.statuses[i] = new Array()
+      const keys = [1, 2, 3, 4, 5, 6, 7, 8]
+      var object = new Map()
+      for (var i = 0; i < keys.length; i++){
+        object[keys[i]] = ''
       }
+      if (data === null){
+        this.statuses = object
+        return
+      }
+
       for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.statuses[0].push(data[i])
-        }
-        if (data[i].semester === 2) {
-          this.statuses[1].push(data[i])
-        }
-        if (data[i].semester === 3) {
-          this.statuses[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.statuses[3].push(data[i])
-        }
+        object[data[i].semester] = data[i].status
       }
+
+      this.statuses = object
     },
 
     async saveTables() {
@@ -356,12 +380,14 @@ export default {
 
   },
   async beforeMount() {
+
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
 
     try {
       const response = await axios.get('http://localhost:8080/students/dissertation/' + localStorage.getItem("access_token"))
+
       this.data = await response.data
       this.theme = this.data.commonInfo.theme
       this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
@@ -385,7 +411,6 @@ export default {
       for (var i = 0; i < keys.length; i++){
         this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
       }
-
       const year = (objectDate.slice(0,4))
       const month = (objectDate.slice(5,7))
       const day = (objectDate.slice(8,10))
@@ -394,6 +419,7 @@ export default {
       this.actualSemestr = this.data.commonInfo.actualSemestr
       this.fillArrayOfStatuses(this.data.statuses)
       // this.fillArrayOfFilesID(this.data.ids)
+
 
     }
     catch (e) {
@@ -453,7 +479,7 @@ export default {
 
 
   .myBox {
-    width: 80%;
+    width: 90%;
     margin: auto;
 
   }
@@ -604,7 +630,7 @@ export default {
 
 
   .myBox {
-    width: 80%;
+    width: 90%;
     margin: auto;
 
   }
@@ -716,6 +742,157 @@ export default {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
     font-size: 0.8rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
+}
+
+@media (pointer: coarse)  {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+  .myCheckBox{
+    zoom: 0.35;
+    accent-color: white;
+    background-color: green;
+  }
+
+  .myInput{
+
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .myBox {
+    width: 90% !important;
+    margin: auto;
+
+  }
+
+  div input {
+    border-width: 0.15em !important;
+    height: 1.5rem !important;
+    border-radius: 0.7em !important;
+    width: 100% !important;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size:0.8rem;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-top: 5%;
+    margin-right: 5%;
+    background-color: white;
+    font-size: 0.7rem;
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+    font-size: 0.7rem;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:0.6rem;
+
+  }
+
+  .mainPage {
+    width: 90%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 0.5%;
+  }
+
+
+  .image-upload>input {
+    display: none;
+  }
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.6rem;
+    font-weight: 450;
+  }
+
+  .textInput {
+    font-size: 0.8rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
+  .inputWidth {
+    width: 100%;
+  }
+
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 0.6rem
+  }
+
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 0.6rem !important;
     resize: none !important;
     background-color: white !important;
     font-weight: 350;

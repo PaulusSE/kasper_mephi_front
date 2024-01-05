@@ -195,8 +195,6 @@ export default {
         }
         }
 
-      console.log(object)
-
       try {
         const response = await axios.post("http://localhost:8080/students/registration/" + localStorage.getItem('access_token'),
             {
@@ -205,9 +203,9 @@ export default {
               "email" : this.email,
               "actualSemester" : parseInt(this.actualSemester),
               "enrollmentOrder" : this.enrollmentOrder,
-              "dateOfBeginning" : this.dateOfBeginning,
+              "startDate" : this.dateOfBeginning,
               "specialization" : this.specialization,
-              "numberOfYears" : this.numberOfYears,
+              "numberOfYears" : parseInt(this.numberOfYears),
               "supervisorID" : supervisorID,
             }
         )

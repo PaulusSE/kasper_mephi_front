@@ -166,7 +166,68 @@ export default {
   }
 }
 
+@media (pointer: coarse) {
+  header .head-top {
+    background-color: #005faf;
+    height: 3rem
+  }
 
+  .myHeader {
+    margin:auto;
+    width: 90%;
+    padding: 0 !important;
+    margin-top: 0 !important;
+    height: 0 !important;
+
+
+  }
+
+  header .head-top nav {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: medium;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .imageButtons {
+    margin-top: 0.5em;
+    color:black;
+  }
+
+  .imageMephi{
+    width: 40px;
+  }
+  .imageProfile{
+    width: 21px;
+  }
+  .imageLogOut{
+    width: 24px !important;
+  }
+}
 
 
 

@@ -28,7 +28,7 @@
       <div class="roundBlock p-0 pb-1" v-if="arrayOfStudents.length !== 0">
 
           <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfStudents.length - 1}"  v-for="(student,index) in arrayOfStudents">
-            <router-link class="ps-4 pt-2 linkStyle" to="/user">{{index + 1}}. {{student.fullName}}</router-link>
+            <a class="ps-4 pt-2 linkStyle" href="/user" @click="pushStudentIDToStorage(index)"  >{{index + 1}}. {{student.studentFullName}}</a>
             <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteStudent(index)" :disabled="stateOfStudents">
               <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
             </button>
@@ -56,7 +56,7 @@
 
       <div class="roundBlock p-0 pb-1"  v-if="arrayOfTeachers.length !== 0">
         <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
-          <router-link class="ps-4 pt-2 linkStyle" to="/user2">{{index + 1}}. {{teacher.fullName}}</router-link>
+          <a class="ps-4 pt-2 linkStyle" href="/user2" @click="pushTeacherIDToStorage(index)">{{index + 1}}. {{teacher.teacherFullName}}</a>
           <button class="btnAddDeleteFiles me-2 mt-1" @click="deleteTeacher(index)" :disabled="stateOfTeachers">
             <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
           </button>
@@ -73,6 +73,7 @@
 <script>
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 export default {
   name: "editUser",
   props : ["stateOfAdminPage"],
@@ -83,34 +84,9 @@ export default {
     return {
       arrayOfStudentsCopy : [],
       arrayOfStudents : [
-        {
-          fullName: 'Витя П.',
-          studentId:1,
-        },
-        {
-          fullName: 'Дима С.',
-          studentId:2,
-        },
-        {
-          fullName: 'Катя Н.',
-          studentId:3,
-        }
       ],
       arrayOfTeachersCopy: [],
-      arrayOfTeachers : [
-        {
-          fullName: 'Витя П. С.',
-          teacherId:4,
-        },
-        {
-          fullName: 'Дима Н. Г.',
-          teacherId:5,
-        },
-        {
-          fullName: 'Катя А. Ф.',
-          teacherId:6,
-        }
-      ],
+      arrayOfTeachers : [],
       stateOfStudents: true,
       stateOfTeachers: true,
     }
@@ -151,13 +127,38 @@ export default {
     cancelTeachers(){
       this.stateOfTeachers = !this.stateOfTeachers
       this.arrayOfTeachers = this.arrayOfTeachersCopy.slice(0)
+    },
+    async getAspsAndTeachers() {
+      try {
+        const response = await axios.get("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+        )
+        this.arrayOfTeachers = response.data.supervisors
+        this.arrayOfStudents = response.data.pairs
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+
+    },
+
+    pushStudentIDToStorage(index){
+      localStorage.setItem("studentId", this.arrayOfStudents[index].studentId)
+      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].studentId)
+    },
+    pushTeacherIDToStorage(index){
+    localStorage.setItem("teacherId", this.arrayOfTeachers[index].teacherId)
+      //todo мб стоит пихнуть id в store
     }
   },
   beforeMount() {
     if (store.getters.getType !== "admin"){
       this.$router.push('/wrongAccess')
     }
+    this.getAspsAndTeachers()
   }
+
 }
 </script>
 

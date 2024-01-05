@@ -103,7 +103,7 @@ export default {
       // }
 
       try {
-        const response = await axios.post("http://localhost:8080/authorization/authorize",
+        const response = await axios.post( "http://localhost:8080/authorization/authorize",
             {
               email : this.login,
               password : this.password
@@ -273,7 +273,8 @@ export default {
     padding-top: 2%;
   }
 }
-@media (max-width: 1080px) {
+
+@media (pointer: coarse) {
   * {
     margin: 0 !important;
     padding: 0;
@@ -323,8 +324,8 @@ export default {
 
 
   .mainPage {
-    width: 50%;
-
+    width: 80%;
+    margin-top:1rem !important;
     background: rgba(255, 255, 255, 1);
     opacity: 1;
     border-top-left-radius: 25px;
@@ -332,8 +333,7 @@ export default {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-    margin: 2rem auto auto !important;
-    margin-left:25% !important;
+    margin-left:10% !important;
     overflow-x: hidden;
     overflow-y: hidden;
   }

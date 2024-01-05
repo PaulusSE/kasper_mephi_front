@@ -112,6 +112,8 @@ export default {
         this.showWrongAnswerString = true;
       }
     },
+
+
     downloadFile() {
       const blob = new Blob([this.explanationaryNoteFile]);
       const link = document.createElement('a');

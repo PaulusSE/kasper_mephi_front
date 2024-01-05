@@ -36,7 +36,7 @@
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">ФИО преподователя</label>
-            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="teacherFullName">
+            <input type="text" class="textInput" disabled  v-model="teacherFullName">
           </nav>
         </div>
 
@@ -50,7 +50,7 @@
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Дата приказа об утверждении</label>
-            <input type="text" class="textInput" :disabled="!commonInfo" v-model="dateOfOrderOfStatement">
+            <input type="date" class="textInput" :disabled="!commonInfo" v-model="dateOfOrderOfStatement">
           </nav>
         </div>
       </div>
@@ -65,17 +65,17 @@
 
       <div class="myBox roundBlock p-0">
         <div class="d-flex underline" >
-          <div class="rightLine col-6 textTable">
+          <div class="rightLine col-4 textTable">
             Этап
           </div>
-          <div class="col-6 textTable" >
+          <div class="col-8 textTable" >
             Семестр
           </div>
         </div>
 
 
         <div class="d-flex underline">
-          <div class="col-6 textTable rightLine">
+          <div class="col-4 textTable rightLine">
 
           </div>
           <div class="col-1 textTable rightLine">
@@ -96,13 +96,19 @@
           <div class="col-1 textTable">
             6
           </div>
+          <div class="col-1 textTable">
+            7
+          </div>
+          <div class="col-1 textTable">
+            8
+          </div>
 
         </div>
 
 
 
         <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,key, index) in array">
-          <div class="col-6 textTable rightLine">
+          <div class="col-4 textTable rightLine">
             {{key}}
           </div>
           <div class="col-1 textTable myInput rightLine">
@@ -120,8 +126,14 @@
           <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id5 disabled>
           </div>
-          <div class="col-1 textTable myInput">
+          <div class="col-1 textTable myInput rightLine">
             <input type="checkbox" class="myCheckBox" v-model=value.id6 disabled>
+          </div>
+          <div class="col-1 textTable myInput rightLine">
+            <input type="checkbox" class="myCheckBox" v-model=value.id7 disabled>
+          </div>
+          <div class="col-1 textTable myInput">
+            <input type="checkbox" class="myCheckBox" v-model=value.id8 disabled>
           </div>
 
         </div>
@@ -131,7 +143,7 @@
 
     <student-page-from-teacher-status-tab v-for="index in this.actualSemestr"
                                           :id = index
-                                          :job-status = statusOfJob[this.statuses[index-1][0].status]
+                                          :job-status = statusOfJob[this.statuses[index]]
 
     ></student-page-from-teacher-status-tab>
 
@@ -190,6 +202,7 @@ export default {
       teacherFullName: "",
       numberOfOrderOfStatement: "",
       dateOfOrderOfStatement: "",
+      actualSemestr : '',
       statuses : [],
       statusOfJob : {
         'todo': 'На доработку',
@@ -224,8 +237,26 @@ export default {
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
     },
-    saveCommonInfo() {
+    async saveCommonInfo() {
       this.commonInfo = !this.commonInfo
+      var object = {"studentID" : this.$store.getters.getuserId,
+        "enrollmentOrder" : this.numberOfOrderOfStatement,
+        "startDate" : this.dateOfOrderOfStatement}
+
+      try {
+        const response = await axios.post("http://localhost:8080/admin/students/common_info/" + localStorage.getItem("access_token"), {
+              "studentID" : this.$store.getters.getuserId,
+              "enrollmentOrder" : this.numberOfOrderOfStatement,
+              "startDate" : this.dateOfOrderOfStatement
+            }
+        )
+        console.log(response)
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
     },
 
     async getStudentCommonInfo() {
@@ -267,6 +298,8 @@ export default {
 
         this.dateOfOrderOfStatement = day + '.' + month + '.' + year
         this.actualSemestr = this.data.commonInfo.actualSemestr
+        console.log(this.actualSemestr)
+
         this.fillArrayOfStatuses(response.data.statuses)
 
 
@@ -277,25 +310,72 @@ export default {
       }
     },
 
+    async getStudentCommonInfoForAdmin() {
+      console.log("here")
+      try {
+        const response = await axios.put("http://localhost:8080/admin/students/dissertation/" + localStorage.getItem("access_token"), {
+              "studentID" : localStorage.getItem("studentId")
+            }
+        )
+        console.log(response)
+        this.data = await response.data
+        this.theme = this.data.theme
+        this.teacherFullName = this.data.commonInfo.teacherFullName
+        this.jobStatus = this.data.commonInfo.jobStatus
+        this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
+        this.textOfReview = this.data.commonInfo.feedback
+        let objectDate = this.data.commonInfo.dateOfOrderOfStatement
+
+        const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
+        const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
+        var key = ''
+        for (var i = 0; i < keys.length; i++) {
+          key = keys[i]
+
+          this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
+          this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
+          this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
+          this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
+          this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
+          this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
+        }
+        for (var i = 0; i < keys.length; i++){
+          this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
+        }
+
+        const year = (objectDate.slice(0,4))
+        const month = (objectDate.slice(5,7))
+        const day = (objectDate.slice(8,10))
+
+        this.dateOfOrderOfStatement = day + '.' + month + '.' + year
+        console.log(typeof objectDate)
+        console.log(new Date(objectDate))
+
+        this.actualSemestr = this.data.commonInfo.actualSemestr
+        this.fillArrayOfStatuses(response.data.statuses)
+      }
+
+      catch (e) {
+        console.log(e)
+      }
+    },
+
     fillArrayOfStatuses(data) {
-      this.statuses = Array(data.length)
-      for (var i = 0; i < this.statuses.length; i++){
-        this.statuses[i] = new Array()
+      const keys = [1, 2, 3, 4, 5, 6, 7, 8]
+      var object = new Map()
+      for (var i = 0; i < keys.length; i++){
+        object[keys[i]] = ''
       }
+      if (data === null){
+        this.statuses = object
+        return
+      }
+
       for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.statuses[0].push(data[i])
-        }
-        if (data[i].semester === 2) {
-          this.statuses[1].push(data[i])
-        }
-        if (data[i].semester === 3) {
-          this.statuses[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.statuses[3].push(data[i])
-        }
+        object[data[i].semester] = data[i].status
       }
+
+      this.statuses = object
     },
     async checkAuth() {
       try {
@@ -317,6 +397,7 @@ export default {
   },
 
   async beforeMount() {
+
     this.checkAuth()
 
     if (store.getters.getType === "student"){
@@ -324,10 +405,17 @@ export default {
     }
     await this.getStudentCommonInfo()
 
+    // if(store.getters.getType === 'admin'){
+    //   await this.getStudentCommonInfoForAdmin()
+    // }
+    // if (store.getters.getType === 'supervisor')
+    //   await this.getStudentCommonInfo()
+
   },
 
   beforeCreate() {
     this.$store.dispatch("updateUserId", localStorage.getItem("studentID"))
+
   }
 }
 </script>
@@ -373,7 +461,7 @@ export default {
 
 
   .myBox {
-    width: 80%;
+    width: 90%;
     margin: auto;
 
   }
@@ -517,7 +605,7 @@ export default {
 
 
   .myBox {
-    width: 80%;
+    width: 90%;
     margin: auto;
 
   }

@@ -51,11 +51,11 @@
 
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 26.3%; text-align: center">
+          <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
             Тип занятий
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
+          <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
             Кол-во<br>часов
           </div>
 
@@ -94,19 +94,23 @@
 
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 26.3%; text-align: center">
+          <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model=element.typeOfClasses readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.typeOfClasses></textarea>
+              <select class="textWithCarry inputBox mt-1" style="width:30px;-webkit-appearance: none;" v-model="element.typeOfClasses">
+                <option>лабораторная</option>
+                <option>лекция</option>
+                <option>семинар</option>
+              </select>
             </div>
 
 
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
+          <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly ></textarea>
             </div>
@@ -135,11 +139,11 @@
 
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 25.3%; text-align: center">
+          <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
             Тип занятий
           </div>
 
-          <div class="textMiniTable ps-3 rightLine" style="width: 6.3%; text-align: center">
+          <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
             Кол-во<br>часов<br>сем.
           </div>
 
@@ -182,7 +186,7 @@
 
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 25.3%; text-align: center">
+          <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model="element.typeOfClasses" readonly></textarea>
             </div>
@@ -192,7 +196,7 @@
             </div>
           </div>
 
-          <div class="textMiniTable ps-3 rightLine" style="width: 6.3%; text-align: center">
+          <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
               <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly></textarea>
             </div>
@@ -249,9 +253,12 @@ export default {
     },
 
     cancelChange(){
+      this.smallTableEditing = !this.smallTableEditing
       this.$emit('buttonSmallTableCancel')
       if (this.deleteState === true)
         this.deleteState = false
+
+
     },
 
     deleteButton(){
@@ -463,6 +470,112 @@ export default {
     border: 0;
     background-color: white;
     font-size: 0.9rem;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+
+  }
+
+  .trashLogo{
+    width:35px !important;
+    height: 35px !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .textWithCarry{
+    border: 0 !important;
+    resize: none;
+    width: 100%;
+    overflow-x:hidden;
+    overflow-y:hidden;
+  }
+}
+
+@media (pointer: coarse) {
+  .headingSemester {
+
+    margin-top:1%;
+    margin-left: 1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:0.9rem;
+  }
+
+  .semestrImgActive{
+    width: 40px;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 1rem;
+  }
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+
+  }
+
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    padding: 0 !important;
+    margin-bottom: 2%;
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+    font-size: 0.7rem;
   }
 
   ul p{

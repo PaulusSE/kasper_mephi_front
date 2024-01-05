@@ -535,5 +535,111 @@ export default {
   }
 }
 
+@media (pointer: coarse) {
+  .headingSemester {
+
+    margin-top:0.5%;
+    margin-left: 1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:0.9rem;
+
+  }
+
+  .semestrImgActive{
+    width: 40px;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 1rem;
+  }
+
+
+  .trashLogo{
+    width:35px !important;
+    height: 35px !important;
+  }
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-top: 0.2rem;
+    padding-right: 0.1rem;
+  }
+
+  .textWithCarry{
+    border: 0 !important;
+    resize: none;
+    width: 100%;
+    overflow-x:hidden;
+    overflow-y:hidden;
+  }
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    padding: 0 !important;
+    margin-bottom: 2%;
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+    font-size: 0.7rem;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+
+  }
+}
+
 
 </style>

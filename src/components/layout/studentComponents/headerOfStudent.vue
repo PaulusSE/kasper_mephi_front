@@ -93,6 +93,7 @@ export default {
 
   nav {
     margin-right: 0.6rem;
+
   }
 
   .btnBox {
@@ -142,6 +143,7 @@ export default {
 
   nav {
     margin-right: 0.6rem;
+
   }
 
   .btnBox {

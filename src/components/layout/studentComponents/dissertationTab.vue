@@ -7,13 +7,13 @@
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img  src="../../../../static/figures/arrowleft.png">
+          <img  src="../../../../static/figures/arrowleft.png" class="imgSize">
         </button>
 
       </div>
       <div v-else>
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
-          <img  src="../../../../static/figures/arrowdown.png">
+          <img  src="../../../../static/figures/arrowdown.png" class="imgSize">
         </button>
       </div>
     </div>
@@ -70,11 +70,11 @@
           <p class="loadText">Пояснительная записка:</p>
         </div>
 
-        <div v-if="this.explanationaryNoteFile === '' " class="ms-5 mt-2">
+        <div v-if="this.explanationaryNoteFile === '' " class="mt-2 ms-3">
           <p class="loadTextState">Файл не выбран</p>
         </div>
 
-        <div v-else class="ms-5 mt-2">
+        <div v-else class="ms-3 mt-2">
           <p class="loadTextState">
 
             <button class="downloadFile" @click="downloadFile">{{this.explanationaryNoteFilename}}</button>
@@ -229,12 +229,13 @@ export default {
             },
             {
               responseType: 'blob',
+              responseEncoding: "latin1"
             }
         )
         if (response.status === 200) {
 
-          console.log(response)
-          this.explanationaryNoteFilename = response.headers["content-disposition"]
+
+          this.explanationaryNoteFilename = response.headers["content-disposition"].toString('latin1')
           this.explanationaryNoteFile = response.data
         }
 
@@ -440,7 +441,7 @@ export default {
 
   .loadText {
     font-family: 'Raleway', 'sans-serif';
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
   }
 
@@ -515,6 +516,131 @@ export default {
 
   .imgSize2{
     width: 45px;
+  }
+}
+
+@media (pointer: coarse) {
+  .headingSemester {
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .imgSize{
+    width: 40px !important;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 1.5rem;
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95% !important;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  ;
+
+  }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:0.8rem;
+    margin-left: 2%;
+
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+
+
+
+
+  .loadTextState{
+    font-size: 0.8rem;
+  }
+
+  .sendFilesBtn{
+    margin-right: 2.5%;
+
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:1.4rem;
+    padding: 0.25rem;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+    margin-bottom: 1%;
+    margin-top: 1%;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .statusLine {
+    font-size: 0.7rem !important;
+  }
+
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
+  .textResult1 {
+    font-weight: 550;
+    color:#6BDB6B;
+
+  }
+
+  .textResult2 {
+    font-weight: 550;
+    color:#FFC009
+  }
+
+  .textResult3 {
+    font-weight: 550;
+    color:#FF3333;
+  }
+
+  .checkboxBlock {
+    margin-left: 2.5%;
+  }
+  .imgSize1{
+    width: 30px;
+  }
+
+  .imgSize2{
+    width: 30px;
   }
 }
 

@@ -521,6 +521,123 @@ export default {
   }
 }
 
+@media (pointer: coarse) {
+  .loggining {
+    font-size: 1rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  header .head-top nav {
+    margin-top: 2px;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  header .head-top nav a {
+    height: 20px;
+    width: 20px;
+  }
+
+  header .head-top nav a:nth-of-type(1) {
+    width: 10px;
+    height: 10px;
+    margin: 0 auto;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem !important;
+    font-weight: 450;
+
+  }
+
+  header .head-top nav a:nth-of-type(2) {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .mainPage {
+    width: 90%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  .btnedit{
+    margin-top: 1rem;
+    font-size: 0.6rem;
+
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 3em;
+    font-size: 0.8rem !important;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem !important;
+    font-weight: 450;
+  }
+
+  input {
+    padding-left : 0.5rem;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-align: center;
+    padding-top: 2%;
+  }
+}
+
 .slide-fade-enter-active {
   transition: all .3s ease-out;
 }

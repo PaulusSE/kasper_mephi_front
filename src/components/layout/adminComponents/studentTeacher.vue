@@ -55,6 +55,7 @@
 <script>
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 
 export default {
   name: "student-teacher",
@@ -116,11 +117,34 @@ export default {
       this.stateOfButton = !this.stateOfButton
       this.makeCopy()
     },
-    savePairs(){
+    async savePairs(){
       this.stateOfButton = !this.stateOfButton
       if (this.arrayOfPairsStudentTeacherCopy === this.arrayOfPairsStudentTeacher)
         return
       ///save Pairs
+
+      for (var i = 0; i < this.arrayOfPairsStudentTeacher.length; i++){
+        var teacherFullName = this.arrayOfPairsStudentTeacher[i].teacherFullName
+        for (var j = 0; j < this.arrayOfTeacher.length; j++){
+          if (this.arrayOfTeacher[j].teacherFullName === teacherFullName){
+            this.arrayOfPairsStudentTeacher[i].teacherId = this.arrayOfTeacher[j].teacherId
+            break
+          }
+        }
+      }
+
+      try {
+        const response = await axios.post("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+            {
+              "pairs" : this.arrayOfPairsStudentTeacher
+            }
+        )
+        console.log(response)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
 
       this.makeCopy()
     },
@@ -142,12 +166,25 @@ export default {
           this.arrayOfPairsStudentTeacher[i] = Object.assign({}, this.arrayOfPairsStudentTeacherCopy[i]);
         }
       }
+    },
+    async getAspsAndTeachers() {
+      try {
+        const response = await axios.get("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+        )
+
+        this.arrayOfTeacher = response.data.supervisors
+        this.arrayOfPairsStudentTeacher = response.data.pairs
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
     }
   },
   beforeMount() {
     if (store.getters.getType !== "admin"){
       this.$router.push('/wrongAccess')
     }
+    this.getAspsAndTeachers()
   }
 }
 </script>

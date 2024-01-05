@@ -51,6 +51,7 @@ export default {
       this.$router.push('/registration')
 
 
+
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }

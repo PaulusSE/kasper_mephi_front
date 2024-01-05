@@ -57,7 +57,6 @@ export default {
     async checkAuth() {
       try {
         const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
-        console.log(response)
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
           this.type = response.data.userType

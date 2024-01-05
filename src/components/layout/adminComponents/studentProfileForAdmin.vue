@@ -107,7 +107,7 @@
     </div>
       <div class="d-flex justify-content-between">
         <nav style="margin-left: 1.5rem">
-          <button class="sendAcademButton">В академ нах</button>
+          <button class="sendAcademButton" @click="sendToAdacem">В академ нах</button>
         </nav>
         <nav>
           <button class="deleteButton">Удалить пользователя</button>
@@ -174,6 +174,9 @@ export default {
       if (this.stateOfWriting)
         this.stateOfWriting = !this.stateOfWriting
     },
+    sendToAdacem() {
+      alert("send")
+    }
   }
 }
 </script>
