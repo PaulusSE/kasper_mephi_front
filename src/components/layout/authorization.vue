@@ -220,8 +220,8 @@ export default {
 
   .loggining {
     font-size: 1.7rem !important;
-    height: 4.5rem !important;
-    width: 9rem !important;
+    height: 3.5rem !important;
+    width: 8rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
@@ -311,8 +311,8 @@ export default {
 
   .loggining {
     font-size: 1.7rem !important;
-    height: 4.5rem !important;
-    width: 9rem !important;
+    height: 3.5rem !important;
+    width: 7rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
@@ -323,7 +323,7 @@ export default {
 
 
   .mainPage {
-    width: 40%;
+    width: 60%;
     height: 100%;
     background: rgba(255, 255, 255, 1);
     opacity: 1;

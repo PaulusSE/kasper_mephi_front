@@ -56,7 +56,7 @@
           </div>
 
           <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
-            Кол-во<br>часов
+            Часы
           </div>
 
         </div>
@@ -144,7 +144,7 @@
           </div>
 
           <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
-            Кол-во<br>часов<br>сем.
+            Часы
           </div>
 
           <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
@@ -206,7 +206,7 @@
             </div>
           </div>
 
-          <div class="textMiniTable ps-3 pt-2" style="width: 7%; text-align: center">
+          <div class="textMiniTable ps pt-2" style="width: 8.1%; text-align: center">
             <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
               <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
             </button>
@@ -482,8 +482,8 @@ export default {
   }
 
   .trashLogo{
-    width:35px !important;
-    height: 35px !important;
+    width:22px !important;
+    height: 22px !important;
   }
 
   .btnAddDeleteFiles {
@@ -575,7 +575,7 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
   }
 
   ul p{
@@ -588,8 +588,8 @@ export default {
   }
 
   .trashLogo{
-    width:35px !important;
-    height: 35px !important;
+    width:10px !important;
+    height: 10px !important;
   }
 
   .btnAddDeleteFiles {

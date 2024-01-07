@@ -48,40 +48,7 @@ export default {
     return {
       isTableEditing:false,
       arrayOfTeachingLoadByPeriodCopy : [],
-      arrayOfTeachingLoadByPeriod:[[
-        {
-          subject:"Информатика",
-          numberOfGroup: "Б15-501",
-          mainTeacher: "Сидоров А.А.",
-          typeOfClasses: "Семинары",
-          numberOfHours: 16
-        },
-        {
-          subject:"Вdsaf",
-          numberOfGroup: "gfds1",
-          mainTeacher: "Ивdfgh",
-          typeOfClasses: "Леdfghи",
-          numberOfHours: 223
-        }
-      ],
-        [{
-          subject:"Весна 2024",
-          numberOfGroup: "Б15-501",
-          mainTeacher: "Иванов Г.В.",
-          typeOfClasses: "Лекции",
-          numberOfHours: 24
-
-        }],
-        [{
-          subject:'123',
-          numberOfGroup: '3456',
-          mainTeacher:'8756',
-          typeOfClasses: '3456',
-          numberOfHours: '45678',
-
-        }],
-        [],
-      ],
+      arrayOfTeachingLoadByPeriod:[],
       arrayOfTeachingLoad : [
         {
           hours1: '48 семинары', otherLoad1: "2стендта (УИР), прием экзаменов по ..."
