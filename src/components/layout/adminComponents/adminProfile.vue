@@ -54,11 +54,11 @@ export default {
   "changePasswordNotification" : changePasswordNotification,
   data() {
     return {
-      fullName: '1',
-      email: '2',
-      academicDegree: '3',
-      department: '4',
-      faculty: '5',
+      fullName: '',
+      email: '',
+      academicDegree: '',
+      department: '',
+      faculty: '',
       fullNameCopy: '',
       emailCopy: '',
       academicDegreeCopy: '',
@@ -105,7 +105,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post("http://localhost:8080/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,

@@ -100,7 +100,7 @@
             </div>
 
             <div v-else>
-              <select class="textWithCarry inputBox mt-1" style="width:30px;-webkit-appearance: none;" v-model="element.typeOfClasses">
+              <select class="textWithCarry inputBox mt-1" style="-webkit-appearance: none;word-break: break-all" v-model="element.typeOfClasses">
                 <option>лабораторная</option>
                 <option>лекция</option>
                 <option>семинар</option>
@@ -508,11 +508,11 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:0.9rem;
+    font-size:0.7rem;
   }
 
   .semestrImgActive{
-    width: 40px;
+    width: 30px;
   }
 
   .semestrButtonActive {
@@ -530,7 +530,7 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size:0.6rem;
+    font-size:0.5rem;
     text-align: center;
     word-break: break-all;
     padding-left:0.1rem;

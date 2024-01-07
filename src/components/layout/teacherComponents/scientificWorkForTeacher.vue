@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       arrayOfArticles: [
+
       ],
     }
   },
@@ -38,7 +39,7 @@ export default {
   methods : {
     async loadScientificWorks() {
       try {
-        const response = await axios.put('http://localhost:8080/supervisor/students/scientific_works/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/supervisor/students/scientific_works/' + localStorage.getItem("access_token"),
             {
               "studentID" : localStorage.getItem("studentID")
             }
@@ -317,6 +318,113 @@ export default {
 
   .mainPage {
     width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+}
+
+@media (pointer: coarse) {
+  .bigBox{
+    width: 22%;
+  }
+
+  .smallBox{
+    width: 10.85%;
+
+  }
+
+
+
+
+  .textTableUp{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:17px;
+    text-align: center;
+
+  }
+
+
+
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:30px;
+    text-align: center;
+
+
+
+
+
+  }
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:0.6rem;
+    margin-left: 2%;
+
+  }
+
+
+  .mainPage {
+    width: 90%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

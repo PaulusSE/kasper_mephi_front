@@ -34,7 +34,7 @@
     </div>
 
 
-    <div class="roundBlock pb-3 mt-3" v-if="buttonIsOpened">
+    <div class="roundBlock" v-if="buttonIsOpened">
       <p class="mainText mb-2 ms-4" >Общая информация</p>
       <div v-if="buttonIsOpened" class="textInTheBox">
         <p>Тема: <p class="dataText">{{topic}}</p></p>
@@ -110,6 +110,7 @@ export default {
     width: 95%;
     margin:auto;
     margin-bottom: 2% !important;
+
   }
 
 
@@ -223,7 +224,78 @@ export default {
 
 }
 
+@media (pointer: coarse) {
 
+  .semestrImgActive{
+    width: 30px;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+
+  }
+
+  .textOfHeaders {
+    margin-top: 7%;
+    text-decoration: none !important;
+    font-size: 0.8rem;
+  }
+
+  .nameLink {
+    padding-left: 2.5% !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 400 !important;
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+  }
+
+
+  .mainText {
+    color: #7C7F86;
+    font-weight: 100;
+    font-size: 0.8rem;
+  }
+
+
+  .textInTheBox {
+
+    color: black !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size:0.6rem !important;
+    margin-left: 2% !important;
+  }
+
+  .dataText{
+    font-weight: 400 !important;
+    display: inline;
+  }
+
+
+
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+  }
+
+}
 
 
 </style>

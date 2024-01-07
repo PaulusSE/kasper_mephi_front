@@ -196,7 +196,7 @@ export default {
         }
 
       try {
-        const response = await axios.post("http://localhost:8080/students/registration/" + localStorage.getItem('access_token'),
+        const response = await axios.post(this.IP +"/students/registration/" + localStorage.getItem('access_token'),
             {
               "fullName" : this.fullName,
               "numberOfGroup" : this.numberOfGroup,
@@ -227,7 +227,7 @@ export default {
     },
     async getListOfTeachers() {
       try {
-        const response = await axios.get("http://localhost:8080/students/supervisors/" + localStorage.getItem('access_token'),
+        const response = await axios.get(this.IP +"/students/supervisors/" + localStorage.getItem('access_token'),
         )
         this.arrayOfTeachers = response.data.supervisors
 
@@ -239,7 +239,7 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
 
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)

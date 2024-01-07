@@ -543,12 +543,12 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:0.9rem;
+    font-size:0.7rem;
 
   }
 
   .semestrImgActive{
-    width: 40px;
+    width: 30px;
   }
 
   .semestrButtonActive {
@@ -571,7 +571,7 @@ export default {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size:0.6rem;
+    font-size:0.5rem;
     text-align: center;
     word-break: break-all;
     padding-left:0.1rem;

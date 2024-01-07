@@ -132,7 +132,7 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"),
             {"works" : saveData}
         )
 
@@ -149,7 +149,7 @@ export default {
 
 
       try {
-        const response = await axios.delete("http://localhost:8080/students/scientific_works/" + localStorage.getItem("access_token"),
+        const response = await axios.delete(this.IP +"/students/scientific_works/" + localStorage.getItem("access_token"),
             {data : {
           "ids" : this.arrayDeleteWorkId
           }
@@ -225,7 +225,7 @@ export default {
 
     async loadScientificWorks() {
       try {
-        const response = await axios.get('http://localhost:8080/students/scientific_works/' + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"))
         console.log(response)
         this.data = await response.data;
         this.fillArrayOfArticles(this.data.works, this.data.years * 2)

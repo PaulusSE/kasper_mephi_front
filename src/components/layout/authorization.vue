@@ -2,7 +2,7 @@
   <div class="mainPage">
     <div class="container-fluid my-2">
       <div class="container largeLogo">
-        <img src="../../../static/figures/Mephi_Logo.png" alt="Логотип Мифи"/>
+        <img class='imgSize' src="../../../static/figures/Mephi_Logo.png" alt="Логотип Мифи"/>
       </div>
     </div>
 
@@ -83,8 +83,8 @@ export default {
       showWrongAnswerString: false,
       showEmptyfieldError : false,
       showEmptyfieldErrorLanguage : false,
-      currentLogin: '123',
-      currentPassword: '123',
+      currentLogin: '',
+      currentPassword: '',
       type: '',
       data: []
     }
@@ -103,13 +103,14 @@ export default {
       // }
 
       try {
-        const response = await axios.post( "http://localhost:8080/authorization/authorize",
+        const response = await axios.post( this.IP + "/authorization/authorize",
             {
               email : this.login,
               password : this.password
                 }
 
         )
+
         if (response.status === 200){
           this.data = await response.data
 
@@ -195,6 +196,101 @@ export default {
     --color_white2: F3F5F6;
   }
 
+  .imgSize{
+    width: 200px !important;
+  }
+
+  .largeLogo {
+    margin-top: 10rem;
+    text-align: center;
+    width: auto;
+    height: auto;
+
+  }
+
+  .textMainPage {
+    text-align: center;
+    font-size: x-large;
+    font-family: "Raleway", sans-serif;
+    color: #a3a1a1;
+    font-weight: 600;
+  }
+
+
+
+  .loggining {
+    font-size: 1.7rem !important;
+    height: 4.5rem !important;
+    width: 9rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+
+
+  .mainPage {
+    width: 40%;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: auto auto 5%;
+  }
+
+  div input {
+    border-width: 0.15em !important;
+    height: 3rem !important;
+    border-radius: 0.7em !important;
+    width: 100% !important;
+  }
+
+
+
+  .btnBlock {
+    padding:3em !important;
+    padding-bottom:2.5em !important;
+  }
+
+
+  .descriptionBlock {
+    margin-bottom: 3rem !important;
+    width: 85% !important;
+  }
+
+  .authorization {
+    margin:auto !important;
+    width:85% !important;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 2%;
+  }
+}
+
+@media (max-width: 1080px) {
+  :root {
+    --color-white: FFFFFF;
+    --color-grey: A3A1A1;
+    --color-blue: 0055BB;
+    --color_white2: F3F5F6;
+  }
+
+  .imgSize{
+    width: 200px !important;
+  }
+
   .largeLogo {
     margin-top: 10rem;
     text-align: center;
@@ -275,12 +371,6 @@ export default {
 }
 
 @media (pointer: coarse) {
-  * {
-    margin: 0 !important;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
   :root {
     --color-white: FFFFFF;
     --color-grey: A3A1A1;
@@ -288,44 +378,44 @@ export default {
     --color_white2: F3F5F6;
   }
 
+  .imgSize{
+    width: 100px !important;
+  }
+
   .largeLogo {
-    margin-top: 0 !important;
+    margin-top: 2rem;
     text-align: center;
-    width: 0;
-    height: 0;
-    visibility: hidden;
+    width: auto;
+    height: auto;
 
   }
 
   .textMainPage {
-    text-align: center !important;
-    margin: auto !important;
-    padding: 0 !important;
-    font-size: 1.1rem !important;
+    text-align: center;
+    font-size: 1rem;
     font-family: "Raleway", sans-serif;
     color: #a3a1a1;
-    font-weight: 600;
-
+    font-weight: 500;
   }
 
 
 
   .loggining {
-    font-size: 1.2rem !important;
-    height: 3rem !important;
-    width: 6rem !important;
+    font-size: 1rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
-    border-radius: 0.7em !important;
+    border-radius: 1em !important;
     padding: 0 !important;
     margin: 0 !important;
+    width: 5rem !important;
+    height: 4rem !important;
   }
 
 
 
   .mainPage {
     width: 80%;
-    margin-top:1rem !important;
+    height: 100%;
     background: rgba(255, 255, 255, 1);
     opacity: 1;
     border-top-left-radius: 25px;
@@ -333,14 +423,12 @@ export default {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-    margin-left:10% !important;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    margin: auto auto 5%;
   }
 
   div input {
     border-width: 0.15em !important;
-
+    height: 2rem !important;
     border-radius: 0.7em !important;
     width: 100% !important;
   }
@@ -348,28 +436,26 @@ export default {
 
 
   .btnBlock {
-    padding:1rem !important;
   }
 
 
   .descriptionBlock {
-    margin-bottom: 3rem !important;
-    width: 100% !important;
+
+    width: 85% !important;
   }
 
   .authorization {
     margin:auto !important;
     width:85% !important;
-
   }
 
   .wrongPassword {
     color: red;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.8rem;
     text-align: center;
-    padding-top: 1rem;
+    padding-top: 2%;
   }
 }
 

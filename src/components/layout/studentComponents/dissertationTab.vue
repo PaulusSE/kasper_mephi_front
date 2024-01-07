@@ -77,7 +77,7 @@
         <div v-else class="ms-3 mt-2">
           <p class="loadTextState">
 
-            <button class="downloadFile" @click="downloadFile">{{this.explanationaryNoteFilename}}</button>
+            <button class="downloadFile" @click="downloadFile"><p style="word-break: break-word">{{this.explanationaryNoteFilename}}</p></button>
 
           </p>
         </div>
@@ -201,7 +201,7 @@ export default {
 
       var resultStatus = ''
       try {
-        const response = await axios.post("http://localhost:8080/students/dissertation/file/" + localStorage.getItem("access_token"),formData,
+        const response = await axios.post(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),formData,
             {
               headers : {
                 "Content-Type": "multipart/form-data"
@@ -223,7 +223,7 @@ export default {
     async getFiles() {
 
       try {
-        const response = await axios.put("http://localhost:8080/students/dissertation/file/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),
             {
               "semester" : this.id
             },
@@ -363,6 +363,7 @@ export default {
     border: none;
     background-color: white;
     color: #0b5ed7;
+
   }
 
   .textResult1 {
@@ -489,6 +490,7 @@ export default {
     border: none;
     background-color: white;
     color: #0b5ed7;
+
   }
 
   .textResult1 {
@@ -614,6 +616,7 @@ export default {
     border: none;
     background-color: white;
     color: #0b5ed7;
+
   }
 
   .textResult1 {

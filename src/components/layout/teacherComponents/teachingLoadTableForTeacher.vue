@@ -46,8 +46,8 @@
             Тип занятий
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
-            Кол-во<br>часов
+          <div class="textMiniTable" style="width: 8.3%; text-align: center">
+            Часы
           </div>
 
         </div>
@@ -278,6 +278,7 @@ export default {
     font-weight: 500;
     font-size:18px;
     text-align: center;
+    word-break: break-all;
 
   }
 
@@ -382,6 +383,113 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 500;
     font-size:0.9rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    padding: 0 !important;
+    margin-bottom: 2%;
+  }
+
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+  }
+
+
+  .editBtn2 {
+    color:#0055BB;
+    border: 0;
+    background-color: white;
+  }
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+
+  }
+
+  .trashLogo{
+    width:35px !important;
+    height: 35px !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .textWithCarry{
+    border: 0 !important;
+    resize: none;
+    width: 100%;
+    overflow-x:hidden;
+    overflow-y:hidden;
+  }
+}
+
+@media (pointer: coarse) {
+  .headingSemester {
+
+    margin-top:1%;
+    margin-left: 1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:0.8rem;
+  }
+
+  .semestrImgActive{
+    width: 30px;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 1rem;
+  }
+
+
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
     text-align: center;
     word-break: break-all;
     padding-left:0.1rem;

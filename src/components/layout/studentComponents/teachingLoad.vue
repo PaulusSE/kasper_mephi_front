@@ -154,6 +154,7 @@ export default {
         var saveData = new Array()
         for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
           for (var j = 0; j < this.arrayOfTeachingLoadByPeriod[i].length; j++){
+            console.log(this.arrayOfTeachingLoadByPeriod[i][j].typeOfClasses)
             saveData.push(
                 {
                   subject: this.arrayOfTeachingLoadByPeriod[i][j].subject,
@@ -173,12 +174,11 @@ export default {
 
 
         try {
-          const response = await axios.post('http://localhost:8080/students/teaching_load/' + localStorage.getItem("access_token"),
+          const response = await axios.post(this.IP +'/students/teaching_load/' + localStorage.getItem("access_token"),
               {"array" : saveData}
           )
-
           this.data = response.data;
-          this.fillArrayOfTeachingLoad(this.data.works, this.numberOfSemesters)
+          this.fillArrayOfTeachingLoad(this.data.array, this.numberOfSemesters)
         }
         catch (e) {
           console.log(e)
@@ -189,14 +189,14 @@ export default {
       }
 
       try {
-        const response = await axios.delete("http://localhost:8080/students/teaching_load/" + localStorage.getItem("access_token"),
+        const response = await axios.delete(this.IP +"/students/teaching_load/" + localStorage.getItem("access_token"),
             {data : {
                 "ids" : this.arrayDeleteTeachingLoadId
               }
             }
         )
         this.data = response.data;
-        this.fillArrayOfTeachingLoad(this.data, this.numberOfSemesters)
+        this.fillArrayOfTeachingLoad(this.data.array, this.numberOfSemesters)
       }
       catch (e) {
         console.log(e)
@@ -238,7 +238,7 @@ export default {
     },
 
     fillArrayOfTeachingLoad(data, numberOfSemesters) {
-      console.log(data)
+
       this.arrayOfTeachingLoadByPeriod = Array(parseInt(numberOfSemesters))
 
       for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
@@ -275,7 +275,7 @@ export default {
 
     async loadTeachingLoad() {
       try {
-        const response = await axios.get('http://localhost:8080/students/teaching_load/' + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +'/students/teaching_load/' + localStorage.getItem("access_token"))
         this.data = await response.data;
       }
       catch (e) {
@@ -291,6 +291,7 @@ export default {
       this.$router.push('/wrongAccess')
     }
     await this.loadTeachingLoad()
+
   },
 }
 </script>

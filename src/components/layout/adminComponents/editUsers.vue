@@ -130,7 +130,7 @@ export default {
     },
     async getAspsAndTeachers() {
       try {
-        const response = await axios.get("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.get(this.IP + "/admin/pairs/" + localStorage.getItem("access_token"),
         )
         this.arrayOfTeachers = response.data.supervisors
         this.arrayOfStudents = response.data.pairs

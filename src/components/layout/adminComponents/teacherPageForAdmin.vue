@@ -92,11 +92,11 @@ export default {
   },
   data() {
     return {
-      fullName: '1',
-      email: '2',
-      academicDegree: '3',
-      department: '4',
-      faculty: '5',
+      fullName: '',
+      email: '',
+      academicDegree: '',
+      department: '',
+      faculty: '',
       fullNameCopy: '',
       emailCopy: '',
       academicDegreeCopy: '',
@@ -104,15 +104,7 @@ export default {
       facultyCopy: '',
       stateOfEditing: false,
       stateOfWriting: false,
-      arrayOfStudents : [
-        {
-          "fullName" : 'name',
-
-        },
-        {
-          "fullName" : "name2",
-        }
-      ]
+      arrayOfStudents : []
     }
   },
   methods : {
@@ -151,7 +143,7 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
         console.log(response)
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)

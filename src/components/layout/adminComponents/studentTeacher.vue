@@ -66,46 +66,8 @@ export default {
   data() {
     return {
       arrayOfPairsStudentTeacherCopy: [],
-      arrayOfPairsStudentTeacher : [
-        {
-          studentFullName: "Сафиуллин Ильяс Фанисович",
-          teacherFullName: "Тихомирова Анна Николаевна",
-          studentId:1,
-          teacherId:2
-        },
-        {
-          studentFullName: "Дима",
-          teacherFullName: "Рословцев Владимир Владимирович",
-          studentId:3,
-          teacherId:4
-        },
-        {
-          studentFullName: "Никита",
-          teacherFullName: "Тихомирова Анна Николаевна",
-          studentId:5,
-          teacherId:6
-        },
-        {
-          studentFullName: "Виктор П.",
-          teacherFullName: "",
-          studentId:6,
-          teacherId:7
-        },
-      ],
-      arrayOfTeacher : [
-        {
-          teacherFullName: "Тихомирова Анна Николаевна",
-          teacherId:2
-        },
-        {
-          teacherFullName: "Рословцев Владимир Владимирович",
-          teacherId: 4
-        },
-        {
-          teacherFullName: "Тихомирова Дарья",
-          teacherId: 7
-        },
-      ],
+      arrayOfPairsStudentTeacher : [],
+      arrayOfTeacher : [],
       stateOfButton : true,
     }
   },
@@ -134,7 +96,7 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP + "/admin/pairs/" + localStorage.getItem("access_token"),
             {
               "pairs" : this.arrayOfPairsStudentTeacher
             }
@@ -169,7 +131,7 @@ export default {
     },
     async getAspsAndTeachers() {
       try {
-        const response = await axios.get("http://localhost:8080/admin/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.get(this.IP +"/admin/pairs/" + localStorage.getItem("access_token"),
         )
 
         this.arrayOfTeacher = response.data.supervisors

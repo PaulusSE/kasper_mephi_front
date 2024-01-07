@@ -41,7 +41,7 @@ export default createStore({
         },
         getuserId(state) {
             return state.user_id
-        }
+        },
 
     },
     modules : {

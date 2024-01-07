@@ -216,7 +216,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post("http://localhost:8080/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,
@@ -465,8 +465,7 @@ export default {
   div nav {
     margin-left: 1.5rem !important;
     margin-right: 1.5rem !important;;
-    margin-bottom: 1%;
-    height: 5em;
+    margin-bottom: 0.3rem;
   }
 
   div nav button {
@@ -540,15 +539,12 @@ export default {
   }
 
   header .head-top nav {
-    margin-top: 2px;
+    margin-top: 0 !important;
     margin-left: 20%;
     margin-right: 20%;
   }
 
-  header .head-top nav a {
-    height: 20px;
-    width: 20px;
-  }
+
 
   header .head-top nav a:nth-of-type(1) {
     width: 10px;
@@ -567,8 +563,7 @@ export default {
   header .head-top nav a:nth-of-type(2) {
     width: 30px;
     height: 30px;
-    margin: 0 auto;
-    margin-top: 10px;
+
   }
 
   .mainPage {

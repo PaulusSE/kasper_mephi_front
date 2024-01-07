@@ -219,7 +219,7 @@ export default {
   }
 
   .imageMephi{
-    width: 40px;
+    width: 50px;
   }
   .imageProfile{
     width: 21px;

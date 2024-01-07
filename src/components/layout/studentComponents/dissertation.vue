@@ -221,8 +221,7 @@ export default {
       resultOfSending: '',
       arrayWithFilesId: [],
       jobStatus : '',
-      feedback: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n" +
-          "\n ",
+      feedback: "",
       array: {
       },
       progressMap : new Map(),
@@ -245,7 +244,7 @@ export default {
     },
     async saveCommonInfo(){
       try {
-        const response = await axios.post("http://localhost:8080/students/dissertation/theme/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/students/dissertation/theme/" + localStorage.getItem("access_token"),
             {
                 "theme" : this.theme
             }
@@ -344,7 +343,7 @@ export default {
 
 
       try {
-        const response = await axios.post("http://localhost:8080/students/dissertation/progress/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/students/dissertation/progress/" + localStorage.getItem("access_token"),
             {"progress" : saveData
             }
         )
@@ -386,7 +385,7 @@ export default {
     }
 
     try {
-      const response = await axios.get('http://localhost:8080/students/dissertation/' + localStorage.getItem("access_token"))
+      const response = await axios.get(this.IP +'/students/dissertation/' + localStorage.getItem("access_token"))
 
       this.data = await response.data
       this.theme = this.data.commonInfo.theme

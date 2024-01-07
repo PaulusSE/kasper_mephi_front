@@ -114,11 +114,11 @@ export default {
   "changePasswordNotification" : changePasswordNotification,
   data() {
     return {
-      fullName: '1',
-      email: '2',
-      academicDegree: '3',
-      department: '4',
-      faculty: '5',
+      fullName: '',
+      email: '',
+      academicDegree: '',
+      department: '',
+      faculty: '',
       fullNameCopy: '',
       emailCopy: '',
       academicDegreeCopy: '',
@@ -165,7 +165,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post("http://localhost:8080/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,
@@ -400,7 +400,6 @@ export default {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 1%;
-    height: 5em;
   }
 
   .btnedit{
@@ -425,7 +424,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
+    height: 2em;
     font-size: medium;
     padding-left: 0.5rem;
   }
@@ -463,6 +462,100 @@ export default {
   }
 }
 
+@media (pointer: coarse) {
+  .mainText {
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+  header .head-top nav {
+
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+
+  header .head-top nav a:nth-of-type(2) {
+
+
+  }
+
+  .mainPage {
+    width: 90%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+
+  }
+
+  .btnedit{
+
+    font-size: 0.8rem
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    font-size: medium;
+    padding-left: 0.5rem;
+  }
+
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 450;
+  }
+
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.25rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-align: center;
+    padding-top: 2%;
+  }
+}
 
 
 .slide-fade-enter-active {

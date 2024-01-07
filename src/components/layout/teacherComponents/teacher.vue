@@ -42,7 +42,7 @@ export default {
     },
     async getStudents(){
       try {
-        const response = await axios.get('http://localhost:8080/supervisors/list_of_students/' + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +'/supervisors/list_of_students/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         this.arrayOfStudents = this.data.array
 
@@ -260,6 +260,106 @@ export default {
 
   .mainPage {
     width: 80% !important;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 0.5%;
+    padding-top: 1.5%;
+  }
+}
+
+@media (pointer: coarse) {
+  .aspirantText {
+    font-family: "Raleway", sans-serif !important;
+    border: solid 0.12em #0055BB !important;
+    border-radius: 12px;
+    display:inline-block;
+    margin-left: 2.5%;
+    margin-bottom: 3%;
+    color: #0055BB !important;
+    font-weight: 500;
+    font-size:0.8rem ;
+    padding-bottom: 0.2%;
+    padding-top: 0.2%;
+    padding-right: 1%;
+    padding-left: 1%;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+  }
+
+  .textOfHeaders {
+    margin-top: 7%;
+    text-decoration: none !important;
+    font-size: 25px;
+  }
+
+  .nameLink {
+    padding-left: 2.5% !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 400 !important;
+
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+  }
+
+
+  .mainText {
+    color: #7C7F86;
+    font-weight: 100;
+    font-size: 30px;
+  }
+
+
+  .textInTheBox {
+
+    color: black !important;
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size:22px !important;
+    margin-left: 2% !important;
+  }
+
+  .dataText{
+    font-weight: 400 !important;
+    display: inline;
+  }
+
+
+
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 900;
+    font-size:22px;
+    margin-left: 2%;
+  }
+
+
+
+  .mainPage {
+    width: 90% !important;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

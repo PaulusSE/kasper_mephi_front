@@ -56,7 +56,7 @@
             Файлы отсутствуют
           </ul>
           <ul class="selectedFileMessage" v-else>
-            <button class="downloadFile" @click="downloadFile">{{this.explanationaryNoteFilename}}</button>
+            <button class="downloadFile" @click="downloadFile"><p style="word-break: break-word">{{this.explanationaryNoteFilename}}</p></button>
           </ul>
         </div>
 
@@ -92,7 +92,7 @@ export default {
     async getFiles() {
 
       try {
-        const response = await axios.put("http://localhost:8080/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
             {
               "semester" : this.id,
               "studentID" : localStorage.getItem("studentID")
@@ -125,7 +125,7 @@ export default {
       setTimeout(async () => {
 
         try {
-          const response = await axios.post("http://localhost:8080/supervisor/students/set_status/" + localStorage.getItem("access_token"),
+          const response = await axios.post(this.IP +"/supervisor/students/set_status/" + localStorage.getItem("access_token"),
               {
                 "semester": this.id,
                 "studentID": localStorage.getItem("studentID"),

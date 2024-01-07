@@ -93,10 +93,10 @@
           <div class="col-1 textTable rightLine">
             5
           </div>
-          <div class="col-1 textTable">
+          <div class="col-1 textTable rightLine">
             6
           </div>
-          <div class="col-1 textTable">
+          <div class="col-1 textTable rightLine">
             7
           </div>
           <div class="col-1 textTable">
@@ -221,8 +221,8 @@ export default {
       this.editingReview = !this.editingReview
 
       try {
-        const response = await axios.post("http://localhost:8080/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
-              "studentID" : this.$store.getters.getuserId,
+        const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
+              "studentID" : localStorage.getItem("studentId"),
               "feedback" : this.textOfReview
             }
         )
@@ -244,13 +244,12 @@ export default {
         "startDate" : this.dateOfOrderOfStatement}
 
       try {
-        const response = await axios.post("http://localhost:8080/admin/students/common_info/" + localStorage.getItem("access_token"), {
-              "studentID" : this.$store.getters.getuserId,
+        const response = await axios.post(this.IP +"/admin/students/common_info/" + localStorage.getItem("access_token"), {
+              "studentID" : localStorage.getItem("studentId"),
               "enrollmentOrder" : this.numberOfOrderOfStatement,
               "startDate" : this.dateOfOrderOfStatement
             }
         )
-        console.log(response)
 
       }
       catch (e) {
@@ -260,15 +259,16 @@ export default {
     },
 
     async getStudentCommonInfo() {
+      console.log(localStorage.getItem("studentId"))
       try {
-        const response = await axios.put("http://localhost:8080/supervisors/student/" + localStorage.getItem("access_token"), {
-            "studentID" : this.$store.getters.getuserId
+        const response = await axios.put(this.IP +"/supervisors/student/" + localStorage.getItem("access_token"), {
+            "studentID" : localStorage.getItem("studentId")
             }
         )
 
         this.data = await response.data
 
-        this.theme = this.data.theme
+        this.theme = this.data.commonInfo.theme
         this.teacherFullName = this.data.commonInfo.teacherFullName
         this.jobStatus = this.data.commonInfo.jobStatus
         this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
@@ -292,13 +292,9 @@ export default {
           this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
         }
 
-        const year = (objectDate.slice(0,4))
-        const month = (objectDate.slice(5,7))
-        const day = (objectDate.slice(8,10))
+        this.dateOfOrderOfStatement = this.data.commonInfo.dateOfOrderOfStatement
 
-        this.dateOfOrderOfStatement = day + '.' + month + '.' + year
         this.actualSemestr = this.data.commonInfo.actualSemestr
-        console.log(this.actualSemestr)
 
         this.fillArrayOfStatuses(response.data.statuses)
 
@@ -313,7 +309,7 @@ export default {
     async getStudentCommonInfoForAdmin() {
       console.log("here")
       try {
-        const response = await axios.put("http://localhost:8080/admin/students/dissertation/" + localStorage.getItem("access_token"), {
+        const response = await axios.put(this.IP +"/admin/students/dissertation/" + localStorage.getItem("access_token"), {
               "studentID" : localStorage.getItem("studentId")
             }
         )
@@ -379,7 +375,7 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get("http://localhost:8080/authorization/check/" + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
 
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
@@ -405,11 +401,11 @@ export default {
     }
     await this.getStudentCommonInfo()
 
-    // if(store.getters.getType === 'admin'){
-    //   await this.getStudentCommonInfoForAdmin()
-    // }
-    // if (store.getters.getType === 'supervisor')
-    //   await this.getStudentCommonInfo()
+    if(store.getters.getType === 'admin'){
+      await this.getStudentCommonInfoForAdmin()
+    }
+    if (store.getters.getType === 'supervisor')
+      await this.getStudentCommonInfo()
 
   },
 
@@ -702,6 +698,143 @@ export default {
 
   .textInput {
     font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
+
+
+  .myCheckBox{
+    zoom: 1.2;
+    accent-color: white;
+    background-color: green;
+  }
+
+  .myInput{
+
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+
+  .myBox {
+    width: 90%;
+    margin: auto;
+
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+    font-size: 25px !important;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+
+  .mainText{
+    color:#7C7F86;
+    font-size:0.8rem;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .textTable{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size:0.7rem !important;
+    text-align: center;
+  }
+
+  .editBtn {
+    color:#0055BB !important;
+    border: 0 !important;
+    margin-top: 15% !important;
+    margin-right: 1.5rem !important;
+    background-color: white;
+    font-size: 0.6rem;
+  }
+
+
+  ul p{
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size:0.6rem;
+    margin-left: 2%;
+
+  }
+
+  .text2 {
+    display: inline;
+    font-weight: 400;
+    margin-left:0.35%;
+  }
+
+  .text3 {
+    display: inline;
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 18px;
+    height: 2.2em !important;
+    border-radius: 0.3rem !important;
+  }
+
+  .selectedFileMessage {
+    font-weight: 400;
+    font-family: "Times New Roman", "Arial", "serif";
+    font-size: 15px;
+    margin-left:2%;
+    color: #7C7F86;
+  }
+
+  .mainPage {
+    width: 90% !important;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .textInput {
+    font-size: 0.8rem;
     border-top-left-radius: 10px !important;
     border-top-right-radius: 10px !important;
     border-bottom-left-radius: 10px !important;

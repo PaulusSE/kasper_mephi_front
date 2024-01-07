@@ -44,6 +44,7 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import scientificWorkForTeacher from "@/components/layout/teacherComponents/scientificWorkForTeacher.vue";
 import teachingLoadForTeacher from "@/components/layout/teacherComponents/teachingLoadForTeacher.vue";
 import studentProfileForAdmin from "@/components/layout/adminComponents/studentProfileForAdmin.vue";
+import store from "@/store/index.js";
 
 import {h} from "vue";
 export default {
@@ -66,6 +67,9 @@ export default {
       this.stateOfPage = index
     },
   },
+  async beforeMount() {
+
+  }
 
 }
 </script>
