@@ -343,8 +343,43 @@ export default {
   }
 }
 
-@media (pointer: coarse)  {
+@media (pointer: coarse) and (max-width: 400px) {
+  .mainPage {
+    width: 90%;
 
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .headerText{
+    font-family: Raleway,serif;
+    padding-top: 1%;
+    margin-left: 2rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+
+  .text {
+    font-size: 0.7rem;
+  }
+
+  .wrongData{
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.7rem;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 2%;
+  }
 }
 
 

@@ -453,7 +453,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .textTableUp{
     color: #7C7F86;
     font-family: "Raleway", sans-serif;

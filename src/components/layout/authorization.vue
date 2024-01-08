@@ -114,9 +114,8 @@ export default {
 
         if (response.status === 200){
           this.data = await response.data
-
-
           localStorage.setItem("access_token", this.data.token)
+          localStorage.setItem("userType", this.data.client_type)
           localStorage.setItem("registered", this.data.registered)
           this.$store.dispatch("updateUserType", this.data.client_type)
 
@@ -367,7 +366,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   :root {
     --color-white: FFFFFF;
     --color-grey: A3A1A1;

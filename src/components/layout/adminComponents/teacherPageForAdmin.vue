@@ -16,14 +16,14 @@
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">ФИО</label>
+        <label class="text ms-0">ФИО</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Почта</label>
+        <label class="text ms-0">Почта</label>
         <input type="text" class="col-12" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
       </nav>
 
@@ -31,7 +31,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Ученая степень</label>
+        <label class="text ms-0">Ученая степень</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
       </nav>
 
@@ -41,7 +41,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Кафедра</label>
+        <label class="text ms-0">Кафедра</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
       </nav>
 
@@ -49,7 +49,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-5">Факультет</label>
+        <label class="text ms-0">Факультет</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
 
@@ -84,6 +84,7 @@
 import header from "@/components/layout/header.vue";
 import tabOfStudent from "@/components/layout/studentComponents/tabOfStudent.vue";
 import axios from "axios";
+import store from "@/store/index.js";
 export default {
   name: "teacherPageForAdmin",
   components : {
@@ -144,9 +145,9 @@ export default {
     async checkAuth() {
       try {
         const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
-        console.log(response)
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
+          localStorage.setItem("userType", response.data.userType)
           this.type = response.data.userType
         }
         else {
@@ -159,8 +160,13 @@ export default {
       }
     },
   },
-  beforeMount() {
-    this.checkAuth()
+  async beforeMount() {
+    await this.checkAuth()
+    if (store.getters.getType !== 'admin'){
+      this.$router.push("/wrongAccess")
+    }
+
+
   }
 }
 </script>
@@ -174,119 +180,256 @@ export default {
   box-sizing: border-box;
 }
 
-.mainText {
-  margin-top: 1rem;
-  color:#7C7F86;
-  font-weight: 300;
-  font-size: 1.2rem;
+@media (min-width: 800px) {
+  .mainText {
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
+
+
+  .mainPage {
+    width: 50%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-bottom: 1%;
+  }
+
+  .btnedit{
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 2.5rem;
+    font-size: 1rem;
+    padding-left: 0.5rem;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1rem;
+    font-weight: 450;
+  }
+
+  .aspirantText {
+    font-family: "Raleway", sans-serif !important;
+    border: solid 0.12em #0055BB !important;
+    border-radius: 12px;
+    display:inline-block;
+    margin-top: 1%;
+    margin-left: 2.5%;
+    margin-bottom: 1%;
+    color: #0055BB !important;
+    font-weight: 500;
+    font-size:1.2rem;
+    padding-bottom: 0.2%;
+    padding-top: 0.2%;
+    padding-right: 1%;
+    padding-left: 1%;
+  }
 }
 
+@media (max-width: 800px) {
+  .mainText {
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1rem;
+  }
 
-header .head-top {
-  background-color: #005faf;
-  height: 4em;
+
+  .mainPage {
+    width: 80%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 1%;
+  }
+
+  .btnedit{
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 2rem;
+    font-size: 0.9rem;
+    padding-left: 0.5rem;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.9rem;
+    font-weight: 450;
+  }
+
+  .aspirantText {
+    font-family: "Raleway", sans-serif !important;
+    border: solid 0.15em #0055BB !important;
+    border-radius: 12px;
+    display:inline-block;
+    margin-top: 1%;
+    margin-left: 2.5%;
+    margin-bottom: 1%;
+    color: #0055BB !important;
+    font-weight: 500;
+    font-size:1rem;
+    padding-bottom: 0.2%;
+    padding-top: 0.2%;
+    padding-right: 1%;
+    padding-left: 1%;
+  }
 }
 
-header .head-top nav {
-  margin-top: 2px;
-  margin-left: 20%;
-  margin-right: 20%;
+@media (pointer: coarse) and (max-width: 400px) {
+  .mainText {
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 0.8rem;
+  }
+
+  .mainPage {
+    width: 90%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 1%;
+  }
+
+  .btnedit{
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+    height: 2rem;
+    font-size: 0.8rem;
+    padding-left: 0.5rem;
+  }
+
+  div nav label {
+    display: block;
+    margin-left: 5%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 450;
+  }
+
+  .aspirantText {
+    font-family: "Raleway", sans-serif !important;
+    border: solid 0.17em #0055BB !important;
+    border-radius: 12px;
+    display:inline-block;
+    margin-top: 1%;
+    margin-left: 2.5%;
+    margin-bottom: 1%;
+    color: #0055BB !important;
+    font-weight: 500;
+    font-size:0.8rem;
+    padding-bottom: 0.2%;
+    padding-top: 0.2%;
+    padding-right: 1%;
+    padding-left: 1%;
+  }
 }
-
-header .head-top nav a {
-  height: 20px;
-  width: 20px;
-}
-
-header .head-top nav a:nth-of-type(1) {
-  width: 10px;
-  height: 10px;
-  margin: 0 auto;
-}
-
-header .head-top nav a:nth-of-type(2) {
-  width: 30px;
-  height: 30px;
-  margin: 0 auto;
-  margin-top: 10px;
-}
-
-.mainPage {
-  width: 60%;
-
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: 1.5% auto auto;
-  padding-bottom: 1.5%;
-}
-
-div nav {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-bottom: 1%;
-  height: 5em;
-}
-
-.btnedit{
-  margin-top: 1em;
-  font-size: larger;
-  margin-right: 0.5rem;
-}
-
-
-div nav button {
-  background-color: white !important;
-  border-color: white !important;
-  color: #0055bb !important;
-  transition: 0.5s all ease;
-}
-
-div nav button:hover {
-  color: darkblue;
-  background-color: #7c7f86;
-}
-
-div nav input {
-  width: 100%;
-  border-color: #7c7f86 !important;
-  border-radius: 0.7em;
-  height: 3em;
-  font-size: medium;
-  padding-left: 0.5rem;
-}
-
-div nav label {
-  display: block;
-  margin-left: 5%;
-}
-
-.text {
-  font-family: "Raleway", sans-serif;
-  color: #7c7f86;
-  font-size: 22px;
-  font-weight: 450;
-}
-
-.aspirantText {
-  font-family: "Raleway", sans-serif !important;
-  border: solid 0.12em #0055BB !important;
-  border-radius: 12px;
-  display:inline-block;
-  margin-top: 1%;
-  margin-left: 2.5%;
-  margin-bottom: 1%;
-  color: #0055BB !important;
-  font-weight: 500;
-  font-size:22px;
-  padding-bottom: 0.2%;
-  padding-top: 0.2%;
-  padding-right: 1%;
-  padding-left: 1%;
-}
-
 </style>

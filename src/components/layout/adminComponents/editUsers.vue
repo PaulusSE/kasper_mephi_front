@@ -144,11 +144,11 @@ export default {
     },
 
     pushStudentIDToStorage(index){
-      localStorage.setItem("studentId", this.arrayOfStudents[index].studentId)
+      localStorage.setItem("studentID", this.arrayOfStudents[index].studentId)
       this.$store.dispatch("updateUserId", this.arrayOfStudents[index].studentId)
     },
     pushTeacherIDToStorage(index){
-    localStorage.setItem("teacherId", this.arrayOfTeachers[index].teacherId)
+    localStorage.setItem("teacherID", this.arrayOfTeachers[index].teacherId)
       //todo мб стоит пихнуть id в store
     }
   },
@@ -319,7 +319,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .editBtnStudents{
     width: 95%;
     margin:auto;

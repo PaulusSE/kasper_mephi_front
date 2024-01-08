@@ -3,7 +3,7 @@
     <div class="mainPage">
       <div class="container-fluid my-2">
         <div class="container logo">
-          <img src="/static/figures/Mephi_Logo.png" alt="Логотип Мифи"/>
+          <img class='imgSize' src="/static/figures/Mephi_Logo.png" alt="Логотип Мифи"/>
         </div>
       </div>
 
@@ -41,34 +41,105 @@ export default {
   padding: 0;
 }
 
-.logo {
-  margin-top: 10rem;
-  text-align: center;
-  width: 100%;
-  height: 300px;
+@media (min-width: 800px) {
+  .logo {
+    margin-top: 10rem;
+    text-align: center;
+  }
+  .imgSize {
+    width: 300px !important;
+  }
+
+  .text404 {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align:center;
+    margin-bottom: 2%;
+  }
+
+  .mainPage {
+    width: 50%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: auto auto 5%;
+  }
 }
 
-.text404 {
-  font-family: "Raleway", sans-serif;
-  color: #7c7f86;
-  font-size: 25px;
-  font-weight: 500;
-  text-align:center;
-  margin-bottom: 2%;
+@media (max-width: 800px) {
+  .logo {
+    margin-top: 10rem;
+    text-align: center;
+    width: 200px;
+  }
+
+  .imgSize {
+    width: 200px;
+  }
+
+  .text404 {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align:center;
+    margin-bottom: 2%;
+  }
+
+  .mainPage {
+    width: 80%;
+
+    height: 80%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: auto auto 5%;
+  }
 }
 
-.mainPage {
-  width: 40%;
+@media (pointer: coarse) and (max-width: 400px) {
+  .logo {
 
-  height: 80%;
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
-  box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
-  margin: auto auto 5%;
+    text-align: center;
+    width: 300px !important;
+  }
+
+  .imgSize {
+    width: 150px;
+  }
+
+  .text404 {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align:center;
+    margin-bottom: 2%;
+  }
+
+  .mainPage {
+    width: 90%;
+
+    height: 80%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: auto auto 5%;
+  }
 }
 
 </style>

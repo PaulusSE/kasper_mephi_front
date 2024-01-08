@@ -93,6 +93,7 @@ export default {
     },
     async getFiles() {
 
+      console.log(localStorage.getItem("studentId"))
       try {
         const response = await axios.put(this.IP +"/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
             {
@@ -150,88 +151,264 @@ export default {
 </script>
 
 <style scoped>
-.semestrButtonActive {
-  border:0 !important;
-  width: 3%;
-  height: 100%;
-  max-width: 42px;
-  margin-top: 0 !important;
-  background-color: white;
+
+@media (min-width: 800px) {
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+
+  .headingSemester {
+
+    margin-top:1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:1.2rem;
+  }
+
+  .mySelectedField {
+    width: 12rem !important;
+    margin-bottom: 1rem;
+  }
+
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
+
+  .textResult1 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+
+    color:#6BDB6B;
+  }
+
+  .textResult2 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FFC009
+  }
+
+  .textResult3 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FF3333;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:20px;
+    text-align: center;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 3rem;
+  }
 }
 
-.roundBlock {
-  border: solid 0.12em #DEDEDE;
-  border-radius: 20px;
-  width: 95%;
-  margin:auto;
-  margin-bottom: 2% !important;
-  padding: 0 1% 1%;
+@media (max-width: 800px) {
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+  }
 
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+
+  }
+  .headingSemester {
+    margin-top:1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:1rem;
+  }
+
+  .mySelectedField {
+    width: 12rem !important;
+    margin-bottom: 1rem;
+  }
+
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
+
+  .textResult1 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    font-size: 0.8rem;
+    color:#6BDB6B;
+  }
+
+  .textResult2 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FFC009;
+    font-size: 0.8rem;
+  }
+
+  .textResult3 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FF3333;
+    font-size: 0.8rem;
+  }
+
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:1rem;
+    text-align: center;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 3rem;
+  }
 }
 
-.headingSemester {
+@media (pointer: coarse) and (max-width: 400px) {
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 42px;
+    margin-top: 0 !important;
+    background-color: white;
+  }
 
-  margin-top:1%;
-  color: #7C7F86;
-  font-family: "Raleway", sans-serif;
-  font-weight: 400;
-  font-size:22px;
-}
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
 
-.mySelectedField {
-  width: 12rem !important;
-  margin-bottom: 1rem;
-}
+  }
+  .headingSemester {
+    margin-top:1%;
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
+    font-size:0.8rem;
+  }
 
-.downloadFile{
-  border: none;
-  background-color: white;
-  color: #0b5ed7;
-}
+  .mySelectedField {
+    width: 12rem !important;
+    margin-bottom: 1rem;
+  }
 
-
-.textResult1 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-
-  color:#6BDB6B;
-}
-
-.textResult2 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color:#FFC009
-}
-
-.textResult3 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color:#FF3333;
-}
+  .downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
 
 
+  .textResult1 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    font-size: 0.7rem;
+    color:#6BDB6B;
+  }
 
-.mainText{
-  color:#7C7F86;
-  font-weight: 300;
-  font-size:20px;
-  text-align: center;
-}
+  .textResult2 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FFC009;
+    font-size: 0.7rem;
+  }
 
-.loadText {
-  font-family: 'Raleway', 'sans-serif';
-  font-size: 22px;
-  font-weight: 500;
-}
+  .textResult3 {
+    font-family: "Raleway", sans-serif;
+    font-weight: 550;
+    color:#FF3333;
+    font-size: 0.7rem;
+  }
 
-.semestrButtonActive {
-  border:0 !important;
-  width: 3%;
-  height: 100%;
-  max-width: 1rem;
-  margin-top: 0 !important;
-  background-color: white;
-  margin-right: 3rem;
+
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:0.8rem;
+    text-align: center;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  .semestrButtonActive {
+    border:0 !important;
+    width: 3%;
+    height: 100%;
+    max-width: 1rem;
+    margin-top: 0 !important;
+    background-color: white;
+    margin-right: 2rem;
+  }
+  .semestrImgActive {
+    width: 35px;
+  }
 }
 
 

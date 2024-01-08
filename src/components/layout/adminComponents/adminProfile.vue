@@ -379,7 +379,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   header .head-top {
     background-color: #005faf;
     height: 4em;

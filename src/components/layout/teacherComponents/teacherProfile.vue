@@ -13,12 +13,11 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-      <nav>
-        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>
-        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>
-        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>
-
-      </nav>
+<!--      <nav>-->
+<!--        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>-->
+<!--        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>-->
+<!--        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>-->
+<!--      </nav>-->
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -462,7 +461,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .mainText {
     margin-top: 1rem;
     color:#7C7F86;

@@ -76,6 +76,7 @@ export default {
 
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
+          localStorage.setItem("userType", response.data.userType)
           this.type = response.data.userType
         }
         else {
@@ -91,7 +92,12 @@ export default {
   async beforeMount() {
     if (localStorage.getItem('registered') === 'false')
       this.$router.push('/registration')
-    this.checkAuth()
+
+    await this.checkAuth()
+
+    if (!(store.getters.getType === 'supervisor' || store.getters.getType === 'admin')){
+      this.$router.push("/wrongAccess")
+    }
 
 
   },

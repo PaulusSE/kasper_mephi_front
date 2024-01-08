@@ -457,7 +457,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .headingSemester {
 
     margin-top:1%;
