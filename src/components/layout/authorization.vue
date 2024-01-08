@@ -71,7 +71,8 @@ const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((
 const regularSymbolForPassword = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
 import axios from "axios";
-import store from "@/store/index.js";
+
+
 
 export default {
 
@@ -155,14 +156,13 @@ export default {
     },
   },
     async beforeMount() {
+      var fileName = 'Ð¢Ð¡.pdf'
+      let utf8String = encodeURIComponent(fileName);
+      console.log(utf8String)
 },
   mounted() {
   }
 }
-
-
-
-
 </script>
 
 

@@ -73,6 +73,8 @@
 <script>
 import axios from "axios";
 
+
+
 export default {
   name: "studentPageFromTeacherStatusTab",
   props : ["id", "jobStatus"],
@@ -101,15 +103,15 @@ export default {
               responseType: 'blob',
             }
         )
+        console.log(response.headers)
         if (response.status === 200) {
-          this.explanationaryNoteFilename = response.headers["content-disposition"]
+          this.explanationaryNoteFilename = utf8.decode(response.headers["content-disposition"])
           this.explanationaryNoteFile = response.data
         }
 
       }
       catch (e) {
-
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
     },
 

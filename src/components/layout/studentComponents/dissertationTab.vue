@@ -229,13 +229,13 @@ export default {
             },
             {
               responseType: 'blob',
-              responseEncoding: "latin1"
             }
         )
+
         if (response.status === 200) {
 
 
-          this.explanationaryNoteFilename = response.headers["content-disposition"].toString('latin1')
+          this.explanationaryNoteFilename = response.headers["content-disposition"]
           this.explanationaryNoteFile = response.data
         }
 

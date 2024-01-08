@@ -259,7 +259,7 @@ export default {
     },
 
     async getStudentCommonInfo() {
-      console.log(localStorage.getItem("studentId"))
+
       try {
         const response = await axios.put(this.IP +"/supervisors/student/" + localStorage.getItem("access_token"), {
             "studentID" : localStorage.getItem("studentId")
@@ -307,13 +307,13 @@ export default {
     },
 
     async getStudentCommonInfoForAdmin() {
-      console.log("here")
+
       try {
         const response = await axios.put(this.IP +"/admin/students/dissertation/" + localStorage.getItem("access_token"), {
               "studentID" : localStorage.getItem("studentId")
             }
         )
-        console.log(response)
+
         this.data = await response.data
         this.theme = this.data.theme
         this.teacherFullName = this.data.commonInfo.teacherFullName
@@ -399,13 +399,11 @@ export default {
     // if (store.getters.getType === "student"){
     //   this.$router.push('/wrongAccess')
     // }
+    // if(await store.getters.getType === 'admin'){
+    //   await this.getStudentCommonInfoForAdmin()
+    // }
+    // if (await store.getters.getType === 'supervisor')
     await this.getStudentCommonInfo()
-
-    if(store.getters.getType === 'admin'){
-      await this.getStudentCommonInfoForAdmin()
-    }
-    if (store.getters.getType === 'supervisor')
-      await this.getStudentCommonInfo()
 
   },
 
@@ -573,7 +571,7 @@ export default {
 
 
   .myCheckBox{
-    zoom: 1.2;
+    zoom: 0.35;
     accent-color: white;
     background-color: green;
 
@@ -719,7 +717,7 @@ export default {
 
 
   .myCheckBox{
-    zoom: 1.2;
+    zoom: 0.25 !important;
     accent-color: white;
     background-color: green;
   }

@@ -3,7 +3,7 @@
 
   </page-header>
 
-  <div v-if="this.userType === 'supervisor' || this.userType=== 'admin'">
+  <div>
     <student-page-from-teacher v-if="stateOfPage === 1"
                                :state-of-page = this.stateOfPage
                                @btnDissertationClicked="buttonManageStudentPageClicked(1)"
@@ -73,7 +73,7 @@ export default {
     async checkAuth() {
       try {
         const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
-        console.log(response)
+
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
           this.type = response.data.userType
@@ -89,11 +89,14 @@ export default {
     },
   },
   async beforeMount() {
-    // if (localStorage.getItem('registered') === 'false')
-    //   this.$router.push('/registration')
-    // this.checkAuth()
-    store.dispatch("updateUserType", 'admin')
-    this.userType = 'admin'
+    if (localStorage.getItem('registered') === 'false')
+      this.$router.push('/registration')
+    this.checkAuth()
+
+
+  },
+  async beforeCreate() {
+
   }
 
 }
