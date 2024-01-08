@@ -72,7 +72,7 @@
 
 <script>
 import axios from "axios";
-
+import utf8 from "utf8"
 
 
 export default {
@@ -103,7 +103,6 @@ export default {
               responseType: 'blob',
             }
         )
-        console.log(response.headers)
         if (response.status === 200) {
           this.explanationaryNoteFilename = utf8.decode(response.headers["content-disposition"])
           this.explanationaryNoteFile = response.data
