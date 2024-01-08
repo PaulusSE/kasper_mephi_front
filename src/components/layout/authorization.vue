@@ -156,9 +156,6 @@ export default {
     },
   },
     async beforeMount() {
-      var fileName = 'Ð¢Ð¡.pdf'
-      let utf8String = encodeURIComponent(fileName);
-      console.log(utf8String)
 },
   mounted() {
   }

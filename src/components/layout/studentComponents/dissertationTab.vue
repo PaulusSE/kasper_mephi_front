@@ -83,12 +83,7 @@
         </div>
 
         <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" :disabled = "(this.explanationaryNoteFile === '' || this.actualSemester !== this.id)" @click="deleteExplanatoryNote">
-              <img class='imgSize1' v-if="this.explanationaryNoteFile === '' || this.actualSemester !== this.id" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img class='imgSize1' v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">
-            </button>
-          </div>
+
 
           <div class="image-upload">
             <label for="file-input2">
@@ -119,6 +114,7 @@
 
 <script>
 import axios from "axios";
+import utf8 from "utf8"
 
 export default {
   name: "dissertationTab",
@@ -235,7 +231,7 @@ export default {
         if (response.status === 200) {
 
 
-          this.explanationaryNoteFilename = response.headers["content-disposition"]
+          this.explanationaryNoteFilename = utf8.decode(response.headers["content-disposition"])
           this.explanationaryNoteFile = response.data
         }
 
