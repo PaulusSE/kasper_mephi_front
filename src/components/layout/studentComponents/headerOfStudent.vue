@@ -46,11 +46,14 @@ export default {
   props: ["stateOfStudentPage"],
   data() {
     return {
-      userType: '',
+      userType: localStorage.getItem("userType"),
     }
   },
-  beforeMount() {
-    this.userType = store.getters.getType
+  async beforeMount() {
+
+  },
+  async beforeCreate() {
+
   }
 }
 </script>
@@ -109,8 +112,6 @@ export default {
   }
 }
 
-
-
 @media (max-width: 1200px) {
   .myContainer {
     width: 100%;
@@ -159,8 +160,6 @@ export default {
   }
 }
 
-
-
 @media (max-width: 700px) {
   .myContainer {
     width: 100%;
@@ -175,7 +174,7 @@ export default {
     border: solid 0.12em #0055BB !important;
     border-radius: 11px !important;
     color: #0055BB !important;
-    padding: 0.1rem;
+    padding: 0.25rem !important;
 
 
   }
@@ -187,7 +186,7 @@ export default {
     border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-    padding: 0.1rem;
+    padding: 0.25rem !important;
 
   }
 
@@ -208,8 +207,7 @@ export default {
   }
 }
 
-
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .myContainer {
     width: 100%;
     padding-top: 0.7rem;
@@ -235,7 +233,7 @@ export default {
     border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-
+    padding: 0;
 
   }
 

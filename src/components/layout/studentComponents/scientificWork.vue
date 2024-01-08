@@ -476,7 +476,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .bigBox{
     width: 22%;
   }

@@ -143,13 +143,7 @@ export default {
       //todo
     },
     downloadFile(){
-      // var fileURL = window.URL.createObjectURL(new Blob([this.explanationaryNoteFile]));
-      // var fURL = document.createElement('a');
-      //
-      // fURL.href = fileURL;
-      // fURL.setAttribute('download', 'dissertation.pdf');
-      // document.body.appendChild(fURL);
-      // fURL.click();
+
 
       const blob = new Blob([this.explanationaryNoteFile]);
       const link = document.createElement('a');
@@ -517,7 +511,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .headingSemester {
     color:#7C7F86;
     font-weight: 400;

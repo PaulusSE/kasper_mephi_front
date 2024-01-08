@@ -12,20 +12,20 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-      <nav v-if="false">
-        <!--todo решить с возможностью редактирования-->
-        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">
-          <p>Редактировать</p>
-        </button>
+<!--      <nav>-->
+<!--        &lt;!&ndash;todo решить с возможностью редактирования&ndash;&gt;-->
+<!--        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">-->
+<!--          <p>Редактировать</p>-->
+<!--        </button>-->
 
-        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">
-          <p>Отменить</p>
-        </button>
+<!--        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">-->
+<!--          <p>Отменить</p>-->
+<!--        </button>-->
 
-        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">
-          <p>Сохранить</p>
-        </button>
-      </nav>
+<!--        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">-->
+<!--          <p>Сохранить</p>-->
+<!--        </button>-->
+<!--      </nav>-->
 
 
     </div>
@@ -520,7 +520,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .loggining {
     font-size: 1rem !important;
     padding: 0.3rem;

@@ -274,7 +274,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .aspirantText {
     font-family: "Raleway", sans-serif !important;
     border: solid 0.12em #0055BB !important;

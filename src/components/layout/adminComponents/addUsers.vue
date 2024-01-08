@@ -319,7 +319,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .mainText {
     margin-left: 2.5% ;
     /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/

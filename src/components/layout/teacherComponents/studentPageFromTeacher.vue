@@ -112,28 +112,28 @@
             {{key}}
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id1 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id1 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id2 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id2 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id3 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id3 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id4 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id4 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id5 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id5 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id6 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id6 disabled>
           </div>
           <div class="col-1 textTable myInput rightLine">
-            <input type="checkbox" class="myCheckBox" v-model=value.id7 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id7 disabled>
           </div>
           <div class="col-1 textTable myInput">
-            <input type="checkbox" class="myCheckBox" v-model=value.id8 disabled>
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id8 disabled>
           </div>
 
         </div>
@@ -222,7 +222,7 @@ export default {
 
       try {
         const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
-              "studentID" : localStorage.getItem("studentId"),
+              "studentID" : localStorage.getItem("studentID"),
               "feedback" : this.textOfReview
             }
         )
@@ -262,7 +262,7 @@ export default {
 
       try {
         const response = await axios.put(this.IP +"/supervisors/student/" + localStorage.getItem("access_token"), {
-            "studentID" : localStorage.getItem("studentId")
+            "studentID" : localStorage.getItem("studentID")
             }
         )
 
@@ -310,7 +310,7 @@ export default {
 
       try {
         const response = await axios.put(this.IP +"/admin/students/dissertation/" + localStorage.getItem("access_token"), {
-              "studentID" : localStorage.getItem("studentId")
+              "studentID" : localStorage.getItem("studentID")
             }
         )
 
@@ -432,8 +432,9 @@ export default {
   .myCheckBox{
     zoom: 0.5;
     accent-color: white;
-    background-color: green;
-
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
   }
   .myInput{
 
@@ -571,12 +572,11 @@ export default {
 
 
   .myCheckBox{
-    zoom: 0.35;
+    zoom: 0.45;
     accent-color: white;
-    background-color: green;
-
-
-
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
   }
 
   .myInput{
@@ -708,7 +708,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   .checkboxBlock{
     padding-top: 0.8%;
     padding-left: 0.8%;
@@ -717,9 +717,11 @@ export default {
 
 
   .myCheckBox{
-    zoom: 0.25 !important;
+    zoom: 0.45;
     accent-color: white;
-    background-color: green;
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
   }
 
   .myInput{

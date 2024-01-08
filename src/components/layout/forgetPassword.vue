@@ -73,7 +73,7 @@ export default {
 @import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
 
 
-@media (min-width: 1080px){
+@media (min-width: 800px){
   * {
     margin: 0;
     padding: 0;
@@ -174,7 +174,7 @@ export default {
   }
 }
 
-@media (max-width: 1080px){
+@media (max-width: 800px){
   * {
     margin: 0;
     padding: 0;
@@ -208,7 +208,7 @@ export default {
   }
 
   .mainPage {
-    width: 60%;
+    width: 60% !important;
     height: 100%;
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -266,7 +266,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   * {
     margin: 0;
     padding: 0;

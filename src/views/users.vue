@@ -59,6 +59,7 @@ export default {
         const response = await axios.get("http://79.174.84.44:8080/authorization/check/" + localStorage.getItem("access_token"))
         if (response.status === 200){
           this.$store.dispatch("updateUserType", response.data.userType)
+          localStorage.setItem("userType", response.data.userType)
           this.type = response.data.userType
         }
         else {
@@ -73,7 +74,8 @@ export default {
 
     },
   async beforeMount() {
-    this.checkAuth()
+    await this.checkAuth()
+
 
     },
   async beforeCreate() {

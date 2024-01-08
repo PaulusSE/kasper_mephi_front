@@ -43,6 +43,12 @@ export default {
         //todo Post запрос. Сделать токен невалидным
         localStorage.setItem("access_token", '')
       localStorage.setItem("user_type", '')
+      localStorage.setItem("studentId", '')
+      localStorage.setItem("access_token", '')
+      localStorage.setItem("studentID", '')
+      localStorage.setItem("userType", '')
+      localStorage.setItem("registered", '')
+      localStorage.setItem("teacherId", '')
     }
   }
 }
@@ -176,7 +182,7 @@ export default {
   }
 }
 
-@media (pointer: coarse) {
+@media (pointer: coarse) and (max-width: 400px) {
   header .head-top {
     background-color: #005faf;
     padding-bottom: 0.25rem;

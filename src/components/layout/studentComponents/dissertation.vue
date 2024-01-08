@@ -13,9 +13,9 @@
     ></header-of-student>
 
     <div class="roundBlock">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between mt-1">
       <nav class="checkboxBlock">
-        <p class="mainText">Общая информация</p>
+        <p class="mainText mt-0">Общая информация</p>
       </nav>
       <nav v-if="!editingInfo">
         <button class="editBtn" @click="editCommonInfo">Редактировать</button>
@@ -96,10 +96,10 @@
         <div class="col-1 textTable rightLine">
             5
         </div>
-        <div class="col-1 textTable">
+        <div class="col-1 textTable rightLine">
               6
         </div>
-        <div class="col-1 textTable">
+        <div class="col-1 textTable rightLine">
           7
         </div>
         <div class="col-1 textTable">
@@ -111,34 +111,34 @@
 
 
       <div class="d-flex" :class="{underline: number < 10}" v-for="(element,index, number) in array">
-        <div class="col-4 textTable rightLine">
+        <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{index}}
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id1 :disabled="!(actualSemestr === 1) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id1 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id2 :disabled="!(actualSemestr === 2) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id2 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id3 :disabled="!(actualSemestr === 3) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id3 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id4 :disabled="!(actualSemestr === 4) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id4 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id5 :disabled="!(actualSemestr === 5) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id5 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id6 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id6 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="myCheckBox" v-model=element.id7 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id7 :disabled="!editingCheckbox">
         </div>
         <div class="col-1 mainText myInput">
-          <input type="checkbox" class="myCheckBox" v-model=element.id8 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id8 :disabled="!editingCheckbox">
         </div>
-
+<!--        :disabled="!(actualSemestr === 8) || !editingCheckbox"-->
       </div>
     </div>
 
@@ -287,11 +287,11 @@ export default {
           forth : this.array[key].id4,
           fifth : this.array[key].id5,
           sixth : this.array[key].id6,
+          seventh : this.array[key].id7,
+          eighth : this.array[key].id8,
           progressName : value,
         })
       }
-
-
       return saveData
     },
 
@@ -406,7 +406,10 @@ export default {
         this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
         this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
         this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
+        this.data.dissertationPlan[key].id7 = (this.data.dissertationPlan[key].id7 === true) ? this.data.dissertationPlan[key].id7 : false
+        this.data.dissertationPlan[key].id8 = (this.data.dissertationPlan[key].id8 === true) ? this.data.dissertationPlan[key].id8 : false
       }
+
       for (var i = 0; i < keys.length; i++){
         this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
       }
@@ -457,7 +460,11 @@ export default {
   .myCheckBox{
     zoom: 0.5;
     accent-color: white;
-    background-color: green;
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
+    margin-top:10px;
+    margin-bottom:10px;
   }
 
   .myInput{
@@ -517,8 +524,7 @@ export default {
   .editBtn {
     color:#0055BB;
     border: 0;
-    margin-top: 5%;
-    margin-right: 5%;
+    margin-right: 1rem;
     background-color: white;
   }
 
@@ -526,6 +532,7 @@ export default {
     color:#0055BB;
     border: 0;
     background-color: white;
+    margin-right: 1rem;
   }
 
   ul p{
@@ -606,9 +613,13 @@ export default {
 
 
   .myCheckBox{
-    zoom: 0.4;
+    zoom: 0.45;
     accent-color: white;
-    background-color: green;
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
+    margin-top:10px;
+    margin-bottom:10px;
   }
 
   .myInput{
@@ -669,14 +680,16 @@ export default {
     color:#0055BB;
     border: 0;
     margin-top: 5%;
-    margin-right: 5%;
+    margin-right: 1rem;
     background-color: white;
+
   }
 
   .editBtn2 {
     color:#0055BB;
     border: 0;
     background-color: white;
+    margin-right: 1rem;
   }
 
   ul p{
@@ -747,7 +760,7 @@ export default {
   }
 }
 
-@media (pointer: coarse)  {
+@media (pointer: coarse) and (max-width: 400px)  {
   .checkboxBlock{
     padding-top: 0.8%;
     padding-left: 0.8%;
@@ -755,9 +768,13 @@ export default {
   }
 
   .myCheckBox{
-    zoom: 0.35;
+    zoom: 0.5;
     accent-color: white;
-    background-color: green;
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
+    margin-top:5px;
+    margin-bottom:5px;
   }
 
   .myInput{
