@@ -90,7 +90,7 @@ export default {
   .text {
     font-family: "Raleway", sans-serif;
     color: #7c7f86;
-    font-size: 20px;
+    font-size: 1rem;
     font-weight: 500;
   }
 
@@ -100,7 +100,7 @@ export default {
     text-align: center !important;
     padding:1rem !important;
     font-family: Raleway,serif;
-    font-size: 25px !important;
+    font-size: 1rem !important;
   }
 
   .block1 {
@@ -109,7 +109,7 @@ export default {
   }
 
   .mainPage {
-    width: 30%;
+    width: 40%;
     height: 100%;
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -129,18 +129,16 @@ export default {
     background-color: #0055BB !important;
     color: white !important;
     border-color: #0055BB !important;
-    padding: 0.3rem;
     margin: 1rem;
     border-radius: 0.7em !important;
     font-weight: 300 !important;
-    height: 4rem !important;
-    width: 13rem !important;
-    font-size: 20px !important;
+    padding: 0.6rem;
+    font-size: 1.2rem !important;
   }
 
   div input {
     border-width: 0.15em !important;
-    height: 60px !important;
+    height: 3rem;
     border-radius: 0.7em !important;
     width: 100% !important;
   }
@@ -171,7 +169,7 @@ export default {
   .textMessage{
     text-align: center !important;
     padding: 0.25em !important;
-    font-size: 20px !important;
+    font-size: 1rem !important;
 
   }
 }
@@ -193,13 +191,13 @@ export default {
   .text {
     font-family: "Raleway", sans-serif;
     color: #7c7f86;
-    font-size: 1rem;
+    font-size:0.9rem;
     font-weight: 500;
   }
 
   .headerText {
     text-align: center !important;
-    padding:1rem !important;
+    padding:0.9rem !important;
     font-family: Raleway,serif;
 
   }
@@ -210,7 +208,7 @@ export default {
   }
 
   .mainPage {
-    width: 70%;
+    width: 60%;
     height: 100%;
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -230,7 +228,7 @@ export default {
     padding: 0.3rem;
     border-radius: 8px !important;
     font-weight: 300 !important;
-
+    font-size: 0.9rem;
   }
 
   .input {
@@ -245,7 +243,7 @@ export default {
   .wrongData{
     color: red;
     font-family: "Raleway", sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-align: center;
     font-weight: 500;
     padding-top: 2%;
@@ -261,6 +259,99 @@ export default {
     text-align: center !important;
     padding: 0.25em !important;
     font-size: 1rem !important;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+  }
+}
+
+@media (pointer: coarse) {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --color-white: FFFFFF;
+    --color-grey: A3A1A1;
+    --color-blue: 0055BB;
+    --color_white2: F3F5F6;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .headerText {
+    text-align: center !important;
+    padding:1rem !important;
+    font-family: Raleway,serif;
+
+  }
+
+  .block1 {
+    width: 80%;
+    margin-left:10%
+  }
+
+  .mainPage {
+    width: 90% !important;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1rem auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  .myBtn{
+    background-color: #0055BB !important;
+    color: white !important;
+    border-color: #0055BB !important;
+    padding: 0.3rem;
+    border-radius: 8px !important;
+    font-weight: 300 !important;
+    font-size: 0.8rem;
+
+  }
+
+  .input {
+    width: 90%;
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .wrongData{
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 2%;
+  }
+
+  .text {
+    font-family: "Raleway", sans-serif;
+  }
+
+
+
+  .textMessage{
+    text-align: center !important;
+    padding: 0.25em !important;
+    font-size: 0.8rem !important;
     margin-top: 1rem;
     margin-left: 1rem;
     margin-right: 1rem;

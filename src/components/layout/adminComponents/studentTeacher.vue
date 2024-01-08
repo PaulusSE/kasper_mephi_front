@@ -302,5 +302,77 @@ export default {
   }
 }
 
+@media (pointer: coarse) {
+  .mainPage {
+    width: 90%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+
+  .buttonBlock {
+    width: 80%;
+    margin: auto;
+    text-align: right;
+    padding-bottom: 0.3em;
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 5px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+  .myBox {
+    width: 95%;
+    margin: auto;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+
+  .rightLine {
+    border-right:  solid 0.12em #DEDEDE !important;
+    font-size: 25px !important;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 300;
+    font-size:0.8rem !important;
+    text-align: center;
+  }
+
+  .blockStyles {
+    border-radius: 0 !important;
+    border-color: #7C7F86;
+    border-width:0;
+    padding-bottom: 0;
+  }
+
+
+
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 2.5%;
+    background-color: white;
+    font-size: 0.6rem;
+  }
+}
+
 
 </style>

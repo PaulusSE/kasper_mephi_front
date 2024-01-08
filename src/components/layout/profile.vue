@@ -47,15 +47,15 @@ export default {
     },
   },
   async beforeMount() {
-    // if (localStorage.getItem('registered') === 'false')
-    //   this.$router.push('/registration')
-    // this.checkAuth()
+    if (localStorage.getItem('registered') === 'false')
+      this.$router.push('/registration')
+    this.checkAuth()
 
 
 
   },
   async beforeCreate() {
-  await store.dispatch("updateUserType", "supervisor")
+
   },
   mounted() {
   }

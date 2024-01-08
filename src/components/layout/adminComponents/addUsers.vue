@@ -38,14 +38,14 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
             <button class="btnAddDeleteFiles" @click="deleteStudentFile">
-              <img v-if="studentsFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="../../../../static/figures/trashActive.png">
+              <img class="imgSize" v-if="studentsFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
             </button>
           </div>
 
           <div class="image-upload">
             <label for="file-input2">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
+              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
             <input id="file-input2" type="file" @input="inputStudentFile"/>
           </div>
@@ -71,14 +71,14 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
           <div class="image-upload">
             <button class="btnAddDeleteFiles" @click="deleteTeacherFile">
-              <img v-if="teachersFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img v-else src="../../../../static/figures/trashActive.png">
+              <img class="imgSize" v-if="teachersFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
+              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
             </button>
           </div>
 
           <div class="image-upload">
             <label for="file-input">
-              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
+              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
             <input id="file-input" type="file" @input="inputTeacherFile"/>
           </div>
@@ -312,6 +312,89 @@ export default {
   .imgUploadFile {
     width: 30px;
     height: 30px;
+  }
+
+  .imgSize {
+    width: 40px !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .mainText {
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+    margin-top: 0;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 0.8rem;
+
+  }
+
+  .mainPage {
+    width: 90%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .myBtn {
+    margin-right: 2.5%;
+    text-align: right
+  }
+
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .loadText {
+    font-family: 'Raleway', 'sans-serif';
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .btnAddDeleteFiles {
+    border:0;
+    background:white;
+  }
+
+  .image-upload>input {
+    display: none;
+  }
+
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:0.6rem;
+    padding: 5px;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+  }
+
+  .imgUploadFile {
+    width: 20px;
+    height: 20px;
+  }
+
+  .imgSize {
+    width: 30px;
+  }
+
+  .loadTextState {
+    font-size: 0.6rem;
   }
 }
 

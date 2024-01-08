@@ -11,7 +11,7 @@
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
-    <div class="pt-4">
+    <div>
       <div class="roundBlock">
         <div class="d-flex justify-content-between">
           <nav class="checkboxBlock">
@@ -394,11 +394,11 @@ export default {
 
   async beforeMount() {
 
-    this.checkAuth()
-
-    if (store.getters.getType === "student"){
-      this.$router.push('/wrongAccess')
-    }
+    // this.checkAuth()
+    //
+    // if (store.getters.getType === "student"){
+    //   this.$router.push('/wrongAccess')
+    // }
     await this.getStudentCommonInfo()
 
     if(store.getters.getType === 'admin'){

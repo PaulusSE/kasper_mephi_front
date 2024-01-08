@@ -57,7 +57,7 @@ export default {
 @media (min-width: 800px) {
   header .head-top {
     background-color: #005faf;
-    height: 4em;
+    padding-bottom: 0.25rem;
   }
 
   .myHeader {
@@ -103,12 +103,22 @@ export default {
     margin-top: 0.5em;
     color:black
   }
+
+  .imageMephi{
+    width: 80px;
+  }
+  .imageProfile{
+    width: 35px;
+  }
+  .imageLogOut{
+    width: 35px !important;
+  }
 }
 
 @media (max-width: 800px) {
   header .head-top {
     background-color: #005faf;
-    height: 4em;
+    padding-bottom: 0.25rem;
   }
 
   .myHeader {
@@ -156,20 +166,20 @@ export default {
   }
 
   .imageMephi{
-
+    width: 70px;
   }
   .imageProfile{
-
+    width: 30px;
   }
   .imageLogOut{
-
+    width: 30px !important;
   }
 }
 
 @media (pointer: coarse) {
   header .head-top {
     background-color: #005faf;
-    height: 3rem
+    padding-bottom: 0.25rem;
   }
 
   .myHeader {
@@ -177,8 +187,6 @@ export default {
     width: 90%;
     padding: 0 !important;
     margin-top: 0 !important;
-    height: 0 !important;
-
 
   }
 
@@ -222,10 +230,10 @@ export default {
     width: 50px;
   }
   .imageProfile{
-    width: 21px;
+    width: 20px;
   }
   .imageLogOut{
-    width: 24px !important;
+    width: 20px !important;
   }
 }
 

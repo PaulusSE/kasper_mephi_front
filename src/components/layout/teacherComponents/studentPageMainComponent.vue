@@ -3,35 +3,37 @@
 
   </page-header>
 
+  <div v-if="this.userType === 'supervisor' || this.userType=== 'admin'">
+    <student-page-from-teacher v-if="stateOfPage === 1"
+                               :state-of-page = this.stateOfPage
+                               @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                               @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                               @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                               @btnProfileClicked="buttonManageStudentPageClicked(4)"
 
-  <student-page-from-teacher v-if="stateOfPage === 1"
-  :state-of-page = this.stateOfPage
-  @btnDissertationClicked="buttonManageStudentPageClicked(1)"
-  @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
-  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
-  @btnProfileClicked="buttonManageStudentPageClicked(4)"
+    ></student-page-from-teacher>
+    <scientific-work-for-teacher v-if="stateOfPage === 2"
+                                 :state-of-page = this.stateOfPage
+                                 @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                                 @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                                 @btnProfileClicked="buttonManageStudentPageClicked(4)"
+    ></scientific-work-for-teacher>
+    <teaching-load-for-teacher v-if="stateOfPage === 3"
+                               :state-of-page = this.stateOfPage
+                               @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                               @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                               @btnProfileClicked="buttonManageStudentPageClicked(4)"
+    ></teaching-load-for-teacher>
+    <student-profile-for-admin v-if="stateOfPage === 4"
+                               :state-of-page = this.stateOfPage
+                               @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                               @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                               @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                               @btnProfileClicked="buttonManageStudentPageClicked(4)"
+    ></student-profile-for-admin>
+  </div>
 
-  ></student-page-from-teacher>
-  <scientific-work-for-teacher v-if="stateOfPage === 2"
-   :state-of-page = this.stateOfPage
-   @btnDissertationClicked="buttonManageStudentPageClicked(1)"
-   @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
-   @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
-   @btnProfileClicked="buttonManageStudentPageClicked(4)"
-  ></scientific-work-for-teacher>
-  <teaching-load-for-teacher v-if="stateOfPage === 3"
-    :state-of-page = this.stateOfPage
-    @btnDissertationClicked="buttonManageStudentPageClicked(1)"
-    @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
-    @btnProfileClicked="buttonManageStudentPageClicked(4)"
-  ></teaching-load-for-teacher>
-  <student-profile-for-admin v-if="stateOfPage === 4"
-      :state-of-page = this.stateOfPage
-      @btnDissertationClicked="buttonManageStudentPageClicked(1)"
-      @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
-      @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
-      @btnProfileClicked="buttonManageStudentPageClicked(4)"
-  ></student-profile-for-admin>
 
 
 
@@ -47,6 +49,7 @@ import studentProfileForAdmin from "@/components/layout/adminComponents/studentP
 import store from "@/store/index.js";
 
 import {h} from "vue";
+import axios from "axios";
 export default {
   name: "studentPageMainComponent",
   components : {
@@ -60,15 +63,37 @@ export default {
   data() {
     return {
       stateOfPage : 1,
+      userType : '',
     }
   },
   methods : {
     buttonManageStudentPageClicked(index){
       this.stateOfPage = index
     },
+    async checkAuth() {
+      try {
+        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
+        console.log(response)
+        if (response.status === 200){
+          this.$store.dispatch("updateUserType", response.data.userType)
+          this.type = response.data.userType
+        }
+        else {
+          this.$router.push('/auth')
+        }
+
+      } catch (e) {
+        console.log(e)
+        this.$router.push('/auth')
+      }
+    },
   },
   async beforeMount() {
-
+    // if (localStorage.getItem('registered') === 'false')
+    //   this.$router.push('/registration')
+    // this.checkAuth()
+    store.dispatch("updateUserType", 'admin')
+    this.userType = 'admin'
   }
 
 }

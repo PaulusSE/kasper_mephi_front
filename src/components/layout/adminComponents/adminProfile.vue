@@ -13,7 +13,7 @@
 
 
     </div>
-    <div class="container-fluid justify-content-between">
+    <div class="container-fluid justify-content-between mt-2">
       <nav style="width: 50%">
         <label class="text ms-0">Старый пароль</label>
         <input type="password" @input="inputEvent" v-model="currentPassword">
@@ -218,7 +218,7 @@ export default {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
 
@@ -326,7 +326,7 @@ export default {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
 
@@ -373,7 +373,97 @@ export default {
     color: red;
     font-family: "Raleway", sans-serif;
     font-weight: 500;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+    text-align: center;
+    padding-top: 2%;
+  }
+}
+
+@media (pointer: coarse) {
+  header .head-top {
+    background-color: #005faf;
+    height: 4em;
+  }
+
+  header .head-top nav {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+
+  .mainText {
+    margin-top: 0.8rem;
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+
+
+
+
+  .mainPage {
+    width: 90%;
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto auto;
+    padding-bottom: 1.5%;
+  }
+
+  div nav {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0;
+  }
+
+
+  div nav button {
+    background-color: white !important;
+    border-color: white !important;
+    color: #0055bb !important;
+    transition: 0.5s all ease;
+  }
+
+  div nav button:hover {
+    color: darkblue;
+    background-color: #7c7f86;
+  }
+
+  div nav input {
+    width: 100%;
+    border-color: #7c7f86 !important;
+    border-radius: 0.7em;
+
+    font-size: 0.8rem;
+    padding-left: 0.5rem;
+  }
+
+
+  .text {
+    font-family: "Raleway", sans-serif;
+    color: #7c7f86;
+    font-size: 0.8rem;
+    font-weight: 450;
+  }
+
+  .loggining {
+    font-size: 0.8rem !important;
+    padding:0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+  .wrongPassword {
+    color: red;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
     text-align: center;
     padding-top: 2%;
   }
