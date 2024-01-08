@@ -44,7 +44,6 @@ export default {
               "studentID" : localStorage.getItem("studentID")
             }
         )
-        console.log(response)
         this.data = await response.data;
         this.fillArrayOfArticles(this.data.works, this.data.years * 2)
         this.numberOfSemesters = this.data.years * 2

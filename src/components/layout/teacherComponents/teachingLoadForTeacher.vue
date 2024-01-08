@@ -41,9 +41,8 @@ export default {
   },
   methods : {
     fillArrayOfTeachingLoad(data, numberOfSemesters) {
-      console.log(data)
-      console.log(numberOfSemesters)
-      this.arrayOfTeachingLoadByPeriod = Array(8)
+
+      this.arrayOfTeachingLoadByPeriod = Array(parseInt(numberOfSemesters))
 
       for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
         this.arrayOfTeachingLoadByPeriod[i] = new Array()
