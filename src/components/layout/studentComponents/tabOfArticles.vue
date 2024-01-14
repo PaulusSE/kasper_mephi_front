@@ -86,11 +86,12 @@
           </div>
           <div class="rightLine textMiniTable" style="width: 11.15%;">
             <div v-if="!smallTableEditing" style="height: 100%; display: table; overflow: hidden;">
-              <div class="textWithCarry inputBox" style="height: calc(100%); display: table-cell; vertical-align: middle">
-                <div>
-                  {{article.work_type}}
-                </div>
-              </div>
+              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="article.work_type" disabled>
+                <option>ВАК</option>
+                <option>РИНЦ</option>
+                <option>SCOPUS</option>
+                <option>WoS</option>
+              </select>
             </div>
 
             <div v-else style="height: 100%">
@@ -131,8 +132,10 @@
             </div>
           </div>
           <div class="textMiniTable" style="width: 12.26%; text-align: center; padding-right: 0" >
-            <div v-if="!smallTableEditing">
-              <div class="textWithCarry inputBox "> {{article.co_authors}}</div>
+            <div class="pe-3" v-if="!smallTableEditing">
+              <div class="ps-3">
+                <div class="textWithCarry inputBox "> {{article.co_authors}}</div>
+              </div>
             </div>
 
             <div v-if="smallTableEditing">

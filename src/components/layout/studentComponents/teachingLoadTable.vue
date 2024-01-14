@@ -64,7 +64,7 @@
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <div class="textWithCarry inputBox " >{{element.subject}}</div>
+              <div class="textWithCarry inputBox ">{{element.subject}}</div>
             </div>
 
             <div v-else>
@@ -97,11 +97,11 @@
 
           <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState" style="height: 100%; display: table; overflow: hidden;">
-              <div class="textWithCarry inputBox" style="height: calc(100%); display: table-cell; vertical-align: middle">
-                <div>
-                  {{element.typeOfClasses}}
-                </div>
-              </div>
+              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses" disabled>
+                <option style="word-break: break-all">лабораторная</option>
+                <option>лекция</option>
+                <option>семинар</option>
+              </select>
             </div>
 
             <div v-else style="height: 100%">
@@ -113,9 +113,11 @@
             </div>
           </div>
 
-          <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <div class="textWithCarry inputBox">{{element.numberOfHours}}</div>
+          <div class="textMiniTable" style="width: 17.3%; text-align: center">
+            <div class="pe-3" v-if="!smallTableEditing || deleteState">
+              <div >
+                <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
+              </div>
             </div>
 
             <div v-else>

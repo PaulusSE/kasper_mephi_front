@@ -159,14 +159,27 @@ export default {
         this.$router.push('/auth')
       }
     },
+    async getStudents(){
+      try {
+        const response = await axios.put(this.IP +'/admin/supervisor/students/' + localStorage.getItem("access_token"),
+            {
+              "teacherID" : localStorage.getItem("teacherID")
+                  }
+        )
+        this.data = await response.data;
+        this.arrayOfStudents = this.data.array
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
   },
   async beforeMount() {
     await this.checkAuth()
     if (store.getters.getType !== 'admin'){
       this.$router.push("/wrongAccess")
     }
-
-
+    await this.getStudents()
   }
 }
 </script>
