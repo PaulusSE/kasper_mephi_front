@@ -47,7 +47,7 @@
 
 
           <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
-            СТАТУС<br>(ВАК,<br>РИНЦ,<br>SCOPUS,<br>WoS)
+            Статус
 
           </div>
 
@@ -70,74 +70,78 @@
         </div>
 
         <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(article,index) in articles">
+
           <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
 
             {{index + 1}}
           </div>
-
           <div class="rightLine textMiniTable" style="width: 30.5%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.name" readonly></textarea>
+              <div class="textWithCarry inputBox ">{{article.name}}</div>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.name"></textarea>
+              <textarea class="textWithCarry inputBox " rows=5 v-model="article.name" style="overflow-y: auto;"></textarea>
             </div>
           </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type" readonly></textarea>
+          <div class="rightLine textMiniTable" style="width: 11.15%;">
+            <div v-if="!smallTableEditing" style="height: 100%; display: table; overflow: hidden;">
+              <div class="textWithCarry inputBox" style="height: calc(100%); display: table-cell; vertical-align: middle">
+                <div>
+                  {{article.work_type}}
+                </div>
+              </div>
             </div>
 
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type"></textarea>
+            <div v-else style="height: 100%">
+              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="article.work_type">
+                <option>ВАК</option>
+                <option>РИНЦ</option>
+                <option>SCOPUS</option>
+                <option>WoS</option>
+              </select>
             </div>
 
           </div>
-
           <div class="rightLine textMiniTable" style="width: 9.21%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.impact" readonly></textarea>
+              <div class="textWithCarry inputBox ">{{article.impact}}</div>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.impact"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.impact"></textarea>
             </div>
           </div>
-
           <div class="rightLine textMiniTable" style="width: 25.07%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data" readonly></textarea>
+              <div class="textWithCarry inputBox ">{{article.output_data}}</div>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.output_data"></textarea>
             </div>
           </div>
-
           <div class="rightLine textMiniTable" style="width: 6.926%; text-align: center">
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.volume" readonly></textarea>
+              <div class="textWithCarry inputBox "> {{article.volume}}</div>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.volume"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.volume"></textarea>
             </div>
           </div>
-
           <div class="textMiniTable" style="width: 12.26%; text-align: center; padding-right: 0" >
             <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.co_authors" readonly ></textarea>
+              <div class="textWithCarry inputBox "> {{article.co_authors}}</div>
             </div>
 
             <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.co_authors"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.co_authors"></textarea>
             </div>
           </div>
 
         </div>
+
       </div>
 
       <div v-if="deleteState">
@@ -187,63 +191,63 @@
 
           <div class="rightLine textMiniTable" style="width: 29.5%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.name" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.name" readonly></textarea>
             </div>
 
             <div v-else="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.name"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.name"></textarea>
             </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.work_type" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.work_type"></textarea>
             </div>
 
           </div>
 
           <div class="rightLine textMiniTable" style="width: 8.21%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.impact" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.impact" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.impact"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.impact"></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 24.07%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.output_data" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.output_data"></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 5.926%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.volume" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.volume" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.volume"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.volume"></textarea>
             </div>
           </div>
 
           <div class="textMiniTable rightLine" style="width: 11.26%; text-align: center; padding-right: 0" >
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.co_authors" readonly ></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.co_authors" readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.co_authors"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="article.co_authors"></textarea>
             </div>
           </div>
 
@@ -362,7 +366,7 @@ export default {
     font-weight: 500;
     font-size:1.1rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-right: 0.1rem;
 
@@ -400,6 +404,7 @@ export default {
 
   .underline {
     border-bottom: solid 0.12em #DEDEDE;
+
 
   }
 
@@ -468,7 +473,7 @@ export default {
     font-weight: 500;
     font-size:0.9rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-right: 0.1rem;
   }
@@ -573,7 +578,7 @@ export default {
     font-weight: 500;
     font-size:0.5rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-top: 0.2rem;
     padding-right: 0.1rem;

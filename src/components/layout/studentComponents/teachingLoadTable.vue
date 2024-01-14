@@ -64,59 +64,62 @@
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.subject readonly ></textarea>
+              <div class="textWithCarry inputBox " >{{element.subject}}</div>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.subject></textarea>
+              <textarea class="textWithCarry inputBox  textArea" rows=5 v-model=element.subject style="overflow-y: auto;"></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.numberOfGroup readonly ></textarea>
+              <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.numberOfGroup></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.numberOfGroup></textarea>
             </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.mainTeacher readonly ></textarea>
+              <div class="textWithCarry inputBox ">
+                {{element.mainTeacher }}</div>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.mainTeacher></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.mainTeacher></textarea>
             </div>
 
           </div>
 
           <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.typeOfClasses readonly ></textarea>
+            <div v-if="!smallTableEditing || deleteState" style="height: 100%; display: table; overflow: hidden;">
+              <div class="textWithCarry inputBox" style="height: calc(100%); display: table-cell; vertical-align: middle">
+                <div>
+                  {{element.typeOfClasses}}
+                </div>
+              </div>
             </div>
 
-            <div v-else>
-              <select class="textWithCarry inputBox mt-1" style="-webkit-appearance: none;word-break: break-all" v-model="element.typeOfClasses">
-                <option>лабораторная</option>
+            <div v-else style="height: 100%">
+              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
+                <option style="word-break: break-all">лабораторная</option>
                 <option>лекция</option>
                 <option>семинар</option>
               </select>
             </div>
-
-
           </div>
 
           <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly ></textarea>
+              <div class="textWithCarry inputBox">{{element.numberOfHours}}</div>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours"></textarea>
+              <textarea class="textWithCarry inputBox" v-model="element.numberOfHours"></textarea>
             </div>
 
           </div>
@@ -156,53 +159,53 @@
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.subject" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.subject" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.subject"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.subject"></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfGroup" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfGroup" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfGroup"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfGroup"></textarea>
             </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.mainTeacher" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.mainTeacher" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.mainTeacher"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.mainTeacher"></textarea>
             </div>
 
           </div>
 
           <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.typeOfClasses" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.typeOfClasses" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.typeOfClasses"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.typeOfClasses"></textarea>
             </div>
           </div>
 
           <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours" readonly></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours"></textarea>
             </div>
           </div>
 
@@ -214,10 +217,12 @@
         </div>
       </div>
 
-
-
     </div>
   </div>
+
+
+
+
 
 
 </template>
@@ -268,9 +273,17 @@ export default {
       this.$emit('deleteTeachingLoad', myIndex)
     }
 
+  },
+  beforeMount() {
+
   }
 }
+
+
 </script>
+
+
+
 
 <style scoped>
 @import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
@@ -282,6 +295,8 @@ export default {
   padding:0;
   box-sizing: border-box;
 }
+
+
 
 @media (min-width: 800px) {
   .headingSemester {
@@ -315,7 +330,7 @@ export default {
     font-weight: 500;
     font-size:1.1rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-right: 0.1rem;
 
@@ -425,7 +440,7 @@ export default {
     font-weight: 500;
     font-size:0.9rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-right: 0.1rem;
 
@@ -532,7 +547,7 @@ export default {
     font-weight: 500;
     font-size:0.5rem;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
     padding-left:0.1rem;
     padding-right: 0.1rem;
 
@@ -605,5 +620,6 @@ export default {
     overflow-y:hidden;
   }
 }
+
 
 </style>

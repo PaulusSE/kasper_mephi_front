@@ -85,17 +85,17 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
 
 
-          <div class="image-upload">
+          <div class="image-upload" v-if="this.id === this.actualSemester">
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
-      <div class="text-end">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id !== this.actualSemester">
+      <div class="text-end" v-if="this.id === this.actualSemester">
+        <button class="sendFilesBtn" @click="sendFiles($event)">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
@@ -103,7 +103,6 @@
             </p>
           </div>
         </button>
-
       </div>
 
     </div>

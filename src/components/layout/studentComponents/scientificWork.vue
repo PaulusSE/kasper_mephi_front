@@ -130,22 +130,24 @@ export default {
           )
         }
       }
-
+      console.log(saveData)
       try {
         const response = await axios.post(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"),
             {"works" : saveData}
         )
 
         this.data = response.data;
+
+        if (this.arrayDeleteWorkId.length === 0){
+          this.fillArrayOfArticles(this.data, this.numberOfSemesters)
+          return
+        }
       }
       catch (e) {
         console.log(e)
       }
 
-      if (this.arrayDeleteWorkId.length === 0){
-        this.fillArrayOfArticles(this.data, this.numberOfSemesters)
-        return
-      }
+
 
 
       try {
@@ -220,13 +222,11 @@ export default {
         }
 
       }
-      console.log(this.arrayOfArticles)
     },
 
     async loadScientificWorks() {
       try {
         const response = await axios.get(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"))
-        console.log(response)
         this.data = await response.data;
         this.fillArrayOfArticles(this.data.works, this.data.years * 2)
         this.numberOfSemesters = this.data.years * 2

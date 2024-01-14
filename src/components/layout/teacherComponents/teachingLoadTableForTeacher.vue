@@ -55,43 +55,43 @@
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.subject readonly ></textarea>
+              <div class="textWithCarry inputBox ">{{element.subject}}</div>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.subject></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.subject></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.numberOfGroup readonly ></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.numberOfGroup readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.numberOfGroup></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.numberOfGroup></textarea>
             </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.mainTeacher readonly ></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.mainTeacher readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.mainTeacher></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.mainTeacher></textarea>
             </div>
 
           </div>
 
           <div class="rightLine textMiniTable" style="width: 26.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.typeOfClasses readonly ></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.typeOfClasses readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model=element.typeOfClasses></textarea>
+              <textarea class="textWithCarry inputBox " v-model=element.typeOfClasses></textarea>
             </div>
 
 
@@ -99,107 +99,17 @@
 
           <div class="textMiniTable ps-3" style="width: 8.3%; text-align: center">
             <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly ></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours" readonly ></textarea>
             </div>
 
             <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours"></textarea>
+              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours"></textarea>
             </div>
 
           </div>
         </div>
       </div>
 
-      <div v-if="deleteState">
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-          <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
-            Дисциплина
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
-            Группы
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
-            Основной<br>преподователь
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 25.3%; text-align: center">
-            Тип занятий
-          </div>
-
-          <div class="textMiniTable ps-3 rightLine" style="width: 6.3%; text-align: center">
-            Кол-во<br>часов<br>сем.
-          </div>
-
-          <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
-
-          </div>
-
-        </div>
-
-        <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
-          <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.subject" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.subject"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfGroup" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfGroup"></textarea>
-            </div>
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.mainTeacher" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.mainTeacher"></textarea>
-            </div>
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 25.3%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.typeOfClasses" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.typeOfClasses"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable ps-3 rightLine" style="width: 6.3%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="element.numberOfHours"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable ps-3 pt-2" style="width: 7%; text-align: center">
-            <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
-              <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-            </button>
-          </div>
-        </div>
-      </div>
 
 
 
