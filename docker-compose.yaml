@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   server:
-    image: "jackblack178/vue1:vue8"
+    image: "jackblack178/vue1:v0.1.2"
     ports:
       - "80:5173"
     restart: always
