@@ -4,6 +4,10 @@
         :result-of-sending = resultOfSending
     ></sending-files-notification>
 
+  <range-notification
+  :show="showRangeError"
+  ></range-notification>
+
   <div class="mainPage">
     <header-of-student
         @btnDissertationClicked="$emit('btnDissertationClicked')"
@@ -23,20 +27,18 @@
       <nav v-else>
         <button class="editBtn" @click="saveCommonInfo">Сохранить</button>
       </nav>
-
-
     </div>
     <div>
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
-          <label class="text">Тема</label>
+          <label class="text">Тема диссертации</label>
           <input type="text" class="textInput" :disabled="!editingInfo"  v-model="theme">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
-          <label class="text">ФИО преподователя</label>
+          <label class="text">Научный руководитель</label>
           <input type="text" class="textInput" disabled  v-model="teacherFullName">
         </nav>
       </div>
@@ -54,14 +56,14 @@
           <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
         </nav>
       </div>
-
-
     </div>
+
+
   </div>
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText">План подготовки рукописи диссертаций и автореферата</p>
+        <p class="mainText">Текущее состояние диссертации</p>
         <button v-if="!editingCheckbox" @click="editTables" class="editBtn2">Редактировать</button>
         <button v-else @click="saveTables" class="editBtn2">Сохранить</button>
       </div>
@@ -81,28 +83,28 @@
         <div class="col-4 textTable rightLine">
 
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
             1
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
             2
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
             3
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
             4
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
             5
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
               6
         </div>
-        <div class="col-1 textTable rightLine">
+        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
           7
         </div>
-        <div class="col-1 textTable">
+        <div class="col-1 textTable" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
           8
         </div>
 
@@ -114,33 +116,38 @@
         <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{index}}
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id1 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id1 :disabled="!(actualSemestr === 1) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id2 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id2 :disabled="!(actualSemestr === 2) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id3 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id3 :disabled="!(actualSemestr === 3) || !editingCheckbox" >
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id4 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id4 :disabled="!(actualSemestr === 4) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id5 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id5 :disabled="!(actualSemestr === 5) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id6 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id6 :disabled="!(actualSemestr === 6) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id7 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id7 :disabled="!(actualSemestr === 7) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id8 :disabled="!editingCheckbox">
+        <div class="col-1 mainText myInput" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id8 :disabled="!(actualSemestr === 8) || !editingCheckbox">
         </div>
-<!--        :disabled="!(actualSemestr === 8) || !editingCheckbox"-->
+
       </div>
     </div>
+
+      <div class=" justify-content-between checkboxBlock">
+        <p class="textTable">Шкала прогресса {{this.progressOfDissertation}} %</p>
+        <input type="range" v-model="progressOfDissertation" :disabled="!editingCheckbox">
+      </div>
 
     </div>
 
@@ -162,22 +169,6 @@
 
     </div>
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between">
-        <nav class="checkboxBlock">
-          <p class="mainText">Рецензия</p>
-        </nav>
-      </div>
-
-      <div>
-
-        <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
-
-        <p v-else class="">
-          <textarea disabled v-model="feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
-        </p>
-      </div>
-    </div>
 
 
   </div>
@@ -195,14 +186,16 @@ import SendingFilesNotification
 import dissertationTab from "@/components/layout/studentComponents/dissertationTab.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+import rangeNotification from "@/components/layout/notifications/studentNotifications/rangeNotification.vue";
 
 
 export default {
   name: "dissertation",
-  components: {SendingFilesNotification, headerOfStudent, PageNotFound, dissertationTab},
+  components: {SendingFilesNotification, headerOfStudent, PageNotFound, dissertationTab, rangeNotification},
   "headerOfStudent":headerOfStudent,
   "notification":sendingFilesNotification,
   "dissertationTab" : dissertationTab,
+  "rangeNotification" : rangeNotification,
   props: ["stateOfStudentPage", "educationTime"],
 
   data(){
@@ -232,6 +225,9 @@ export default {
         'empty': '',
         '' : ''
       },
+      progressOfDissertation : 15,
+      progressOfDissertationCopy : '',
+      showRangeError : false,
 
     }
 
@@ -258,6 +254,7 @@ export default {
     },
     editTables() {
       this.editingCheckbox = !this.editingCheckbox;
+      this.progressOfDissertationCopy = this.progressOfDissertation
     },
 
     createSaveData() {
@@ -337,6 +334,17 @@ export default {
 
     async saveTables() {
       this.editingCheckbox = !this.editingCheckbox;
+      if (this.progressOfDissertationCopy > this.progressOfDissertation){
+        this.progressOfDissertation = this.progressOfDissertationCopy
+        this.showRangeError = true
+        setTimeout(() => {
+          this.showRangeError = false
+        }, 5000);
+
+      }
+
+
+
 
 
     var saveData = this.createSaveData()
@@ -445,6 +453,12 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.hightlightActualSemesterColumn {
+  background-color: mediumseagreen;
+  color:black !important;
+  font-weight: 400 !important;
 }
 
 
@@ -587,20 +601,6 @@ export default {
     width: 100%;
   }
 
-  .noFeedBack{
-    text-align: left;
-    margin-left: 5%;
-    font-size: 1rem
-  }
-
-  .feedback {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    font-size: 1rem !important;
-    resize: none !important;
-    background-color: white !important;
-    font-weight: 350;
-  }
 }
 
 @media (max-width: 800px) {
@@ -899,20 +899,6 @@ export default {
     width: 100%;
   }
 
-  .noFeedBack{
-    text-align: left;
-    margin-left: 5%;
-    font-size: 0.6rem
-  }
-
-  .feedback {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    font-size: 0.6rem !important;
-    resize: none !important;
-    background-color: white !important;
-    font-weight: 350;
-  }
 }
 
 

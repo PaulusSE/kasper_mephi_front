@@ -8,48 +8,37 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">ФИО</label>
+        <label class="text m-0">ФИО (полностью)</label>
         <input type="text" class="blockStyles" v-model="fullName" @input="inputEvent">
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text m-0">Почта</label>
-        <input type="text" class="blockStyles" v-model="email" @input="inputEvent">
-      </nav>
-    </div>
-
-
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Номер группы</label>
-        <input type="text" class="blockStyles" v-model="numberOfGroup" @input="inputEvent">
+        <label class="text m-0">Группа</label>
+        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
+          <option v-for="group in numberOfGroups" >{{group}}</option>
+        </select>
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Актуальный семестр</label>
-        <input type="text" class="blockStyles" v-model="actualSemester" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
+          <option v-for="number in 8" >{{number}}</option>
+        </select>
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Специализация</label>
+        <label class="text m-0">Научная специальность</label>
         <input type="text" class="blockStyles" v-model="specialization" @input="inputEvent">
       </nav>
     </div>
 
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text m-0">Приказ о зачислении</label>
-        <input type="text" class="blockStyles" v-model="enrollmentOrder" @input="inputEvent">
-      </nav>
-    </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -61,7 +50,11 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Длительность обучения (лет)</label>
-        <input type="text" class="blockStyles" v-model="numberOfYears" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
+          <option>3</option>
+          <option>4</option>
+
+        </select>
       </nav>
     </div>
 
@@ -119,7 +112,8 @@ export default {
       actualSemester:'',
       numberOfGroup: '',
       numberOfYears: '',
-      arrayOfTeachers: []
+      arrayOfTeachers: [],
+      numberOfGroups : ["Б20-504", "Б20-514", 'Б20-524'],
     }
   },
   methods: {

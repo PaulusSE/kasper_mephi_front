@@ -22,14 +22,14 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Почта</label>
-        <input type="text" class="col-12" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
       </nav>
 
     </div>
@@ -37,7 +37,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Ученая степень</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
       </nav>
 
     </div>
@@ -47,7 +47,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
       </nav>
 
     </div>
@@ -55,7 +55,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
 
     </div>
@@ -74,18 +74,18 @@
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <label class="text ms-0">Старый пароль</label>
-        <input type="password" @input="inputEvent" v-model="currentPassword">
+        <input type="password" class="textInput" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
         <label class="text ms-0">Новый пароль</label>
-        <input type="password" @input="inputEvent" v-model="newPassword">
+        <input type="password" class="textInput" @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%">
         <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
-          <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
+          <input type="password" class="textInput" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
@@ -232,6 +232,19 @@ export default {
     font-size: 1.2rem;
   }
 
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
 
   header .head-top {
     background-color: #005faf;
@@ -280,7 +293,7 @@ export default {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
   .btnedit{
@@ -305,7 +318,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
+
     font-size: medium;
     padding-left: 0.5rem;
   }
@@ -323,12 +336,12 @@ export default {
   }
 
   .loggining {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
 
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.5 ;
+    padding: 0.3rem ;
     margin: 0 !important;
     color:white !important;
   }
@@ -423,7 +436,6 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2em;
     font-size: medium;
     padding-left: 0.5rem;
   }
@@ -440,13 +452,27 @@ export default {
     font-weight: 450;
   }
 
+  textInput {
+    font-size: 0.9rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
+
   .loggining {
-    font-size: 1.1rem !important;
+    font-size: 0.8rem !important;
 
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.25rem;
+    padding: 0.2rem;
     margin: 0 !important;
     color:white !important;
   }
@@ -537,13 +563,26 @@ export default {
   }
 
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.7rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.25rem;
+    padding: 0.2rem;
     margin: 0 !important;
     color:white !important;
+  }
+
+  textInput {
+    font-size: 0.7rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
   }
 
   .wrongPassword {

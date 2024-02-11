@@ -6,98 +6,132 @@
 
   <page-header></page-header>
 
-  <div class="mainPage">
-    <div class="container-fluid justify-content-between d-flex">
-      <nav>
-        <p class="mainText">Основная информация</p>
-      </nav>
+  <div class="mainPage pt-4">
+    <div class="roundBlock">
 
-<!--      <nav>-->
-<!--        &lt;!&ndash;todo решить с возможностью редактирования&ndash;&gt;-->
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">-->
-<!--          <p>Редактировать</p>-->
-<!--        </button>-->
+      <div class="container-fluid justify-content-between d-flex">
+        <nav>
+          <p class="mainText">Основная информация</p>
+        </nav>
 
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">-->
-<!--          <p>Отменить</p>-->
-<!--        </button>-->
+        <nav>
+          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">
+            <p>Редактировать</p>
+          </button>
 
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">-->
-<!--          <p>Сохранить</p>-->
-<!--        </button>-->
-<!--      </nav>-->
+          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">
+            <p>Отменить</p>
+          </button>
 
+          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">
+            <p>Сохранить</p>
+          </button>
+        </nav>
+      </div>
 
+      <div class="container-fluid justify-content-between d-flex">
+        <nav style="width: 100%;">
+          <label class="text ms-0">ФИО</label>
+          <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="fullName">
+        </nav>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex">
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Почта</label>
+            <input type="text" class="textInput" disabled @input="inputEvent" v-model="email">
+          </div>
+
+        </nav>
+        <nav style="width: 50%;">
+          <div style="width: 100%">
+            <label class="text ms-0" >Группа</label>
+            <select class="form-select blockStyles textInput ps-2 p-0" v-model="group" @input="inputEvent">
+              <option v-for="group in numberOfGroups" >{{group}}</option>
+            </select>
+          </div>
+        </nav>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex">
+        <nav style="width: 100%;">
+          <label class="text ms-0">Научная специальность</label>
+          <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="speciality">
+        </nav>
+
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex">
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Срок обучения</label>
+            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
+          </div>
+        </nav>
+
+        <nav style="width: 50%" >
+          <div style="width: 100%">
+            <label class="text ms-0" >Дата начала обучения</label>
+            <input type="date" class="textInput":disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
+          </div>
+        </nav>
+      </div>
     </div>
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
-      </nav>
-    </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 60%">
-        <div style="width: 100%">
-          <label class="text ms-0">Почта</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between mt-1">
+        <div class="container-fluid justify-content-between d-flex">
+          <nav>
+            <p class="mainText">Общая информация</p>
+          </nav>
+
+          <nav>
+            <button type="button" class="btn btn-primar btnedit"  @click="editDissertationInfo()" v-if="!stateOfEditingDissertationInfo">
+              <p>Редактировать</p>
+            </button>
+
+            <button type="button" class="btn btn-primar btnedit"  @click="cancelChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo">
+              <p>Отменить</p>
+            </button>
+
+            <button type="button" class="btn btn-primar btnedit"  @click="saveChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo && stateOfWritingDissertationInfo">
+              <p>Сохранить</p>
+            </button>
+          </nav>
+        </div>
+      </div>
+      <div>
+        <div class="container-fluid justify-content-between d-flex">
+          <nav class="inputWidth">
+            <label class="text">Тема диссертации</label>
+            <input type="text" class="textInput" :disabled="!stateOfEditingDissertationInfo"  v-model="theme">
+          </nav>
         </div>
 
-      </nav>
-      <nav style="width: 30%;">
-        <div style="width: 100%">
-          <label class="text ms-0" >Группа</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="group">
-        </div>
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Научная специальность</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="speciality">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between">
-      <nav style="width: 50%">
-        <div style="width: 100%">
-          <label class="text ms-0">Срок обучения</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="studyingTime">
+        <div class="container-fluid justify-content-between d-flex">
+          <nav class="inputWidth">
+            <label class="text">Научный руководитель</label>
+            <input type="text" class="textInput" disabled  v-model="teacherFullName">
+          </nav>
         </div>
 
-      </nav>
-      <nav style="width: 50%" >
-        <div style="width: 100%">
-          <label class="text ms-0" >Дата начала обучения</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="startDateStudying">
+        <div class="container-fluid justify-content-between d-flex">
+          <nav class="inputWidth">
+            <label class="text">Номер приказа об утверждении</label>
+            <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
+          </nav>
         </div>
-      </nav>
+
+        <div class="container-fluid justify-content-between d-flex">
+          <nav class="inputWidth">
+            <label class="text">Дата приказа об утверждении</label>
+            <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
+          </nav>
+        </div>
+      </div>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Приказ о зачислении</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
-      </nav>
-    </div>
 
   </div>
 
@@ -112,18 +146,18 @@
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <label class="text ms-0">Старый пароль</label>
-        <input type="password" @input="inputEvent" v-model="currentPassword">
+        <input type="password" class=textInput @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
         <label class="text ms-0">Новый пароль</label>
-        <input type="password" @input="inputEvent" v-model="newPassword">
+        <input type="password" class=textInput @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%" class="mb-1">
         <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
-          <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
+          <input type="password" class=textInput @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
@@ -153,15 +187,15 @@ export default {
   "changePasswordNotification" : changePasswordNotification,
   data(){
     return {
-      fullName: '1',
-      email: '2',
-      group: '3',
-      speciality: '4',
-      studyingTime: '5',
-      startDateStudying: '6',
-      department: '7',
-      faculty: '8',
-      admissionOrder: '9',
+      fullName: '',
+      email: '',
+      group: '',
+      speciality: '',
+      studyingTime: '',
+      startDateStudying: '',
+      department: '',
+      faculty: '',
+      admissionOrder: '',
       fullNameCopy: "",
       emailCopy: '',
       groupCopy: '',
@@ -177,14 +211,17 @@ export default {
       stateOfSending:false,
       resultOfSending: '',
       errorText : '',
-      stateOfEditing: false,
-      stateOfWriting: false,
+      stateOfEditingCommonInfo: false,
+      stateOfWritingCommonInfo: false,
+      stateOfEditingDissertationInfo : false,
+      stateOfWritingDissertationInfo : false,
+      numberOfGroups : ["Б20-504", "Б20-514", 'Б20-524'],
     }
   },
 
   methods:{
     editProfile(){
-      this.stateOfEditing = !this.stateOfEditing
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
       this.fullNameCopy = this.fullName
       this.emailCopy = this.email
       this.groupCopy = this.group
@@ -194,13 +231,17 @@ export default {
       this.departmentCopy = this.department
       this.facultyCopy = this.faculty
       this.admissionOrderCopy = this.admissionOrder
+    },
+
+    editDissertationInfo(){
 
     },
+
     inputEvent(){
       if (this.errorText !== '')
         this.errorText = ''
-      if(!this.stateOfWriting){
-        this.stateOfWriting = !this.stateOfWriting
+      if(!this.stateOfWritingCommonInfo){
+        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
       }
     },
     async changePassword(){
@@ -238,7 +279,7 @@ export default {
 
 
     cancelChange(){
-      this.stateOfEditing = !this.stateOfEditing
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
       this.fullName = this.fullNameCopy
       this.email = this.emailCopy
       this.group = this.groupCopy
@@ -249,15 +290,18 @@ export default {
       this.faculty = this.facultyCopy
       this.admissionOrder = this.admissionOrderCopy
 
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+      if (this.stateOfWritingCommonInfo)
+        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
 
     },
     saveChange(){
-      this.stateOfEditing = !this.stateOfEditing
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
+      if (this.stateOfWritingCommonInfo)
+        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
     },
+
+
+
     beforeMount() {
       if (store.getters.getType !== "student"){
         this.$router.push('/wrongAccess')
@@ -279,16 +323,43 @@ export default {
   padding: 0;
 }
 
+.roundBlock {
+  border: solid 0.12em #DEDEDE;
+  border-radius: 20px;
+  width: 95% !important;
+  margin:auto;
+  margin-bottom: 2% !important;
+  padding: 0 1% 1%;;
+}
+
+.checkboxBlock{
+  padding-top: 0.8%;
+  padding-left: 0.8%;
+  padding-bottom: 2%;
+}
+
+.inputWidth {
+  width: 100%;
+}
+
+.blockStyles {
+  height: 2rem;
+  border-radius: 10px;
+  border-color: #7C7F86;
+  border-width: 2px 2px 2px 2px !important;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  font-size: 0.8rem;
+}
 
 
 
 @media (min-width: 800px) {
   .loggining {
-    font-size: 1.2rem !important;
+    font-size: 1rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.5rem;
+    padding: 0.3rem;
     margin: 0 !important;
     color:white !important;
   }
@@ -297,7 +368,7 @@ export default {
     margin-top: 1rem;
     color:#7C7F86;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   header .head-top nav {
@@ -349,7 +420,7 @@ export default {
     margin-left: 1.5rem !important;
     margin-right: 1.5rem !important;;
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
   div nav button {
@@ -373,13 +444,25 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
     font-size: medium;
   }
 
   div nav label {
     display: block;
     margin-left: 5%;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
   }
 
 
@@ -400,7 +483,7 @@ export default {
 
 @media (max-width: 800px) {
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.9rem !important;
     padding: 0.3rem;
     background-color: #0055bb !important;
     font-weight: 300 !important;
@@ -490,7 +573,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
+
     font-size: medium;
   }
 
@@ -518,11 +601,25 @@ export default {
     text-align: center;
     padding-top: 2%;
   }
+
+  .textInput {
+    font-size: 0.8rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.8rem !important;
     padding: 0.3rem;
     background-color: #0055bb !important;
     font-weight: 300 !important;
@@ -580,6 +677,19 @@ export default {
     padding-bottom: 1.5%;
   }
 
+  .textInput {
+    font-size: 0.6rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
 
   div nav button {
     background-color: white !important;
@@ -603,7 +713,6 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
     font-size: 0.8rem !important;
   }
 

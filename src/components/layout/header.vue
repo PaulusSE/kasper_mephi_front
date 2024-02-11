@@ -2,7 +2,7 @@
 
 <template>
   <header>
-    <div class="container-fluid head-top d-flexms-0">
+    <div class="container-fluid head-top d-flex ms-0">
       <div class="myHeader d-flex justify-content-between">
         <nav>
           <router-link to="/" @click="redirectToMainPage" >
@@ -10,10 +10,23 @@
           </router-link>
 
         </nav>
-        <div class="d-flex justify-content-end gap-3">
-          <nav class="align-items-center justify-content-center me-">
+        <div class="d-flex justify-content-end gap-2">
+<!--          <nav class="align-items-center justify-content-center">-->
+<!--            <router-link to="/profile" class="d-flex gap-3" style="text-decoration: none">-->
+<!--              <img class= "imageButtons imageProfile" src="../../../static/figures/man_logo.png" alt="logo">-->
+<!--              <div class="buttonProfileText"> ФИО аспиранта</div>-->
+<!--            </router-link>-->
+<!--          </nav>-->
+
+          <nav class="align-items-center justify-content-center">
             <router-link to="/profile">
-              <img class= "imageButtons imageProfile" src="../../../static/figures/man_logo.png" alt="logo">
+              <img class= "imageButtons imageLogOut" style="width: 40px" src="../../../static/figures/man_logo.png" alt="logo">
+            </router-link>
+          </nav>
+
+          <nav class="align-items-center justify-content-center">
+            <router-link to="/profile" style="text-decoration: none">
+              <div class="buttonProfileText"> ФИО аспиранта</div>
             </router-link>
           </nav>
 
@@ -111,13 +124,20 @@ export default {
   }
 
   .imageMephi{
-    width: 80px;
+    width: 80px !important;
   }
   .imageProfile{
-    width: 35px;
+    width: 35px !important;
   }
   .imageLogOut{
     width: 35px !important;
+  }
+
+  .buttonProfileText{
+    margin-top:12px;
+    text-decoration: none;
+    font-size: 1rem;
+    color:rgb(206,224,229)
   }
 }
 
@@ -180,6 +200,13 @@ export default {
   .imageLogOut{
     width: 30px !important;
   }
+
+  .buttonProfileText{
+    margin-top:10px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color:rgb(206,224,229)
+  }
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
@@ -240,6 +267,12 @@ export default {
   }
   .imageLogOut{
     width: 20px !important;
+  }
+
+  .buttonProfileText{
+    text-decoration: none;
+    font-size: 0.8rem;
+    color:rgb(206,224,229)
   }
 }
 

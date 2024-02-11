@@ -17,8 +17,12 @@
     :id = index
     :articles = this.arrayOfArticles[index]
     @updatePage=cancelChange()
-    @buttonSmallTableAdd=buttonSmallTableAdd(index)
+    @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
+    @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
+    @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
     @saveArticles = saveArticles()
+    @saveProjects = saveProjects()
+    @saveReports = saveReports()
     @makeCopy = makeCopy
     @deleteArticle="(n) => deleteArticle(index, n)"
     ></tab-of-articles>
@@ -81,7 +85,7 @@ export default {
 
     },
 
-    buttonSmallTableAdd(n){
+    buttonSmallTableAdd1(n){
       let newArticle = {
         name: '',
         work_type: '',
@@ -93,6 +97,32 @@ export default {
         numberOfSemesters : ''
       }
       this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
+    },
+    buttonSmallTableAdd2(n){
+      let newArticle = {
+        name: '',
+        work_type: '',
+        impact: '',
+        output_data: '',
+        volume: null,
+        co_authors: '',
+        semester : n + 1,
+        numberOfSemesters : ''
+      }
+      // this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
+    },
+    buttonSmallTableAdd3(n){
+      let newArticle = {
+        name: '',
+        work_type: '',
+        impact: '',
+        output_data: '',
+        volume: null,
+        co_authors: '',
+        semester : n + 1,
+        numberOfSemesters : ''
+      }
+      // this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
     },
 
     cancelChange(){
@@ -165,6 +195,12 @@ export default {
       }
 
       this.arrayDeleteWorkId = []
+
+    },
+
+    async saveProjects() {},
+
+    async saveReports() {
 
     },
 

@@ -121,7 +121,6 @@ export default {
         var saveData = new Array()
         for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
           for (var j = 0; j < this.arrayOfTeachingLoadByPeriod[i].length; j++){
-            console.log(this.arrayOfTeachingLoadByPeriod[i][j].typeOfClasses)
             saveData.push(
                 {
                   subject: this.arrayOfTeachingLoadByPeriod[i][j].subject,
@@ -139,7 +138,8 @@ export default {
           }
         }
 
-
+        console.log(saveData)
+        console.log(this.arrayOfTeachingLoadByPeriod)
         try {
           const response = await axios.post(this.IP +'/students/teaching_load/' + localStorage.getItem("access_token"),
               {"array" : saveData}
@@ -148,7 +148,9 @@ export default {
           this.fillArrayOfTeachingLoad(this.data.array, this.numberOfSemesters)
         }
         catch (e) {
+          console.log("Message here")
           console.log(e)
+
         }
 
       if (this.arrayDeleteTeachingLoadId.length === 0){

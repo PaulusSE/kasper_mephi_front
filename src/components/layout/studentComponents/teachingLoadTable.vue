@@ -23,8 +23,7 @@
     <div v-if="buttonIsOpened" class="text-end" style="margin-right: 2.5%">
       <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2 mt-3">Редактировать</button>
       <div v-else>
-        <button class="editBtn2 mt-3 me-2" @click="deleteButton" v-if="!deleteState">Удалить</button>
-        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')"  v-if="!deleteState">Добавить</button>
+        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')">Добавить</button>
         <button class="editBtn2 mt-3 me-2" @click="cancelChange" >Отменить</button>
         <button class="editBtn2 mt-3 me-2" @click="buttonSaveLoad" >Сохранить</button>
       </div>
@@ -35,7 +34,7 @@
 
 
     <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
-      <div v-if="!deleteState">
+      <div v-if="!smallTableEditing">
         <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
           <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
             Дисциплина
@@ -63,72 +62,45 @@
 
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
+            <div>
               <div class="textWithCarry inputBox ">{{element.subject}}</div>
             </div>
 
-            <div v-else>
-              <textarea class="textWithCarry inputBox  textArea" rows=5 v-model=element.subject style="overflow-y: auto;"></textarea>
-            </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
+            <div>
               <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
             </div>
 
-            <div v-else>
-              <textarea class="textWithCarry inputBox " v-model=element.numberOfGroup></textarea>
-            </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
+            <div>
               <div class="textWithCarry inputBox ">
                 {{element.mainTeacher }}</div>
             </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox " v-model=element.mainTeacher></textarea>
-            </div>
-
           </div>
 
           <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState" style="height: 100%; display: table; overflow: hidden;">
-              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses" disabled>
-                <option style="word-break: break-all">лабораторная</option>
-                <option>лекция</option>
-                <option>семинар</option>
-              </select>
-            </div>
-
-            <div v-else style="height: 100%">
-              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
-                <option style="word-break: break-all">лабораторная</option>
-                <option>лекция</option>
-                <option>семинар</option>
-              </select>
+            <div>
+              <div class="textWithCarry inputBox ">
+                {{element.typeOfClasses }}</div>
             </div>
           </div>
 
           <div class="textMiniTable" style="width: 17.3%; text-align: center">
-            <div class="pe-3" v-if="!smallTableEditing || deleteState">
+            <div class="pe-3">
               <div >
                 <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
               </div>
             </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox" v-model="element.numberOfHours"></textarea>
-            </div>
-
           </div>
         </div>
       </div>
 
-      <div v-if="deleteState">
+      <div v-else>
         <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
           <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
             Дисциплина
@@ -160,53 +132,39 @@
 
         <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
           <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox " v-model="element.subject" readonly></textarea>
-            </div>
 
-            <div v-else>
-              <textarea class="textWithCarry inputBox " v-model="element.subject"></textarea>
+            <div>
+              <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject"></textarea>
             </div>
           </div>
 
           <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox " v-model="element.numberOfGroup" readonly></textarea>
-            </div>
-
-            <div v-else>
+            <div>
               <textarea class="textWithCarry inputBox " v-model="element.numberOfGroup"></textarea>
             </div>
           </div>
 
 
           <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox " v-model="element.mainTeacher" readonly></textarea>
-            </div>
-
-            <div v-else>
+            <div>
               <textarea class="textWithCarry inputBox " v-model="element.mainTeacher"></textarea>
             </div>
 
           </div>
 
           <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox " v-model="element.typeOfClasses" readonly></textarea>
+
+            <div style="height: 100%">
+              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
+                <option style="word-break: break-all">лабораторная</option>
+                <option>лекция</option>
+                <option>семинар</option>
+              </select>
             </div>
 
-            <div v-else>
-              <textarea class="textWithCarry inputBox " v-model="element.typeOfClasses"></textarea>
-            </div>
           </div>
-
           <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours" readonly></textarea>
-            </div>
-
-            <div v-else>
+            <div>
               <textarea class="textWithCarry inputBox " v-model="element.numberOfHours"></textarea>
             </div>
           </div>
@@ -237,7 +195,6 @@ export default {
     return {
       buttonIsOpened : false,
       smallTableEditing: false,
-      deleteState: false,
     }
   },
   methods : {
@@ -255,22 +212,15 @@ export default {
       this.smallTableEditing = !this.smallTableEditing
       this.$emit('buttonSmallTableSave')
 
-      if (this.deleteState === true)
-        this.deleteState = false
+
     },
 
     cancelChange(){
       this.smallTableEditing = !this.smallTableEditing
       this.$emit('buttonSmallTableCancel')
-      if (this.deleteState === true)
-        this.deleteState = false
-
 
     },
 
-    deleteButton(){
-      this.deleteState = !this.deleteState
-    },
     deleteTeachingLoad(myIndex){
       this.$emit('deleteTeachingLoad', myIndex)
     }

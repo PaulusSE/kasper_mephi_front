@@ -3,7 +3,10 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id}} семестр</p>
+      <div class="d-flex gap-1">
+        <p class="headingSemester">{{id}} семестр</p>
+        <p v-if="actualSemester===id" class="headingSemester">(текущий)</p>
+      </div>
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -105,6 +108,24 @@
         </button>
       </div>
 
+      <div class="roundBlock mt-2">
+        <div class="d-flex justify-content-between mt-1 mb-1">
+          <nav class="checkboxBlock">
+            <p class="mainText">Комментарий научного руководителя</p>
+          </nav>
+        </div>
+
+        <div>
+
+          <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
+
+          <p v-else class="">
+            <textarea disabled v-model="feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
+          </p>
+        </div>
+      </div>
+
+
     </div>
   </div>
 
@@ -139,7 +160,6 @@ export default {
       this.explanationaryNoteFilename = ''
 
 
-      //todo
     },
     downloadFile(){
 
@@ -257,6 +277,8 @@ export default {
   box-sizing: border-box;
 }
 
+
+
 @media (min-width: 800px){
   .headingSemester {
     color:#7C7F86;
@@ -275,8 +297,27 @@ export default {
     margin-right: 3rem;
   }
 
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 1rem
+  }
 
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 1rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
 
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.1rem;
+    text-align: center;
+  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -401,7 +442,20 @@ export default {
     margin-right: 3rem;
   }
 
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 0.8rem
+  }
 
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 0.8rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
 
 
   .roundBlock {
@@ -410,9 +464,7 @@ export default {
     width: 95% !important;
     margin:auto;
     margin-bottom: 2% !important;
-    padding: 0 1% 1%;
-  ;
-
+    padding: 0 1% 1%;;
   }
 
   .btnAddDeleteFiles {
@@ -571,6 +623,20 @@ export default {
   }
 
 
+  .noFeedBack{
+    text-align: left;
+    margin-left: 5%;
+    font-size: 0.6rem
+  }
+
+  .feedback {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    font-size: 0.6rem !important;
+    resize: none !important;
+    background-color: white !important;
+    font-weight: 350;
+  }
 
 
 
