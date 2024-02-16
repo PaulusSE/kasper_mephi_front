@@ -20,164 +20,438 @@
       </div>
 
     </div>
-    <div v-if="buttonIsOpened" class="text-end" style="margin-right: 2.5%">
-      <button v-if="!smallTableEditing" @click="buttonSmallTableClicked" class="editBtn2 mt-3">Редактировать</button>
-      <div v-else>
-        <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd')">Добавить</button>
-        <button class="editBtn2 mt-3 me-2" @click="cancelChange" >Отменить</button>
-        <button class="editBtn2 mt-3 me-2" @click="buttonSaveLoad" >Сохранить</button>
+
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Аудиторная нагрузка</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3">Редактировать</button>
+          <div v-else>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange1">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveAuditWork">Сохранить</button>
+          </div>
+        </nav>
       </div>
 
-    </div>
+      <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
+        <div v-if="!smallTableEditing1">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
+              Дисциплина
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
+              Группы
+            </div>
 
 
+            <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
+              Основной<br>преподователь
 
+            </div>
 
-    <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
-      <div v-if="!smallTableEditing">
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-          <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
-            Дисциплина
-          </div>
+            <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
+              Тип занятий
+            </div>
 
-          <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
-            Группы
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
-            Основной<br>преподователь
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
-            Тип занятий
-          </div>
-
-          <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
-            Часы
-          </div>
-
-        </div>
-
-        <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
-          <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
-            <div>
-              <div class="textWithCarry inputBox ">{{element.subject}}</div>
+            <div class="textMiniTable ps-3" style="width: 17.3%; text-align: center">
+              Часы
             </div>
 
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
-            <div>
-              <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
+          <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
+            <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{element.subject}}</div>
+              </div>
+
             </div>
 
-          </div>
+            <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
+              </div>
 
-
-          <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
-            <div>
-              <div class="textWithCarry inputBox ">
-                {{element.mainTeacher }}</div>
             </div>
-          </div>
 
-          <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
-            <div>
-              <div class="textWithCarry inputBox ">
-                {{element.typeOfClasses }}</div>
+
+            <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">
+                  {{element.mainTeacher }}</div>
+              </div>
             </div>
-          </div>
 
-          <div class="textMiniTable" style="width: 17.3%; text-align: center">
-            <div class="pe-3">
-              <div >
-                <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
+            <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">
+                  {{element.typeOfClasses }}</div>
+              </div>
+            </div>
+
+            <div class="textMiniTable" style="width: 17.3%; text-align: center">
+              <div class="pe-3">
+                <div >
+                  <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-else>
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-          <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
-            Дисциплина
+        <div v-else>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
+              Дисциплина
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
+              Группы
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
+              Основной<br>преподователь
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
+              Тип занятий
+            </div>
+
+            <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
+              Часы
+            </div>
+
+            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
+
+            </div>
+
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
-            Группы
+          <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
+            <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
+
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject"></textarea>
+              </div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.numberOfGroup"></textarea>
+              </div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.mainTeacher"></textarea>
+              </div>
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
+
+              <div style="height: 100%">
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
+                  <option style="word-break: break-all">лабораторная</option>
+                  <option>лекция</option>
+                  <option>семинар</option>
+                  <option>прием зачетов и экзаменов</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.numberOfHours"></textarea>
+              </div>
+            </div>
+
+            <div class="textMiniTable ps pt-2" style="width: 8.1%; text-align: center">
+              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
           </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
-            Основной<br>преподователь
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
-            Тип занятий
-          </div>
-
-          <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
-            Часы
-          </div>
-
-          <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
-
-          </div>
-
         </div>
 
-        <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
-          <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
-
-            <div>
-              <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
-            <div>
-              <textarea class="textWithCarry inputBox " v-model="element.numberOfGroup"></textarea>
-            </div>
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
-            <div>
-              <textarea class="textWithCarry inputBox " v-model="element.mainTeacher"></textarea>
-            </div>
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
-
-            <div style="height: 100%">
-              <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
-                <option style="word-break: break-all">лабораторная</option>
-                <option>лекция</option>
-                <option>семинар</option>
-              </select>
-            </div>
-
-          </div>
-          <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
-            <div>
-              <textarea class="textWithCarry inputBox " v-model="element.numberOfHours"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable ps pt-2" style="width: 8.1%; text-align: center">
-            <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
-              <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-            </button>
-          </div>
-        </div>
       </div>
-
     </div>
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Индивидуальная работа со студентами</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3">Редактировать</button>
+          <div v-else>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange2">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveIndividualWork">Сохранить</button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
+        <div v-if="!smallTableEditing2">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: individualWork.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
+              Тип
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
+              Количество студентов
+            </div>
+
+
+            <div class="textMiniTable" style="width: 33%; text-align: center">
+              Комментарий (опционально)
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in this.individualWork">
+            <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{work.type}}</div>
+              </div>
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{work.numberOfStudents}}</div>
+              </div>
+
+            </div>
+
+
+            <div class="textMiniTable" style="width: 33%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">
+                  {{work.comment }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center;">
+              Тип
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              Количество студентов
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              Комментарий (опционально)
+
+            </div>
+            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in individualWork">
+            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center">
+
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.type"></textarea>
+              </div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="work.numberOfStudents"></textarea>
+              </div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="work.comment"></textarea>
+              </div>
+
+            </div>
+
+
+            <div class="textMiniTable ps-2 pt-2" style="width: 8%; text-align: center">
+              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Прочая нагрузка</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3">Редактировать</button>
+          <div v-else>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange3">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveOtherWork">Сохранить</button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
+        <div v-if="!smallTableEditing3">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center;">
+              Наименование
+              нагрузки
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              Объем (в любых ед. измерения)
+            </div>
+
+
+            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
+              Комментарий (опционально)
+
+            </div>
+
+            <div class="textMiniTable" style="width: 25%; text-align: center">
+              Количество академических часов
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in this.otherWork">
+            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{work.name}}</div>
+              </div>
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{work.volume}}</div>
+              </div>
+
+            </div>
+
+
+            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">
+                  {{work.comment }}</div>
+              </div>
+            </div>
+
+            <div class="textMiniTable" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">
+                  {{work.numberOfHours }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 23%; text-align: center;">
+              Наименование
+              нагрузки
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+              Объем (в любых ед. измерения)
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+              Комментарий (опционально)
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+              Количество академических часов
+            </div>
+
+
+            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in otherWork">
+            <div class="rightLine textMiniTable ps-3" style="width: 23%; text-align: center">
+
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.name"></textarea>
+              </div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="work.volume"></textarea>
+              </div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="work.comment"></textarea>
+              </div>
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+
+              <div style="height: 100%">
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="work.hours">
+                  <option style="word-break: break-all">лабораторная</option>
+                  <option>лекция</option>
+                  <option>семинар</option>
+                  <option>прием зачетов и экзаменов</option>
+                </select>
+              </div>
+
+            </div>
+
+
+            <div class="textMiniTable ps pt-2" style="width: 7%; text-align: center">
+              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
   </div>
 
 
@@ -194,26 +468,74 @@ export default {
   data() {
     return {
       buttonIsOpened : false,
-      smallTableEditing: false,
+      smallTableEditing1 : false,
+      smallTableEditing2 : false,
+      smallTableEditing3 : false,
+      individualWork : [
+        {
+          type: "",
+          numberOfStudents : '2',
+          comment: 'вроде так',
+        },
+        {
+          type: "",
+          numberOfStudents : '5',
+          comment: 'вроде так',
+        }
+      ],
+      otherWork : [
+        {
+          name : "Работа",
+          volume : "Много",
+          comment : "Комментарий",
+          numberOfHours : '40 в неделю',
+        }
+      ]
     }
   },
   methods : {
     buttonClicked(){
-
       if (this.buttonIsOpened === true)
         this.smallTableEditing = false
+
       this.buttonIsOpened = !this.buttonIsOpened
     },
-    buttonSmallTableClicked(){
-      this.smallTableEditing = !this.smallTableEditing
+    buttonSmallTableClicked1(){
+      this.smallTableEditing1 = !this.smallTableEditing1
       this.$emit("makeCopy")
     },
-    buttonSaveLoad(){
-      this.smallTableEditing = !this.smallTableEditing
-      this.$emit('buttonSmallTableSave')
+    buttonSmallTableClicked2(){
+      this.smallTableEditing2 = !this.smallTableEditing2
+      this.$emit("makeCopy")
+    },
+    buttonSmallTableClicked3(){
+      this.smallTableEditing3 = !this.smallTableEditing3
+      this.$emit("makeCopy")
+    },
 
+    cancelChange1(){
+      this.$emit('updatePage')
+      this.smallTableEditing1 = !this.smallTableEditing1
+    },
+    cancelChange2(){
+      this.$emit('updatePage')
+      this.smallTableEditing2 = !this.smallTableEditing2
+    },
+    cancelChange3(){
+      this.$emit('updatePage')
+      this.smallTableEditing3 = !this.smallTableEditing3
+    },
+
+    saveAuditWork() {
 
     },
+    saveIndividualWork() {
+
+    },
+    saveOtherWork() {
+
+    },
+
 
     cancelChange(){
       this.smallTableEditing = !this.smallTableEditing

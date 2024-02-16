@@ -3,7 +3,10 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id}} семестр</p>
+      <div class="d-flex gap-1">
+        <p class="headingSemester">{{id}} семестр</p>
+        <p v-if="actualSemester===id" class="headingSemester">(текущий)</p>
+      </div>
 
       <div v-if="buttonIsOpened" class="semestrButtonActive">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -36,17 +39,6 @@
 
         </div>
 
-<!--        <div class="roundBlock" style="height: 5em">-->
-<!--          <ul class="pt-1">-->
-<!--            <p style="font-family: 'Raleway', 'sans-serif';" class="loadText">Титульный лист</p>-->
-<!--          </ul>-->
-<!--          <ul class="selectedFileMessage" v-if="true">-->
-<!--            Файлы отсутствуют-->
-<!--          </ul>-->
-<!--          <ul class="selectedFileMessage" v-else>-->
-<!--            {{}}-->
-<!--          </ul>-->
-<!--        </div>-->
 
         <div class="roundBlock">
           <ul>
@@ -62,7 +54,32 @@
 
       </div>
 
+
+      <div class="roundBlock">
+        <div class="d-flex justify-content-between">
+          <nav class="checkboxBlock">
+            <p class="mainText">Рецензия</p>
+          </nav>
+          <nav>
+            <button v-if="!editingReview" class="editBtn pt-1 ps-0" @click="buttonEditReview">Редактировать</button>
+            <button v-else class="editBtn pt-1 ps-1" @click="saveReview">Сохранить</button>
+          </nav>
+        </div>
+
+        <div v-if="!editingReview">
+          <p v-if="textOfReview === ''" class="textTable">Рецензия отсутствует</p>
+          <p v-else style="font-size:20px; font-weight: 350">
+            <textarea disabled v-model="textOfReview" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+          </p>
+        </div>
+        <div v-else>
+          <textarea v-model="textOfReview"  rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+        </div>
+      </div>
+
     </div>
+
+
 
 
   </div>
@@ -77,7 +94,7 @@ import utf8 from "utf8"
 
 export default {
   name: "studentPageFromTeacherStatusTab",
-  props : ["id", "jobStatus"],
+  props : ["id", "jobStatus", "actualSemester"],
   data()  {
     return {
       buttonIsOpened : false,
@@ -85,11 +102,28 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+      editingReview : false,
     }
   },
   methods : {
     buttonClicked() {
       this.buttonIsOpened = !this.buttonIsOpened
+    },
+    async saveReview(){
+      this.editingReview = !this.editingReview
+
+      try {
+        const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
+              "studentID" : localStorage.getItem("studentID"),
+              "feedback" : this.textOfReview
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
     },
     async getFiles() {
 
@@ -141,7 +175,10 @@ export default {
       }, 100);
 
 
-    }
+    },
+    buttonEditReview() {
+      this.editingReview = !this.editingReview
+    },
   },
   beforeMount() {
     this.getFiles()
@@ -151,6 +188,14 @@ export default {
 </script>
 
 <style scoped>
+
+.editBtn {
+  color:#0055BB !important;
+  border: 0 !important;
+  margin-top: 15% !important;
+  margin-right: 1.5rem !important;
+  background-color: white;
+}
 
 @media (min-width: 800px) {
   .semestrButtonActive {

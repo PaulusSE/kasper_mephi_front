@@ -73,7 +73,7 @@
         <nav style="width: 50%" >
           <div style="width: 100%">
             <label class="text ms-0" >Дата начала обучения</label>
-            <input type="date" class="textInput":disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
+            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
           </div>
         </nav>
       </div>

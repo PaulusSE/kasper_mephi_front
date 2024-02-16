@@ -28,14 +28,14 @@
         </div>
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Тема</label>
+            <label class="text">Тема диссертации</label>
             <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
           </nav>
         </div>
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">ФИО преподователя</label>
+            <label class="text">Научный руководитель</label>
             <input type="text" class="textInput" disabled  v-model="teacherFullName">
           </nav>
         </div>
@@ -78,28 +78,28 @@
           <div class="col-4 textTable rightLine">
 
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
             1
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
             2
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
             3
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
             4
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
             5
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
             6
           </div>
-          <div class="col-1 textTable rightLine">
+          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
             7
           </div>
-          <div class="col-1 textTable">
+          <div class="col-1 textTable" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
             8
           </div>
 
@@ -111,32 +111,37 @@
           <div class="col-4 textTable rightLine">
             {{key}}
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id1 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id2 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id3 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id4 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id5 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id6 disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine">
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id7 disabled>
           </div>
-          <div class="col-1 textTable myInput">
+          <div class="col-1 textTable myInput" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
             <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id8 disabled>
           </div>
 
         </div>
+      </div>
+
+      <div class=" justify-content-between checkboxBlock">
+        <p class="textTable">Шкала прогресса {{this.progressOfDissertation}} %</p>
+        <input type="range" v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
 
     </div>
@@ -144,30 +149,10 @@
     <student-page-from-teacher-status-tab v-for="index in this.actualSemestr"
                                           :id = index
                                           :job-status = statusOfJob[this.statuses[index]]
-
+                                          :actual-semester = this.actualSemestr
     ></student-page-from-teacher-status-tab>
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between">
-        <nav class="checkboxBlock">
-          <p class="mainText">Рецензия</p>
-        </nav>
-        <nav>
-          <button v-if="!editingReview" class="editBtn pt-1 ps-0" @click="buttonClicked">Редактировать</button>
-          <button v-else class="editBtn pt-1 ps-1" @click="saveReview">Сохранить</button>
-        </nav>
-      </div>
 
-      <div v-if="!editingReview">
-        <p v-if="textOfReview === ''" class="textTable">Рецензия отсутствует</p>
-        <p v-else style="font-size:20px; font-weight: 350">
-          <textarea disabled v-model="textOfReview" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
-        </p>
-      </div>
-      <div v-else>
-        <textarea v-model="textOfReview"  rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-      </div>
-    </div>
 
   </div>
 
@@ -210,29 +195,11 @@ export default {
         'passed' : 'Принято',
         'empty': ''
       },
+      progressOfDissertation : 55,
     }
 
   },
   methods : {
-    buttonClicked() {
-      this.editingReview = !this.editingReview
-    },
-    async saveReview(){
-      this.editingReview = !this.editingReview
-
-      try {
-        const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
-              "studentID" : localStorage.getItem("studentID"),
-              "feedback" : this.textOfReview
-            }
-        )
-
-      }
-      catch (e) {
-        console.log(e)
-      }
-
-    },
 
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
@@ -420,6 +387,12 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.hightlightActualSemesterColumn {
+  background-color: mediumseagreen;
+  color:black !important;
+  font-weight: 400 !important;
 }
 
 @media (min-width: 800px) {
