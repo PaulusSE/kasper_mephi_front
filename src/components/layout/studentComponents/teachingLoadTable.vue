@@ -237,9 +237,9 @@
             </div>
 
 
-            <div class="textMiniTable" style="width: 33%; text-align: center">
+            <div class="textMiniTable pe-3" style="width: 33%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">
+                <div class="textWithCarry inputBox ps-3">
                   {{work.comment }}</div>
               </div>
             </div>
@@ -365,9 +365,9 @@
               </div>
             </div>
 
-            <div class="textMiniTable" style="width: 25%; text-align: center">
+            <div class="textMiniTable pe-3" style="width: 25%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">
+                <div class="textWithCarry inputBox ps-3 ">
                   {{work.numberOfHours }}</div>
               </div>
             </div>
@@ -464,7 +464,7 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["elements", "id"],
+  props: ["elements", "id", "waitForCheck"],
   data() {
     return {
       buttonIsOpened : false,
@@ -501,14 +501,32 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
     buttonSmallTableClicked1(){
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing1 = !this.smallTableEditing1
       this.$emit("makeCopy")
     },
     buttonSmallTableClicked2(){
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing2 = !this.smallTableEditing2
       this.$emit("makeCopy")
     },
     buttonSmallTableClicked3(){
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit("makeCopy")
     },

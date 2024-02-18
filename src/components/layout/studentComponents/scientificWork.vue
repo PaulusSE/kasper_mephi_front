@@ -1,6 +1,10 @@
 <template>
 
-
+  <work-send-to-check-notification
+      :show = "showEditError"
+      @makeEditErrorNotification = callEditError
+  >
+  </work-send-to-check-notification>
 
 
   <div class="mainPage">
@@ -16,6 +20,7 @@
     <tab-of-articles v-for="(articles,index) in arrayOfArticles"
     :id = index
     :articles = this.arrayOfArticles[index]
+    :waitForCheck = this.waitForCheck
     @updatePage=cancelChange()
     @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
     @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
@@ -24,9 +29,17 @@
     @saveProjects = saveProjects()
     @saveReports = saveReports()
     @makeCopy = makeCopy
+    @makeEditErrorNotification = callEditError
     @deleteArticle="(n) => deleteArticle(index, n)"
     ></tab-of-articles>
+
+    <div class="text-end pb-2" style="margin-right: 2.5%">
+      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
+    </div>
+
   </div>
+
 
 
 </template>
@@ -36,11 +49,14 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import tabOfArticles from "@/components/layout/studentComponents/tabOfArticles.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+import workSendToCheckNotification
+  from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 export default {
   name: "scientificWork",
   components: {
     "headerOfStudent" : headerOfStudent,
-    "tabOfArticles" : tabOfArticles
+    "tabOfArticles" : tabOfArticles,
+    "workSendToCheckNotification" : workSendToCheckNotification
   },
   props: ["stateOfStudentPage", "educationTime"],
   data() {
@@ -59,6 +75,8 @@ export default {
       arrayOfArticles: [
       ],
       arrayDeleteWorkId : [],
+      showEditError: false,
+      waitForCheck : false,
     }
   },
 
@@ -133,6 +151,21 @@ export default {
 
       this.arrayDeleteWorkId.length = 0
 
+    },
+
+    callEditError() {
+      this.showEditError = true
+      setTimeout(() => {
+        this.showEditError = false
+      }, 5000);
+    },
+
+    async sendToCheck() {
+      this.waitForCheck = !this.waitForCheck
+    },
+
+    async cancelCheck() {
+      this.waitForCheck = !this.waitForCheck
     },
 
     async saveArticles(){
@@ -308,6 +341,16 @@ export default {
 
   }
 
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.3rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
 
 
 
@@ -415,6 +458,16 @@ export default {
 
   }
 
+  .loggining {
+    font-size: 0.9rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
+
 
 
 
@@ -520,6 +573,16 @@ export default {
   .smallBox{
     width: 10.85%;
 
+  }
+
+  .loggining {
+    font-size: 0.8rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
 

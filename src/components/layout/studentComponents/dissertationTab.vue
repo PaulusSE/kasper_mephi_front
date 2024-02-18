@@ -92,7 +92,7 @@
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf"  @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
@@ -147,7 +147,7 @@ export default {
       explanationaryNoteFilename : '',
     }
   },
-  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'waitForCheck'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)
@@ -185,6 +185,13 @@ export default {
       }
     },
     inputExplanatoryFile(){
+
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.explanationaryNoteFilename = event.target.files[0].name
       if ( event.target.files[0].type === 'application/pdf' ) {
         this.explanationaryNoteFile = event.target.files[0]
@@ -192,6 +199,11 @@ export default {
     },
 
     async sendFiles(){
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
 
       // if (this.tittlePageFile.length === 0 && this.explanationaryNoteFile.length === 0)
       //   return

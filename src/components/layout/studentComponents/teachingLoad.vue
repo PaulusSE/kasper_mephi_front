@@ -1,5 +1,10 @@
 <template>
 
+  <work-send-to-check-notification
+      :show = "showEditError"
+  >
+  </work-send-to-check-notification>
+
 
   <div class="mainPage">
     <header-of-student
@@ -12,17 +17,23 @@
     ></header-of-student>
 
 
-
     <teaching-load-table v-for="(elements,index) in arrayOfTeachingLoadByPeriod "
                          :id = index
                          :elements = elements
+                         :waitForCheck = this.waitForCheck
                          @buttonSmallTableAdd=buttonSmallTableAdd(index)
                          @buttonSmallTableCancel = cancelChange()
                          @buttonSmallTableSave = saveTeachingLoad()
                          @makeCopy = makeCopy()
                          @deleteTeachingLoad="(n) => deleteTeachingLoad(index, n)"
+                         @makeEditErrorNotification = callEditError
+
     ></teaching-load-table>
 
+    <div class="text-end pb-2" style="margin-right: 2.5%">
+      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
+    </div>
 
 
 
@@ -37,9 +48,12 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import teachingLoadTable from "@/components/layout/studentComponents/teachingLoadTable.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+import workSendToCheckNotification
+  from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 export default {
   name: "teachingLoad",
   components: {
+    workSendToCheckNotification,
     "headerOfStudent":headerOfStudent,
     "teachingLoadTable":teachingLoadTable
   },
@@ -78,6 +92,8 @@ export default {
       arrayOfTeachingLoadCopy: [],
       arrayDeleteTeachingLoadId : [],
       numberOfSemesters : '',
+      showEditError: false,
+      waitForCheck : false,
     }
   },
 
@@ -105,6 +121,21 @@ export default {
       this.arrayOfTeachingLoadByPeriod = JSON.parse(JSON.stringify(this.arrayOfTeachingLoadByPeriodCopy));
 
       this.arrayDeleteTeachingLoadId.length = 0
+    },
+
+    callEditError() {
+      this.showEditError = true
+      setTimeout(() => {
+        this.showEditError = false
+      }, 5000);
+    },
+
+    async sendToCheck() {
+      this.waitForCheck = !this.waitForCheck
+    },
+
+    async cancelCheck() {
+      this.waitForCheck = !this.waitForCheck
     },
 
     cancelChangeHighTable() {
@@ -285,6 +316,17 @@ export default {
 
   }
 
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.3rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
+
 
 
   .checkboxBlock{
@@ -375,6 +417,16 @@ export default {
 
   }
 
+  .loggining {
+    font-size: 0.9rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
+  }
+
 
 
   .checkboxBlock{
@@ -463,6 +515,16 @@ export default {
     font-size:20px;
     text-align: center;
 
+  }
+
+  .loggining {
+    font-size: 0.8rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
 

@@ -35,24 +35,18 @@
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Научный руководитель</label>
-            <input type="text" class="textInput" disabled  v-model="teacherFullName">
+            <label class="text">Год обучения (курс)</label>
+            <input type="text" class="textInput" disabled  v-model="yearOfStudy">
           </nav>
         </div>
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Номер приказа об утверждении</label>
+            <label class="text">Специальность</label>
             <input type="text" class="textInput" :disabled="!commonInfo"  v-model="numberOfOrderOfStatement">
           </nav>
         </div>
 
-        <div class="container-fluid justify-content-between d-flex mb-3">
-          <nav class="inputWidth">
-            <label class="text">Дата приказа об утверждении</label>
-            <input type="date" class="textInput" :disabled="!commonInfo" v-model="dateOfOrderOfStatement">
-          </nav>
-        </div>
       </div>
     </div>
 
@@ -195,7 +189,10 @@ export default {
         'passed' : 'Принято',
         'empty': ''
       },
+
+      // todo
       progressOfDissertation : 55,
+      yearOfStudy : "",
     }
 
   },

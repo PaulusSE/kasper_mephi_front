@@ -20,10 +20,10 @@
         <div class="form-floating mb-4 col-6 authorization">
           <form>
             <div class="form-group mb-3">
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Логин" @click="inputEvent" v-model="login" style="font-size: 1rem">
+              <input type="email"  @keyup.enter="authorizate"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Логин" @click="inputEvent" v-model="login" style="font-size: 1rem">
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Пароль" @click="inputEvent" v-model="password" style="font-size: 1rem">
+              <input type="password" @keyup.enter="authorizate" class="form-control" id="exampleInputPassword1" placeholder="Пароль" @click="inputEvent" v-model="password" style="font-size: 1rem">
             </div>
           </form>
         </div>

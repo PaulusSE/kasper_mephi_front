@@ -8,6 +8,13 @@
   :show="showRangeError"
   ></range-notification>
 
+  <work-send-to-check-notification
+      :show = "showEditError"
+  >
+  </work-send-to-check-notification>
+
+
+
   <div class="mainPage">
     <header-of-student
         @btnDissertationClicked="$emit('btnDissertationClicked')"
@@ -165,11 +172,16 @@
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemestr
+                        :waitForCheck = waitForCheck
+                        @makeEditErrorNotification = callEditError
       ></dissertation-tab>
 
     </div>
 
-
+<div class="text-end pb-2" style="margin-right: 2.5%">
+  <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+  <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
+</div>
 
   </div>
 
@@ -187,15 +199,17 @@ import dissertationTab from "@/components/layout/studentComponents/dissertationT
 import store from "@/store/index.js";
 import axios from "axios";
 import rangeNotification from "@/components/layout/notifications/studentNotifications/rangeNotification.vue";
-
+import workSendToCheckNotification
+  from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 
 export default {
   name: "dissertation",
-  components: {SendingFilesNotification, headerOfStudent, PageNotFound, dissertationTab, rangeNotification},
+  components: {SendingFilesNotification, headerOfStudent, PageNotFound, dissertationTab, rangeNotification, workSendToCheckNotification},
   "headerOfStudent":headerOfStudent,
   "notification":sendingFilesNotification,
   "dissertationTab" : dissertationTab,
   "rangeNotification" : rangeNotification,
+  "workSendToCheckNotification" : workSendToCheckNotification,
   props: ["stateOfStudentPage", "educationTime"],
 
   data(){
@@ -215,6 +229,7 @@ export default {
       arrayWithFilesId: [],
       jobStatus : '',
       feedback: "",
+      waitForCheck : false,
       array: {
       },
       progressMap : new Map(),
@@ -228,6 +243,7 @@ export default {
       progressOfDissertation : 15,
       progressOfDissertationCopy : '',
       showRangeError : false,
+      showEditError: false,
 
     }
 
@@ -236,6 +252,11 @@ export default {
 ,
   methods: {
     editCommonInfo() {
+      if (this.waitForCheck){
+        this.callEditError()
+        return
+      }
+
       this.editingInfo = !this.editingInfo
     },
     async saveCommonInfo(){
@@ -252,9 +273,31 @@ export default {
       }
       this.editingInfo = !this.editingInfo
     },
+
+    callEditError() {
+        this.showEditError = true
+        setTimeout(() => {
+          this.showEditError = false
+        }, 5000);
+    },
+
     editTables() {
+
+      if (this.waitForCheck){
+        this.callEditError()
+        return
+      }
+
       this.editingCheckbox = !this.editingCheckbox;
       this.progressOfDissertationCopy = this.progressOfDissertation
+    },
+
+    async sendToCheck() {
+this.waitForCheck = !this.waitForCheck
+    },
+
+    async cancelCheck() {
+      this.waitForCheck = !this.waitForCheck
     },
 
     createSaveData() {
@@ -469,6 +512,16 @@ export default {
     padding-bottom: 2%;
   }
 
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.3rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
 
 
   .myCheckBox{
@@ -608,6 +661,16 @@ export default {
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
+  }
+
+  .loggining {
+    font-size: 0.9rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
 
@@ -765,6 +828,16 @@ export default {
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
+  }
+
+  .loggining {
+    font-size: 0.8rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
   .myCheckBox{

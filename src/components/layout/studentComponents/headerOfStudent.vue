@@ -25,7 +25,7 @@
         </router-link>
       </nav>
 
-      <nav v-if="this.userType === 'admin'">
+      <nav v-if="this.userType === 'admin' || 'teacher'">
         <router-link to="#">
           <button class="btn" :class="{btn_active: stateOfStudentPage === 4, btn_disactive: stateOfStudentPage !==4}" @click="$emit('btnProfileClicked')"><p style="word-break: break-all">Профиль</p>
           </button>

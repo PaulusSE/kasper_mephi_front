@@ -662,7 +662,7 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles", "id"],
+  props: ["articles", "id", "waitForCheck"],
   data() {
     return {
       buttonIsOpened : false,
@@ -724,14 +724,30 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
     buttonSmallTableClicked1(){
+
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing1 = !this.smallTableEditing1
       this.$emit("makeCopy")
     },
     buttonSmallTableClicked2(){
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing2 = !this.smallTableEditing2
       this.$emit("makeCopy")
     },
     buttonSmallTableClicked3(){
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit("makeCopy")
     },
