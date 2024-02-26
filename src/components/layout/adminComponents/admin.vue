@@ -28,6 +28,7 @@
              :state-of-admin-page = stateOfAdminPage
   ></report>
 
+
 </template>
 
 <script>

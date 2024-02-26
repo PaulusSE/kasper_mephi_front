@@ -28,9 +28,71 @@
         </div>
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Тема диссертации</label>
+            <div class="d-flex">
+              <label class="text">Тема диссертации</label>
+              <div>
+                <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
+                <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
+              </div>
+            </div>
+
             <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
           </nav>
+        </div>
+
+        <div v-if="showTopicHistory" class="myBox roundBlock p-0">
+          <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
+            <div class="rightLine col-6 mainText">
+              <p class="text">№ семестра</p>
+            </div>
+            <div class="col-6 textTable" >
+              Тема
+            </div>
+          </div>
+
+          <div class="d-flex" :class="{underline:index < Object.keys(this.arrayOfTopics).length}" v-for="(element,index) in arrayOfTopics">
+            <div class="rightLine col-6 mainText">
+              <p class="text">{{index}}</p>
+            </div>
+            <div class="col-6 textTable" >
+              {{this.arrayOfTopics[index]}}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <div class="d-flex">
+              <label class="text">Научный руководитель</label>
+              <div>
+                <button v-if="!showTeacherHistory" class="editBtn ms-2" @click="changeTeacherHistoryState">Список научных руководителей</button>
+                <button v-else class="editBtn ms-2" @click="changeTeacherHistoryState">Скрыть список</button>
+              </div>
+            </div>
+            <input type="text" class="textInput" disabled  v-model="teacherFullName">
+          </nav>
+        </div>
+
+        <div v-if="showTeacherHistory" class="myBox roundBlock p-0">
+          <div class="d-flex" :class="{underline : arrayOfTeachers.length !== 0}" >
+            <div class="rightLine col-6 mainText">
+              <p class="text">Научный руководитель</p>
+            </div>
+            <div class="col-6 textTable" >
+              Период
+            </div>
+          </div>
+
+          <div class="d-flex" :class="{underline:index+1 < Object.keys(this.arrayOfTeachers).length}" v-for="(element,index) in arrayOfTeachers">
+            <div class="rightLine col-6 mainText">
+              <p class="text">{{element.teacher}}</p>
+            </div>
+            <div class="col-6 textTable" >
+              {{element.period}}
+            </div>
+          </div>
+
         </div>
 
         <div class="container-fluid justify-content-between d-flex mb-3">
@@ -44,6 +106,20 @@
           <nav class="inputWidth">
             <label class="text">Специальность</label>
             <input type="text" class="textInput" :disabled="!commonInfo"  v-model="numberOfOrderOfStatement">
+          </nav>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Объект исследования</label>
+            <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
+          </nav>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Приказ исследования</label>
+            <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
           </nav>
         </div>
 
@@ -193,6 +269,27 @@ export default {
       // todo
       progressOfDissertation : 55,
       yearOfStudy : "",
+
+      showTopicHistory : false,
+      showTeacherHistory : false,
+      arrayOfTopics : {
+        1: "Тема 1",
+        2: "Тема 2",
+        3: "Тема 3",
+        4: "Тема 4",
+        5: "Тема 5",
+        6: "Тема 6",
+      },
+      arrayOfTeachers : [
+        {
+          teacher:'T1',
+          period:"21.10.2022-15.02.2023"
+        },
+        {
+          teacher:'T2',
+          period:"15.02.2023-27.04.2024"
+        },
+      ]
     }
 
   },
@@ -268,6 +365,13 @@ export default {
       catch (e) {
         console.log(e)
       }
+    },
+
+    changeTopicHistoryState(){
+      this.showTopicHistory = !this.showTopicHistory
+    },
+    changeTeacherHistoryState(){
+      this.showTeacherHistory = !this.showTeacherHistory
     },
 
     async getStudentCommonInfoForAdmin() {

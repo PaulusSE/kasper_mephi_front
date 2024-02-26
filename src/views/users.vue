@@ -74,7 +74,8 @@ export default {
 
     },
   async beforeMount() {
-    await this.checkAuth()
+    // await this.checkAuth()
+    this.type = 'admin'
 
 
     },

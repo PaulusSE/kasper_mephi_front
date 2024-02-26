@@ -143,10 +143,10 @@ export default {
     }
   },
   beforeMount() {
-    if (store.getters.getType !== "admin"){
-      this.$router.push('/wrongAccess')
-    }
-    this.getAspsAndTeachers()
+    // if (store.getters.getType !== "admin"){
+    //   this.$router.push('/wrongAccess')
+    // }
+    // this.getAspsAndTeachers()
   }
 }
 </script>
