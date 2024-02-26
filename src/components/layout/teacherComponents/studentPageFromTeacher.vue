@@ -134,8 +134,8 @@
       </div>
 
       <div class=" justify-content-between checkboxBlock">
-        <p class="textTable">Шкала прогресса {{this.progressOfDissertation}} %</p>
-        <input type="range" v-model="progressOfDissertation" :disabled="!editingCheckbox">
+        <p class="textTable">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
+
       </div>
 
     </div>
