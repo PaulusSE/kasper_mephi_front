@@ -549,8 +549,6 @@ export default {
     color:#000000;
     background-color: white;
     outline: none !important;
-
-
   }
 
   .roundBlock {

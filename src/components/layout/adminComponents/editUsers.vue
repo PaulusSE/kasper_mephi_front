@@ -10,58 +10,215 @@
 
     <div class="roundBlock">
 
-      <div class="">
-        <p class="headerText text-start">Аспиранты</p>
-      </div>
-      <div class="editBtnStudents">
-        <div v-if="stateOfStudents">
-          <button class="editBtn" @click="editStudentsButton">Редактировать</button>
-        </div>
-
-        <div v-else>
-          <button class="editBtn"  @click="saveStudents">Сохранить</button>
-          <button class="editBtn"  @click="cancelStudents">Отменить</button>
-        </div>
-      </div>
-
-      <div class="roundBlock p-0 " v-if="arrayOfStudents.length !== 0">
-
-          <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfStudents.length - 1}"  v-for="(student,index) in arrayOfStudents">
-            <a class="ps-2 p-0 linkStyle" href="/user" @click="pushStudentIDToStorage(index)"  >{{index + 1}}. {{student.studentFullName}}</a>
-            <button class="btnAddDeleteFiles me-3" @click="deleteStudent(index)" :disabled="stateOfStudents">
-              <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
-            </button>
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" >
+          <p class="headingSemester">Доступ пользователей</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!editCommonTable" @click="buttonEditCommonTable" class="editBtn mt-3">Редактировать</button>
+          <div v-else class="d-flex">
+            <button class="editBtn mt-3 me-2" @click="buttonCancelChangeCommonTable">Отменить</button>
+            <button class="editBtn mt-3 " @click="buttonSaveCommonTable">Сохранить</button>
           </div>
+        </nav>
+
+      </div>
+
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
+              ФИО Аспиранта
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              Год
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              Группа
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 26%; text-align: center">
+              Статус
+            </div>
+
+            <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
+              <input :disabled='!editCommonTable' type="checkbox" @click="selectAllCheckbox" v-model="stateOfMainCheckBox" class="me-3">
+            </div>
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfStudents.length}" v-for="(element,index) in arrayOfStudents">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
+             {{element.fullName}}
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              {{element.year}} курс
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              {{ element.group }}
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 26%; text-align: center">
+              <div style="height: 100%; width: 100%">
+                <select :disabled='!editCommonTable' class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.state">
+                  <option>Обучается</option>
+                  <option>В академический отпуск</option>
+                  <option>Завершил обучение</option>
+                  <option>Отчислился</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
+              <input :disabled='!editCommonTable' type="checkbox" v-model="element.editState" class="me-3">
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="roundBlock mt-1">
+    <div class="roundBlock">
 
-      <div class="mt-2 mb-3">
-        <p class="headerText text-start">Научные руководители</p>
-      </div>
 
-      <div class="editBtnStudents">
-        <div v-if="stateOfTeachers">
-          <button class="editBtn" @click="editTeachersButton">Редактировать</button>
+        <div class="d-flex justify-content-between" style="margin-left: 2.5%">
+          <nav class="mt-3" >
+            <p class="headingSemester">Редактирование списка актуальных групп</p>
+          </nav>
+          <nav class="text-end" style="margin-right: 2.5%">
+            <button v-if="!editTableWithGroups" @click="buttonEditGroups" class="editBtn mt-3">Редактировать</button>
+            <div v-else>
+              <button class="editBtn mt-3 me-2" @click="buttonAddGroup">Добавить</button>
+              <button class="editBtn mt-3 me-2" @click="buttonCancelChangeGroups">Отменить</button>
+              <button class="editBtn mt-3 " @click="buttonSaveGroup">Сохранить</button>
+            </div>
+          </nav>
         </div>
 
-        <div v-else>
-          <button class="editBtn"  @click="saveTeachers">Сохранить</button>
-          <button class="editBtn"  @click="cancelTeachers">Отменить</button>
-        </div>
-      </div>
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
+              Группа
+            </div>
 
 
-      <div class="roundBlock p-0"  v-if="arrayOfTeachers.length !== 0">
-        <div class="mainText text-start d-flex justify-content-between m-0" :class="{underline:index !== arrayOfTeachers.length - 1}"  v-for="(teacher,index) in arrayOfTeachers">
-          <a class="ps-2 p-0 linkStyle" href="/user2" @click="pushTeacherIDToStorage(index)">{{index + 1}}. {{teacher.teacherFullName}}</a>
-          <button class="btnAddDeleteFiles me-3" @click="deleteTeacher(index)" :disabled="stateOfTeachers">
-            <img class="trashLogo" src="../../../../static/figures/trash.png" alt="trashLogo">
-          </button>
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+
+            </div>
+
+
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
+              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="arrayOfGroups[index]">
+              <p v-else>{{element}}</p>
+            </div>
+
+
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+              <button v-if="editTableWithGroups" class="btnAddDeleteFiles mt-2" @click="deleteGroup(index)">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+              <button v-else class="btnAddDeleteFiles mt-2">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
+
+    <div class="roundBlock">
+
+
+      <div class="d-flex justify-content-between" style="margin-left: 2.5%">
+        <nav class="mt-3" >
+          <p class="headingSemester">Редактирование актуального плана обучения</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!editTableYears" @click="buttonEditTableYears" class="editBtn mt-3">Редактировать</button>
+          <div v-else>
+            <button class="editBtn mt-3 me-2" @click="buttonAddYear">Добавить</button>
+            <button class="editBtn mt-3 " @click="buttonSaveYear">Сохранить</button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
+              План (лет)
+            </div>
+
+
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+
+            </div>
+
+
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfPlan.length}" v-for="(element,index) in arrayOfPlan">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
+              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]">
+              <p v-else>{{element}}</p>
+            </div>
+
+
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+              <button v-if="editTableWithGroups" class="btnAddDeleteFiles mt-2" @click="buttonDeleteYear(index)">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+              <button v-else class="btnAddDeleteFiles mt-2">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
 
 
   </div>
@@ -82,13 +239,39 @@ export default {
   data(){
     return {
       arrayOfStudentsCopy : [],
+      arrayofStudentsCopy : [],
       arrayOfStudents : [
-        {}
+        {
+          'fullName' : 'ФИО1',
+          'group' : 'group1',
+          'year' : 1,
+          'state' : 'обучается',
+          'editState' : false
+        },
+        {
+          'fullName' : 'ФИО2',
+          'group' : 'group2',
+          'year' : 2,
+          'state' : 'академ',
+          'editState' : true
+        },
       ],
+
       arrayOfTeachersCopy: [],
       arrayOfTeachers : [{}],
       stateOfStudents: true,
       stateOfTeachers: true,
+      stateOfMainCheckBox : false,
+      arrayOfGroups: [
+          'Б20-504',
+          'Б20-514',
+          'Б19-514',
+      ],
+      arrayOfGroupsCopy:[],
+      editTableWithGroups : false,
+      editCommonTable : false,
+      arrayOfPlan : [3,4],
+      editTableYears : false
     }
   },
   methods : {
@@ -122,8 +305,13 @@ export default {
       this.stateOfTeachers = !this.stateOfTeachers
       if (this.arrayOfTeachersCopy === this.arrayOfTeachers)
         return
-      /// save changes
+      /// todo save changes
     },
+    selectAllCheckbox(){
+    for (var i = 0; i < this.arrayOfStudents.length; i++)
+      this.arrayOfStudents[i].editState = !this.stateOfMainCheckBox
+    },
+
     cancelTeachers(){
       this.stateOfTeachers = !this.stateOfTeachers
       this.arrayOfTeachers = this.arrayOfTeachersCopy.slice(0)
@@ -138,9 +326,56 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
+    },
 
+    buttonEditGroups(){
+      this.arrayOfGroupsCopy = this.arrayOfGroups.slice(0)
+      this.editTableWithGroups = !this.editTableWithGroups
+    },
+    buttonCancelChangeGroups(){
+      this.arrayOfGroups = this.arrayOfGroupsCopy.slice(0)
+      this.editTableWithGroups = false
+    },
 
+    buttonSaveGroup(){
+      //todo saving
+      this.editTableWithGroups = false
+    },
+    buttonAddGroup(){
+      this.arrayOfGroups.push('')
+    },
 
+    deleteGroup(index){
+      this.arrayOfGroups.splice(index, 1)
+    },
+    buttonEditCommonTable() {
+      this.arrayOfStudentsCopy = JSON.parse(JSON.stringify(this.arrayOfStudents));
+      this.editCommonTable = true
+    },
+
+    buttonCancelChangeCommonTable(){
+      this.arrayOfStudents = JSON.parse(JSON.stringify(this.arrayOfStudentsCopy));
+      this.editCommonTable = false
+    },
+
+    buttonSaveCommonTable(){
+      //todo saving
+      this.editCommonTable = false
+    },
+
+    buttonEditTableYears() {
+      this.editTableYears = true
+    },
+
+    buttonAddYear(){
+      this.arrayOfPlan.push('')
+    },
+
+    buttonSaveYear(){
+      this.editTableYears = false
+    },
+    buttonDeleteYear(index){
+      this.arrayOfPlan.splice(index, 1)
     },
 
     pushStudentIDToStorage(index){
@@ -170,6 +405,22 @@ export default {
   box-sizing: border-box;
 }
 
+.rightLine {
+  border-right:  solid 0.12em #DEDEDE !important;
+}
+
+
+.inputBox {
+  border: 0 !important;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 0 !important;
+  color:#000000;
+  background-color: white;
+  outline: none !important;
+  width: 100%;
+}
+
 @media (min-width: 800px) {
   .editBtnStudents{
     width: 95%;
@@ -182,6 +433,21 @@ export default {
     border: 0;
     margin-right: 1%;
     background-color: white;
+  }
+
+  .trashLogo{
+    width:32px !important;
+    height: 32px !important;
+  }
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:18px;
+    text-align: center;
+    word-break: break-all;
+
   }
 
   .mainPage {
@@ -232,11 +498,6 @@ export default {
     background:white !important;
   }
 
-  .trashLogo{
-    width:40px !important;
-    height: 40px !important;
-
-  }
 
   .linkStyle {
 
@@ -258,6 +519,18 @@ export default {
     margin-right: 1%;
     background-color: white;
     font-size: 0.9rem;
+  }
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.9rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
   }
 
   .mainPage {
@@ -309,8 +582,8 @@ export default {
   }
 
   .trashLogo{
-    width:30px !important;
-    height: 30px !important;
+    width:25px !important;
+    height: 25px !important;
   }
 
   .linkStyle {
@@ -334,6 +607,23 @@ export default {
     background-color: white;
     font-size: 0.7rem !important;
   }
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  .trashLogo{
+    width:15px !important;
+    height: 15px !important;
+
+  }
+
 
   .mainPage {
     width: 90%;

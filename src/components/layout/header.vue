@@ -26,7 +26,7 @@
 
           <nav class="align-items-center justify-content-center">
             <router-link to="/profile" style="text-decoration: none">
-              <div class="buttonProfileText"> ФИО аспиранта</div>
+              <div class="buttonProfileText">{{userName}}</div>
             </router-link>
           </nav>
 
@@ -63,6 +63,18 @@ export default {
       localStorage.setItem("registered", '')
       localStorage.setItem("teacherId", '')
     }
+  },
+  data(){
+    return {
+      userName : ''
+    }
+  },
+  beforeMount() {
+    if (localStorage.getItem("user_type") === 'admin'){
+      this.userName = 'Администратор'
+      return
+    }
+    //todo else
   }
 }
 </script>
