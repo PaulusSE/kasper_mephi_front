@@ -1,4 +1,10 @@
 <template>
+
+  <error-for-table-plan
+  :show = this.showDataErrorForTablePlan
+  ></error-for-table-plan>
+
+
   <div class="mainPage">
     <header-of-admin
         @btnStudentTeacherButtonClicked="$emit('btnStudentTeacherButtonClicked')"
@@ -84,6 +90,7 @@
                   <option>Отчислился</option>
                 </select>
               </div>
+
             </div>
 
             <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
@@ -230,11 +237,14 @@
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+import errorNotificationForTablePlan
+  from "@/components/layout/notifications/adminNotifications/errorNotificationForTablePlan.vue";
 export default {
   name: "editUser",
   props : ["stateOfAdminPage"],
   components : {
     "headerOfAdmin": headerOfAdmin,
+    "errorForTablePlan" : errorNotificationForTablePlan,
   },
   data(){
     return {
@@ -245,14 +255,14 @@ export default {
           'fullName' : 'ФИО1',
           'group' : 'group1',
           'year' : 1,
-          'state' : 'обучается',
+          'state' : 'Обучается',
           'editState' : false
         },
         {
           'fullName' : 'ФИО2',
           'group' : 'group2',
           'year' : 2,
-          'state' : 'академ',
+          'state' : 'Завершил обучение',
           'editState' : true
         },
       ],
@@ -271,7 +281,9 @@ export default {
       editTableWithGroups : false,
       editCommonTable : false,
       arrayOfPlan : [3,4],
-      editTableYears : false
+      arrayOfPlanCopy: [],
+      editTableYears : false,
+      showDataErrorForTablePlan : false,
     }
   },
   methods : {
@@ -365,13 +377,30 @@ export default {
 
     buttonEditTableYears() {
       this.editTableYears = true
+      this.arrayOfPlanCopy = this.arrayOfPlan.slice(0)
     },
 
     buttonAddYear(){
       this.arrayOfPlan.push('')
     },
+    callEditTablePlanError() {
+      this.showDataErrorForTablePlan = true
+      setTimeout(() => {
+        this.showDataErrorForTablePlan = false
+      }, 5000);
+    },
 
     buttonSaveYear(){
+      for (var i = 0; i < this.arrayOfPlan.length; i++){
+        if (!/^\d+$/.test(this.arrayOfPlan[i])){
+          this.arrayOfPlan = this.arrayOfPlanCopy.slice(0)
+          this.callEditTablePlanError()
+          return
+        }
+      }
+      //todo saving
+
+
       this.editTableYears = false
     },
     buttonDeleteYear(index){
@@ -392,6 +421,9 @@ export default {
     //   this.$router.push('/wrongAccess')
     // }
     // this.getAspsAndTeachers()
+
+
+
   }
 
 }
