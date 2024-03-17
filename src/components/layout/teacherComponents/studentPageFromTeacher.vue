@@ -11,15 +11,32 @@
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
+    <div class="roundBlock">
+      <div class="mb-2">
+        <p class="mainText text-start">Статус работы: </p>
+      </div>
+      <div>
+        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.status">
+          <option  class="textResult1" value="approved">Принято</option>
+          <option  class="textResult2" value="todo">На доработку</option>
+          <option  class="textResult3" value="failed">Не сдано</option>
+          <option  class="textResult2" value="in progress">В процессе</option>
+        </select>
+      </div>
+
+
+
+    </div>
+
     <div>
       <div class="roundBlock">
         <div class="d-flex justify-content-between">
           <nav class="checkboxBlock">
             <p class="mainText">Общая информация</p>
           </nav>
-          <nav>
-            <button v-if="!commonInfo" class="editBtn pt-1 ps-0" @click="buttonClickedCommonInfo">Редактировать</button>
-            <button v-else class="editBtn pt-1 ps-1" @click="saveCommonInfo">Сохранить</button>
+          <nav class="checkboxBlock">
+            <button v-if="!commonInfo" class="editBtn" @click="buttonClickedCommonInfo">Редактировать</button>
+            <button v-else class="editBtn" @click="saveCommonInfo">Сохранить</button>
           </nav>
 
 
@@ -29,11 +46,13 @@
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <div class="d-flex">
-              <label class="text">Тема диссертации</label>
-              <div>
+              <div class="text">Тема диссертации</div>
+              <div class="text">
+
                 <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
                 <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
               </div>
+
             </div>
 
             <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
@@ -43,7 +62,7 @@
         <div v-if="showTopicHistory" class="myBox roundBlock p-0">
           <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
             <div class="rightLine col-6 mainText">
-              <p class="text">№ семестра</p>
+              <p class="textTable">№ семестра</p>
             </div>
             <div class="col-6 textTable" >
               Тема
@@ -51,7 +70,7 @@
           </div>
 
           <div class="d-flex" :class="{underline:index < Object.keys(this.arrayOfTopics).length}" v-for="(element,index) in arrayOfTopics">
-            <div class="rightLine col-6 mainText">
+            <div class="rightLine col-6 textTable">
               <p class="text">{{index}}</p>
             </div>
             <div class="col-6 textTable" >
@@ -76,7 +95,7 @@
 
         <div v-if="showTeacherHistory" class="myBox roundBlock p-0">
           <div class="d-flex" :class="{underline : arrayOfTeachers.length !== 0}" >
-            <div class="rightLine col-6 mainText">
+            <div class="rightLine col-6 textTable">
               <p class="text">Научный руководитель</p>
             </div>
             <div class="col-6 textTable" >
@@ -85,7 +104,7 @@
           </div>
 
           <div class="d-flex" :class="{underline:index+1 < Object.keys(this.arrayOfTeachers).length}" v-for="(element,index) in arrayOfTeachers">
-            <div class="rightLine col-6 mainText">
+            <div class="rightLine col-6 textTable">
               <p class="text">{{element.teacher}}</p>
             </div>
             <div class="col-6 textTable" >
@@ -259,6 +278,7 @@ export default {
       dateOfOrderOfStatement: "",
       actualSemestr : '',
       statuses : [],
+      status: '',
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -294,6 +314,21 @@ export default {
 
   },
   methods : {
+
+    async changeStudentJobStatus(){
+      try {
+        const response = await axios.post(this.IP +"/supervisors/student/review/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentId"),
+              "status" : this.status,
+
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
 
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
@@ -496,6 +531,25 @@ export default {
   font-weight: 400 !important;
 }
 
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+
+  color:#6BDB6B;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FFC009
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333;
+}
+
 @media (min-width: 800px) {
   .checkboxBlock{
     padding-top: 0.8%;
@@ -569,7 +623,7 @@ export default {
   .editBtn {
     color:#0055BB !important;
     border: 0 !important;
-    margin-top: 15% !important;
+
     margin-right: 1.5rem !important;
     background-color: white;
   }
@@ -716,7 +770,6 @@ export default {
   .editBtn {
     color:#0055BB !important;
     border: 0 !important;
-    margin-top: 15% !important;
     margin-right: 1.5rem !important;
     background-color: white;
   }
@@ -854,7 +907,6 @@ export default {
   .editBtn {
     color:#0055BB !important;
     border: 0 !important;
-    margin-top: 15% !important;
     margin-right: 1.5rem !important;
     background-color: white;
     font-size: 0.6rem;

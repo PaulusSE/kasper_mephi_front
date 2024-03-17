@@ -105,14 +105,7 @@
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
       </nav>
     </div>
-      <div class="d-flex justify-content-between">
-        <nav style="margin-left: 1.5rem">
-          <button class="sendAcademButton" @click="sendToAdacem">В академ</button>
-        </nav>
-        <nav>
-          <button class="deleteButton">Удалить пользователя</button>
-        </nav>
-      </div>
+
 
   </div>
   </div>

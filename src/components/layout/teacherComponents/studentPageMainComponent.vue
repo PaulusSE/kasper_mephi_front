@@ -90,14 +90,14 @@ export default {
     },
   },
   async beforeMount() {
-    if (localStorage.getItem('registered') === 'false')
-      this.$router.push('/registration')
+    // if (localStorage.getItem('registered') === 'false')
+    //   this.$router.push('/registration')
+    //
+    // await this.checkAuth()
 
-    await this.checkAuth()
-
-    if (!(store.getters.getType === 'supervisor' || store.getters.getType === 'admin')){
-      this.$router.push("/wrongAccess")
-    }
+    // if (!(store.getters.getType === 'supervisor' || store.getters.getType === 'admin')){
+    //   this.$router.push("/wrongAccess")
+    // }
 
 
   },

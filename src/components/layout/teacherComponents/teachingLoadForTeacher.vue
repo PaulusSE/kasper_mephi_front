@@ -9,11 +9,12 @@
     @btnProfileClicked="$emit('btnProfileClicked')"
     :state-of-student-page = this.stateOfPage
 ></header-of-student>
-
-    <teaching-load-table-for-teacher v-for="(elements,index) in arrayOfTeachingLoadByPeriod "
-                         :id = index
-                         :elements = elements
-    ></teaching-load-table-for-teacher>
+<teaching-load-table-for-teacher v-for="(n, index) in this.actualSemester"
+                                 :id = index
+                                 :classroom-work="array_classroom_load[index]"
+                                 :individual-work="array_individual_students_load[index]"
+                                 :other-work="array_additional_load[index]"
+></teaching-load-table-for-teacher>
 
 
 
@@ -35,69 +36,113 @@ export default {
   },
   data() {
     return {
-      arrayOfTeachingLoadByPeriod:[],
-      numberOfSemesters : '',
+      array_classroom_load:[],
+      array_individual_students_load: [],
+      array_additional_load: [],
+      actualSemester : 1,
     }
   },
   methods : {
-    fillArrayOfTeachingLoad(data, numberOfSemesters) {
 
-      this.arrayOfTeachingLoadByPeriod = Array(parseInt(numberOfSemesters))
+    async fillDataForTables(data){
 
-      for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
-        this.arrayOfTeachingLoadByPeriod[i] = new Array()
+      this.array_classroom_load = new Array(this.actualSemester)
+      this.array_individual_students_load = new Array(this.actualSemester)
+      this.array_additional_load = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
+        this.array_classroom_load[i] = new Array()
+        this.array_individual_students_load[i] = new Array()
+        this.array_additional_load[i] = new Array()
       }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfTeachingLoadByPeriod[0].push(data[i])
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+
+        if (data[i].classroom_load.load_id !== undefined){
+          var class_load = data[i].classroom_load
+          this.array_classroom_load[semester - 1].push(class_load)
         }
-        if (data[i].semester === 2) {
-          this.arrayOfTeachingLoadByPeriod[1].push(data[i])
+        if (data[i].individual_students_load.load_id !== undefined){
+          var individual_load = data[i].individual_students_load
+          this.array_individual_students_load[semester-1].push(individual_load)
         }
-        if (data[i].semester === 3) {
-          this.arrayOfTeachingLoadByPeriod[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.arrayOfTeachingLoadByPeriod[3].push(data[i])
-        }
-        if (data[i].semester === 5) {
-          this.arrayOfTeachingLoadByPeriod[4].push(data[i])
-        }
-        if (data[i].semester === 6) {
-          this.arrayOfTeachingLoadByPeriod[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfTeachingLoadByPeriod[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfTeachingLoadByPeriod[7].push(data[i])
+        if (data[i].additional_load.load_id !== undefined){
+          var add_load = data[i].additional_load
+          this.array_additional_load[semester-1].push(add_load)
         }
       }
+
+
     },
     async loadTeachingLoad() {
       try {
-        const response = await axios.put(this.IP +'/supervisor/students/teaching_load/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/supervisors/student/load/' + localStorage.getItem("access_token"),
             {
-              'studentID' : localStorage.getItem('studentID')
+              'student_id' : localStorage.getItem('studentID')
             }
         )
         this.data = await response.data;
-
+        this.fillDataForTables(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+    async getActualSemester(){
+      try {
+        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
+        this.data = await response.data
+        for (var i = 0; i < this.data.length; i++){
+          if (this.data[i].student_id === localStorage.getItem("student_id")){
+            this.actualSemester = this.data[i].actual_semester
+          }
+        }
 
       }
       catch (e) {
         console.log(e)
       }
-      this.fillArrayOfTeachingLoad(this.data.array, this.data.years * 2)
-      this.numberOfSemesters = this.data.years * 2
-    }
+    },
   },
   async beforeMount() {
     if (store.getters.getType === "student"){
       this.$router.push('/wrongAccess')
     }
     await this.loadTeachingLoad()
+    await this.getActualSemester()
+
+    var data = [{
+      "accepted_at": "string",
+      "additional_load": {
+        "comment": "string",
+        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "name": "string",
+        "volume": "string"
+      },
+      "approval_status": "todo",
+      "classroom_load": {
+        "group_name": "string",
+        "hours": 0,
+        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "load_type": "practice",
+        "main_teacher": "string",
+        "subject_name": "string"
+      },
+      "individual_students_load": {
+        "comment": "string",
+        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "load_type": "project practice",
+        "students_amount": 0
+      },
+      "loads_id": "string",
+      "semester": 1,
+      "student_id": "string",
+      "updated_at": "string"
+    }]
+
+    await this.fillDataForTables(data)
+
   },
 
 }

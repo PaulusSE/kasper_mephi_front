@@ -78,20 +78,20 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 10.15%;">
-              <div class="textWithCarry inputBox ">{{article.state}}</div>
+              <div class="textWithCarry inputBox ">{{article.status}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10.15%;">
 
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" disabled/>ВАК</label>
+                  <input type="checkbox" v-model="article.wac" disabled style="word-break: break-word"/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>РИНЦ</label>
+                  <input type="checkbox" v-model="article.rinc" disabled style="word-break: break-word"/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>Scopus</label>
+                  <input type="checkbox" v-model="article.scopus" disabled style="word-break: break-word"/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>WoS</label>
+                  <input type="checkbox" v-model="article.wos" disabled style="word-break: break-word"/>WoS</label>
               </div>
 
 
@@ -127,123 +127,7 @@
 
         </div>
 
-        <div v-if="smallTableEditing1">
 
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: articles.length !== 0}">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
-              №
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              Наименование<br>работы
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 9.15%; text-align: center">
-              Статус
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 12.65%; text-align: center">
-              Индексация
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 7.21%; text-align: center">
-              Импакт<br>-<br>фактор<br>издания
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 20.07%; text-align: center">
-              Выходные<br>данные
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 4.926%; text-align: center">
-              Объем<br>в стр
-            </div>
-
-            <div class="textMiniTable rightLine" style="width: 9.26%; text-align: center">
-              Соавторы
-            </div>
-
-            <div class="textMiniTable" style="width: 6.0%; text-align: center">
-
-            </div>
-
-          </div>
-
-          <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(article,index) in articles">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
-
-              {{index + 1}}
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox " v-model="article.name" rows="4" style="overflow-y:auto"></textarea>
-              </div>
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 9.15%; text-align: center">
-              <div style="height: 100%; width: 100%">
-                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="article.work_type">
-                  <option>Принято в печать</option>
-                  <option>Опубликовано</option>
-                  <option>В процессе написания</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 12.65%; text-align: center">
-
-              <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox"/>ВАК</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>РИНЦ</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>Scopus</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>WoS</label>
-              </div>
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 7.21%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox" rows="4" v-model="article.impact"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 20.07%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox" rows="4" v-model="article.output_data"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 4.926%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox" rows="4" v-model="article.volume"></textarea>
-              </div>
-            </div>
-
-            <div class="textMiniTable rightLine" style="width: 9.26%; text-align: center; padding-right: 0" >
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="article.co_authors"></textarea>
-              </div>
-            </div>
-
-            <div class="textMiniTable" style="width: 6%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-            </div>
-
-          </div>
-
-        </div>
 
       </div>
     </div>
@@ -273,16 +157,16 @@
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 14.15%; text-align: center">
               Индексация
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
               Название конференции
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 15.07%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 14.07%; text-align: center">
               Дата
             </div>
 
@@ -300,161 +184,52 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.nameOfReport}}</div>
+                <div class="textWithCarry inputBox ">{{report.conference_name}}</div>
               </div>
 
             </div>
             <div class="rightLine textMiniTable" style="width: 11.15%;">
-              <div style="height: 100%; display: table; overflow: hidden;">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.stateOfReport" disabled>
-                  <option>Зарегистрировался</option>
-                  <option>Выступил</option>
-                </select>
+              <div>
+                <div class="textWithCarry inputBox ">{{report.status}}</div>
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 11.15%;">
+            <div class="rightLine textMiniTable" style="width: 14.15%;">
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.reportWorkType.vac" disabled/>ВАК</label>
+                  <input type="checkbox" v-model="report.wac" disabled/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.rinc" disabled/>РИНЦ</label>
+                  <input type="checkbox" v-model="report.rinc" disabled/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.scopus" disabled/>Scopus</label>
+                  <input type="checkbox" v-model="report.scopus" disabled/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.wos" disabled/>WoS</label>
+                  <input type="checkbox" v-model="report.wos" disabled/>WoS</label>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.nameOfConference}}</div>
+                <div class="textWithCarry inputBox ">{{report.report_name}}</div>
               </div>
 
             </div>
-            <div class="rightLine textMiniTable" style="width: 15.07%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 14.07%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.dateOfConference}}</div>
+                <div class="textWithCarry inputBox ">{{report.reported_at}}</div>
               </div>
 
             </div>
             <div class="textMiniTable" style="width: 10%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox "> {{report.place}}</div>
+                <div class="textWithCarry inputBox "> {{report.location}}</div>
               </div>
             </div>
           </div>
 
         </div>
 
-        <div v-if="smallTableEditing2">
 
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: reports.length !== 0}">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
-              №
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              Наименование<br>доклада
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
-              Статус
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 14.65%; text-align: center">
-              Индексация
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              Название конференции
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
-              Дата
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
-              Место проведения
-            </div>
-
-
-            <div class="textMiniTable" style="width: 7%; text-align: center">
-
-            </div>
-
-          </div>
-
-          <div class="d-flex " :class="{ underline: index !== reports.length-1}" v-for="(report,index) in reports">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
-
-              {{index + 1}}
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox " v-model="report.nameOfReport" rows="4" style="overflow-y:auto"></textarea>
-              </div>
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
-              <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.stateOfReport">
-                  <option>Зарегистрировался</option>
-                  <option>Выступил</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 14.65%; text-align: center">
-              <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.reportWorkType.vac" />ВАК</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.rinc"/>РИНЦ</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.scopus"/>Scopus</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.wos"/>WoS</label>
-              </div>
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.nameOfConference"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.dateOfConference"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.place" style="word-break: break-all"></textarea>
-              </div>
-            </div>
-
-
-            <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-            </div>
-
-          </div>
-
-        </div>
 
       </div>
     </div>
@@ -506,28 +281,28 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.nameOfProject}}</div>
+                <div class="textWithCarry inputBox ">{{project.project_name}}</div>
               </div>
 
             </div>
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.dateOfBeggining}}</div>
+              <div class="textWithCarry inputBox ">{{formatDate(project.start_at)}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.dateOfEnding}}</div>
+              <div class="textWithCarry inputBox ">{{formatDate(project.end_at)}}</div>
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.additionalinfo}}</div>
+                <div class="textWithCarry inputBox ">{{project.add_info}}</div>
               </div>
 
             </div>
             <div class="textMiniTable" style="width: 20%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.grantGiver}}</div>
+                <div class="textWithCarry inputBox ">{{project.grantee}}</div>
               </div>
 
             </div>
@@ -536,91 +311,7 @@
 
         </div>
 
-        <div v-if="smallTableEditing3">
 
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: projects.length !== 0}">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
-              №
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
-              Наименование проекта (гранта)
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
-              Дата начала
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
-              Дата окончания
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
-              Дополнительная информация
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
-              Грантодатель
-            </div>
-            <div class="textMiniTable" style="width: 7%; text-align: center">
-
-            </div>
-
-          </div>
-
-          <div class="d-flex " :class="{ underline: index !== projects.length-1}" v-for="(project,index) in projects">
-            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
-
-              {{index + 1}}
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox " v-model="project.nameOfProject" rows="4" style="overflow-y:auto"></textarea>
-              </div>
-            </div>
-
-
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox " v-model="project.dateOfBeggining" rows="4" style="overflow-y:auto"></textarea>
-              </div>
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.dateOfEnding"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
-
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.additionalinfo"></textarea>
-              </div>
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.grantGiver"></textarea>
-              </div>
-            </div>
-
-
-            <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-            </div>
-
-          </div>
-
-        </div>
 
       </div>
     </div>
@@ -635,57 +326,13 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles", "id"],
+  props: ["articles","reports","projects" , "id"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
-      reports : [{
-        nameOfReport : 'доклад 1',
-        stateOfReport : 'Зарегистрировался',
-        reportWorkType : {
-          'vac' : true,
-          'scopus' : false,
-          'rinc' : true,
-          'wos' : true,
-        },
-        nameOfConference : "Конференция 1",
-        dateOfConference : '20.02.4621',
-        place : '21 street 122 avenu',
-
-      },
-        {
-          nameOfReport : 'доклад 2',
-          stateOfReport : 'Выступил',
-          reportWorkType : {
-            'vac' : true,
-            'scopus' : true,
-            'rinc' : true,
-            'wos' : false,
-          },
-          nameOfConference : "Конференция 2",
-          dateOfConference : '6.12.1621',
-          place : '21 street 122 avenu',
-        },
-      ],
-      projects : [
-        {
-          nameOfProject: "Проект 1",
-          dateOfBeggining: "12.12.12",
-          dateOfEnding: "13.13.13",
-          additionalinfo: "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.",
-          grantGiver : "Грантодатель",
-        },
-        {
-          nameOfProject: "Проект 2",
-          dateOfBeggining: "14.14.14",
-          dateOfEnding: "15.15.15",
-          additionalinfo: "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.",
-          grantGiver : "Грантодатель2",
-        }
-      ]
     }
   },
   methods : {
@@ -695,10 +342,15 @@ export default {
 
       this.buttonIsOpened = !this.buttonIsOpened
     },
+    formatDate(date){
+      return  date.slice(8,10) + '/' + date.slice(5,7) + '/' + date.slice(2,4)
+    },
 
   },
 
   beforeMount() {
+
+
   }
 }
 </script>

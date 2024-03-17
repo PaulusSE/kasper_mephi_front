@@ -6,12 +6,12 @@
     </div>
     <div v-for="student in arrayOfStudents">
       <tab-of-student
-      :full-name = student.fullName
-      :group = student.group
+      :full-name = student.full_name
+      :group = student.group_name
       :topic = student.topic
       :date-of-statement = student.dateOfStatement
       :number-of-order-of-statement = student.numberOfOrderOfStatement
-      :student_id = student.studentID
+      :student_id = student.student_id
       ></tab-of-student>
 
   </div>
@@ -33,7 +33,7 @@ export default {
   },
   data(){
     return {
-      arrayOfStudents : []
+      arrayOfStudents : [{}]
     }
   },
   methods: {
@@ -42,9 +42,8 @@ export default {
     },
     async getStudents(){
       try {
-        const response = await axios.get(this.IP +'/supervisors/list_of_students/' + localStorage.getItem("access_token"))
-        this.data = await response.data;
-        this.arrayOfStudents = this.data.array
+        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
+        this.arrayOfStudents = await response.data;
 
       }
       catch (e) {
@@ -53,10 +52,17 @@ export default {
     }
   },
   async beforeMount() {
-    if (store.getters.getType !== "supervisor"){
-      this.$router.push('/wrongAccess')
-    }
+    // if (store.getters.getType !== "supervisor"){
+    //   this.$router.push('/wrongAccess')
+    // }
     await this.getStudents()
+
+    const object1 = {
+      'a': 'somestring',
+      b: 42,
+      c: false,
+    };
+
 
   }
 }

@@ -9,9 +9,11 @@
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
-    <tab-of-articles-for-teacher v-for="(articles,index) in arrayOfArticles"
+    <tab-of-articles-for-teacher v-for="(n, index) in this.actualSemester"
                      :id = index
                      :articles = this.arrayOfArticles[index]
+                     :reports = this.arrayOfReports[index]
+                     :projects = this.arrayOfProjects[index]
     ></tab-of-articles-for-teacher>
   </div>
 
@@ -26,9 +28,12 @@ export default {
   name: "scientificWorkForTeacher",
   data() {
     return {
-      arrayOfArticles: [
-
+      arrayOfArticles: [],
+      arrayOfReports : [
       ],
+      arrayOfProjects:[
+      ],
+      actualSemester: 1,
     }
   },
   props : ['stateOfPage'],
@@ -39,14 +44,14 @@ export default {
   methods : {
     async loadScientificWorks() {
       try {
-        const response = await axios.put(this.IP +'/supervisor/students/scientific_works/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/supervisors/student/works/' + localStorage.getItem("access_token"),
             {
-              "studentID" : localStorage.getItem("studentID")
+              "student_id" : localStorage.getItem("student_id")
             }
         )
         this.data = await response.data;
-        this.fillArrayOfArticles(this.data.works, this.data.years * 2)
-        this.numberOfSemesters = this.data.years * 2
+        await this.fillDataForTables(this.data)
+
 
       }
       catch (e) {
@@ -54,41 +59,50 @@ export default {
       }
     },
 
-    fillArrayOfArticles(data, numberOfSemesters){
+    async getActualSemester(){
+      try {
+        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
+        this.data = await response.data
+        for (var i = 0; i < this.data.length; i++){
+          if (this.data[i].student_id === localStorage.getItem("student_id")){
+            this.actualSemester = this.data[i].actual_semester
+          }
+        }
 
-      this.arrayOfArticles = Array(parseInt(numberOfSemesters))
-      for (var i = 0; i < this.arrayOfArticles.length; i++){
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+
+    async fillDataForTables(data){
+      this.arrayOfArticles = new Array(this.actualSemester)
+      this.arrayOfReports = new Array(this.actualSemester)
+      this.arrayOfProjects = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
         this.arrayOfArticles[i] = new Array()
+        this.arrayOfReports[i] = new Array()
+        this.arrayOfProjects[i] = new Array()
       }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfArticles[0].push(data[i])
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+        if (data[i].publication.publication_id !== undefined){
+          var article = data[i].publication
+          this.arrayOfArticles[semester - 1].push(article)
         }
-        if (data[i].semester === 2) {
-          this.arrayOfArticles[1].push(data[i])
+        if (data[i].conference.conference_id !== undefined){
+          var report = data[i].conference
+          this.arrayOfReports[semester-1].push(report)
         }
-        if (data[i].semester === 3) {
-          this.arrayOfArticles[2].push(data[i])
+        if (data[i].research_project.project_id !== undefined){
+          var project = data[i].research_project
+          this.arrayOfProjects[semester-1].push(project)
         }
-        if (data[i].semester === 4) {
-          this.arrayOfArticles[3].push(data[i])
-        }
-        if (data[i].semester === 5) {
-          this.arrayOfArticles[4].push(data[i])
-        }
-        if (data[i].semester === 6) {
-          this.arrayOfArticles[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfArticles[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfArticles[7].push(data[i])
-        }
-
       }
-      console.log(this.arrayOfArticles)
+
+
     },
 
 
@@ -99,7 +113,53 @@ export default {
     if (store.getters.getType === "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.getActualSemester()
     await this.loadScientificWorks()
+    var data = [
+      {
+        "accepted_at": "2024-03-17T13:10:11.346Z",
+        "conference": {
+          "conference_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "conference_name": "string",
+          "location": "string",
+          "report_name": "string",
+          "reported_at": "2024-03-17T13:10:11.346Z",
+          "rinc": true,
+          "scopus": true,
+          "status": "registered",
+          "wac": true,
+          "wos": true
+        },
+        "publication": {
+          "co_authors": "string",
+          "impact": 0,
+          "name": "string",
+          "output_data": "string",
+          "publication_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "rinc": true,
+          "scopus": true,
+          "status": "to print",
+          "volume": 0,
+          "wac": true,
+          "wos": true
+        },
+        "research_project": {
+          "add_info": "string",
+          "end_at": "2024-03-17T13:10:11.346Z",
+          "grantee": "string",
+          "project_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "project_name": "string",
+          "start_at": "2024-03-17T13:10:11.346Z"
+        },
+        "semester": 1,
+        "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "updated_at": "2024-03-17T13:10:11.346Z",
+        "works_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "works_status": "todo"
+      }
+    ]
+    await this.fillDataForTables(data)
+
   }
 
 }

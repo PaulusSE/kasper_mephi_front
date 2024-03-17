@@ -34,7 +34,7 @@
 
       <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
         <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: classroomWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
               Дисциплина
             </div>
@@ -59,17 +59,17 @@
 
           </div>
 
-          <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
+          <div class="d-flex" :class="{ underline: index !== classroomWork.length-1}" v-for="(element,index) in classroomWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{element.subject}}</div>
+                <div class="textWithCarry inputBox ">{{element.subject_name}}</div>
               </div>
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
+                <div class="textWithCarry inputBox ">{{element.group_name}}</div>
               </div>
 
             </div>
@@ -78,21 +78,21 @@
             <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">
-                  {{element.mainTeacher }}</div>
+                  {{element.main_teacher }}</div>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">
-                  {{element.typeOfClasses }}</div>
+                  {{element.load_type }}</div>
               </div>
             </div>
 
             <div class="textMiniTable" style="width: 17.3%; text-align: center">
               <div class="pe-3">
                 <div >
-                  <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
+                  <div class="textWithCarry inputBox ps-3">{{element.hours}}</div>
                 </div>
               </div>
             </div>
@@ -133,14 +133,14 @@
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in this.individualWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.type}}</div>
+                <div class="textWithCarry inputBox ">{{work.load_type}}</div>
               </div>
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.numberOfStudents}}</div>
+                <div class="textWithCarry inputBox ">{{work.students_amount}}</div>
               </div>
 
             </div>
@@ -169,37 +169,32 @@
       <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
         <div>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center;">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
               Наименование
               нагрузки
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               Объем (в любых ед. измерения)
             </div>
 
 
-            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
+            <div class="textMiniTable" style="width: 33%; text-align: center">
               Комментарий (опционально)
-
-            </div>
-
-            <div class="textMiniTable" style="width: 25%; text-align: center">
-              Количество академических часов
 
             </div>
 
           </div>
 
           <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in this.otherWork">
-            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">{{work.name}}</div>
               </div>
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">{{work.volume}}</div>
               </div>
@@ -207,19 +202,14 @@
             </div>
 
 
-            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
-              <div>
-                <div class="textWithCarry inputBox ">
+            <div class="textMiniTable" style="width: 33%; text-align: center">
+              <div class="me-2">
+                <div class="textWithCarry inputBox ps-2">
                   {{work.comment }}</div>
               </div>
             </div>
 
-            <div class="textMiniTable pe-3" style="width: 25%; text-align: center">
-              <div>
-                <div class="textWithCarry inputBox ps-3 ">
-                  {{work.numberOfHours }}</div>
-              </div>
-            </div>
+
           </div>
         </div>
 
@@ -238,32 +228,12 @@ import store from "@/store/index.js";
 
 export default {
   name: "tabOfArticles",
-  props: ["elements", "id"],
+  props: ["classroomWork", "individualWork", "otherWork", "id"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing: false,
       deleteState: false,
-      individualWork : [
-        {
-          type: "",
-          numberOfStudents : '2',
-          comment: 'вроде так',
-        },
-        {
-          type: "",
-          numberOfStudents : '5',
-          comment: 'вроде так',
-        }
-      ],
-      otherWork : [
-        {
-          name : "Работа",
-          volume : "Много",
-          comment : "Комментарий",
-          numberOfHours : '40 в неделю',
-        }
-      ]
     }
   },
   methods : {
@@ -275,6 +245,7 @@ export default {
     },
 
   },
+
 
 }
 </script>
