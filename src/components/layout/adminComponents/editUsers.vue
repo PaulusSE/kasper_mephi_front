@@ -18,7 +18,7 @@
 
       <div class="d-flex justify-content-between">
         <nav class="mt-3" >
-          <p class="headingSemester">Доступ пользователей</p>
+          <p class="headingSemester">Доступ аспирантов</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editCommonTable" @click="buttonEditCommonTable" class="editBtn mt-3">Редактировать</button>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
-              ФИО Аспиранта
+              ФИО
             </div>
 
 
@@ -67,34 +67,72 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
-             {{element.fullName}}
+              <router-link style="text-decoration: none" to="/user">{{element["full_name"]}}</router-link>
+
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              {{element.year}} курс
+              {{element["years"]}} курс
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              {{ element.group }}
+              {{ element["group_name"] }}
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 26%; text-align: center">
-              <div style="height: 100%; width: 100%">
-                <select :disabled='!editCommonTable' class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.state">
-                  <option>Обучается</option>
-                  <option>В академический отпуск</option>
-                  <option>Завершил обучение</option>
-                  <option>Отчислился</option>
+
+              <div  style="height: 100%; width: 100%">
+                <select  :disabled="!editCommonTable"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element['state']">
+                  <option value="studying">Обучается</option>
+                  <option value="academic"> В академическом отпуске</option>
+                  <option value="graduated">Выпустился</option>
+                  <option value="expelled">Отчислился</option>
                 </select>
               </div>
 
             </div>
 
             <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
-              <input :disabled='!editCommonTable' type="checkbox" v-model="element.editState" class="me-3">
+              <input :disabled='!editCommonTable' type="checkbox" v-model="element['can_edit']" class="me-3">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="roundBlock">
+
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" >
+          <p class="headingSemester">Научные руководители</p>
+        </nav>
+      </div>
+
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfTeachers.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              ФИО
+            </div>
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfTeachers.length}" v-for="(element,index) in arrayOfTeachers">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index}}
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              <router-link style="text-decoration: none" to="/user">{{element["full_name"]}}</router-link>
+
             </div>
           </div>
         </div>
@@ -255,27 +293,26 @@ export default {
           'fullName' : 'ФИО1',
           'group' : 'group1',
           'year' : 1,
-          'state' : 'Обучается',
-          'editState' : false
+          'state' : 'graduated',
+          'can_edit' : false
         },
         {
           'fullName' : 'ФИО2',
           'group' : 'group2',
           'year' : 2,
-          'state' : 'Завершил обучение',
-          'editState' : true
+          'state' : 'studying',
+          'can_edit' : true
         },
       ],
 
-      arrayOfTeachersCopy: [],
-      arrayOfTeachers : [{}],
+      arrayOfTeachers : [],
       stateOfStudents: true,
       stateOfTeachers: true,
       stateOfMainCheckBox : false,
       arrayOfGroups: [
-          'Б20-504',
-          'Б20-514',
-          'Б19-514',
+          // 'Б20-504',
+          // 'Б20-514',
+          // 'Б19-514',
       ],
       arrayOfGroupsCopy:[],
       editTableWithGroups : false,
@@ -284,15 +321,34 @@ export default {
       arrayOfPlanCopy: [],
       editTableYears : false,
       showDataErrorForTablePlan : false,
+      statusMap: {
+        "studying" : "Обучается",
+        "academic" : "В академическом отпуске",
+        "expelled" : "Отчислился",
+        "graduated" : "Выпустился",
+      }
     }
   },
   methods : {
+
+    mapSelect(index){
+      var currentState = this.arrayOfStudents[index]["state"]
+      console.log(currentState)
+      // this.arrayOfStudents[index]["state"] = "expelled"
+    },
+
+    setState(index, string){
+      this.arrayOfStudents[index][state] = string
+      console.log(string)
+    },
+
+
     deleteStudent(index){
-      console.log("Запрос на удаление пользователя ",index)
+
       this.arrayOfStudents.splice(index,1) /// Временно
     },
     deleteTeacher(index){
-      console.log("Запрос на удаление пользователя ",index)
+
       this.arrayOfTeachers.splice(index,1) /// Временно
     },
     editStudentsButton(){
@@ -330,10 +386,17 @@ export default {
     },
     async getAspsAndTeachers() {
       try {
-        const response = await axios.get(this.IP + "/admin/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.get(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"),
         )
-        this.arrayOfTeachers = response.data.supervisors
-        this.arrayOfStudents = response.data.pairs
+
+        this.data = response.data
+
+        for (var i = 0; i < this.data.length; i++){
+          this.arrayOfTeachers.push(this.data["supervisor"])
+          this.arrayOfStudents.push(this.data["student"])
+        }
+
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -420,7 +483,7 @@ export default {
     // if (store.getters.getType !== "admin"){
     //   this.$router.push('/wrongAccess')
     // }
-    // this.getAspsAndTeachers()
+    this.getAspsAndTeachers()
 
 
 

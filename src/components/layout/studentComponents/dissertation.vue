@@ -512,9 +512,9 @@ this.waitForCheck = !this.waitForCheck
   },
   async beforeMount() {
 
-    // if (store.getters.getType !== "student"){
-    //   this.$router.push('/wrongAccess')
-    // }
+    if (store.getters.getType !== "student"){
+      this.$router.push('/wrongAccess')
+    }
 
     try {
       const response = await axios.get(this.IP +'/students/dissertation/' + localStorage.getItem("access_token"))

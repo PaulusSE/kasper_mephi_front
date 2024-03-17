@@ -35,11 +35,11 @@
       <div v-for="(pair,index) in arrayOfPairsStudentTeacher" >
         <div class="d-flex" :class="{underline:index !== arrayOfPairsStudentTeacher.length - 1}">
           <div class="rightLine col-6 mainText">
-            {{pair.studentFullName}}
+            {{pair["student"]["fullName"]}}
           </div>
           <div class="col-6 mainText">
             <select class="form-select blockStyles mainText m-0 p-0" :disabled="stateOfButton" v-model="pair.teacherFullName" @input="inputEvent">
-              <option v-for="teacher in arrayOfTeacher" class="mainText">{{teacher.teacherFullName}}</option> >
+              <option v-for="teacher in arrayOfTeacher" class="mainText">{{pair["supervisor"]["full_name"]}}</option> >
             </select>
           </div>
         </div>
@@ -83,23 +83,26 @@ export default {
       this.stateOfButton = !this.stateOfButton
       if (this.arrayOfPairsStudentTeacherCopy === this.arrayOfPairsStudentTeacher)
         return
-      ///save Pairs
+
+      var pairs = new Array()
 
       for (var i = 0; i < this.arrayOfPairsStudentTeacher.length; i++){
-        var teacherFullName = this.arrayOfPairsStudentTeacher[i].teacherFullName
+        var teacherFullName = this.arrayOfPairsStudentTeacher[i]["supervisor"]["full_name"]
         for (var j = 0; j < this.arrayOfTeacher.length; j++){
-          if (this.arrayOfTeacher[j].teacherFullName === teacherFullName){
-            this.arrayOfPairsStudentTeacher[i].teacherId = this.arrayOfTeacher[j].teacherId
+          if (this.arrayOfTeacher[j]["full_name"] === teacherFullName){
+            this.arrayOfPairsStudentTeacher[i]["supervisor"]["supervisor_id"] = this.arrayOfTeacher[j]["supervisor_id"]
             break
           }
         }
+        pairs.push({
+          "student_id": this.arrayOfPairsStudentTeacher[i]["student"]["student_id"],
+          "supervisor_id" : this.arrayOfPairsStudentTeacher[i]["supervisor"]["supervisor_id"]
+        })
       }
 
       try {
-        const response = await axios.post(this.IP + "/admin/pairs/" + localStorage.getItem("access_token"),
-            {
-              "pairs" : this.arrayOfPairsStudentTeacher
-            }
+        const response = await axios.post(this.IP + "/administrator/student/change/" + localStorage.getItem("access_token"),
+            pairs
         )
         console.log(response)
       }
@@ -131,11 +134,16 @@ export default {
     },
     async getAspsAndTeachers() {
       try {
-        const response = await axios.get(this.IP +"/admin/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.get(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"),
         )
 
-        this.arrayOfTeacher = response.data.supervisors
-        this.arrayOfPairsStudentTeacher = response.data.pairs
+        this.data = response.data
+
+        for (var i = 0; i < this.data.length; i++){
+          this.arrayOfTeacher.push(this.data["supervisor"])
+        }
+
+        this.arrayOfPairsStudentTeacher = this.data
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -146,7 +154,7 @@ export default {
     // if (store.getters.getType !== "admin"){
     //   this.$router.push('/wrongAccess')
     // }
-    // this.getAspsAndTeachers()
+    this.getAspsAndTeachers()
   }
 }
 </script>
