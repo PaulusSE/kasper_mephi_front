@@ -17,8 +17,8 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Группа</label>
-        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
-          <option v-for="group in numberOfGroups" >{{group}}</option>
+        <select class="form-select blockStyles" v-model="groupName" @change ="inputEvent">
+          <option v-for="group in numberOfGroups" >{{group.name}}</option>
         </select>
       </nav>
     </div>
@@ -26,7 +26,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Актуальный семестр</label>
-        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="actualSemester" @input="inputEvent">
           <option v-for="number in 8" >{{number}}</option>
         </select>
       </nav>
@@ -50,7 +50,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Длительность обучения (лет)</label>
-        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="numberOfYears" @input="inputEvent">
           <option>3</option>
           <option>4</option>
 
@@ -106,11 +106,11 @@ export default {
       teacher: '',
       errorMessage: '',
       department: '',
-      enrollmentOrder: '',
       specialization: '',
       dateOfBeginning:'',
       actualSemester:'',
-      numberOfGroup: '',
+      groupName: '',
+
       numberOfYears: '',
       arrayOfTeachers: [],
       numberOfGroups : ["Б20-504", "Б20-514", 'Б20-524'],
@@ -182,6 +182,7 @@ export default {
     async requestToRegister() {
 
       var supervisorID = ''
+      var groupID = ''
       for (var i = 0; i < this.arrayOfTeachers.length; i++) {
         if (this.arrayOfTeachers[i].name === this.teacher){
           supervisorID = this.arrayOfTeachers[i].supervisorID
@@ -189,17 +190,23 @@ export default {
         }
         }
 
+      for (var i = 0; i < this.numberOfGroups.length; i++){
+        if (this.numberOfGroups[i].name === this.groupName){
+          groupID = this.numberOfGroups[i].group_id
+          break
+        }
+      }
+
+
       try {
-        const response = await axios.post(this.IP +"/students/registration/" + localStorage.getItem('access_token'),
+        const response = await axios.post(this.IP +"/authorize/registration/student/" + localStorage.getItem('access_token'),
             {
-              "fullName" : this.fullName,
-              "numberOfGroup" : this.numberOfGroup,
-              "email" : this.email,
-              "actualSemester" : parseInt(this.actualSemester),
-              "enrollmentOrder" : this.enrollmentOrder,
-              "startDate" : this.dateOfBeginning,
-              "specialization" : this.specialization,
-              "numberOfYears" : parseInt(this.numberOfYears),
+              "full_name" : this.fullName,
+              "group_number" : groupID,
+              "department" : this.specialization,
+              "actual_semester" : parseInt(this.actualSemester),
+              "start_date" : this.dateOfBeginning,
+              "number_of_years" : parseInt(this.numberOfYears),
               "supervisorID" : supervisorID,
             }
         )
@@ -219,7 +226,7 @@ export default {
     redirectToMain() {
       this.$router.push('/')
     },
-    async getListOfTeachers() {
+    async getListOfTeachers() { //todo
       try {
         const response = await axios.get(this.IP +"/students/supervisors/" + localStorage.getItem('access_token'),
         )
@@ -231,6 +238,20 @@ export default {
         this.showWrongAnswerString = true;
       }
     },
+
+    async getListOfGroups(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
+        )
+        this.numberOfGroups = response.data
+
+      }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
     async checkAuth() {
       try {
         const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
@@ -250,10 +271,22 @@ export default {
     },
   },
   async beforeMount() {
-    this.checkAuth()
-    if (localStorage.getItem('registered') !== 'false')
-      this.$router.push('/')
+    // this.checkAuth()
+    // if (localStorage.getItem('registered') !== 'false')
+    //   this.$router.push('/')
     await this.getListOfTeachers()
+    await this.getListOfGroups()
+
+    this.numberOfGroups = [
+      {
+        "group_id": 0,
+        "name": "string0"
+      },
+      {
+        "group_id": 1,
+        "name": "string1"
+      }
+    ]
 
   }
 }

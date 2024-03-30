@@ -84,13 +84,13 @@
             <div class="rightLine textMiniTable" style="width: 10.15%;">
 
               <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="article.wac" disabled style="word-break: break-word"/>ВАК</label>
-                <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="article.rinc" disabled style="word-break: break-word"/>РИНЦ</label>
-                <label class="textCheckBox inputBox text-start">
+                <label class="textCheckBox inputBox text-start checkboxFont" >
+                  <input type="checkbox" class="ms-0"  v-model="article.wac" disabled style="word-break: break-word"/>ВАК</label>
+                <label class="textCheckBox inputBox text-start checkboxFont">
+                  <input type="checkbox" class="ms-0" v-model="article.rinc" disabled style="word-break: break-word"/>РИНЦ</label>
+                <label class="textCheckBox inputBox text-start checkboxFont">
                   <input type="checkbox" v-model="article.scopus" disabled style="word-break: break-word"/>Scopus</label>
-                <label class="textCheckBox inputBox text-start">
+                <label class="textCheckBox inputBox text-start checkboxFont">
                   <input type="checkbox" v-model="article.wos" disabled style="word-break: break-word"/>WoS</label>
               </div>
 
@@ -196,13 +196,13 @@
 
             <div class="rightLine textMiniTable" style="width: 14.15%;">
               <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start" >
+                <label class="textCheckBox inputBox text-start checkboxFont" >
                   <input type="checkbox" v-model="report.wac" disabled/>ВАК</label>
-                <label class="textCheckBox inputBox text-start">
+                <label class="textCheckBox inputBox text-start checkboxFont">
                   <input type="checkbox" v-model="report.rinc" disabled/>РИНЦ</label>
-                <label class="textCheckBox inputBox text-start">
+                <label class="textCheckBox inputBox text-start checkboxFont">
                   <input type="checkbox" v-model="report.scopus" disabled/>Scopus</label>
-                <label class="textCheckBox inputBox text-start">
+                <label class="textCheckBox inputBox text-start checkboxFont">
                   <input type="checkbox" v-model="report.wos" disabled/>WoS</label>
               </div>
             </div>
@@ -371,6 +371,7 @@ export default {
   box-sizing: border-box;
 }
 
+
 @media (min-width: 800px){
   .headingSemester {
 
@@ -380,7 +381,10 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:22px;
+  }
 
+  .checkboxFont {
+    font-size:15px !important;
   }
 
   .semestrButtonActive {
@@ -482,6 +486,10 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:1.1rem;
+  }
+
+  .checkboxFont {
+    font-size:13px !important;
   }
 
   .semestrImgActive{
@@ -590,6 +598,10 @@ export default {
 
   .semestrImgActive{
     width: 30px;
+  }
+
+  .checkboxFont {
+    font-size:12px !important;
   }
 
   .semestrButtonActive {

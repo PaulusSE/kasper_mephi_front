@@ -30,10 +30,10 @@
 
     ></teaching-load-table>
 
-    <div class="text-end pb-2" style="margin-right: 2.5%">
-      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
-    </div>
+<!--    <div class="text-end pb-2" style="margin-right: 2.5%">-->
+<!--      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>-->
+<!--      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>-->
+<!--    </div>-->
 
 
 
@@ -287,9 +287,7 @@ export default {
 
   },
   async beforeMount() {
-    if (store.getters.getType !== "student"){
-      this.$router.push('/wrongAccess')
-    }
+
     await this.loadTeachingLoad()
 
   },

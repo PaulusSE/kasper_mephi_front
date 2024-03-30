@@ -89,20 +89,20 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 10.15%;">
-              <div class="textWithCarry inputBox ">{{article.state}}</div>
+              <div class="textWithCarry inputBox ">{{article.status}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10.15%;">
 
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" disabled/>ВАК</label>
+                  <input type="checkbox" v-model="article.wac" disabled/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>РИНЦ</label>
+                  <input type="checkbox" v-model="article.rinc" disabled/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>Scopus</label>
+                  <input type="checkbox" v-model="article.scopus" disabled/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" disabled/>WoS</label>
+                  <input type="checkbox" v-model="article.wos" disabled/>WoS</label>
               </div>
 
 
@@ -197,7 +197,7 @@
 
             <div class="rightLine textMiniTable" style="width: 9.15%; text-align: center">
               <div style="height: 100%; width: 100%">
-                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="article.work_type">
+                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="article.status">
                   <option>Принято в печать</option>
                   <option>Опубликовано</option>
                   <option>В процессе написания</option>
@@ -209,13 +209,13 @@
 
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox"/>ВАК</label>
+                  <input type="checkbox" v-model="article.vac" />ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>РИНЦ</label>
+                  <input type="checkbox" v-model="article.rinc"/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>Scopus</label>
+                  <input type="checkbox" v-model="article.scopus"/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox"/>WoS</label>
+                  <input type="checkbox" v-model="article.wos"/>WoS</label>
               </div>
 
             </div>
@@ -318,13 +318,13 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.nameOfReport}}</div>
+                <div class="textWithCarry inputBox ">{{report.report_name}}</div>
               </div>
 
             </div>
             <div class="rightLine textMiniTable" style="width: 11.15%;">
               <div style="height: 100%; display: table; overflow: hidden;">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.stateOfReport" disabled>
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.status" disabled>
                   <option>Зарегистрировался</option>
                   <option>Выступил</option>
                 </select>
@@ -334,32 +334,32 @@
             <div class="rightLine textMiniTable" style="width: 11.15%;">
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.reportWorkType.vac" disabled/>ВАК</label>
+                  <input type="checkbox" v-model="report.vac" disabled/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.rinc" disabled/>РИНЦ</label>
+                  <input type="checkbox" v-model="report.rinc" disabled/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.scopus" disabled/>Scopus</label>
+                  <input type="checkbox" v-model="report.scopus" disabled/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.wos" disabled/>WoS</label>
+                  <input type="checkbox" v-model="report.wos" disabled/>WoS</label>
               </div>
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.nameOfConference}}</div>
+                <div class="textWithCarry inputBox ">{{report.conference_name}}</div>
               </div>
 
             </div>
             <div class="rightLine textMiniTable" style="width: 15.07%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.dateOfConference}}</div>
+                <div class="textWithCarry inputBox ">{{report.reported_at}}</div>
               </div>
 
             </div>
             <div class="textMiniTable" style="width: 10%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox "> {{report.place}}</div>
+                <div class="textWithCarry inputBox "> {{report.location}}</div>
               </div>
             </div>
           </div>
@@ -415,14 +415,14 @@
 
             <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " v-model="report.nameOfReport" rows="4" style="overflow-y:auto"></textarea>
+                <textarea class="textWithCarry inputBox " v-model="report.report_name" rows="4" style="overflow-y:auto"></textarea>
               </div>
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
               <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.stateOfReport">
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.status">
                   <option>Зарегистрировался</option>
                   <option>Выступил</option>
                 </select>
@@ -432,13 +432,13 @@
             <div class="rightLine textMiniTable" style="width: 14.65%; text-align: center">
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.reportWorkType.vac" />ВАК</label>
+                  <input type="checkbox" v-model="report.vac" />ВАК</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.rinc"/>РИНЦ</label>
+                  <input type="checkbox" v-model="report.rinc"/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.scopus"/>Scopus</label>
+                  <input type="checkbox" v-model="report.scopus"/>Scopus</label>
                 <label class="textCheckBox inputBox text-start">
-                  <input type="checkbox" v-model="report.reportWorkType.wos"/>WoS</label>
+                  <input type="checkbox" v-model="report.wos"/>WoS</label>
               </div>
 
             </div>
@@ -446,26 +446,26 @@
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.nameOfConference"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="report.conference_name"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.dateOfConference"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="report.reported_at"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.place" style="word-break: break-all"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="report.location" style="word-break: break-all"></textarea>
               </div>
             </div>
 
 
             <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
+              <button class="btnAddDeleteFiles mt-2" @click="deleteReport(index)">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -524,7 +524,7 @@
 
           </div>
 
-          <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(project,index) in projects">
+          <div class="d-flex " :class="{ underline: index !== projects.length-1}" v-for="(project,index) in projects">
 
             <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
 
@@ -532,28 +532,28 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.nameOfProject}}</div>
+                <div class="textWithCarry inputBox ">{{project.project_name}}</div>
               </div>
 
             </div>
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.dateOfBeggining}}</div>
+              <div class="textWithCarry inputBox ">{{project.start_at}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.dateOfEnding}}</div>
+              <div class="textWithCarry inputBox ">{{project.end_at}}</div>
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.additionalinfo}}</div>
+                <div class="textWithCarry inputBox ">{{project.add_info}}</div>
               </div>
 
             </div>
             <div class="textMiniTable" style="width: 20%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{project.grantGiver}}</div>
+                <div class="textWithCarry inputBox ">{{project.grantee}}</div>
               </div>
 
             </div>
@@ -604,7 +604,7 @@
 
             <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " v-model="project.nameOfProject" rows="4" style="overflow-y:auto"></textarea>
+                <textarea class="textWithCarry inputBox " v-model="project.project_name" rows="4" style="overflow-y:auto"></textarea>
               </div>
             </div>
 
@@ -612,7 +612,7 @@
             <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " v-model="project.dateOfBeggining" rows="4" style="overflow-y:auto"></textarea>
+                <textarea class="textWithCarry inputBox " v-model="project.start_at" rows="4" style="overflow-y:auto"></textarea>
               </div>
 
             </div>
@@ -620,26 +620,26 @@
             <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.dateOfEnding"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="project.end_at"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.additionalinfo"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="project.add_info"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.grantGiver"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="project.grantee"></textarea>
               </div>
             </div>
 
 
             <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
+              <button class="btnAddDeleteFiles mt-2" @click="deleteProject(index)">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -662,58 +662,13 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles", "id", "waitForCheck"],
+  props: ["articles", "reports", "projects", "id", "waitForCheck"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
-
-      reports : [{
-        nameOfReport : 'доклад 1',
-        stateOfReport : 'Зарегистрировался',
-        reportWorkType : {
-          'vac' : true,
-          'scopus' : false,
-          'rinc' : true,
-          'wos' : true,
-        },
-        nameOfConference : "Конференция 1",
-        dateOfConference : '20.02.4621',
-        place : '21 street 122 avenu',
-
-      },
-        {
-          nameOfReport : 'доклад 2',
-          stateOfReport : 'Выступил',
-          reportWorkType : {
-            'vac' : true,
-            'scopus' : true,
-            'rinc' : true,
-            'wos' : false,
-          },
-          nameOfConference : "Конференция 2",
-          dateOfConference : '6.12.1621',
-          place : '21 street 122 avenu',
-        },
-      ],
-      projects : [
-        {
-          nameOfProject: "Проект 1",
-          dateOfBeggining: "12.12.12",
-          dateOfEnding: "13.13.13",
-          additionalinfo: "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.",
-          grantGiver : "Грантодатель",
-        },
-        {
-          nameOfProject: "Проект 2",
-          dateOfBeggining: "14.14.14",
-          dateOfEnding: "15.15.15",
-          additionalinfo: "Lorem Ipsum - это текст-\"рыба\", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной \"рыбой\" для текстов на латинице с начала XVI века. В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки образцов. Lorem Ipsum не только успешно пережил без заметных изменений пять веков, но и перешагнул в электронный дизайн. Его популяризации в новое время послужили публикация листов Letraset с образцами Lorem Ipsum в 60-х годах и, в более недавнее время, программы электронной вёрстки типа Aldus PageMaker, в шаблонах которых используется Lorem Ipsum.",
-          grantGiver : "Грантодатель2",
-        }
-      ]
     }
   },
   methods : {
@@ -731,7 +686,7 @@ export default {
       }
 
       this.smallTableEditing1 = !this.smallTableEditing1
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 1)
     },
     buttonSmallTableClicked2(){
       if (this.waitForCheck){
@@ -740,7 +695,7 @@ export default {
       }
 
       this.smallTableEditing2 = !this.smallTableEditing2
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 2)
     },
     buttonSmallTableClicked3(){
       if (this.waitForCheck){
@@ -749,7 +704,7 @@ export default {
       }
 
       this.smallTableEditing3 = !this.smallTableEditing3
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 3)
     },
     saveArticles(){
       this.smallTableEditing1 = !this.smallTableEditing1
@@ -769,20 +724,26 @@ export default {
 
     },
     cancelChange1(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 1)
       this.smallTableEditing1 = !this.smallTableEditing1
     },
     cancelChange2(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 2)
       this.smallTableEditing2 = !this.smallTableEditing2
     },
     cancelChange3(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 3)
       this.smallTableEditing3 = !this.smallTableEditing3
     },
 
     deleteArticle(myIndex){
       this.$emit('deleteArticle', myIndex)
+    },
+    deleteReport(myIndex){
+      this.$emit('deleteReport', myIndex)
+    },
+    deleteProject(myIndex){
+      this.$emit('deleteProject', myIndex)
     }
   },
 

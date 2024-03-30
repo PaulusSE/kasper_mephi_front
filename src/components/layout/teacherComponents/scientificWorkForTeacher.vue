@@ -101,8 +101,6 @@ export default {
           this.arrayOfProjects[semester-1].push(project)
         }
       }
-
-
     },
 
 

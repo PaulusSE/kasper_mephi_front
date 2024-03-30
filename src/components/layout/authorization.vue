@@ -104,10 +104,10 @@ export default {
       // }
 
       try {
-        const response = await axios.post( this.IP + "/authorization/authorize",
+        const response = await axios.post( this.IP + "/authorize",
             {
-              email : this.login,
-              password : this.password
+              "email" : this.login,
+              "password" : this.password
                 }
 
         )

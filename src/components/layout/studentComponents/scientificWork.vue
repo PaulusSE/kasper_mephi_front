@@ -17,26 +17,32 @@
 
 
 
-    <tab-of-articles v-for="(articles,index) in arrayOfArticles"
+    <tab-of-articles v-for="(n, index) in this.actualSemester"
     :id = index
-    :articles = this.arrayOfArticles[index]
+                     :articles = this.arrayOfArticles[index]
+                     :reports = this.arrayOfReports[index]
+                     :projects = this.arrayOfProjects[index]
+
     :waitForCheck = this.waitForCheck
-    @updatePage=cancelChange()
+                     @updatePage="(n) => cancelChange(n)"
     @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
     @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
     @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
     @saveArticles = saveArticles()
     @saveProjects = saveProjects()
     @saveReports = saveReports()
-    @makeCopy = makeCopy
+
+    @makeCopy="(n) => makeCopy(n)"
     @makeEditErrorNotification = callEditError
     @deleteArticle="(n) => deleteArticle(index, n)"
+    @deleteReport="(n) => deleteReport(index, n)"
+    @deleteProject="(n) => deleteProject(index, n)"
     ></tab-of-articles>
 
-    <div class="text-end pb-2" style="margin-right: 2.5%">
-      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
-    </div>
+<!--    <div class="text-end pb-2" style="margin-right: 2.5%">-->
+<!--      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>-->
+<!--      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>-->
+<!--    </div>-->
 
   </div>
 
@@ -51,9 +57,11 @@ import store from "@/store/index.js";
 import axios from "axios";
 import workSendToCheckNotification
   from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
+import tabOfArticlesForTeacher from "@/components/layout/teacherComponents/tabOfArticlesForTeacher.vue";
 export default {
   name: "scientificWork",
   components: {
+    tabOfArticlesForTeacher,
     "headerOfStudent" : headerOfStudent,
     "tabOfArticles" : tabOfArticles,
     "workSendToCheckNotification" : workSendToCheckNotification
@@ -61,96 +69,111 @@ export default {
   props: ["stateOfStudentPage", "educationTime"],
   data() {
     return {
-      generalArrayOfArticles: [
-        {id1:0, id2:1, id3:1, id4:0, id5:0, id6:0, id7:2},
-        {id1:1, id2:0, id3:0, id4:0, id5:0, id6:0, id7:1},
-        {id1:0, id2:2, id3:1, id4:1, id5:1, id6:0, id7:5},
-        {id1:0, id2:0, id3:0, id4:1, id5:1, id6:1, id7:3},
-        {id1:1, id2:0, id3:1, id4:0, id5:0, id6:1, id7:2},
-        {id1:2, id2:0, id3:0, id4:0, id5:0, id6:1, id7:3},
-      ],
-      generalArrayOfArticlesCopy : [],
       isTableEditing: false,
+      arrayOfArticles: [],
       arrayOfArticlesCopy: [],
-      arrayOfArticles: [
-      ],
-      arrayDeleteWorkId : [],
+      arrayOfReports : [],
+      arrayOfReportsCopy : [],
+      arrayOfProjects:[],
+      arrayOfProjectsCopy:[],
       showEditError: false,
       waitForCheck : false,
+      actualSemester: 1,
     }
+
   },
 
 
   methods : {
-    editTable() {
 
-      this.makeCopyGeneralArrays()
-      this.isTableEditing = !this.isTableEditing;
-    },
 
-    makeCopyGeneralArrays(reverse = 1) {
-      if (reverse){
-        for (var i = 0; i < this.generalArrayOfArticles.length; i++) {
-          this.generalArrayOfArticlesCopy[i] = Object.assign({}, this.generalArrayOfArticles[i]);
-        }
-      }
-      else {
-        this.generalArrayOfArticles.length = 0
-        for (var i = 0; i < this.generalArrayOfArticlesCopy.length; i++) {
-          this.generalArrayOfArticles[i] = Object.assign({}, this.generalArrayOfArticlesCopy[i]);
-        }
+    async fillDataForTables(data){
+      this.arrayOfArticles = new Array(this.actualSemester)
+      this.arrayOfReports = new Array(this.actualSemester)
+      this.arrayOfProjects = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
+        this.arrayOfArticles[i] = new Array()
+        this.arrayOfReports[i] = new Array()
+        this.arrayOfProjects[i] = new Array()
       }
 
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+        if (data[i].publication.publication_id !== undefined){
+          var article = data[i].publication
+          this.arrayOfArticles[semester - 1].push(article)
+        }
+        if (data[i].conference.conference_id !== undefined){
+          var report = data[i].conference
+          this.arrayOfReports[semester-1].push(report)
+        }
+        if (data[i].research_project.project_id !== undefined){
+          var project = data[i].research_project
+          this.arrayOfProjects[semester-1].push(project)
+        }
+      }
     },
+
 
     buttonSmallTableAdd1(n){
       let newArticle = {
         name: '',
-        work_type: '',
-        impact: '',
-        output_data: '',
-        volume: null,
-        co_authors: '',
-        semester : n + 1,
-        numberOfSemesters : ''
+        status: '',
+        wac: '',
+        rinc: '',
+        scopus: '',
+        wos: '',
+        impact : '',
+        output_data : '',
+        volume : '',
+        co_authors : ''
       }
       this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
     },
     buttonSmallTableAdd2(n){
-      let newArticle = {
-        name: '',
-        work_type: '',
-        impact: '',
-        output_data: '',
-        volume: null,
+      let newReport = {
+        conference_name: '',
+        location: '',
+        report_name: '',
+        reported_at: '',
+        rinc: '',
+        'wos' : '',
+        'wac': '',
+        'scopus':'',
         co_authors: '',
         semester : n + 1,
         numberOfSemesters : ''
       }
-      // this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
+      this.arrayOfReports[n] = this.arrayOfReports[n].concat(newReport)
     },
     buttonSmallTableAdd3(n){
-      let newArticle = {
-        name: '',
-        work_type: '',
-        impact: '',
-        output_data: '',
-        volume: null,
-        co_authors: '',
-        semester : n + 1,
-        numberOfSemesters : ''
+      let newReport = {
+        project_name: '',
+        start_at: '',
+        end_at: '',
+        add_info: '',
+        grantee: '',
       }
-      // this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
+      this.arrayOfProjects[n] = this.arrayOfProjects[n].concat(newReport)
     },
 
-    cancelChange(){
-      this.arrayOfArticles.length = 0
-
-      for (var i = 0; i < this.arrayOfArticlesCopy.length; i++)
-        this.arrayOfArticles[i] = this.arrayOfArticlesCopy[i].slice();
-
-      this.arrayDeleteWorkId.length = 0
-
+    cancelChange(n){
+      if (n === 1){
+        this.arrayOfArticles.length = 0
+        for (var i = 0; i < this.arrayOfArticlesCopy.length; i++)
+          this.arrayOfArticles[i] = this.arrayOfArticlesCopy[i].slice();
+      }
+     if (n === 2){
+       this.arrayOfReports.length = 0
+       for (var i = 0; i < this.arrayOfReportsCopy.length; i++)
+         this.arrayOfReports[i] = this.arrayOfReportsCopy[i].slice();
+     }
+     if (n === 3){
+       this.arrayOfProjects.length = 0
+       for (var i = 0; i < this.arrayOfProjectsCopy.length; i++)
+         this.arrayOfProjects[i] = this.arrayOfProjectsCopy[i].slice();
+     }
     },
 
     callEditError() {
@@ -193,7 +216,6 @@ export default {
           )
         }
       }
-      console.log(saveData)
       try {
         const response = await axios.post(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"),
             {"works" : saveData}
@@ -210,25 +232,6 @@ export default {
         console.log(e)
       }
 
-
-
-
-      try {
-        const response = await axios.delete(this.IP +"/students/scientific_works/" + localStorage.getItem("access_token"),
-            {data : {
-          "ids" : this.arrayDeleteWorkId
-          }
-            }
-        )
-        this.data = response.data;
-        this.fillArrayOfArticles(this.data, this.numberOfSemesters)
-      }
-      catch (e) {
-        console.log(e)
-      }
-
-      this.arrayDeleteWorkId = []
-
     },
 
     async saveProjects() {},
@@ -237,68 +240,47 @@ export default {
 
     },
 
-    makeCopy(){
-      this.arrayOfArticlesCopy.length = 0
-      this.arrayOfArticlesCopy = JSON.parse(JSON.stringify(this.arrayOfArticles));
+    makeCopy(n){
+      if (n === 1) {
+        this.arrayOfArticlesCopy.length = 0
+        this.arrayOfArticlesCopy = JSON.parse(JSON.stringify(this.arrayOfArticles));
+      }
+      if (n === 2) {
+        this.arrayOfReportsCopy.length = 0
+        this.arrayOfReportsCopy = JSON.parse(JSON.stringify(this.arrayOfReports));
+      }
+      if (n === 3) {
+        this.arrayOfProjectsCopy.length = 0
+        this.arrayOfProjectsCopy = JSON.parse(JSON.stringify(this.arrayOfProjects));
+      }
+
 
     },
 
     deleteArticle(index,n){
-
-
       var tempData = this.arrayOfArticles[index]
-      this.arrayDeleteWorkId.push(tempData[n].work_id)
       tempData.splice(n,1)
+    },
+    deleteReport(index,n){
 
+      var tempData = this.arrayOfReports[index]
+      tempData.splice(n,1)
+    },
+    deleteProject(index,n){
+      console.log('deleteti')
+      var tempData = this.arrayOfProjects[index]
+      tempData.splice(n,1)
     },
 
-    cancelChangeHighTable() {
-      this.makeCopyGeneralArrays(0)
-      this.isTableEditing = !this.isTableEditing;
-    },
 
-    fillArrayOfArticles(data, numberOfSemesters){
 
-      this.arrayOfArticles = Array(parseInt(numberOfSemesters))
-      for (var i = 0; i < this.arrayOfArticles.length; i++){
-        this.arrayOfArticles[i] = new Array()
-      }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfArticles[0].push(data[i])
-        }
-        if (data[i].semester === 2) {
-          this.arrayOfArticles[1].push(data[i])
-        }
-        if (data[i].semester === 3) {
-          this.arrayOfArticles[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.arrayOfArticles[3].push(data[i])
-        }
-        if (data[i].semester === 5) {
-          this.arrayOfArticles[4].push(data[i])
-        }
-        if (data[i].semester === 6) {
-          this.arrayOfArticles[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfArticles[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfArticles[7].push(data[i])
-        }
-
-      }
-    },
 
     async loadScientificWorks() {
       try {
-        const response = await axios.get(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
-        this.fillArrayOfArticles(this.data.works, this.data.years * 2)
-        this.numberOfSemesters = this.data.years * 2
+        await this.fillDataForTables(this.data)
 
       }
       catch (e) {
@@ -308,10 +290,55 @@ export default {
 
   },
   async beforeMount() {
-    if (store.getters.getType !== "student"){
-      this.$router.push('/wrongAccess')
-    }
+
     await this.loadScientificWorks()
+    var data = [
+      {
+        "accepted_at": "2024-03-30T15:26:05.545Z",
+        "conference": {
+          "conference_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "conference_name": "string",
+          "location": "string",
+          "report_name": "string",
+          "reported_at": "2024-03-30T15:26:05.545Z",
+          "rinc": true,
+          "scopus": true,
+          "status": "registered",
+          "wac": true,
+          "wos": true
+        },
+        "publication": {
+          "co_authors": "string",
+          "impact": 0,
+          "name": "string",
+          "output_data": "string",
+          "publication_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "rinc": true,
+          "scopus": true,
+          "status": "to print",
+          "volume": 0,
+          "wac": true,
+          "wos": true
+        },
+        "research_project": {
+          "add_info": "string",
+          "end_at": "2024-03-30T15:26:05.545Z",
+          "grantee": "string",
+          "project_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "project_name": "string",
+          "start_at": "2024-03-30T15:26:05.545Z"
+        },
+        "semester": 1,
+        "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "updated_at": "2024-03-30T15:26:05.545Z",
+        "works_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "works_status": "todo"
+      }
+    ]
+    await this.fillDataForTables(data)
+    console.log(this.arrayOfArticles)
+    console.log(this.arrayOfReports)
+
 
 
   }
