@@ -28,7 +28,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Публикация в изданиях</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
           <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')">Добавить</button>
@@ -264,7 +264,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Выступление на научных конференциях</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
           <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')">Добавить</button>
@@ -482,7 +482,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Участие в научно-исследовательских проектах</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
           <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')">Добавить</button>
@@ -660,15 +660,20 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "tabOfArticles",
-  props: ["articles", "reports", "projects", "id", "waitForCheck"],
+  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
+      deleteArticlesID : [],
+      deleteProjectsID : [],
+      deleteReportsID : [],
     }
   },
   methods : {
@@ -706,43 +711,76 @@ export default {
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit("makeCopy", 3)
     },
-    saveArticles(){
+    async saveArticles(){
       this.smallTableEditing1 = !this.smallTableEditing1
       this.$emit('saveArticles')
 
+      try {
+        const response = await axios.put(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
+            {"ids" : this.deleteArticlesID}
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+
 
     },
-    saveReports(){
+    async saveReports(){
       this.smallTableEditing2 = !this.smallTableEditing2
       this.$emit('saveReports')
 
+      try {
+        const response = await axios.put(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
+            {"ids" : this.deleteReportsID}
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+
 
     },
-    saveProjects(){
+    async saveProjects(){
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit('saveProjects')
+
+      try {
+        const response = await axios.put(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
+            {"ids" : this.deleteProjectsID}
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
 
     },
     cancelChange1(){
       this.$emit('updatePage', 1)
+      this.deleteArticlesID.length = 0
       this.smallTableEditing1 = !this.smallTableEditing1
     },
     cancelChange2(){
       this.$emit('updatePage', 2)
+      this.deleteReportsID.length = 0
       this.smallTableEditing2 = !this.smallTableEditing2
     },
     cancelChange3(){
       this.$emit('updatePage', 3)
+      this.deleteProjectsID.length = 0
       this.smallTableEditing3 = !this.smallTableEditing3
     },
 
     deleteArticle(myIndex){
+      this.deleteArticlesID.push(this.articles[myIndex].publication_id)
       this.$emit('deleteArticle', myIndex)
     },
     deleteReport(myIndex){
+      this.deleteReportsID.push(this.reports[myIndex].conference_id)
       this.$emit('deleteReport', myIndex)
     },
     deleteProject(myIndex){
+      this.deleteProjectsID.push(this.projects[myIndex].project_id)
       this.$emit('deleteProject', myIndex)
     }
   },

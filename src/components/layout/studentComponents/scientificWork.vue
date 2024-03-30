@@ -22,6 +22,7 @@
                      :articles = this.arrayOfArticles[index]
                      :reports = this.arrayOfReports[index]
                      :projects = this.arrayOfProjects[index]
+                     :actual-semester = this.actualSemester
 
     :waitForCheck = this.waitForCheck
                      @updatePage="(n) => cancelChange(n)"
@@ -195,49 +196,60 @@ export default {
       if (JSON.stringify(this.arrayOfArticles) === JSON.stringify(this.arrayOfArticlesCopy)) {
         return
       }
+      this.makeCopy(1)
 
 
-      this.makeCopy()
-      var saveData = new Array()
-
-      for (var i = 0; i < this.arrayOfArticles.length; i++){
-        for (var j = 0; j < this.arrayOfArticles[i].length; j++){
-          saveData.push(
-              {
-                name: this.arrayOfArticles[i][j].name,
-                work_type: this.arrayOfArticles[i][j].work_type,
-                impact: parseFloat(this.arrayOfArticles[i][j].impact),
-                output_data: this.arrayOfArticles[i][j].output_data,
-                volume: parseInt(this.arrayOfArticles[i][j].volume),
-                co_authors: this.arrayOfArticles[i][j].co_authors,
-                work_id: this.arrayOfArticles[i][j].work_id,
-                semester : this.arrayOfArticles[i][j].semester
-              }
-          )
-        }
-      }
       try {
         const response = await axios.post(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"),
-            {"works" : saveData}
+            {
+              "publication" : this.arrayOfArticles[this.actualSemester - 1],
+              "semester": this.actualSemester,
+            }
         )
-
-        this.data = response.data;
-
-        if (this.arrayDeleteWorkId.length === 0){
-          this.fillArrayOfArticles(this.data, this.numberOfSemesters)
-          return
-        }
       }
       catch (e) {
         console.log(e)
       }
-
     },
 
-    async saveProjects() {},
+    async saveProjects() {
+      if (JSON.stringify(this.arrayOfProjects) === JSON.stringify(this.arrayOfProjectsCopy)) {
+        return
+      }
+      this.makeCopy(2)
+
+
+      try {
+        const response = await axios.post(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
+            {
+              "projects" : this.arrayOfProjects[this.actualSemester - 1],
+              "semester": this.actualSemester,
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
 
     async saveReports() {
+      if (JSON.stringify(this.arrayOfReports) === JSON.stringify(this.arrayOfReportsCopy)) {
+        return
+      }
+      this.makeCopy(3)
 
+
+      try {
+        const response = await axios.post(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
+            {
+              "conferences" : this.arrayOfReports[this.actualSemester - 1],
+              "semester": this.actualSemester,
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
 
     makeCopy(n){
@@ -267,7 +279,7 @@ export default {
       tempData.splice(n,1)
     },
     deleteProject(index,n){
-      console.log('deleteti')
+
       var tempData = this.arrayOfProjects[index]
       tempData.splice(n,1)
     },
