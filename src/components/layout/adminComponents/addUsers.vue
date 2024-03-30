@@ -149,9 +149,7 @@ export default {
     }
   },
   beforeMount() {
-    if (store.getters.getType !== "admin"){
-      this.$router.push('/wrongAccess')
-    }
+
   }
 }
 </script>

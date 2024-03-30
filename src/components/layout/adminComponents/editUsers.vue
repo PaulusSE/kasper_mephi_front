@@ -63,7 +63,7 @@
 
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfStudents.length}" v-for="(element,index) in arrayOfStudents">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              {{index}}
+              {{index + 1}}
             </div>
 
             <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
@@ -131,7 +131,7 @@
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
-              <router-link style="text-decoration: none" to="/user">{{element["full_name"]}}</router-link>
+              <router-link style="text-decoration: none" to="/user2">{{element["full_name"]}}</router-link>
 
             </div>
           </div>
@@ -157,7 +157,42 @@
           </nav>
         </div>
 
-      <div class="roundBlock p-0 mt-2">
+
+
+      <div v-if="!editTableWithGroups" class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfGroups.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class=" textMiniTable" style="width: 90%; text-align: center">
+              Группа
+            </div>
+
+
+
+
+
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="arrayOfGroups[index]">
+              <p v-else>{{element}}</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div v-else class="roundBlock p-0 mt-2">
         <div>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
@@ -218,7 +253,38 @@
         </nav>
       </div>
 
-      <div class="roundBlock p-0 mt-2">
+      <div v-if="!editTableYears" class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              План (лет)
+            </div>
+
+
+
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfPlan.length}" v-for="(element,index) in arrayOfPlan">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]">
+              <p v-else>{{element}}</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div v-else class="roundBlock p-0 mt-2">
         <div>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
@@ -287,32 +353,35 @@ export default {
   data(){
     return {
       arrayOfStudentsCopy : [],
-      arrayofStudentsCopy : [],
       arrayOfStudents : [
         {
-          'fullName' : 'ФИО1',
-          'group' : 'group1',
-          'year' : 1,
+          'full_name' : 'ФИО1',
+          'group_name' : 'group1',
+          'years' : 1,
           'state' : 'graduated',
           'can_edit' : false
         },
         {
-          'fullName' : 'ФИО2',
-          'group' : 'group2',
-          'year' : 2,
+          'full_name' : 'ФИО2',
+          'group_name' : 'group2',
+          'years' : 2,
           'state' : 'studying',
           'can_edit' : true
         },
       ],
 
-      arrayOfTeachers : [],
+      arrayOfTeachers : [
+        {
+          'full_name' : 'ФИО1'
+        }
+      ],
       stateOfStudents: true,
       stateOfTeachers: true,
       stateOfMainCheckBox : false,
       arrayOfGroups: [
-          // 'Б20-504',
-          // 'Б20-514',
-          // 'Б19-514',
+          'Б20-504',
+          'Б20-514',
+          'Б19-514',
       ],
       arrayOfGroupsCopy:[],
       editTableWithGroups : false,
@@ -480,9 +549,7 @@ export default {
     }
   },
   beforeMount() {
-    if (store.getters.getType !== "admin"){
-      this.$router.push('/wrongAccess')
-    }
+
     this.getAspsAndTeachers()
 
 

@@ -175,10 +175,10 @@ export default {
     }
   },
   async beforeMount() {
-    await this.checkAuth()
-    if (store.getters.getType !== 'admin'){
-      this.$router.push("/wrongAccess")
-    }
+    // await this.checkAuth()
+    // if (store.getters.getType !== 'admin'){
+    //   this.$router.push("/wrongAccess")
+    // }
     await this.getStudents()
   }
 }
