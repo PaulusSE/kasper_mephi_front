@@ -29,10 +29,10 @@
         <p class="mainText mt-0">Общая информация</p>
       </nav>
       <nav v-if="!editingInfo">
-        <button class="editBtn" @click="editCommonInfo">Редактировать</button>
+        <button class="editBtn" @click="editCommonInfo" :disabled="waitForCheck" :class="{disabledText : waitForCheck}" >Редактировать</button>
       </nav>
       <nav v-else>
-        <button class="editBtn" @click="saveCommonInfo">Сохранить</button>
+        <button class="editBtn" @click="saveCommonInfo" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
       </nav>
     </div>
     <div>
@@ -127,8 +127,8 @@
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
         <p class="mainText">Текущее состояние диссертации</p>
-        <button v-if="!editingCheckbox" @click="editTables" class="editBtn2">Редактировать</button>
-        <button v-else @click="saveTables" class="editBtn2">Сохранить</button>
+        <button v-if="!editingCheckbox" @click="editTables" class="editBtn2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
+        <button v-else @click="saveTables" class="editBtn2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
       </div>
 
     <div class="myBox roundBlock p-0">
@@ -234,12 +234,20 @@
 
     </div>
 
-<div class="text-end pb-2" style="margin-right: 2.5%">
-  <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-  <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>
-</div>
+    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
+      <div class="text-start" style="margin-left: 2.5%">
+        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
+      </div>
+      <div>
+        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+      </div>
+    </div>
+
+
 
   </div>
+
+
 
 
 </template>
@@ -285,17 +293,22 @@ export default {
       arrayWithFilesId: [],
       jobStatus : '',
       feedback: "",
+
       waitForCheck : false,
+      workStatus : 'todo',
+      workStatusMap : {
+        "todo" : "Отправлено на доработку",
+        "approved" : "Принято",
+        "on review" : "Ожидает проверки",
+        "in progress" : "В процессе выполнения",
+        "empty" : "Пусто",
+        "failed" : "Не сдано",
+      },
+
       array: {
       },
       progressMap : new Map(),
-      statusOfJob : {
-        'todo': 'На доработку',
-        'failed' : 'Не сдано',
-        'passed' : 'Сдано',
-        'empty': '',
-        '' : ''
-      },
+
       progressOfDissertation : 15,
       progressOfDissertationCopy : '',
       showRangeError : false,
@@ -573,6 +586,10 @@ this.waitForCheck = !this.waitForCheck
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.disabledText {
+  color: grey !important;
 }
 
 .hightlightActualSemesterColumn {

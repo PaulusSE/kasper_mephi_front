@@ -29,21 +29,28 @@
     @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
     @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
     @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
+
     @saveArticles = saveArticles()
     @saveProjects = saveProjects()
     @saveReports = saveReports()
 
     @makeCopy="(n) => makeCopy(n)"
     @makeEditErrorNotification = callEditError
+
     @deleteArticle="(n) => deleteArticle(index, n)"
     @deleteReport="(n) => deleteReport(index, n)"
     @deleteProject="(n) => deleteProject(index, n)"
+
     ></tab-of-articles>
 
-<!--    <div class="text-end pb-2" style="margin-right: 2.5%">-->
-<!--      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>-->
-<!--      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>-->
-<!--    </div>-->
+    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
+      <div class="text-start" style="margin-left: 2.5%">
+        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
+      </div>
+      <div>
+        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+      </div>
+    </div>
 
   </div>
 
@@ -78,8 +85,17 @@ export default {
       arrayOfProjects:[],
       arrayOfProjectsCopy:[],
       showEditError: false,
-      waitForCheck : false,
+      waitForCheck : true,
       actualSemester: 1,
+      workStatus : '',
+      workStatusMap : {
+        "todo" : "Отправлено на доработку",
+        "approved" : "Принято",
+        "on review" : "Ожидает проверки",
+        "in progress" : "В процессе выполнения",
+        "empty" : "Пусто",
+        "failed" : "Не сдано",
+      }
     }
 
   },
@@ -185,7 +201,19 @@ export default {
     },
 
     async sendToCheck() {
-      this.waitForCheck = !this.waitForCheck
+
+      try {
+        const response = await axios.post(this.IP +'/students/works/review/' + localStorage.getItem("access_token"),
+            {
+              "semester" : this.actualSemester
+            }
+        )
+        this.waitForCheck = true
+
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
 
     async cancelCheck() {
@@ -293,6 +321,20 @@ export default {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         await this.fillDataForTables(this.data)
+        this.workStatus = this.data.work_status
+        this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+
+    async getActualSemester() {
+      try {
+        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+        this.actualSemester = this.data.actual_semester
 
       }
       catch (e) {
@@ -302,8 +344,9 @@ export default {
 
   },
   async beforeMount() {
-
+    await this.actualSemester
     await this.loadScientificWorks()
+
     var data = [
       {
         "accepted_at": "2024-03-30T15:26:05.545Z",
@@ -348,8 +391,9 @@ export default {
       }
     ]
     await this.fillDataForTables(data)
-    console.log(this.arrayOfArticles)
-    console.log(this.arrayOfReports)
+
+    this.workStatus = "approved"
+    this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
 
 
 
@@ -368,6 +412,10 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.disabledText {
+  color: grey !important;
 }
 
 @media (min-width: 800px) {

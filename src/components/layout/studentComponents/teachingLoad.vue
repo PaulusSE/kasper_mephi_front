@@ -17,23 +17,42 @@
     ></header-of-student>
 
 
-    <teaching-load-table v-for="(elements,index) in arrayOfTeachingLoadByPeriod "
+    <teaching-load-table v-for="(n, index) in this.actualSemester "
                          :id = index
-                         :elements = elements
+
+                         :classroom-work="array_classroom_load[index]"
+                         :individual-work="array_individual_students_load[index]"
+                         :other-work="array_additional_load[index]"
+                         :actualSemester = this.actualSemester
+                         @updatePage="(n) => cancelChange(n)"
                          :waitForCheck = this.waitForCheck
-                         @buttonSmallTableAdd=buttonSmallTableAdd(index)
-                         @buttonSmallTableCancel = cancelChange()
-                         @buttonSmallTableSave = saveTeachingLoad()
-                         @makeCopy = makeCopy()
-                         @deleteTeachingLoad="(n) => deleteTeachingLoad(index, n)"
+
+                         @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
+                         @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
+                         @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
+
+                         @deleteClassroomWork="(n) => deleteClassroomWork(index, n)"
+                         @deleteIndividualWork="(n) => deleteIndividualWork(index, n)"
+                         @deleteAdditionalWork="(n) => deleteAdditionalWork(index, n)"
+
+                         @saveClassroomWork = saveClassroomWork()
+                         @saveIndividualWork = saveIndividualWork()
+                         @saveAdditionalWork = saveAdditionalWork()
+
+                         @makeCopy="(n) => makeCopy(n)"
+
                          @makeEditErrorNotification = callEditError
 
     ></teaching-load-table>
 
-<!--    <div class="text-end pb-2" style="margin-right: 2.5%">-->
-<!--      <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>-->
-<!--      <button v-else type="button" class="loggining btn btn-primary btn-lg my-1" @click="cancelCheck()">Отменить проверку</button>-->
-<!--    </div>-->
+    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
+      <div class="text-start" style="margin-left: 2.5%">
+        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
+      </div>
+      <div>
+        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
+      </div>
+    </div>
 
 
 
@@ -50,9 +69,13 @@ import store from "@/store/index.js";
 import axios from "axios";
 import workSendToCheckNotification
   from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
+import teachingLoadTableForTeacher from "@/components/layout/teacherComponents/teachingLoadTableForTeacher.vue";
+import tabOfArticles from "@/components/layout/studentComponents/tabOfArticles.vue";
 export default {
   name: "teachingLoad",
   components: {
+    tabOfArticles,
+    teachingLoadTableForTeacher,
     workSendToCheckNotification,
     "headerOfStudent":headerOfStudent,
     "teachingLoadTable":teachingLoadTable
@@ -60,67 +83,79 @@ export default {
   props: ["stateOfStudentPage", 'educationTime'],
   data() {
     return {
-      isTableEditing:false,
-      arrayOfTeachingLoadByPeriodCopy : [],
-      arrayOfTeachingLoadByPeriod:[],
-      arrayOfTeachingLoad : [
-        {
-          hours1: '48 семинары', otherLoad1: "2стендта (УИР), прием экзаменов по ..."
-        },
-        {
-          hours2: '16 лр', otherLoad2: "1стендт (УИР)"
-        },
-        {
-          hours3: '', otherLoad3: ""
-        },
-        {
-          hours4: '', otherLoad4: ""
-        },
-        {
-          hours5: '', otherLoad5: ""
-        },
-        {
-          hours6: '', otherLoad6: ""
-        },
-        {
-          hours7: '', otherLoad7: ""
-        },
-        {
-          hours8: '', otherLoad8: ""
-        }
-      ],
-      arrayOfTeachingLoadCopy: [],
-      arrayDeleteTeachingLoadId : [],
-      numberOfSemesters : '',
+      array_classroom_load:[],
+      array_classroom_loadCopy:[],
+      array_individual_students_load: [],
+      array_individual_students_loadCopy: [],
+      array_additional_load: [],
+      array_additional_loadCopy: [],
+      actualSemester : 1,
       showEditError: false,
       waitForCheck : false,
+      workStatus : '',
+      workStatusMap : {
+        "todo" : "Отправлено на доработку",
+        "approved" : "Принято",
+        "on review" : "Ожидает проверки",
+        "in progress" : "В процессе выполнения",
+        "empty" : "Пусто",
+        "failed" : "Не сдано",
+      }
+
     }
   },
 
 
   methods: {
-    editTable() {
-      this.isTableEditing = !this.isTableEditing;
-      this.makeCopyGeneralArrays()
-    },
-    buttonSmallTableAdd(n){
+
+    buttonSmallTableAdd1(n){
       let newLoad = {
-        subject: '',
-        numberOfGroup: '',
-        mainTeacher: '',
-        typeOfClasses: '',
-        numberOfHours: '',
-        semester:n + 1,
-        numberOfSemesters : ''
+        subject_name: '',
+        main_teacher: '',
+        load_type: '',
+        hours: '',
+        group_name: '',
       }
-      this.arrayOfTeachingLoadByPeriod[n] = this.arrayOfTeachingLoadByPeriod[n].concat(newLoad)
+      this.array_classroom_load[n] = this.array_classroom_load[n].concat(newLoad)
     },
-    cancelChange(){
 
-      this.arrayOfTeachingLoadByPeriod.length = 0
-      this.arrayOfTeachingLoadByPeriod = JSON.parse(JSON.stringify(this.arrayOfTeachingLoadByPeriodCopy));
+    buttonSmallTableAdd2(n){
+      let newLoad = {
+        students_amount: '',
+        load_type: '',
+        comment: '',
 
-      this.arrayDeleteTeachingLoadId.length = 0
+      }
+      this.array_individual_students_load[n] = this.array_individual_students_load[n].concat(newLoad)
+    },
+
+    buttonSmallTableAdd3(n){
+      let newLoad = {
+        name: '',
+        volume: '',
+        comment: '',
+      }
+      this.array_additional_load[n] = this.array_additional_load[n].concat(newLoad)
+    },
+
+    cancelChange(n){
+
+      if (n === 1){
+        this.array_classroom_load.length = 0
+        for (var i = 0; i < this.array_classroom_loadCopy.length; i++)
+          this.array_classroom_load[i] = this.array_classroom_loadCopy[i].slice();
+      }
+      if (n === 2){
+        this.array_individual_students_load.length = 0
+        for (var i = 0; i < this.array_individual_students_loadCopy.length; i++)
+          this.array_individual_students_load[i] = this.array_individual_students_loadCopy[i].slice();
+      }
+      if (n === 3){
+        this.array_additional_load.length = 0
+        for (var i = 0; i < this.array_additional_loadCopy.length; i++)
+          this.array_additional_load[i] = this.array_additional_loadCopy[i].slice();
+      }
+
     },
 
     callEditError() {
@@ -131,164 +166,222 @@ export default {
     },
 
     async sendToCheck() {
-      this.waitForCheck = !this.waitForCheck
+      try {
+        const response = await axios.post(this.IP +'/students/works/review/' + localStorage.getItem("access_token"),
+            {
+              "semester" : this.actualSemester
+            }
+        )
+        this.waitForCheck = true
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
 
     async cancelCheck() {
       this.waitForCheck = !this.waitForCheck
     },
 
-    cancelChangeHighTable() {
-      this.isTableEditing = !this.isTableEditing;
-      this.makeCopyGeneralArrays(0)
+    makeCopy(n){
+      if (n === 1){
+        this.array_classroom_loadCopy.length = 0
+        this.array_classroom_loadCopy = JSON.parse(JSON.stringify(this.array_classroom_load));
+      }
+      if (n === 2){
+        this.array_individual_students_loadCopy.length = 0
+        this.array_individual_students_loadCopy = JSON.parse(JSON.stringify(this.array_individual_students_load));
+      }
+      if (n === 3){
+        this.array_additional_loadCopy.length = 0
+        this.array_additional_loadCopy = JSON.parse(JSON.stringify(this.array_additional_load));
+      }
+
+
+
     },
 
-    async saveTeachingLoad(){
-      if (JSON.stringify(this.arrayOfTeachingLoadByPeriod) === JSON.stringify(this.arrayOfTeachingLoadByPeriodCopy)){
+    deleteClassroomWork(index, n){
+      var tempData = this.array_classroom_load[index]
+      tempData.splice(n,1)
+    },
+
+    deleteIndividualWork(index, n){
+      var tempData = this.array_individual_students_load[index]
+      tempData.splice(n,1)
+    },
+
+    deleteAdditionalWork(index, n){
+      var tempData = this.array_additional_load[index]
+      tempData.splice(n,1)
+    },
+
+    async saveClassroomWork(){
+      if (JSON.stringify(this.array_classroom_load) === JSON.stringify(this.array_classroom_loadCopy)) {
         return
       }
-        this.makeCopy()
+      this.makeCopy(1)
 
-        var saveData = new Array()
-        for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
-          for (var j = 0; j < this.arrayOfTeachingLoadByPeriod[i].length; j++){
-            saveData.push(
-                {
-                  subject: this.arrayOfTeachingLoadByPeriod[i][j].subject,
-                  student_id: this.arrayOfTeachingLoadByPeriod[i][j].student_id,
-                  typeOfClasses: this.arrayOfTeachingLoadByPeriod[i][j].typeOfClasses,
-                  semester: parseInt(this.arrayOfTeachingLoadByPeriod[i][j].semester),
-                  numberOfHours: parseInt(this.arrayOfTeachingLoadByPeriod[i][j].numberOfHours),
-                  mainTeacher: this.arrayOfTeachingLoadByPeriod[i][j].mainTeacher,
-                  numberOfGroup: this.arrayOfTeachingLoadByPeriod[i][j].numberOfGroup,
-                  loadID: this.arrayOfTeachingLoadByPeriod[i][j].loadID,
-                  additional_load: this.arrayOfTeachingLoadByPeriod[i][j].additional_load,
-
-                }
-            )
-          }
-        }
-
-        console.log(saveData)
-        console.log(this.arrayOfTeachingLoadByPeriod)
-        try {
-          const response = await axios.post(this.IP +'/students/teaching_load/' + localStorage.getItem("access_token"),
-              {"array" : saveData}
-          )
-          this.data = response.data;
-          this.fillArrayOfTeachingLoad(this.data.array, this.numberOfSemesters)
-        }
-        catch (e) {
-          console.log("Message here")
-          console.log(e)
-
-        }
-
-      if (this.arrayDeleteTeachingLoadId.length === 0){
-        return
-      }
 
       try {
-        const response = await axios.delete(this.IP +"/students/teaching_load/" + localStorage.getItem("access_token"),
-            {data : {
-                "ids" : this.arrayDeleteTeachingLoadId
-              }
+        const response = await axios.post(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
+            {
+              "loads" : this.array_classroom_load[this.actualSemester - 1],
+              "semester": this.actualSemester,
             }
         )
-        this.data = response.data;
-        this.fillArrayOfTeachingLoad(this.data.array, this.numberOfSemesters)
       }
       catch (e) {
         console.log(e)
       }
-
-      this.arrayDeleteTeachingLoadId = []
-
-
-    },
-    makeCopy(){
-      this.arrayOfTeachingLoadByPeriodCopy.length = 0
-      this.arrayOfTeachingLoadByPeriodCopy = JSON.parse(JSON.stringify(this.arrayOfTeachingLoadByPeriod));
-
-    },
-    makeCopyGeneralArrays(reverse = 1) {
-      if (reverse){
-        for (var i = 0; i < this.arrayOfTeachingLoad.length; i++) {
-          this.arrayOfTeachingLoadCopy[i] = Object.assign({}, this.arrayOfTeachingLoad[i]);
-        }
-      }
-      else {
-        this.arrayOfTeachingLoad.length = 0
-        for (var i = 0; i < this.arrayOfTeachingLoadCopy.length; i++) {
-          this.arrayOfTeachingLoad[i] = Object.assign({}, this.arrayOfTeachingLoadCopy[i]);
-        }
-      }
     },
 
-    deleteTeachingLoad(index, n){
-
-      var tempData = this.arrayOfTeachingLoadByPeriod[index]
-      if (tempData[n].loadID === undefined){
-        tempData.splice(n,1)
+    async saveIndividualWork(){
+      if (JSON.stringify(this.array_individual_students_load) === JSON.stringify(this.array_individual_students_loadCopy)) {
         return
       }
+      this.makeCopy(2)
 
-      this.arrayDeleteTeachingLoadId.push(tempData[n].loadID)
-      tempData.splice(n,1)
+
+      try {
+        const response = await axios.post(this.IP +'/students/load/individual/' + localStorage.getItem("access_token"),
+            {
+              "loads" : this.array_individual_students_load[this.actualSemester - 1],
+              "semester": this.actualSemester,
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
 
-    fillArrayOfTeachingLoad(data, numberOfSemesters) {
+    async saveAdditionalWork(){
+      if (JSON.stringify(this.array_additional_load) === JSON.stringify(this.array_additional_loadCopy)) {
+        return
+      }
+      this.makeCopy(3)
 
-      this.arrayOfTeachingLoadByPeriod = Array(parseInt(numberOfSemesters))
 
-      for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
-        this.arrayOfTeachingLoadByPeriod[i] = new Array()
+      try {
+        const response = await axios.post(this.IP +'/students/load/additional/' + localStorage.getItem("access_token"),
+            {
+              "loads" : this.array_additional_load[this.actualSemester - 1],
+              "semester": this.actualSemester,
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+
+
+    async fillDataForTables(data){
+
+      this.array_classroom_load = new Array(this.actualSemester)
+      this.array_individual_students_load = new Array(this.actualSemester)
+      this.array_additional_load = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
+        this.array_classroom_load[i] = new Array()
+        this.array_individual_students_load[i] = new Array()
+        this.array_additional_load[i] = new Array()
       }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfTeachingLoadByPeriod[0].push(data[i])
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+
+        if (data[i].classroom_load.load_id !== undefined){
+          var class_load = data[i].classroom_load
+          this.array_classroom_load[semester - 1].push(class_load)
         }
-        if (data[i].semester === 2) {
-          this.arrayOfTeachingLoadByPeriod[1].push(data[i])
+        if (data[i].individual_students_load.load_id !== undefined){
+          var individual_load = data[i].individual_students_load
+          this.array_individual_students_load[semester-1].push(individual_load)
         }
-        if (data[i].semester === 3) {
-          this.arrayOfTeachingLoadByPeriod[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.arrayOfTeachingLoadByPeriod[3].push(data[i])
-        }
-        if (data[i].semester === 5) {
-          this.arrayOfTeachingLoadByPeriod[4].push(data[i])
-        }
-        if (data[i].semester === 6) {
-          this.arrayOfTeachingLoadByPeriod[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfTeachingLoadByPeriod[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfTeachingLoadByPeriod[7].push(data[i])
+        if (data[i].additional_load.load_id !== undefined){
+          var add_load = data[i].additional_load
+          this.array_additional_load[semester-1].push(add_load)
         }
       }
+
+
     },
 
     async loadTeachingLoad() {
       try {
-        const response = await axios.get(this.IP +'/students/teaching_load/' + localStorage.getItem("access_token"))
+        const response = await axios.put(this.IP +'/supervisors/student/load/' + localStorage.getItem("access_token"),
+            {
+              'student_id' : localStorage.getItem('studentID')
+            }
+        )
         this.data = await response.data;
+        this.fillDataForTables(this.data)
+        this.workStatus = this.data.approval_status
+        this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
       }
       catch (e) {
         console.log(e)
       }
-      this.fillArrayOfTeachingLoad(this.data.array, this.data.years * 2)
-      this.numberOfSemesters = this.data.years * 2
+    },
+
+    async getActualSemester() {
+      try {
+        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+        this.actualSemester = this.data.actual_semester
+
+      }
+      catch (e) {
+        console.log(e)
+      }
     }
 
   },
   async beforeMount() {
-
+    // await this.getActualSemester()
     await this.loadTeachingLoad()
+
+    this.data = [
+      {
+        "accepted_at": "string",
+        "additional_load": {
+          "comment": "string",
+          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "name": "string",
+          "volume": "string"
+        },
+        "approval_status": "todo",
+        "classroom_load": {
+          "group_name": "string",
+          "hours": 0,
+          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "load_type": "practice",
+          "main_teacher": "string",
+          "subject_name": "string"
+        },
+        "individual_students_load": {
+          "comment": "string",
+          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "load_type": "project practice",
+          "students_amount": 0
+        },
+        "loads_id": "string",
+        "semester": 1,
+        "student_id": "string",
+        "updated_at": "string"
+      }
+    ]
+
+    this.workStatus = "in progress"
+    this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
+    this.fillDataForTables(this.data)
+
+
+
+
+
 
   },
 }
@@ -302,6 +395,10 @@ export default {
   box-sizing: border-box;
 }
 
+
+.disabledText {
+  color: grey !important;
+}
 
 
 @media (min-width: 800px) {

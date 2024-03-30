@@ -29,11 +29,11 @@
           <p class="headingSemester">Публикация в изданиях</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
-          <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3">Редактировать</button>
+          <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" :disabled="waitForCheck" :class="{disabledText : waitForCheck}" class="editBtn2 mt-3">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange1">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveArticles">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange1" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveArticles" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
@@ -247,7 +247,7 @@
             </div>
 
             <div class="textMiniTable" style="width: 6%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
+              <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -265,11 +265,11 @@
           <p class="headingSemester">Выступление на научных конференциях</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
-          <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3">Редактировать</button>
+          <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange2">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveReports">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveReports" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
@@ -465,7 +465,7 @@
 
 
             <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteReport(index)">
+              <button class="btnAddDeleteFiles mt-2" @click="deleteReport(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -483,11 +483,11 @@
           <p class="headingSemester">Участие в научно-исследовательских проектах</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
-          <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3">Редактировать</button>
+          <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange3">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveProjects">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveProjects" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
@@ -639,7 +639,7 @@
 
 
             <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-              <button class="btnAddDeleteFiles mt-2" @click="deleteProject(index)">
+              <button class="btnAddDeleteFiles mt-2" @click="deleteProject(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -803,6 +803,10 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.disabledText {
+  color: grey !important;
 }
 
 @media (min-width: 800px) {

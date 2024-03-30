@@ -9,6 +9,23 @@
     @btnProfileClicked="$emit('btnProfileClicked')"
     :state-of-student-page = this.stateOfPage
 ></header-of-student>
+
+    <div class="roundBlock">
+      <div class="mb-2">
+        <p class="mainText text-start">Статус работы: </p>
+      </div>
+      <div>
+        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.status">
+          <option  class="textResult1" value="approved">Принято</option>
+          <option  class="textResult2" value="todo">На доработку</option>
+          <option  class="textResult3" value="failed">Не сдано</option>
+          <option  class="textResult2" value="in progress">В процессе</option>
+          <option  class="textResult2" value="empty">Пусто</option>
+          <option  class="textResult2" value="on review">Ожидает проверки</option>
+        </select>
+      </div>
+    </div>
+
 <teaching-load-table-for-teacher v-for="(n, index) in this.actualSemester"
                                  :id = index
                                  :classroom-work="array_classroom_load[index]"
@@ -40,6 +57,7 @@ export default {
       array_individual_students_load: [],
       array_additional_load: [],
       actualSemester : 1,
+      workStatus : '',
     }
   },
   methods : {
@@ -84,6 +102,8 @@ export default {
         )
         this.data = await response.data;
         this.fillDataForTables(this.data)
+        this.workStatus = this.data.approval_status
+
       }
       catch (e) {
         console.log(e)
@@ -208,18 +228,13 @@ export default {
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:1.3rem;
     text-align: center;
 
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
 
   ul p{
     color: #000000;
@@ -248,31 +263,7 @@ export default {
 }
 
 @media (max-width: 800px) {
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
 
-  }
-
-
-
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -285,31 +276,17 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:1.1rem;
     text-align: center;
 
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
+
 
   ul p{
     color: #000000;
@@ -338,31 +315,9 @@ export default {
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
-
-  }
 
 
 
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -375,30 +330,14 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:0.8rem;
     text-align: center;
 
 
-  }
-
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
   }
 
   ul p{

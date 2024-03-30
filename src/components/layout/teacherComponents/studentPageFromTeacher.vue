@@ -16,16 +16,15 @@
         <p class="mainText text-start">Статус работы: </p>
       </div>
       <div>
-        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.status">
+        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
           <option  class="textResult1" value="approved">Принято</option>
           <option  class="textResult2" value="todo">На доработку</option>
           <option  class="textResult3" value="failed">Не сдано</option>
           <option  class="textResult2" value="in progress">В процессе</option>
+          <option  class="textResult2" value="empty">Пусто</option>
+          <option  class="textResult2" value="on review">Ожидает проверки</option>
         </select>
       </div>
-
-
-
     </div>
 
     <div>
@@ -278,7 +277,7 @@ export default {
       dateOfOrderOfStatement: "",
       actualSemestr : '',
       statuses : [],
-      status: '',
+      workStatus: 'failed',
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -319,7 +318,7 @@ export default {
       try {
         const response = await axios.post(this.IP +"/supervisors/student/review/" + localStorage.getItem("access_token"), {
               "student_id" : localStorage.getItem("studentId"),
-              "status" : this.status,
+              "status" : this.workStatus,
 
             }
         )

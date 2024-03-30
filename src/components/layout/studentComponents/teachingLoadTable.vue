@@ -28,19 +28,19 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Аудиторная нагрузка</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
-          <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3">Редактировать</button>
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+          <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange1">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveAuditWork">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange1" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveAuditWork" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
 
       <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
         <div v-if="!smallTableEditing1">
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: classroomWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
               Дисциплина
             </div>
@@ -65,17 +65,17 @@
 
           </div>
 
-          <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
+          <div class="d-flex" :class="{ underline: index !== classroomWork.length-1}" v-for="(element,index) in classroomWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{element.subject}}</div>
+                <div class="textWithCarry inputBox ">{{element.subject_name}}</div>
               </div>
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 11.1%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{element.numberOfGroup}}</div>
+                <div class="textWithCarry inputBox ">{{element.group_name}}</div>
               </div>
 
             </div>
@@ -84,21 +84,21 @@
             <div class="rightLine textMiniTable" style="width: 20.2%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">
-                  {{element.mainTeacher }}</div>
+                  {{element.main_teacher }}</div>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">
-                  {{element.typeOfClasses }}</div>
+                  {{this.loadTypeMap[element.load_type]}}</div>
               </div>
             </div>
 
             <div class="textMiniTable" style="width: 17.3%; text-align: center">
               <div class="pe-3">
                 <div >
-                  <div class="textWithCarry inputBox ps-3">{{element.numberOfHours}}</div>
+                  <div class="textWithCarry inputBox ps-3">{{element.hours}}</div>
                 </div>
               </div>
             </div>
@@ -106,7 +106,7 @@
         </div>
 
         <div v-else>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: classroomWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
               Дисциплина
             </div>
@@ -135,24 +135,24 @@
 
           </div>
 
-          <div class="d-flex" :class="{ underline: index !== elements.length-1}" v-for="(element,index) in elements">
+          <div class="d-flex" :class="{ underline: index !== classroomWork.length-1}" v-for="(element,index) in classroomWork">
             <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject_name"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="element.numberOfGroup"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.group_name"></textarea>
               </div>
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="element.mainTeacher"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.main_teacher"></textarea>
               </div>
 
             </div>
@@ -160,23 +160,23 @@
             <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
 
               <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="element.typeOfClasses">
-                  <option style="word-break: break-all">лабораторная</option>
-                  <option>лекция</option>
-                  <option>семинар</option>
-                  <option>прием зачетов и экзаменов</option>
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" :value="this.loadTypeMap[element.load_type]" v-model="element.load_type">
+                  <option style="word-break: break-all" value="laboratory">лабораторная</option>
+                  <option style="word-break: break-all" value="lecture">лекция</option>
+                  <option style="word-break: break-all" value="practice">семинар</option>
+                  <option style="word-break: break-all" value="exam">прием зачетов и экзаменов</option>
                 </select>
               </div>
 
             </div>
             <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="element.numberOfHours"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="element.hours"></textarea>
               </div>
             </div>
 
             <div class="textMiniTable ps pt-2" style="width: 8.1%; text-align: center">
-              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+              <button class="btnAddDeleteFiles" @click="deleteClassroomWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -192,12 +192,12 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Индивидуальная работа со студентами</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
-          <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3">Редактировать</button>
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id +1">
+          <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange2">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveIndividualWork">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveIndividualWork" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
@@ -224,14 +224,14 @@
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in this.individualWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.type}}</div>
+                <div class="textWithCarry inputBox ">{{work.load_type}}</div>
               </div>
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.numberOfStudents}}</div>
+                <div class="textWithCarry inputBox ">{{work.students_amount}}</div>
               </div>
 
             </div>
@@ -247,7 +247,7 @@
         </div>
 
         <div v-else>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: individualWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center;">
               Тип
             </div>
@@ -271,13 +271,13 @@
             <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.type"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.load_type"></textarea>
               </div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="work.numberOfStudents"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="work.students_amount"></textarea>
               </div>
             </div>
 
@@ -291,7 +291,7 @@
 
 
             <div class="textMiniTable ps-2 pt-2" style="width: 8%; text-align: center">
-              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+              <button class="btnAddDeleteFiles" @click="deleteIndividualWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -307,12 +307,12 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Прочая нагрузка</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%">
-          <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3">Редактировать</button>
+        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+          <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
-            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')">Добавить</button>
-            <button class="editBtn2 mt-3 me-2" @click="cancelChange3">Отменить</button>
-            <button class="editBtn2 mt-3 " @click="saveOtherWork">Сохранить</button>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="saveOtherWork" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
           </div>
         </nav>
       </div>
@@ -320,37 +320,34 @@
       <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
         <div v-if="!smallTableEditing3">
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center;">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center;">
               Наименование
               нагрузки
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               Объем (в любых ед. измерения)
             </div>
 
 
-            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
+            <div class="textMiniTable" style="width: 33%; text-align: center">
               Комментарий (опционально)
 
             </div>
 
-            <div class="textMiniTable" style="width: 25%; text-align: center">
-              Количество академических часов
 
-            </div>
 
           </div>
 
           <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in this.otherWork">
-            <div class="rightLine textMiniTable ps-3" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable ps-3" style="width: 33%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">{{work.name}}</div>
               </div>
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 33%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">{{work.volume}}</div>
               </div>
@@ -358,88 +355,67 @@
             </div>
 
 
-            <div class="textMiniTable rightLine" style="width: 25%; text-align: center">
-              <div>
-                <div class="textWithCarry inputBox ">
+            <div class="textMiniTable" style="width:33%; text-align: center">
+              <div class="me-2">
+                <div class="textWithCarry inputBox ps-2">
                   {{work.comment }}</div>
               </div>
             </div>
 
-            <div class="textMiniTable pe-3" style="width: 25%; text-align: center">
-              <div>
-                <div class="textWithCarry inputBox ps-3 ">
-                  {{work.numberOfHours }}</div>
-              </div>
-            </div>
+
           </div>
         </div>
 
         <div v-else>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: elements.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 23%; text-align: center;">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center;">
               Наименование
               нагрузки
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
               Объем (в любых ед. измерения)
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+            <div class=" textMiniTable rightLine" style="width: 30%; text-align: center">
               Комментарий (опционально)
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
-              Количество академических часов
+            <div class=" textMiniTable" style="width: 10%; text-align: center">
+
+
             </div>
 
-
-            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
-
-            </div>
 
           </div>
 
           <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in otherWork">
-            <div class="rightLine textMiniTable ps-3" style="width: 23%; text-align: center">
+            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center">
 
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.name"></textarea>
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.volume"></textarea>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.comment"></textarea>
               </div>
-
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 23%; text-align: center">
-
-              <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" v-model="work.hours">
-                  <option style="word-break: break-all">лабораторная</option>
-                  <option>лекция</option>
-                  <option>семинар</option>
-                  <option>прием зачетов и экзаменов</option>
-                </select>
-              </div>
-
             </div>
 
 
-            <div class="textMiniTable ps pt-2" style="width: 7%; text-align: center">
-              <button class="btnAddDeleteFiles" @click="deleteTeachingLoad(index)">
+
+            <div class="textMiniTable ps pt-2" style="width: 10%; text-align: center">
+              <button class="btnAddDeleteFiles" @click="deleteAdditionalWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -462,35 +438,29 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "tabOfArticles",
-  props: ["elements", "id", "waitForCheck"],
+  props: ["classroomWork", "individualWork", "otherWork", "actualSemester", "id", "waitForCheck"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
-      individualWork : [
-        {
-          type: "",
-          numberOfStudents : '2',
-          comment: 'вроде так',
-        },
-        {
-          type: "",
-          numberOfStudents : '5',
-          comment: 'вроде так',
-        }
-      ],
-      otherWork : [
-        {
-          name : "Работа",
-          volume : "Много",
-          comment : "Комментарий",
-          numberOfHours : '40 в неделю',
-        }
-      ]
+
+      deleteClassroomWorksID : [],
+      deleteIndividualWorkID : [],
+      deleteAdditionalWorkID : [],
+
+      loadTypeMap : {
+        "practice" : "семинар",
+        "lecture" : "лекция",
+        "laboratory" : "лабораторная",
+        "exam" : "прием зачетов и экзаменов",
+      }
+
     }
   },
   methods : {
@@ -500,6 +470,11 @@ export default {
 
       this.buttonIsOpened = !this.buttonIsOpened
     },
+
+    selectChanged(index) {
+      console.log(this.classroomWork[index])
+    },
+
     buttonSmallTableClicked1(){
 
       if (this.waitForCheck){
@@ -508,7 +483,7 @@ export default {
       }
 
       this.smallTableEditing1 = !this.smallTableEditing1
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 1)
     },
     buttonSmallTableClicked2(){
 
@@ -518,7 +493,7 @@ export default {
       }
 
       this.smallTableEditing2 = !this.smallTableEditing2
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 2)
     },
     buttonSmallTableClicked3(){
 
@@ -528,29 +503,68 @@ export default {
       }
 
       this.smallTableEditing3 = !this.smallTableEditing3
-      this.$emit("makeCopy")
+      this.$emit("makeCopy", 3)
     },
 
     cancelChange1(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 1)
       this.smallTableEditing1 = !this.smallTableEditing1
     },
     cancelChange2(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 2)
       this.smallTableEditing2 = !this.smallTableEditing2
     },
     cancelChange3(){
-      this.$emit('updatePage')
+      this.$emit('updatePage', 3)
       this.smallTableEditing3 = !this.smallTableEditing3
     },
 
-    saveAuditWork() {
+    async saveAuditWork() {
+      this.smallTableEditing1 = !this.smallTableEditing1
+      this.$emit('saveClassroomWork')
+
+      try {
+        const response = await axios.put(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
+            {
+              "ids" : this.deleteClassroomWorksID
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
 
     },
-    saveIndividualWork() {
+    async saveIndividualWork() {
+      this.smallTableEditing2 = !this.smallTableEditing2
+      this.$emit('saveIndividualWork')
 
+      try {
+        const response = await axios.put(this.IP + "/students/load/individual/" + localStorage.getItem("access_token"),
+            {
+              "ids" : this.deleteIndividualWorkID
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
-    saveOtherWork() {
+    async saveOtherWork() {
+      this.smallTableEditing3 = !this.smallTableEditing3
+      this.$emit('saveAdditionalWork')
+
+      try {
+        const response = await axios.put(this.IP + "/students/load/additional/" + localStorage.getItem("access_token"),
+            {
+              "ids" : this.deleteAdditionalWorkID
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+
 
     },
 
@@ -561,9 +575,20 @@ export default {
 
     },
 
-    deleteTeachingLoad(myIndex){
-      this.$emit('deleteTeachingLoad', myIndex)
-    }
+    deleteClassroomWork(myIndex) {
+      this.deleteClassroomWorksID.push(this.classroomWork[myIndex].load_id)
+      this.$emit('deleteClassroomWork', myIndex)
+    },
+    deleteIndividualWork(myIndex){
+      this.deleteIndividualWorkID.push(this.individualWork[myIndex].load_id)
+      this.$emit('deleteIndividualWork', myIndex)
+    },
+
+    deleteAdditionalWork(myIndex){
+      this.deleteAdditionalWorkID.push(this.otherWork[myIndex].load_id)
+      this.$emit('deleteAdditionalWork', myIndex)
+    },
+
 
   },
   beforeMount() {
@@ -588,7 +613,9 @@ export default {
   box-sizing: border-box;
 }
 
-
+.disabledText {
+  color: grey !important;
+}
 
 @media (min-width: 800px) {
   .headingSemester {

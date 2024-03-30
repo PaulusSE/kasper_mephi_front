@@ -92,13 +92,13 @@
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf"  @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf"  @input="inputExplanatoryFile" :disabled="waitForCheck" :class="{disabledText : waitForCheck}"/>
           </div>
         </div>
       </div>
 
       <div class="text-end" v-if="this.id === this.actualSemester">
-        <button class="sendFilesBtn" @click="sendFiles($event)">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}" >
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
@@ -289,6 +289,9 @@ export default {
   box-sizing: border-box;
 }
 
+.disabledText {
+  color: grey !important;
+}
 
 
 @media (min-width: 800px){
