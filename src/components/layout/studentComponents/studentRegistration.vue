@@ -17,8 +17,8 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Группа</label>
-        <select class="form-select blockStyles" v-model="groupName" @change ="inputEvent">
-          <option v-for="group in numberOfGroups" >{{group.name}}</option>
+        <select class="form-select blockStyles" v-model="groupID" @change ="inputEvent">
+          <option v-for="group in numberOfGroups" :value="group.group_id">{{group.name}}</option>
         </select>
       </nav>
     </div>
@@ -34,8 +34,10 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Научная специальность</label>
-        <input type="text" class="blockStyles" v-model="specialization" @input="inputEvent">
+        <label class="text m-0">Специлазация</label>
+        <select class="form-select blockStyles" v-model="specializationID" @input="inputEvent">
+          <option v-for="spec in arrayOfSpecialization" :value="spec.specialization_id">{{spec.name}}</option>
+        </select>
       </nav>
     </div>
 
@@ -61,8 +63,8 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Научный руководитель</label>
-        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
-        <option v-for="teacher in arrayOfTeachers" >{{teacher.name}}</option>
+        <select class="form-select blockStyles" v-model="teacherID" @input="inputEvent">
+        <option v-for="teacher in arrayOfTeachers" :value="teacher.supervisor_id">{{teacher.full_name}}</option>
         <option >Нет в списке</option>
         </select>
       </nav>
@@ -103,17 +105,18 @@ export default {
     return {
       fullName: '',
       email: '',
-      teacher: '',
+      teacherID: '',
       errorMessage: '',
       department: '',
-      specialization: '',
+      specializationID: '',
       dateOfBeginning:'',
       actualSemester:'',
-      groupName: '',
+      groupID: '',
 
       numberOfYears: '',
       arrayOfTeachers: [],
-      numberOfGroups : ["Б20-504", "Б20-514", 'Б20-524'],
+      arrayOfSpecialization : [],
+      numberOfGroups : [],
     }
   },
   methods: {
@@ -150,7 +153,7 @@ export default {
         return;
       }
 
-      if (this.specialization === ''){
+      if (this.specializationID === ''){
         this.errorMessage = "Поле специализация не должо быть пустым"
         return
       }
@@ -170,7 +173,7 @@ export default {
         return;
       }
 
-      if (this.teacher === ''){
+      if (this.teacherID === ''){
         this.errorMessage = 'Поле научный руководитель не должно быть пустым'
         return;
       }
@@ -181,33 +184,16 @@ export default {
     },
     async requestToRegister() {
 
-      var supervisorID = ''
-      var groupID = ''
-      for (var i = 0; i < this.arrayOfTeachers.length; i++) {
-        if (this.arrayOfTeachers[i].name === this.teacher){
-          supervisorID = this.arrayOfTeachers[i].supervisorID
-          break
-        }
-        }
-
-      for (var i = 0; i < this.numberOfGroups.length; i++){
-        if (this.numberOfGroups[i].name === this.groupName){
-          groupID = this.numberOfGroups[i].group_id
-          break
-        }
-      }
-
-
       try {
         const response = await axios.post(this.IP +"/authorize/registration/student/" + localStorage.getItem('access_token'),
             {
               "full_name" : this.fullName,
-              "group_number" : groupID,
-              "department" : this.specialization,
+              "group_number" : this.groupID,
+              "department" : this.specializationID,
               "actual_semester" : parseInt(this.actualSemester),
               "start_date" : this.dateOfBeginning,
               "number_of_years" : parseInt(this.numberOfYears),
-              "supervisorID" : supervisorID,
+              "supervisorID" : this.teacherID,
             }
         )
         console.log(response)
@@ -228,9 +214,9 @@ export default {
     },
     async getListOfTeachers() { //todo
       try {
-        const response = await axios.get(this.IP +"/students/supervisors/" + localStorage.getItem('access_token'),
+        const response = await axios.get(this.IP +"/student/supervisors/list/" + localStorage.getItem('access_token'),
         )
-        this.arrayOfTeachers = response.data.supervisors
+        this.arrayOfTeachers = response.data
 
         }
 
@@ -244,6 +230,18 @@ export default {
         const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
         )
         this.numberOfGroups = response.data
+
+      }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+    async getListOfSpecializations(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/specializations/" + localStorage.getItem('access_token'),
+        )
+        this.arrayOfSpecialization = this.data
 
       }
 
@@ -271,23 +269,9 @@ export default {
     },
   },
   async beforeMount() {
-    // this.checkAuth()
-    // if (localStorage.getItem('registered') !== 'false')
-    //   this.$router.push('/')
     await this.getListOfTeachers()
     await this.getListOfGroups()
-
-    this.numberOfGroups = [
-      {
-        "group_id": 0,
-        "name": "string0"
-      },
-      {
-        "group_id": 1,
-        "name": "string1"
-      }
-    ]
-
+    await this.getListOfSpecializations
   }
 }
 </script>

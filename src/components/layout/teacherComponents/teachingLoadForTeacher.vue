@@ -56,7 +56,7 @@ export default {
       array_classroom_load:[],
       array_individual_students_load: [],
       array_additional_load: [],
-      actualSemester : 1,
+      actualSemester : '',
       workStatus : '',
     }
   },
@@ -131,36 +131,6 @@ export default {
     }
     await this.loadTeachingLoad()
     await this.getActualSemester()
-
-    var data = [{
-      "accepted_at": "string",
-      "additional_load": {
-        "comment": "string",
-        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "name": "string",
-        "volume": "string"
-      },
-      "approval_status": "todo",
-      "classroom_load": {
-        "group_name": "string",
-        "hours": 0,
-        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "load_type": "practice",
-        "main_teacher": "string",
-        "subject_name": "string"
-      },
-      "individual_students_load": {
-        "comment": "string",
-        "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "load_type": "project practice",
-        "students_amount": 0
-      },
-      "loads_id": "string",
-      "semester": 1,
-      "student_id": "string",
-      "updated_at": "string"
-    }]
-
     await this.fillDataForTables(data)
 
   },

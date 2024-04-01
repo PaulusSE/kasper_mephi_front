@@ -4,8 +4,8 @@
     <div class="d-flex justify-content-between">
 
       <div class="d-flex gap-1">
-        <p class="headingSemester">{{id}} семестр</p>
-        <p v-if="actualSemester===id" class="headingSemester">(текущий)</p>
+        <p class="headingSemester">{{id + 1}} семестр</p>
+        <p v-if="actualSemester===id + 1" class="headingSemester">(текущий)</p>
       </div>
 
       <div v-if="buttonIsOpened" class="semestrButtonActive">
@@ -27,15 +27,17 @@
           <nav class="checkboxBlock justify-content-start col-3 ms-0">
             <div class="mySelectedField2 gap-3 d-flex">
               <p class="mainText">Статус</p>
-              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
-                <option  class="textResult">Выбрать статус</option>
-                <option  class="textResult1">Принято</option>
-                <option  class="textResult2">На доработку</option>
-                <option  class="textResult3">Не сдано</option>
+              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="this.feedback.status" :class="{textResult1: this.feedback.status === 'passed', textResult2: this.feedback.status === 'todo', textResult3: this.feedback.status === 'failed'}">
+                <option  class="textResult" value="empty" >Выбрать статус</option>
+                <option  class="textResult1" value="passed">Принято</option>
+                <option  class="textResult2" value="todo" >На доработку</option>
+                <option  class="textResult3" value="failed">Не сдано</option>
               </select>
             </div>
           </nav>
 
+        </div>
+        <div>
 
         </div>
 
@@ -67,13 +69,13 @@
         </div>
 
         <div v-if="!editingReview">
-          <p v-if="textOfReview === ''" class="textTable">Рецензия отсутствует</p>
+          <p v-if="feedback.feedback === ''" class="textTable">Рецензия отсутствует</p>
           <p v-else style="font-size:20px; font-weight: 350">
-            <textarea disabled v-model="textOfReview" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+            <textarea disabled v-model="feedback.feedback" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
           </p>
         </div>
         <div v-else>
-          <textarea v-model="textOfReview"  rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+          <textarea v-model="feedback.feedback"  rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
         </div>
       </div>
 
@@ -94,15 +96,20 @@ import utf8 from "utf8"
 
 export default {
   name: "studentPageFromTeacherStatusTab",
-  props : ["id", "jobStatus", "actualSemester"],
+  props : ["id", "actualSemester", "feedback"],
   data()  {
     return {
       buttonIsOpened : false,
-      status : '',
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
       editingReview : false,
+      statusOfJob : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Принято',
+        'empty': ''
+      },
     }
   },
   methods : {
@@ -114,8 +121,8 @@ export default {
 
       try {
         const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
-              "studentID" : localStorage.getItem("studentID"),
-              "feedback" : this.textOfReview
+              "student_id" : localStorage.getItem("studentID"),
+              "feedback" : this.feedback.feedback
             }
         )
 
@@ -127,12 +134,12 @@ export default {
     },
     async getFiles() {
 
-      console.log(localStorage.getItem("studentId"))
+
       try {
-        const response = await axios.put(this.IP +"/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/supervisors/dissertation/file/" + localStorage.getItem("access_token"),
             {
-              "semester" : this.id,
-              "studentID" : localStorage.getItem("studentID")
+              "semester" : this.id + 1,
+              "student_id" : localStorage.getItem("studentID")
             },
             {
               responseType: 'blob',
@@ -181,8 +188,9 @@ export default {
     },
   },
   beforeMount() {
+
     this.getFiles()
-    this.status = this.jobStatus
+
   }
 }
 </script>

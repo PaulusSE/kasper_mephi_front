@@ -29,6 +29,11 @@ export default {
     "addTeacher" : studentWriteFullNameOfTeacher
   },
   methods : {
+  },
+  beforeMount() {
+    // this.checkAuth()
+    // if (localStorage.getItem('registered') !== 'false')
+    //   this.$router.push('/')
   }
 }
 </script>

@@ -52,6 +52,7 @@ export default {
     }
   },
   async beforeMount() {
+    // this.checkAuth()
     // if (store.getters.getType !== "supervisor"){
     //   this.$router.push('/wrongAccess')
     // }

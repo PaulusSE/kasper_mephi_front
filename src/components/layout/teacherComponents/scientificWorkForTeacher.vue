@@ -49,7 +49,7 @@ export default {
       ],
       arrayOfProjects:[
       ],
-      actualSemester: 1,
+      actualSemester: '',
       workStatus : '',
     }
   },
@@ -126,54 +126,9 @@ export default {
 
 
   async beforeMount() {
-    if (store.getters.getType === "student"){
-      this.$router.push('/wrongAccess')
-    }
+
     await this.getActualSemester()
     await this.loadScientificWorks()
-    var data = [
-      {
-        "accepted_at": "2024-03-17T13:10:11.346Z",
-        "conference": {
-          "conference_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "conference_name": "string",
-          "location": "string",
-          "report_name": "string",
-          "reported_at": "2024-03-17T13:10:11.346Z",
-          "rinc": true,
-          "scopus": true,
-          "status": "registered",
-          "wac": true,
-          "wos": true
-        },
-        "publication": {
-          "co_authors": "string",
-          "impact": 0,
-          "name": "string",
-          "output_data": "string",
-          "publication_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "rinc": true,
-          "scopus": true,
-          "status": "to print",
-          "volume": 0,
-          "wac": true,
-          "wos": true
-        },
-        "research_project": {
-          "add_info": "string",
-          "end_at": "2024-03-17T13:10:11.346Z",
-          "grantee": "string",
-          "project_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "project_name": "string",
-          "start_at": "2024-03-17T13:10:11.346Z"
-        },
-        "semester": 1,
-        "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "updated_at": "2024-03-17T13:10:11.346Z",
-        "works_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "works_status": "todo"
-      }
-    ]
     await this.fillDataForTables(data)
 
   }

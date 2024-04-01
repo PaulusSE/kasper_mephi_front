@@ -68,12 +68,12 @@
             </div>
           </div>
 
-          <div class="d-flex" :class="{underline:index < Object.keys(this.arrayOfTopics).length}" v-for="(element,index) in arrayOfTopics">
+          <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length - 1}" v-for="(element,index) in arrayOfTopics">
             <div class="rightLine col-6 textTable">
-              <p class="text">{{index}}</p>
+              <p class="text">{{element.semester}}</p>
             </div>
             <div class="col-6 textTable" >
-              {{this.arrayOfTopics[index]}}
+              {{element.title}}
             </div>
           </div>
 
@@ -123,21 +123,21 @@
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Специальность</label>
-            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="numberOfOrderOfStatement">
+            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="specialization">
           </nav>
         </div>
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Объект исследования</label>
-            <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
+            <input type="text" class="textInput" disabled  v-model="research_object">
           </nav>
         </div>
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Приказ исследования</label>
-            <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
+            <input type="text" class="textInput" disabled v-model="research_order">
           </nav>
         </div>
 
@@ -166,62 +166,42 @@
           <div class="col-4 textTable rightLine">
 
           </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
-            1
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
-            2
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
-            3
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
-            4
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
-            5
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
-            6
-          </div>
-          <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
-            7
-          </div>
-          <div class="col-1 textTable" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
-            8
+
+          <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{hightlightActualSemesterColumn : actualSemester === index + 1, rightLine : index + 1 < 8}">
+            {{index + 1}}
           </div>
 
         </div>
 
 
 
-        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,key, index) in array">
+        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,index) in progressTableArray">
           <div class="col-4 textTable rightLine">
-            {{key}}
+            {{this.topicMap[value.progress_type]}}
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id1 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 1}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.first disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id2 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 2}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.second disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id3 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 3}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.third disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id4 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 4}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.forth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id5 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 5}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.fifth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id6 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 6}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.sixth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id7 disabled>
+          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 7}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.seventh disabled>
           </div>
-          <div class="col-1 textTable myInput" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.id8 disabled>
+          <div class="col-1 textTable myInput" :class="{hightlightActualSemesterColumn : actualSemester === 8}">
+            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.eighth disabled>
           </div>
 
         </div>
@@ -234,10 +214,12 @@
 
     </div>
 
-    <student-page-from-teacher-status-tab v-for="index in this.actualSemestr"
+    <student-page-from-teacher-status-tab v-for="(number, index) in this.actualSemester"
                                           :id = index
-                                          :job-status = statusOfJob[this.statuses[index]]
-                                          :actual-semester = this.actualSemestr
+                                          :actual-semester = this.actualSemester
+                                          :feedback = this.feedbacks[index]
+                                          :state = this.states[index]
+
     ></student-page-from-teacher-status-tab>
 
 
@@ -265,19 +247,18 @@ export default {
   props : ["stateOfPage",],
   data(){
     return {
-      filesFinish : [],
-      editingReview : false,
+
       commonInfo : false,
-      array: {},
-      stateOfWork: '',
-      textOfReview: '',
+      progressTableArray: {},
       theme : "",
+      research_object:'',
+      research_order : '',
+      specialization: '',
+      feedbacks : [],
+      states : '',
       teacherFullName: "",
-      numberOfOrderOfStatement: "",
-      dateOfOrderOfStatement: "",
-      actualSemestr : '',
-      statuses : [],
-      workStatus: 'failed',
+      actualSemester : 2,
+      workStatus: '',
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -285,30 +266,25 @@ export default {
         'empty': ''
       },
 
-      // todo
-      progressOfDissertation : 55,
+      progressOfDissertation : '',
       yearOfStudy : "",
 
       showTopicHistory : false,
       showTeacherHistory : false,
-      arrayOfTopics : {
-        1: "Тема 1",
-        2: "Тема 2",
-        3: "Тема 3",
-        4: "Тема 4",
-        5: "Тема 5",
-        6: "Тема 6",
-      },
-      arrayOfTeachers : [
-        {
-          teacher:'T1',
-          period:"21.10.2022-15.02.2023"
-        },
-        {
-          teacher:'T2',
-          period:"15.02.2023-27.04.2024"
-        },
-      ]
+      arrayOfTopics : [],
+      arrayOfTeachers : [],
+      topicMap : {
+        'intro' : 'Введение',
+        'ch. 1' : 'Глава 1',
+        'ch. 2' : 'Глава 2',
+        'ch. 3' : 'Глава 3',
+        'ch. 4' : 'Глава 4',
+        'ch. 5' : 'Глава 5 (При необходимости)',
+        'ch. 6' : 'Глава 6 (При необходимости)',
+        'end' : 'Заключение',
+        'literature' : 'Список литературы',
+        'abstract' : 'Автореферат',
+      }
     }
 
   },
@@ -322,7 +298,6 @@ export default {
 
             }
         )
-
       }
       catch (e) {
         console.log(e)
@@ -332,11 +307,8 @@ export default {
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
     },
+
     async saveCommonInfo() {
-      this.commonInfo = !this.commonInfo
-      var object = {"studentID" : this.$store.getters.getuserId,
-        "enrollmentOrder" : this.numberOfOrderOfStatement,
-        "startDate" : this.dateOfOrderOfStatement}
 
       try {
         const response = await axios.post(this.IP +"/admin/students/common_info/" + localStorage.getItem("access_token"), {
@@ -353,53 +325,6 @@ export default {
 
     },
 
-    async getStudentCommonInfo() {
-
-      try {
-        const response = await axios.put(this.IP +"/supervisors/student/" + localStorage.getItem("access_token"), {
-            "studentID" : localStorage.getItem("studentID")
-            }
-        )
-
-        this.data = await response.data
-
-        this.theme = this.data.commonInfo.theme
-        this.teacherFullName = this.data.commonInfo.teacherFullName
-        this.jobStatus = this.data.commonInfo.jobStatus
-        this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
-        this.textOfReview = this.data.commonInfo.feedback
-        let objectDate = this.data.commonInfo.dateOfOrderOfStatement
-
-        const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
-        const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
-        var key = ''
-        for (var i = 0; i < keys.length; i++) {
-          key = keys[i]
-
-          this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
-          this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
-          this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
-          this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
-          this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
-          this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
-        }
-        for (var i = 0; i < keys.length; i++){
-          this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
-        }
-
-        this.dateOfOrderOfStatement = this.data.commonInfo.dateOfOrderOfStatement
-
-        this.actualSemestr = this.data.commonInfo.actualSemestr
-
-        this.fillArrayOfStatuses(response.data.statuses)
-
-
-      }
-
-      catch (e) {
-        console.log(e)
-      }
-    },
 
     changeTopicHistoryState(){
       this.showTopicHistory = !this.showTopicHistory
@@ -408,111 +333,126 @@ export default {
       this.showTeacherHistory = !this.showTeacherHistory
     },
 
-    async getStudentCommonInfoForAdmin() {
-
+    async getActualSemester(){
       try {
-        const response = await axios.put(this.IP +"/admin/students/dissertation/" + localStorage.getItem("access_token"), {
-              "studentID" : localStorage.getItem("studentID")
-            }
-        )
-
+        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
         this.data = await response.data
-        this.theme = this.data.theme
-        this.teacherFullName = this.data.commonInfo.teacherFullName
-        this.jobStatus = this.data.commonInfo.jobStatus
-        this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
-        this.textOfReview = this.data.commonInfo.feedback
-        let objectDate = this.data.commonInfo.dateOfOrderOfStatement
-
-        const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
-        const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
-        var key = ''
-        for (var i = 0; i < keys.length; i++) {
-          key = keys[i]
-
-          this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
-          this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
-          this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
-          this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
-          this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
-          this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
-        }
-        for (var i = 0; i < keys.length; i++){
-          this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
+        for (var i = 0; i < this.data.length; i++){
+          if (this.data[i].student_id === localStorage.getItem("student_id")){
+            this.actualSemester = this.data[i].actual_semester
+          }
         }
 
-        const year = (objectDate.slice(0,4))
-        const month = (objectDate.slice(5,7))
-        const day = (objectDate.slice(8,10))
-
-        this.dateOfOrderOfStatement = day + '.' + month + '.' + year
-        console.log(typeof objectDate)
-        console.log(new Date(objectDate))
-
-        this.actualSemestr = this.data.commonInfo.actualSemestr
-        this.fillArrayOfStatuses(response.data.statuses)
       }
-
       catch (e) {
         console.log(e)
       }
     },
 
-    fillArrayOfStatuses(data) {
-      const keys = [1, 2, 3, 4, 5, 6, 7, 8]
-      var object = new Map()
-      for (var i = 0; i < keys.length; i++){
-        object[keys[i]] = ''
-      }
-      if (data === null){
-        this.statuses = object
-        return
-      }
-
-      for (var i = 0; i < data.length; i++){
-        object[data[i].semester] = data[i].status
-      }
-
-      this.statuses = object
+    async fillThemeHistory(tittles){
+      tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.arrayOfTopics = tittles
     },
-    async checkAuth() {
+
+    sortTopic(a, b){
+      const weight = {
+        'intro' : 1,
+        'ch. 1' : 2,
+        'ch. 2' : 3,
+        'ch. 3' : 4,
+        'ch. 4' : 5,
+        'ch. 5' : 6,
+        'ch. 6' : 7,
+        'end' : 8,
+        'literature' : 9,
+        'abstract' : 10,
+      }
+      var weightA = weight[a.progress_type]
+      var weightB = weight[b.progress_type]
+
+      return weightA > weightB
+    },
+
+    async fillProgressTable(array){
+      array.sort((a, b) => this.sortTopic(a,b) ? 1 : -1);
+      this.progressTableArray = array
+    },
+
+    async fillCommonInfo(tittles){
+      var currentDissertationTittle = new Array()
+      for (var i = 0; i < tittles.length; i++){
+        if (tittles[i].semester === this.actualSemester){
+          currentDissertationTittle = tittles[i]
+          break
+        }
+      }
+      this.theme = currentDissertationTittle.title
+      this.workStatus = currentDissertationTittle.status
+      this.research_order = currentDissertationTittle.research_order
+      this.research_object = currentDissertationTittle.research_object
+    },
+
+    async fillFeedBackArray(feedbacks){
+      feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.feedbacks = feedbacks
+      for (var i = 0; i < this.feedbacks.length; i++){
+        this.feedbacks[i].status = this.states[i].status
+      }
+      console.log(this.feedbacks)
+    },
+
+    async fillStatusArray(statuses){
+      statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.states = statuses
+    },
+
+    async getSpecializationAndYearOfStudy(){
       try {
-        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
-
-        if (response.status === 200){
-          this.$store.dispatch("updateUserType", response.data.userType)
-          this.type = response.data.userType
-        }
-        else {
-          this.$router.push('/auth')
-        }
-
-      } catch (e) {
+        const response = await axios.get(this.IP +"/students/info/" + localStorage.getItem("access_token"))
+        this.data = response.data
+        this.specialization = this.data.specialization
+        this.yearOfStudy = this.data.years
+      }
+      catch (e) {
         console.log(e)
-        this.$router.push('/auth')
       }
     },
+
+    async commonRequest(){
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentId"),
+            }
+        )
+        this.data = response.data
+        await this.fillStatusArray(this.data.dissertations_statuses)
+        await this.fillFeedBackArray(this.data.feedback)
+
+        await this.fillThemeHistory(this.data.dissertation_titles)
+        await this.fillProgressTable(this.data.semester_progress)
+        await this.fillCommonInfo(this.data.dissertation_titles)
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+  },
+
+  async beforeCreate(){
+    this.$store.dispatch("updateUserId", localStorage.getItem("studentID"))
+
   },
 
   async beforeMount() {
+    await this.commonRequest()
+    await this.getSpecializationAndYearOfStudy()
 
-    // this.checkAuth()
-    //
-    // if (store.getters.getType === "student"){
-    //   this.$router.push('/wrongAccess')
-    // }
-    // if(await store.getters.getType === 'admin'){
-    //   await this.getStudentCommonInfoForAdmin()
-    // }
-    // if (await store.getters.getType === 'supervisor')
-    await this.getStudentCommonInfo()
+
+
+
 
   },
 
-  beforeCreate() {
-    this.$store.dispatch("updateUserId", localStorage.getItem("studentID"))
-
-  }
 }
 </script>
 
