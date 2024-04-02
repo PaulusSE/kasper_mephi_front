@@ -61,12 +61,12 @@
           </div>
         </div>
 
-        <div class="d-flex" :class="{underline:index < Object.keys(this.arrayOfTopics).length}" v-for="(element,index) in arrayOfTopics">
+        <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length} - 1" v-for="(element,index) in arrayOfTopics">
           <div class="rightLine col-6 mainText">
-            <p class="text">{{index}}</p>
+            <p class="text">{{element.semester}}</p>
           </div>
           <div class="col-6 textTable" >
-            {{this.arrayOfTopics[index]}}
+            {{element.title}}
           </div>
         </div>
 
@@ -95,12 +95,12 @@
           </div>
         </div>
 
-        <div class="d-flex" :class="{underline:index+1 < Object.keys(this.arrayOfTeachers).length}" v-for="(element,index) in arrayOfTeachers">
+        <div class="d-flex" :class="{underline:index < this.arrayOfTeachers.length - 1}" v-for="(element,index) in arrayOfTeachers">
           <div class="rightLine col-6 mainText">
-            <p class="text">{{element.teacher}}</p>
+            <p class="text">{{element.full_name}}</p>
           </div>
           <div class="col-6 textTable" >
-            {{element.period}}
+            {{element.start_at}} - {{element.end_at}}
           </div>
         </div>
 
@@ -109,14 +109,14 @@
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
           <label class="text">Объект исследования</label>
-          <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
+          <input type="text" class="textInput" disabled  v-model="research_object">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
           <label class="text">Приказ исследования</label>
-          <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
+          <input type="text" class="textInput" disabled v-model="research_order">
         </nav>
       </div>
     </div>
@@ -146,62 +146,41 @@
         <div class="col-4 textTable rightLine">
 
         </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
-            1
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
-            2
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
-            3
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
-            4
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
-            5
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
-              6
-        </div>
-        <div class="col-1 textTable rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
-          7
-        </div>
-        <div class="col-1 textTable" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
-          8
+        <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{hightlightActualSemesterColumn : actualSemester === index + 1, rightLine : index + 1 < 8}">
+          {{index + 1}}
         </div>
 
       </div>
 
 
 
-      <div class="d-flex" :class="{underline: number < 10}" v-for="(element,index, number) in array">
+      <div class="d-flex" :class="{underline: index < 10}" v-for="(element,index) in progressTableArray">
         <div class="col-4 textTable rightLine" style="word-break: break-all">
-          {{index}}
+          {{this.topicMap[element.progress_type]}}
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 1}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id1 :disabled="!(actualSemestr === 1) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 1}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.first :disabled="!(actualSemester === 1) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 2}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id2 :disabled="!(actualSemestr === 2) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 2}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.second :disabled="!(actualSemester === 2) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 3}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id3 :disabled="!(actualSemestr === 3) || !editingCheckbox" >
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 3}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.third :disabled="!(actualSemester === 3) || !editingCheckbox" >
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 4}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id4 :disabled="!(actualSemestr === 4) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 4}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.forth :disabled="!(actualSemester === 4) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 5}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id5 :disabled="!(actualSemestr === 5) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 5}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.fifth :disabled="!(actualSemester === 5) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 6}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id6 :disabled="!(actualSemestr === 6) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 6}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.sixth :disabled="!(actualSemester === 6) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemestr === 7}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id7 :disabled="!(actualSemestr === 7) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 7}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.seventh :disabled="!(actualSemester === 7) || !editingCheckbox">
         </div>
-        <div class="col-1 mainText myInput" :class="{hightlightActualSemesterColumn : actualSemestr === 8}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.id8 :disabled="!(actualSemestr === 8) || !editingCheckbox">
+        <div class="col-1 mainText myInput" :class="{hightlightActualSemesterColumn : actualSemester === 8}">
+          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.eighth :disabled="!(actualSemester === 8) || !editingCheckbox">
         </div>
 
       </div>
@@ -209,7 +188,7 @@
 
       <div class=" justify-content-between checkboxBlock">
         <p class="textTable">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
-        <input type="range" v-model="progressOfDissertation" :disabled="!editingCheckbox">
+        <input type="range"  v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
 
     </div>
@@ -222,14 +201,16 @@
         </nav>
       </div>
 
-      <dissertation-tab v-for="index in actualSemestr"
-                        :id=index
-                        :job-status = statusOfJob[this.statuses[index]]
+      <dissertation-tab v-for="(number, index) in actualSemester"
+                        :id=number
+                        :feedback = this.feedbacks[index]
+                        :status = this.states[index]
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
-                        :actual-semester = this.actualSemestr
+                        :actual-semester = this.actualSemester
                         :waitForCheck = waitForCheck
                         @makeEditErrorNotification = callEditError
+                        v-if="renderChildComponents"
       ></dissertation-tab>
 
     </div>
@@ -284,18 +265,21 @@ export default {
       editingCheckbox : false,
       theme : "",
       teacherFullName : "",
-      numberOfOrderOfStatement : '',
-      dateOfOrderOfStatement : "",
-      actualSemestr: '',
-      statuses : [],
+      actualSemester: 1,
+      states : [],
+
       stateOfSending:false,
       resultOfSending: '',
       arrayWithFilesId: [],
       jobStatus : '',
-      feedback: "",
+      feedbacks: [],
+      renderChildComponents : false,
+
+      research_object:'',
+      research_order : '',
 
       waitForCheck : false,
-      workStatus : 'todo',
+      workStatus : '',
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -305,34 +289,30 @@ export default {
         "failed" : "Не сдано",
       },
 
-      array: {
+      progressTableArray: {
       },
       progressMap : new Map(),
 
-      progressOfDissertation : 15,
+      progressOfDissertation : '',
       progressOfDissertationCopy : '',
       showRangeError : false,
       showEditError: false,
       showTopicHistory : false,
       showTeacherHistory : false,
-      arrayOfTopics : {
-        1: "Тема 1",
-        2: "Тема 2",
-        3: "Тема 3",
-        4: "Тема 4",
-        5: "Тема 5",
-        6: "Тема 6",
-      },
-      arrayOfTeachers : [
-          {
-        teacher:'T1',
-        period:"21.10.2022-15.02.2023"
-      },
-        {
-          teacher:'T2',
-          period:"15.02.2023-27.04.2024"
-        },
-      ]
+      arrayOfTopics : [],
+      arrayOfTeachers : [],
+      topicMap : {
+        'intro' : 'Введение',
+        'ch. 1' : 'Глава 1',
+        'ch. 2' : 'Глава 2',
+        'ch. 3' : 'Глава 3',
+        'ch. 4' : 'Глава 4',
+        'ch. 5' : 'Глава 5 (При необходимости)',
+        'ch. 6' : 'Глава 6 (При необходимости)',
+        'end' : 'Заключение',
+        'literature' : 'Список литературы',
+        'abstract' : 'Автореферат',
+      }
     }
 
   }
@@ -361,9 +341,11 @@ export default {
       }
       this.editingInfo = !this.editingInfo
     },
+
     changeTopicHistoryState(){
       this.showTopicHistory = !this.showTopicHistory
     },
+
     changeTeacherHistoryState(){
       this.showTeacherHistory = !this.showTeacherHistory
     },
@@ -394,81 +376,6 @@ this.waitForCheck = !this.waitForCheck
       this.waitForCheck = !this.waitForCheck
     },
 
-    createSaveData() {
-      var saveData = new Array()
-
-      var requestPlan = {
-        "Введение" : 'intro',
-        "Основная часть" : 'main',
-        "Глава 1" : 'ch. 1',
-        "Глава 2" : 'ch. 2',
-        "Глава 3" : 'ch. 3',
-        "Глава 4" : 'ch. 4',
-        "Глава 5 (При необходимости)" : 'ch. 5',
-        "Глава 6 (При необходимости)" : 'ch. 6',
-        "Заключение" : 'end',
-        "Список литературы" : 'literature',
-        "Автореферат" : 'abstract',
-      }
-
-      const keys = new Map(Object.entries(requestPlan));
-
-      for (var [key, value] of keys) {
-        saveData.push({
-          first : this.array[key].id1,
-          second : this.array[key].id2,
-          third : this.array[key].id3,
-          forth : this.array[key].id4,
-          fifth : this.array[key].id5,
-          sixth : this.array[key].id6,
-          seventh : this.array[key].id7,
-          eighth : this.array[key].id8,
-          progressName : value,
-        })
-      }
-      return saveData
-    },
-
-    fillArrayOfFilesID(data) {
-      this.arrayWithFilesId = Array(data.length)
-      for (var i = 0; i < this.arrayWithFilesId.length; i++){
-        this.arrayWithFilesId[i] = new Array()
-      }
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayWithFilesId[0].push(data[i])
-        }
-        if (data[i].semester === 2) {
-          this.arrayWithFilesId[1].push(data[i])
-        }
-        if (data[i].semester === 3) {
-          this.arrayWithFilesId[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.arrayWithFilesId[3].push(data[i])
-        }
-      }
-
-    },
-
-    fillArrayOfStatuses(data) {
-      const keys = [1, 2, 3, 4, 5, 6, 7, 8]
-      var object = new Map()
-      for (var i = 0; i < keys.length; i++){
-        object[keys[i]] = ''
-      }
-      if (data === null){
-        this.statuses = object
-        return
-      }
-
-      for (var i = 0; i < data.length; i++){
-        object[data[i].semester] = data[i].status
-      }
-
-      this.statuses = object
-    },
-
     async saveTables() {
       this.editingCheckbox = !this.editingCheckbox;
       if (this.progressOfDissertationCopy > this.progressOfDissertation){
@@ -481,15 +388,9 @@ this.waitForCheck = !this.waitForCheck
       }
 
 
-
-
-
-    var saveData = this.createSaveData()
-
-
       try {
         const response = await axios.post(this.IP +"/students/dissertation/progress/" + localStorage.getItem("access_token"),
-            {"progress" : saveData
+            {"progress" : this.progressOfDissertation
             }
         )
       }
@@ -497,13 +398,16 @@ this.waitForCheck = !this.waitForCheck
         this.showWrongAnswerString = true;
       }
     },
-    async fileInputChange() {
-      let files = Array.from(event.target.files);
 
-      this.filesOrder = files.slice();
+    async getActualSemester() {
+      try {
+        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+        this.actualSemester = this.data.actual_semester
 
-      for (let item of files) {
-        await this.uploadFile(item);
+      }
+      catch (e) {
+        console.log(e)
       }
     },
 
@@ -518,57 +422,163 @@ this.waitForCheck = !this.waitForCheck
       }, 5000);
     },
 
-    async uploadFile() {
+
+    async fillFeedBackArray(feedbacks){
+      feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.feedbacks = feedbacks
+      // for (var i = 0; i < this.feedbacks.length; i++){
+      //   this.feedbacks[i].status = this.states[i].status
+      // }
+    },
+
+    async fillStatusArray(statuses){
+      statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.states = statuses
+    },
+
+    async fillThemeHistory(tittles){
+      tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.arrayOfTopics = tittles
+    },
+
+    async fillTeacherHistory(supervisors){
+      supervisors.sort((a, b) => a.start_at > b.start_at ? 1 : -1);
+      this.arrayOfTeachers = supervisors
 
     },
 
+
+    async getCommonInfo() {
+      await this.getActualSemester()
+      try {
+        const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
+        )
+        this.data = response.data
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
+    sortTopic(a, b){
+      const weight = {
+        'intro' : 1,
+        'ch. 1' : 2,
+        'ch. 2' : 3,
+        'ch. 3' : 4,
+        'ch. 4' : 5,
+        'ch. 5' : 6,
+        'ch. 6' : 7,
+        'end' : 8,
+        'literature' : 9,
+        'abstract' : 10,
+      }
+      var weightA = weight[a.progress_type]
+      var weightB = weight[b.progress_type]
+
+      return weightA > weightB
+    },
+
+    async fillProgressTable(array){
+      array.sort((a, b) => this.sortTopic(a,b) ? 1 : -1);
+      this.progressTableArray = array
+    },
+
+    async fillCommonInfo(tittles){
+      var currentDissertationTittle = new Array()
+      for (var i = 0; i < tittles.length; i++){
+        if (tittles[i].semester === this.actualSemester){
+          currentDissertationTittle = tittles[i]
+          break
+        }
+      }
+      this.theme = currentDissertationTittle.title
+      this.workStatus = currentDissertationTittle.status
+      this.research_order = currentDissertationTittle.research_order
+      this.research_object = currentDissertationTittle.research_object
+      this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
+      this.waitForCheck = (currentDissertationTittle.status === 'approved') || (currentDissertationTittle.status === 'on review')
+    }
+
   },
   async beforeMount() {
-
-    try {
-      const response = await axios.get(this.IP +'/students/dissertation/' + localStorage.getItem("access_token"))
-
-      this.data = await response.data
-      this.theme = this.data.commonInfo.theme
-      this.teacherFullName = this.data.commonInfo.teacherFullName //todo забить доконца
-      this.jobStatus = this.data.commonInfo.jobStatus
-      this.numberOfOrderOfStatement = this.data.commonInfo.numberOfOrderOfStatement
-      this.feedback = this.data.commonInfo.feedback === undefined ? '' : this.data.commonInfo.feedback
-      let objectDate = this.data.commonInfo.dateOfOrderOfStatement
-      const keys = ['intro', 'main', 'ch. 1', 'ch. 2', 'ch. 3', 'ch. 4', 'ch. 5', 'ch. 6', 'end', 'literature', 'abstract']
-      const myKeys = ['Введение', 'Основная часть', 'Глава 1', 'Глава 2', 'Глава 3', 'Глава 4', 'Глава 5 (При необходимости)', 'Глава 6 (При необходимости)', 'Заключение', 'Список литературы', 'Автореферат' ]
-      var key = ''
-      for (var i = 0; i < keys.length; i++) {
-        key = keys[i]
-
-        this.data.dissertationPlan[key].id1 = (this.data.dissertationPlan[key].id1 === true) ? this.data.dissertationPlan[key].id1 : false
-        this.data.dissertationPlan[key].id2 = (this.data.dissertationPlan[key].id2 === true) ? this.data.dissertationPlan[key].id2 : false
-        this.data.dissertationPlan[key].id3 = (this.data.dissertationPlan[key].id3 === true) ? this.data.dissertationPlan[key].id3 : false
-        this.data.dissertationPlan[key].id4 = (this.data.dissertationPlan[key].id4 === true) ? this.data.dissertationPlan[key].id4 : false
-        this.data.dissertationPlan[key].id5 = (this.data.dissertationPlan[key].id5 === true) ? this.data.dissertationPlan[key].id5 : false
-        this.data.dissertationPlan[key].id6 = (this.data.dissertationPlan[key].id6 === true) ? this.data.dissertationPlan[key].id6 : false
-        this.data.dissertationPlan[key].id7 = (this.data.dissertationPlan[key].id7 === true) ? this.data.dissertationPlan[key].id7 : false
-        this.data.dissertationPlan[key].id8 = (this.data.dissertationPlan[key].id8 === true) ? this.data.dissertationPlan[key].id8 : false
-      }
-
-      for (var i = 0; i < keys.length; i++){
-        this.array[myKeys[i]] = this.data.dissertationPlan[keys[i]]
-      }
-      const year = (objectDate.slice(0,4))
-      const month = (objectDate.slice(5,7))
-      const day = (objectDate.slice(8,10))
-
-      this.dateOfOrderOfStatement = day + '.' + month + '.' + year
-      this.actualSemestr = this.data.commonInfo.actualSemestr
-      this.fillArrayOfStatuses(this.data.statuses)
-      // this.fillArrayOfFilesID(this.data.ids)
-
-
+      this.data = {
+  "dissertation_titles": [
+    {
+      "accepted_at": "2024-04-02T10:10:50.220Z",
+      "created_at": "2024-04-02T10:10:50.220Z",
+      "research_object": "string",
+      "research_order": "string",
+      "semester": 1,
+      "status": "failed",
+      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "title": "string",
+      "title_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
     }
-    catch (e) {
-      console.log(e)
+  ],
+  "dissertations_statuses": [
+    {
+      "created_at": "string",
+      "dissertation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "semester": 1,
+      "status": "todo",
+      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "updated_at": "string"
     }
-    this.files = new Array(this.actualSemestr)
+  ],
+  "feedback": [
+    {
+      "created_at": "2024-04-02T10:10:50.220Z",
+      "dissertation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "feedback": "string",
+      "feedback_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "semester": 1,
+      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "updated_at": "2024-04-02T10:10:50.220Z"
+    }
+  ],
+  "semester_progress": [
+    {
+      "accepted_at": "2024-04-02T10:10:50.220Z",
+      "eighth": true,
+      "fifth": true,
+      "first": true,
+      "forth": true,
+      "progress_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "progress_type": "intro",
+      "second": true,
+      "seventh": true,
+      "sixth": true,
+      "status": "todo",
+      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "third": true,
+      "updated_at": "2024-04-02T10:10:50.220Z"
+    }
+  ],
+  "supervisors": [
+    {
+      "end_at": "2024-04-02T10:10:50.220Z",
+      "full_name": "string",
+      "start_at": "2024-04-02T10:10:50.220Z",
+      "supervisor_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    }
+  ]
+}
+    await this.fillStatusArray(this.data.dissertations_statuses)
+    await this.fillFeedBackArray(this.data.feedback)
+    await this.fillThemeHistory(this.data.dissertation_titles)
+    await this.fillTeacherHistory(this.data.supervisors)
+    await this.fillCommonInfo(this.data.dissertation_titles)
+    await this.fillProgressTable(this.data.semester_progress)
+
+    console.log(this.feedbacks)
+    console.log(this.states)
+
+    this.renderChildComponents = true
+
+
+
 
 
   }

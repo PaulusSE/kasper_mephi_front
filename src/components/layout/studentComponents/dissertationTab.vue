@@ -26,7 +26,7 @@
         <nav class="checkboxBlock">
           <div class="d-flex gap-2">
             <p class="statusLine">Статус:</p>
-            <p class="statusLine" :class="{textResult1:jobStatus === 'Сдано', textResult2:jobStatus === 'На доработку', textResult3 : jobStatus === 'Не сдано'}">{{jobStatus}}</p>
+            <p class="statusLine" :class="{textResult1: statusOfJob[this.status.status] === 'Сдано', textResult2:statusOfJob[this.status.status] === 'На доработку', textResult3 : statusOfJob[this.status.status] === 'Не сдано'}">{{statusOfJob[this.status.status]}}</p>
           </div>
         </nav>
 
@@ -120,7 +120,7 @@
           <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
 
           <p v-else class="">
-            <textarea disabled v-model="feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
+            <textarea disabled v-model="feedback.feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
           </p>
         </div>
       </div>
@@ -145,9 +145,15 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+      statusOfJob : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Принято',
+        'empty': ''
+      },
     }
   },
-  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'waitForCheck'],
+  props : ['id','status', 'feedback', 'stateOfSending', 'actualSemester', 'waitForCheck'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)
@@ -272,7 +278,12 @@ export default {
   beforeMount() {
     this.getFiles()
 
+  },
+  mounted() {
+    console.log(this.status)
+    console.log(this.feedback)
   }
+
 }
 </script>
 

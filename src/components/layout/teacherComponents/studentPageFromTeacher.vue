@@ -102,12 +102,12 @@
             </div>
           </div>
 
-          <div class="d-flex" :class="{underline:index+1 < Object.keys(this.arrayOfTeachers).length}" v-for="(element,index) in arrayOfTeachers">
+          <div class="d-flex" :class="{underline:index < this.arrayOfTeachers.length - 1}" v-for="(element,index) in arrayOfTeachers">
             <div class="rightLine col-6 textTable">
-              <p class="text">{{element.teacher}}</p>
+              <p class="text">{{element.full_name}}</p>
             </div>
             <div class="col-6 textTable" >
-              {{element.period}}
+              {{element.start_at}} - {{element.end_at}}
             </div>
           </div>
 
@@ -147,7 +147,7 @@
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText">План подготовки рукописи диссертаций и автореферата</p>
+        <p class="mainText">Текущее состояние диссертации</p>
 
       </div>
 
@@ -218,8 +218,8 @@
                                           :id = index
                                           :actual-semester = this.actualSemester
                                           :feedback = this.feedbacks[index]
-                                          :state = this.states[index]
-
+                                          :status = this.states[index]
+                                          v-if="renderChildComponents"
     ></student-page-from-teacher-status-tab>
 
 
@@ -247,7 +247,7 @@ export default {
   props : ["stateOfPage",],
   data(){
     return {
-
+      renderChildComponents : true,
       commonInfo : false,
       progressTableArray: {},
       theme : "",
@@ -257,7 +257,7 @@ export default {
       feedbacks : [],
       states : '',
       teacherFullName: "",
-      actualSemester : 2,
+      actualSemester : 1,
       workStatus: '',
       statusOfJob : {
         'todo': 'На доработку',
@@ -352,6 +352,13 @@ export default {
     async fillThemeHistory(tittles){
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.arrayOfTopics = tittles
+
+    },
+
+    async fillTeacherHistory(supervisors){
+      supervisors.sort((a, b) => a.start_at > b.start_at ? 1 : -1);
+      this.arrayOfTeachers = supervisors
+      this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
     },
 
     sortTopic(a, b){
@@ -395,10 +402,6 @@ export default {
     async fillFeedBackArray(feedbacks){
       feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.feedbacks = feedbacks
-      for (var i = 0; i < this.feedbacks.length; i++){
-        this.feedbacks[i].status = this.states[i].status
-      }
-      console.log(this.feedbacks)
     },
 
     async fillStatusArray(statuses){
@@ -419,6 +422,7 @@ export default {
     },
 
     async commonRequest(){
+      await this.getActualSemester()
       try {
         const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
               "student_id" : localStorage.getItem("studentId"),
@@ -427,10 +431,11 @@ export default {
         this.data = response.data
         await this.fillStatusArray(this.data.dissertations_statuses)
         await this.fillFeedBackArray(this.data.feedback)
-
         await this.fillThemeHistory(this.data.dissertation_titles)
+        await this.fillTeacherHistory(this.data.supervisors)
         await this.fillProgressTable(this.data.semester_progress)
         await this.fillCommonInfo(this.data.dissertation_titles)
+        this.renderChildComponents = true
       }
       catch (e) {
         console.log(e)
