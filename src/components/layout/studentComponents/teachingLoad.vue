@@ -1,4 +1,4 @@
-<template>
+<template >
 
   <work-send-to-check-notification
       :show = "showEditError"
@@ -19,7 +19,7 @@
 
     <teaching-load-table v-for="(n, index) in this.actualSemester "
                          :id = index
-
+                         v-if="isDataFetched"
                          :classroom-work="array_classroom_load[index]"
                          :individual-work="array_individual_students_load[index]"
                          :other-work="array_additional_load[index]"
@@ -45,7 +45,7 @@
 
     ></teaching-load-table>
 
-    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
+    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%" v-if="isDataFetched">
       <div class="text-start" style="margin-left: 2.5%">
         <p>Статус работы: {{workStatusMap[workStatus]}}</p>
       </div>
@@ -100,7 +100,8 @@ export default {
         "in progress" : "В процессе выполнения",
         "empty" : "Пусто",
         "failed" : "Не сдано",
-      }
+      },
+      isDataFetched : false,
 
     }
   },
@@ -377,6 +378,7 @@ export default {
     this.workStatus = "in progress"
     this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
     this.fillDataForTables(this.data)
+    this.isDataFetched = true
 
 
 

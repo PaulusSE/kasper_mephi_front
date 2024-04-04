@@ -62,10 +62,10 @@
         </div>
 
         <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length} - 1" v-for="(element,index) in arrayOfTopics">
-          <div class="rightLine col-6 mainText">
+          <div class="rightLine col-6 mainText" :class="{underline: index < this.arrayOfTopics.length - 1}">
             <p class="text">{{element.semester}}</p>
           </div>
-          <div class="col-6 textTable" >
+          <div class="col-6 textTable" :class="{underline: index < this.arrayOfTopics.length - 1}">
             {{element.title}}
           </div>
         </div>
@@ -203,8 +203,8 @@
 
       <dissertation-tab v-for="(number, index) in actualSemester"
                         :id=number
-                        :feedback = this.feedbacks[index]
-                        :status = this.states[index]
+                        :feedback = this.feedbacks[index].feedback
+                        :status = this.states[index].status
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemester
@@ -265,7 +265,7 @@ export default {
       editingCheckbox : false,
       theme : "",
       teacherFullName : "",
-      actualSemester: 1,
+      actualSemester: "",
       states : [],
 
       stateOfSending:false,
@@ -312,7 +312,14 @@ export default {
         'end' : 'Заключение',
         'literature' : 'Список литературы',
         'abstract' : 'Автореферат',
-      }
+      },
+
+      feedbackDefaultValue : {
+        feedback : ""
+      },
+      statusDefaultValue : {
+        status : ""
+      },
     }
 
   }
@@ -334,7 +341,7 @@ export default {
                 "theme" : this.theme
             }
         )
-        console.log(response)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -390,7 +397,7 @@ this.waitForCheck = !this.waitForCheck
 
       try {
         const response = await axios.post(this.IP +"/students/dissertation/progress/" + localStorage.getItem("access_token"),
-            {"progress" : this.progressOfDissertation
+            {"progresses" : this.progressTableArray
             }
         )
       }
@@ -424,16 +431,56 @@ this.waitForCheck = !this.waitForCheck
 
 
     async fillFeedBackArray(feedbacks){
-      feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.feedbacks = feedbacks
-      // for (var i = 0; i < this.feedbacks.length; i++){
-      //   this.feedbacks[i].status = this.states[i].status
-      // }
+
+      for (var i = 0; i < this.actualSemester; i++){
+
+        if (feedbacks === undefined){
+          this.feedbacks.push({
+            semester:i+1,
+            feedback:'empty'
+          })
+          continue
+        }
+
+        if (feedbacks[i] === undefined)
+          this.feedbacks.push({
+            semester:i+1,
+            feedback:''
+          })
+        else {
+          this.feedbacks.push(feedbacks[i])
+        }
+      }
+
+      this.feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
+
     },
 
     async fillStatusArray(statuses){
-      statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.states = statuses
+
+      for (var i = 0; i < this.actualSemester; i++){
+
+        if (statuses === undefined){
+          this.states.push({
+            semester:i+1,
+            status:'empty'
+          })
+          continue
+        }
+
+        if (statuses[i] === undefined)
+          this.states.push({
+            semester:i+1,
+            status:'empty'
+          })
+        else {
+          this.states.push(statuses[i])
+        }
+      }
+
+      this.states.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
     },
 
     async fillThemeHistory(tittles){
@@ -442,7 +489,7 @@ this.waitForCheck = !this.waitForCheck
     },
 
     async fillTeacherHistory(supervisors){
-      supervisors.sort((a, b) => a.start_at > b.start_at ? 1 : -1);
+      supervisors.sort((a, b) => a.start_at < b.start_at ? 1 : -1);
       this.arrayOfTeachers = supervisors
 
     },
@@ -450,14 +497,25 @@ this.waitForCheck = !this.waitForCheck
 
     async getCommonInfo() {
       await this.getActualSemester()
+
       try {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
         )
         this.data = response.data
 
+        await this.fillTeacherHistory(this.data.supervisors)
+        await this.fillCommonInfo(this.data.dissertation_titles)
+        await this.fillProgressTable(this.data.semester_progress)
+        await this.fillThemeHistory(this.data.dissertation_titles)
+        await this.fillStatusArray(this.data.dissertations_statuses)
+        await this.fillFeedBackArray(this.data.feedback)
+
+        this.renderChildComponents = true
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
+        console.log(e)
       }
     },
 
@@ -481,101 +539,26 @@ this.waitForCheck = !this.waitForCheck
     },
 
     async fillProgressTable(array){
+
       array.sort((a, b) => this.sortTopic(a,b) ? 1 : -1);
       this.progressTableArray = array
     },
 
     async fillCommonInfo(tittles){
-      var currentDissertationTittle = new Array()
-      for (var i = 0; i < tittles.length; i++){
-        if (tittles[i].semester === this.actualSemester){
-          currentDissertationTittle = tittles[i]
-          break
-        }
-      }
-      this.theme = currentDissertationTittle.title
-      this.workStatus = currentDissertationTittle.status
-      this.research_order = currentDissertationTittle.research_order
-      this.research_object = currentDissertationTittle.research_object
+      tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
+      this.theme = tittles[tittles.length - 1].title
+      this.workStatus = tittles[tittles.length - 1].status
+      this.research_order = tittles[tittles.length - 1].research_order
+      this.research_object = tittles[tittles.length - 1].research_object
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
-      this.waitForCheck = (currentDissertationTittle.status === 'approved') || (currentDissertationTittle.status === 'on review')
+      this.waitForCheck = (tittles[tittles.length - 1].status === 'approved') || (tittles[tittles.length - 1].status === 'on review')
     }
 
   },
   async beforeMount() {
-      this.data = {
-  "dissertation_titles": [
-    {
-      "accepted_at": "2024-04-02T10:10:50.220Z",
-      "created_at": "2024-04-02T10:10:50.220Z",
-      "research_object": "string",
-      "research_order": "string",
-      "semester": 1,
-      "status": "failed",
-      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "title": "string",
-      "title_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    }
-  ],
-  "dissertations_statuses": [
-    {
-      "created_at": "string",
-      "dissertation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "semester": 1,
-      "status": "todo",
-      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "updated_at": "string"
-    }
-  ],
-  "feedback": [
-    {
-      "created_at": "2024-04-02T10:10:50.220Z",
-      "dissertation_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "feedback": "string",
-      "feedback_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "semester": 1,
-      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "updated_at": "2024-04-02T10:10:50.220Z"
-    }
-  ],
-  "semester_progress": [
-    {
-      "accepted_at": "2024-04-02T10:10:50.220Z",
-      "eighth": true,
-      "fifth": true,
-      "first": true,
-      "forth": true,
-      "progress_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "progress_type": "intro",
-      "second": true,
-      "seventh": true,
-      "sixth": true,
-      "status": "todo",
-      "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "third": true,
-      "updated_at": "2024-04-02T10:10:50.220Z"
-    }
-  ],
-  "supervisors": [
-    {
-      "end_at": "2024-04-02T10:10:50.220Z",
-      "full_name": "string",
-      "start_at": "2024-04-02T10:10:50.220Z",
-      "supervisor_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    }
-  ]
-}
-    await this.fillStatusArray(this.data.dissertations_statuses)
-    await this.fillFeedBackArray(this.data.feedback)
-    await this.fillThemeHistory(this.data.dissertation_titles)
-    await this.fillTeacherHistory(this.data.supervisors)
-    await this.fillCommonInfo(this.data.dissertation_titles)
-    await this.fillProgressTable(this.data.semester_progress)
+    await this.getCommonInfo()
 
-    console.log(this.feedbacks)
-    console.log(this.states)
-
-    this.renderChildComponents = true
 
 
 

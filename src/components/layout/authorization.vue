@@ -112,12 +112,13 @@ export default {
 
         )
 
+
         if (response.status === 200){
           this.data = await response.data
           localStorage.setItem("access_token", this.data.token)
-          localStorage.setItem("userType", this.data.client_type)
-          localStorage.setItem("registered", this.data.registered)
-          this.$store.dispatch("updateUserType", this.data.client_type)
+          localStorage.setItem("userType", this.data.user_type)
+          localStorage.setItem("registered", this.data.registered === true)
+          this.$store.dispatch("updateUserType", this.data.user_type)
 
           if(!this.data.registered)
             this.$router.push('/registration')

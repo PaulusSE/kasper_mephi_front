@@ -36,7 +36,7 @@
       <nav style="width: 100%;">
         <label class="text m-0">Специлазация</label>
         <select class="form-select blockStyles" v-model="specializationID" @input="inputEvent">
-          <option v-for="spec in arrayOfSpecialization" :value="spec.specialization_id">{{spec.name}}</option>
+          <option v-for="spec in this.arrayOfSpecialization" :value="spec.specialization_id">{{spec.name}}</option>
         </select>
       </nav>
     </div>
@@ -137,11 +137,6 @@ export default {
       }
 
 
-      if (!this.isEmailValid(this.email)){
-        this.errorMessage = "Некорректная почта"
-        return
-      }
-
 
       if (this.numberOfGroup === ''){
         this.errorMessage = 'Поле номер группы не должно быть пустым'
@@ -177,26 +172,27 @@ export default {
         this.errorMessage = 'Поле научный руководитель не должно быть пустым'
         return;
       }
-      if (await this.requestToRegister() === 200)
+      if (await this.requestToRegister() === 200){
         localStorage.setItem('registered', 'true')
         this.redirectToMain()
+      }
+
       this.errorMessage = 'Попробуйте еще раз'
     },
     async requestToRegister() {
-
       try {
         const response = await axios.post(this.IP +"/authorize/registration/student/" + localStorage.getItem('access_token'),
             {
               "full_name" : this.fullName,
               "group_number" : this.groupID,
-              "department" : this.specializationID,
+              "specialization_id" : this.specializationID,
               "actual_semester" : parseInt(this.actualSemester),
               "start_date" : this.dateOfBeginning,
               "number_of_years" : parseInt(this.numberOfYears),
-              "supervisorID" : this.teacherID,
+              "supervisor_id" : this.teacherID,
             }
         )
-        console.log(response)
+
         return response.status
       }
 
@@ -241,7 +237,9 @@ export default {
       try {
         const response = await axios.get(this.IP +"/student/enum/specializations/" + localStorage.getItem('access_token'),
         )
+        this.data = response.data
         this.arrayOfSpecialization = this.data
+
 
       }
 
@@ -271,7 +269,7 @@ export default {
   async beforeMount() {
     await this.getListOfTeachers()
     await this.getListOfGroups()
-    await this.getListOfSpecializations
+    await this.getListOfSpecializations()
   }
 }
 </script>

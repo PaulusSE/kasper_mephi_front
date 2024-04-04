@@ -26,45 +26,11 @@
         <nav class="checkboxBlock">
           <div class="d-flex gap-2">
             <p class="statusLine">Статус:</p>
-            <p class="statusLine" :class="{textResult1: statusOfJob[this.status.status] === 'Сдано', textResult2:statusOfJob[this.status.status] === 'На доработку', textResult3 : statusOfJob[this.status.status] === 'Не сдано'}">{{statusOfJob[this.status.status]}}</p>
+            <p class="statusLine" :class="{textResult1: statusOfJob[this.status] === 'Сдано', textResult2:statusOfJob[this.status] === 'На доработку', textResult3 : statusOfJob[this.status] === 'Не сдано'}">{{statusOfJob[this.status]}}</p>
           </div>
         </nav>
 
       </div>
-
-
-
-<!--      <div class="roundBlock m-auto mt-0">-->
-
-<!--        <div class="ms-3 mt-2">-->
-<!--          <p class="loadText">Титульный лист:</p>-->
-<!--        </div>-->
-
-<!--        <div v-if="this.tittlePageID === '' " class="ms-5 mt-2">-->
-<!--          <p class="loadTextState">Файл не выбран</p>-->
-<!--        </div>-->
-
-<!--        <div v-else class="ms-5 mt-2">-->
-<!--          <p class="loadTextState">Файл {{ this.tittlePageID}} загружен</p>-->
-<!--        </div>-->
-
-<!--        <div class="justify-content-end d-flex gap-1 image-upload">-->
-<!--          <div class="image-upload">-->
-<!--            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteTitlePage">-->
-<!--              <img v-if="(this.tittlePageID === '' || this.id + 1 !== this.actualSemester) && !(this.tittlePageFile.length !== 0)" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>-->
-<!--              <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">-->
-<!--            </button>-->
-<!--          </div>-->
-
-<!--          <div class="image-upload">-->
-<!--            <label for="file-input1">-->
-<!--              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>-->
-<!--            </label>-->
-<!--            <input id="file-input1" accept="application/pdf" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputTitlePage($event)"/>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
 
 
       <div class="roundBlock m-auto mt-4">
@@ -120,7 +86,7 @@
           <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
 
           <p v-else class="">
-            <textarea disabled v-model="feedback.feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
+            <textarea disabled v-model="this.feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
           </p>
         </div>
       </div>
@@ -221,10 +187,9 @@ export default {
         'semester': this.id
       };
       const json = JSON.stringify(obj);
-
       let formData = new FormData();
       formData.append('upload', this.explanationaryNoteFile);
-      formData.append('semester', json);
+      formData.append('semester', this.id);
 
       var resultStatus = ''
       try {
@@ -258,10 +223,7 @@ export default {
               responseType: 'blob',
             }
         )
-
         if (response.status === 200) {
-
-
           this.explanationaryNoteFilename = utf8.decode(response.headers["content-disposition"])
           this.explanationaryNoteFile = response.data
         }
@@ -278,10 +240,9 @@ export default {
   beforeMount() {
     this.getFiles()
 
+
   },
   mounted() {
-    console.log(this.status)
-    console.log(this.feedback)
   }
 
 }

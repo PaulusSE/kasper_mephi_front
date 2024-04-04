@@ -18,11 +18,13 @@
 
 
     <tab-of-articles v-for="(n, index) in this.actualSemester"
+                     v-if="isDataFetched"
     :id = index
                      :articles = this.arrayOfArticles[index]
                      :reports = this.arrayOfReports[index]
                      :projects = this.arrayOfProjects[index]
                      :actual-semester = this.actualSemester
+
 
     :waitForCheck = this.waitForCheck
                      @updatePage="(n) => cancelChange(n)"
@@ -43,7 +45,7 @@
 
     ></tab-of-articles>
 
-    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
+    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%" v-if="isDataFetched">
       <div class="text-start" style="margin-left: 2.5%">
         <p>Статус работы: {{workStatusMap[workStatus]}}</p>
       </div>
@@ -88,6 +90,7 @@ export default {
       waitForCheck : true,
       actualSemester: 1,
       workStatus : '',
+      isDataFetched : false,
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -394,6 +397,7 @@ export default {
 
     this.workStatus = "approved"
     this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
+    this.isDataFetched = true
 
 
 
