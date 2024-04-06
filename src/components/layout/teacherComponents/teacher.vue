@@ -166,7 +166,7 @@ export default {
 
 
   .mainPage {
-    width: 50% !important;
+    width: 70% !important;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

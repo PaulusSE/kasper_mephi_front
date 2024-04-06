@@ -31,10 +31,10 @@
     @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
     @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
     @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
-
-    @saveArticles = saveArticles()
-    @saveProjects = saveProjects()
-    @saveReports = saveReports()
+    :canEdit = this.canEdit
+    @saveArticles = saveArticles(index)
+    @saveProjects = saveProjects(index)
+    @saveReports = saveReports(index)
 
     @makeCopy="(n) => makeCopy(n)"
     @makeEditErrorNotification = callEditError
@@ -89,6 +89,7 @@ export default {
       showEditError: false,
       waitForCheck : true,
       actualSemester: 1,
+      canEdit: '',
       workStatus : '',
       isDataFetched : false,
       workStatusMap : {
@@ -140,10 +141,10 @@ export default {
       let newArticle = {
         name: '',
         status: '',
-        wac: '',
-        rinc: '',
-        scopus: '',
-        wos: '',
+        wac: false,
+        rinc: false,
+        scopus: false,
+        wos: false,
         impact : '',
         output_data : '',
         volume : '',
@@ -157,10 +158,10 @@ export default {
         location: '',
         report_name: '',
         reported_at: '',
-        rinc: '',
-        'wos' : '',
-        'wac': '',
-        'scopus':'',
+        rinc: false,
+        wos : false,
+        wac: false,
+        scopus: false,
         co_authors: '',
         semester : n + 1,
         numberOfSemesters : ''
@@ -223,18 +224,26 @@ export default {
       this.waitForCheck = !this.waitForCheck
     },
 
-    async saveArticles(){
+    async saveArticles(index){
       if (JSON.stringify(this.arrayOfArticles) === JSON.stringify(this.arrayOfArticlesCopy)) {
         return
       }
       this.makeCopy(1)
 
+      if(this.arrayOfArticles.length === 0)
+        return
+
+      for (var i = 0; i < this.arrayOfArticles[index].length; i++){
+        this.arrayOfArticles[index][i].impact = parseFloat(this.arrayOfArticles[index][i].impact)
+        this.arrayOfArticles[index][i].volume = parseInt(this.arrayOfArticles[index][i].volume)
+      }
+
 
       try {
-        const response = await axios.post(this.IP +'/students/scientific_works/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
             {
-              "publication" : this.arrayOfArticles[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "publications" : this.arrayOfArticles[index],
+              "semester": index + 1,
             }
         )
       }
@@ -243,18 +252,30 @@ export default {
       }
     },
 
-    async saveProjects() {
+    async saveProjects(index) {
       if (JSON.stringify(this.arrayOfProjects) === JSON.stringify(this.arrayOfProjectsCopy)) {
         return
       }
       this.makeCopy(2)
 
+      if(this.arrayOfProjects.length === 0)
+        return
+
+
+      for (var i = 0; i < this.arrayOfProjects[index].length; i++){
+        var tempDateStart = new Date(this.arrayOfProjects[index][i].start_at)
+        var tempDateEnd = new Date(this.arrayOfProjects[index][i].end_at)
+        this.arrayOfProjects[index][i].start_at = tempDateStart.toISOString()
+        this.arrayOfProjects[index][i].end_at = tempDateEnd.toISOString()
+      }
+
+
 
       try {
         const response = await axios.post(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
             {
-              "projects" : this.arrayOfProjects[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "projects" : this.arrayOfProjects[index],
+              "semester": index + 1,
             }
         )
       }
@@ -263,18 +284,29 @@ export default {
       }
     },
 
-    async saveReports() {
+    async saveReports(index) {
       if (JSON.stringify(this.arrayOfReports) === JSON.stringify(this.arrayOfReportsCopy)) {
         return
       }
       this.makeCopy(3)
 
 
+      if(this.arrayOfReports.length === 0)
+        return
+
+      for (var i = 0; i < this.arrayOfReports[index].length; i++){
+        var tempDate = new Date(this.arrayOfReports[index][i].reported_at)
+        this.arrayOfReports[index][i].reported_at = tempDate.toISOString()
+      }
+
+
+
+
       try {
-        const response = await axios.post(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
             {
-              "conferences" : this.arrayOfReports[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "conferences" : this.arrayOfReports[index],
+              "semester": index + 1,
             }
         )
       }
@@ -324,10 +356,9 @@ export default {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         await this.fillDataForTables(this.data)
-        this.workStatus = this.data.work_status
-        this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
-
+        console.log(response)
       }
+
       catch (e) {
         console.log(e)
       }
@@ -338,7 +369,9 @@ export default {
         const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         this.actualSemester = this.data.actual_semester
-
+        this.workStatus = this.data.status
+        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
+        this.canEdit = this.data.can_edit
       }
       catch (e) {
         console.log(e)
@@ -347,56 +380,8 @@ export default {
 
   },
   async beforeMount() {
-    await this.actualSemester
+    await this.getActualSemester()
     await this.loadScientificWorks()
-
-    var data = [
-      {
-        "accepted_at": "2024-03-30T15:26:05.545Z",
-        "conference": {
-          "conference_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "conference_name": "string",
-          "location": "string",
-          "report_name": "string",
-          "reported_at": "2024-03-30T15:26:05.545Z",
-          "rinc": true,
-          "scopus": true,
-          "status": "registered",
-          "wac": true,
-          "wos": true
-        },
-        "publication": {
-          "co_authors": "string",
-          "impact": 0,
-          "name": "string",
-          "output_data": "string",
-          "publication_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "rinc": true,
-          "scopus": true,
-          "status": "to print",
-          "volume": 0,
-          "wac": true,
-          "wos": true
-        },
-        "research_project": {
-          "add_info": "string",
-          "end_at": "2024-03-30T15:26:05.545Z",
-          "grantee": "string",
-          "project_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "project_name": "string",
-          "start_at": "2024-03-30T15:26:05.545Z"
-        },
-        "semester": 1,
-        "student_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "updated_at": "2024-03-30T15:26:05.545Z",
-        "works_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "works_status": "todo"
-      }
-    ]
-    await this.fillDataForTables(data)
-
-    this.workStatus = "approved"
-    this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
     this.isDataFetched = true
 
 
@@ -525,7 +510,7 @@ export default {
 
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

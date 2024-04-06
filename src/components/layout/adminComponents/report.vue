@@ -49,7 +49,7 @@ export default {
 
 @media (min-width: 800px) {
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

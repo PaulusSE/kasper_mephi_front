@@ -28,7 +28,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Аудиторная нагрузка</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
           <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -111,17 +111,17 @@
               Дисциплина
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 12.1%; text-align: center">
               Группы
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 20.7%; text-align: center">
               Основной<br>преподователь
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 16.4%; text-align: center">
               Тип занятий
             </div>
 
@@ -129,7 +129,7 @@
               Часы
             </div>
 
-            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
+            <div class="textMiniTable ps-3" style="width: 4%; text-align: center">
 
             </div>
 
@@ -143,21 +143,21 @@
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10.1%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 12.1%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="element.group_name"></textarea>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 19.2%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 20.7%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="element.main_teacher"></textarea>
               </div>
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 15.8%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 16.4%; text-align: center">
 
               <div style="height: 100%">
                 <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" :value="this.loadTypeMap[element.load_type]" v-model="element.load_type">
@@ -175,7 +175,7 @@
               </div>
             </div>
 
-            <div class="textMiniTable ps pt-2" style="width: 8.1%; text-align: center">
+            <div class="textMiniTable ps pt-2" style="width: 4%; text-align: center">
               <button class="btnAddDeleteFiles" @click="deleteClassroomWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -192,7 +192,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Индивидуальная работа со студентами</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id +1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
           <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -248,41 +248,41 @@
 
         <div v-else>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: individualWork.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center;">
+            <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center;">
               Тип
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               Количество студентов
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               Комментарий (опционально)
 
             </div>
-            <div class="textMiniTable ps-3" style="width: 7%; text-align: center">
+            <div class="textMiniTable ps-3" style="width: 4%; text-align: center">
 
             </div>
 
           </div>
 
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in individualWork">
-            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center">
 
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.load_type"></textarea>
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.students_amount"></textarea>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.comment"></textarea>
               </div>
@@ -290,7 +290,7 @@
             </div>
 
 
-            <div class="textMiniTable ps-2 pt-2" style="width: 8%; text-align: center">
+            <div class="textMiniTable ps-2 pt-2" style="width: 4%; text-align: center">
               <button class="btnAddDeleteFiles" @click="deleteIndividualWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -307,7 +307,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Прочая нагрузка</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
           <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -368,22 +368,22 @@
 
         <div v-else>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center;">
+            <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center;">
               Наименование
               нагрузки
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               Объем (в любых ед. измерения)
             </div>
 
 
-            <div class=" textMiniTable rightLine" style="width: 30%; text-align: center">
+            <div class=" textMiniTable rightLine" style="width: 32%; text-align: center">
               Комментарий (опционально)
 
             </div>
 
-            <div class=" textMiniTable" style="width: 10%; text-align: center">
+            <div class=" textMiniTable" style="width: 4%; text-align: center">
 
 
             </div>
@@ -392,21 +392,21 @@
           </div>
 
           <div class="d-flex" :class="{ underline: index !== otherWork.length-1}" v-for="(work,index) in otherWork">
-            <div class="rightLine textMiniTable ps-3" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center">
 
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.name"></textarea>
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.volume"></textarea>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="work.comment"></textarea>
               </div>
@@ -414,7 +414,7 @@
 
 
 
-            <div class="textMiniTable ps pt-2" style="width: 10%; text-align: center">
+            <div class="textMiniTable ps pt-2" style="width: 4%; text-align: center">
               <button class="btnAddDeleteFiles" @click="deleteAdditionalWork(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -442,7 +442,7 @@ import axios from "axios";
 
 export default {
   name: "tabOfArticles",
-  props: ["classroomWork", "individualWork", "otherWork", "actualSemester", "id", "waitForCheck"],
+  props: ["classroomWork", "individualWork", "otherWork", "actualSemester", "id", "waitForCheck", "canEdit"],
   data() {
     return {
       buttonIsOpened : false,

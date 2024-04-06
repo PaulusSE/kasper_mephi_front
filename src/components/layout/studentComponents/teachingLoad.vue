@@ -40,8 +40,8 @@
                          @saveAdditionalWork = saveAdditionalWork()
 
                          @makeCopy="(n) => makeCopy(n)"
-
                          @makeEditErrorNotification = callEditError
+                         :canEdit=this.canEdit
 
     ></teaching-load-table>
 
@@ -57,8 +57,6 @@
 
 
   </div>
-
-
 
 </template>
 
@@ -93,6 +91,7 @@ export default {
       showEditError: false,
       waitForCheck : false,
       workStatus : '',
+      canEdit: '',
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -167,6 +166,8 @@ export default {
     },
 
     async sendToCheck() {
+      this.workStatus = 'on review'
+      console.log(123)
       try {
         const response = await axios.post(this.IP +'/students/works/review/' + localStorage.getItem("access_token"),
             {
@@ -312,15 +313,10 @@ export default {
 
     async loadTeachingLoad() {
       try {
-        const response = await axios.put(this.IP +'/supervisors/student/load/' + localStorage.getItem("access_token"),
-            {
-              'student_id' : localStorage.getItem('studentID')
-            }
-        )
+        const response = await axios.get(this.IP +'/students/load/' + localStorage.getItem("access_token"))
         this.data = await response.data;
-        this.fillDataForTables(this.data)
-        this.workStatus = this.data.approval_status
-        this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
+        await this.fillDataForTables(this.data)
+
       }
       catch (e) {
         console.log(e)
@@ -332,6 +328,9 @@ export default {
         const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         this.actualSemester = this.data.actual_semester
+        this.canEdit = this.data.can_edit
+        this.workStatus = this.data.status
+        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
 
       }
       catch (e) {
@@ -341,44 +340,10 @@ export default {
 
   },
   async beforeMount() {
-    // await this.getActualSemester()
+    await this.getActualSemester()
     await this.loadTeachingLoad()
-
-    this.data = [
-      {
-        "accepted_at": "string",
-        "additional_load": {
-          "comment": "string",
-          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "name": "string",
-          "volume": "string"
-        },
-        "approval_status": "todo",
-        "classroom_load": {
-          "group_name": "string",
-          "hours": 0,
-          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "load_type": "practice",
-          "main_teacher": "string",
-          "subject_name": "string"
-        },
-        "individual_students_load": {
-          "comment": "string",
-          "load_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          "load_type": "project practice",
-          "students_amount": 0
-        },
-        "loads_id": "string",
-        "semester": 1,
-        "student_id": "string",
-        "updated_at": "string"
-      }
-    ]
-
-    this.workStatus = "in progress"
-    this.waitForCheck = (this.workStatus === 'on review') || (this.workStatus === 'approved')
-    this.fillDataForTables(this.data)
     this.isDataFetched = true
+
 
 
 
@@ -490,7 +455,7 @@ export default {
 
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

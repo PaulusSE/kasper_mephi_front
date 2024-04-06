@@ -28,7 +28,7 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Публикация в изданиях</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
           <button v-if="!smallTableEditing1" @click="buttonSmallTableClicked1" :disabled="waitForCheck" :class="{disabledText : waitForCheck}" class="editBtn2 mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd1')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -89,7 +89,7 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 10.15%;">
-              <div class="textWithCarry inputBox ">{{article.status}}</div>
+              <div class="textWithCarry inputBox ">{{this.publicationMap[article.status]}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10.15%;">
@@ -150,7 +150,7 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 9.15%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
               Статус
 
             </div>
@@ -172,11 +172,11 @@
               Объем<br>в стр
             </div>
 
-            <div class="textMiniTable rightLine" style="width: 9.26%; text-align: center">
+            <div class="textMiniTable rightLine" style="width: 10.26%; text-align: center">
               Соавторы
             </div>
 
-            <div class="textMiniTable" style="width: 6.0%; text-align: center">
+            <div class="textMiniTable" style="width: 4.0%; text-align: center">
 
             </div>
 
@@ -195,12 +195,12 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 9.15%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
               <div style="height: 100%; width: 100%">
                 <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="article.status">
-                  <option>Принято в печать</option>
-                  <option>Опубликовано</option>
-                  <option>В процессе написания</option>
+                  <option value="to print">Принято в печать</option>
+                  <option value="published">Опубликовано</option>
+                  <option value="in progress">В процессе написания</option>
                 </select>
               </div>
             </div>
@@ -240,13 +240,13 @@
               </div>
             </div>
 
-            <div class="textMiniTable rightLine" style="width: 9.26%; text-align: center; padding-right: 0" >
+            <div class="textMiniTable rightLine" style="width: 10.26%; text-align: center; padding-right: 0" >
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="article.co_authors"></textarea>
               </div>
             </div>
 
-            <div class="textMiniTable" style="width: 6%; text-align: center; padding-right: 0" >
+            <div class="textMiniTable" style="width: 4%; text-align: center; padding-right: 0" >
               <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -259,12 +259,15 @@
       </div>
     </div>
 
+
+
     <div class="roundBlock" v-if="buttonIsOpened">
       <div class="d-flex justify-content-between">
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Выступление на научных конференциях</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
+
           <button v-if="!smallTableEditing2" @click="buttonSmallTableClicked2" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd2')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -323,11 +326,8 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 11.15%;">
-              <div style="height: 100%; display: table; overflow: hidden;">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.status" disabled>
-                  <option>Зарегистрировался</option>
-                  <option>Выступил</option>
-                </select>
+              <div>
+                <div class="textWithCarry inputBox ">{{this.conferenceMap[report.status]}}</div>
               </div>
             </div>
 
@@ -353,7 +353,7 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 15.07%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{report.reported_at}}</div>
+                <div class="textWithCarry inputBox ">{{report.reported_at.slice(0,10)}}</div>
               </div>
 
             </div>
@@ -378,7 +378,7 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
               Статус
 
             </div>
@@ -392,16 +392,16 @@
               Название конференции
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
               Дата
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
               Место проведения
             </div>
 
 
-            <div class="textMiniTable" style="width: 7%; text-align: center">
+            <div class="textMiniTable" style="width: 4%; text-align: center">
 
             </div>
 
@@ -420,11 +420,11 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
               <div style="height: 100%">
                 <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.status">
-                  <option>Зарегистрировался</option>
-                  <option>Выступил</option>
+                  <option value="registered">Зарегистрировался</option>
+                  <option value="performed ">Выступил</option>
                 </select>
               </div>
             </div>
@@ -450,21 +450,21 @@
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.reported_at"></textarea>
+                <input class="textWithCarry inputBox "  type="date" v-model="report.reported_at"></input>
               </div>
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " rows="4" v-model="report.location" style="word-break: break-all"></textarea>
               </div>
             </div>
 
 
-            <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
+            <div class="textMiniTable" style="width: 4%; text-align: center; padding-right: 0" >
               <button class="btnAddDeleteFiles mt-2" @click="deleteReport(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -482,7 +482,8 @@
         <nav class="mt-3" style="margin-left: 2.5%">
           <p class="headingSemester">Участие в научно-исследовательских проектах</p>
         </nav>
-        <nav class="text-end" style="margin-right: 2.5%" v-if="this.actualSemester === id+1">
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
+
           <button v-if="!smallTableEditing3" @click="buttonSmallTableClicked3" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
           <div v-else>
             <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd3')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
@@ -537,11 +538,11 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.start_at}}</div>
+              <div class="textWithCarry inputBox ">{{project.start_at.slice(0,10)}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 12%;">
-              <div class="textWithCarry inputBox ">{{project.end_at}}</div>
+              <div class="textWithCarry inputBox ">{{project.end_at.slice(0,10)}}</div>
             </div>
 
 
@@ -569,17 +570,17 @@
               №
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 23.5%; text-align: center">
               Наименование проекта (гранта)
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
               Дата начала
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
               Дата окончания
             </div>
 
@@ -590,7 +591,7 @@
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
               Грантодатель
             </div>
-            <div class="textMiniTable" style="width: 7%; text-align: center">
+            <div class="textMiniTable" style="width: 4%; text-align: center">
 
             </div>
 
@@ -602,25 +603,25 @@
               {{index + 1}}
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 23.5%; text-align: center">
               <div>
                 <textarea class="textWithCarry inputBox " v-model="project.project_name" rows="4" style="overflow-y:auto"></textarea>
               </div>
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " v-model="project.start_at" rows="4" style="overflow-y:auto"></textarea>
+                <input class="textWithCarry inputBox " v-model="project.start_at" type="date" style="overflow-y:auto"></input>
               </div>
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="project.end_at"></textarea>
+                <input class="textWithCarry inputBox " type="date" v-model="project.end_at"></input>
               </div>
             </div>
 
@@ -638,7 +639,7 @@
             </div>
 
 
-            <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
+            <div class="textMiniTable" style="width: 4%; text-align: center; padding-right: 0" >
               <button class="btnAddDeleteFiles mt-2" @click="deleteProject(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
@@ -664,7 +665,7 @@ import axios from "axios";
 
 export default {
   name: "tabOfArticles",
-  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester"],
+  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester", "canEdit"],
   data() {
     return {
       buttonIsOpened : false,
@@ -674,6 +675,15 @@ export default {
       deleteArticlesID : [],
       deleteProjectsID : [],
       deleteReportsID : [],
+      publicationMap: {
+        "to print" : "Принято в печать",
+        "published" : "Опубликовано",
+        "in progress": "В процессе написания"
+      },
+      conferenceMap: {
+        "registered" : "Зарегистрировался",
+        "performed " : "Выступил",
+      }
     }
   },
   methods : {
@@ -715,24 +725,36 @@ export default {
       this.smallTableEditing1 = !this.smallTableEditing1
       this.$emit('saveArticles')
 
+      if(this.deleteArticlesID.length === 0)
+        return
+
+
       try {
         const response = await axios.put(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
-            {"ids" : this.deleteArticlesID}
+            {
+              "ids" : this.deleteArticlesID,
+              "semester" : this.id + 1
+            }
         )
       }
       catch (e) {
         console.log(e)
       }
 
-
     },
     async saveReports(){
       this.smallTableEditing2 = !this.smallTableEditing2
       this.$emit('saveReports')
 
+      if(this.deleteReportsID.length === 0)
+        return
+
       try {
         const response = await axios.put(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
-            {"ids" : this.deleteReportsID}
+            {
+              "ids" : this.deleteReportsID,
+              "semester" : this.id + 1
+            }
         )
       }
       catch (e) {
@@ -745,9 +767,19 @@ export default {
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit('saveProjects')
 
+
+      if(this.deleteProjectsID.length === 0)
+        return
+
+      console.log(this.deleteProjectsID)
+      console.log(this.actualSemester)
+
       try {
         const response = await axios.put(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
-            {"ids" : this.deleteProjectsID}
+            {
+              "ids" : this.deleteProjectsID,
+              "semester" : this.id + 1
+            }
         )
       }
       catch (e) {
@@ -786,6 +818,7 @@ export default {
   },
 
   beforeMount() {
+    console.log(this.id)
   }
 }
 </script>

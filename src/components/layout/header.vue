@@ -93,7 +93,7 @@ export default {
 
   .myHeader {
     margin:auto;
-    width: 50%;
+    width: 70%;
     padding: 0 !important;
     margin-top: 0 !important;
 

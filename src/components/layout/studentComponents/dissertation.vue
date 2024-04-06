@@ -109,14 +109,14 @@
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
           <label class="text">Объект исследования</label>
-          <input type="text" class="textInput" disabled  v-model="research_object">
+          <input type="text" class="textInput"  :disabled="!editingInfo" v-model="research_object">
         </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
           <label class="text">Приказ исследования</label>
-          <input type="text" class="textInput" disabled v-model="research_order">
+          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">
         </nav>
       </div>
     </div>
@@ -267,7 +267,7 @@ export default {
       teacherFullName : "",
       actualSemester: "",
       states : [],
-
+      canEdit: '',
       stateOfSending:false,
       resultOfSending: '',
       arrayWithFilesId: [],
@@ -335,16 +335,21 @@ export default {
       this.editingInfo = !this.editingInfo
     },
     async saveCommonInfo(){
+
       try {
-        const response = await axios.post(this.IP +"/students/dissertation/theme/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/students/dissertation_title/" + localStorage.getItem("access_token"),
             {
-                "theme" : this.theme
+              "research_object": this.research_object,
+              "research_order": this.research_order,
+              "title": this.theme
             }
         )
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        // this.showWrongAnswerString = true;
+        console.log(e)
+
       }
       this.editingInfo = !this.editingInfo
     },
@@ -375,13 +380,29 @@ export default {
       this.progressOfDissertationCopy = this.progressOfDissertation
     },
 
+
+
     async sendToCheck() {
-this.waitForCheck = !this.waitForCheck
+
+      try {
+        const response = await axios.post(this.IP +"/students/dissertation/review/" + localStorage.getItem("access_token"),
+            {
+              "semester" : this.actualSemester
+            }
+        )
+        if (response.status === 200){
+          this.waitForCheck = true
+          this.workStatus = 'on review'
+        }
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+      this.workStatus = 'on review'
+      this.waitForCheck = true
     },
 
-    async cancelCheck() {
-      this.waitForCheck = !this.waitForCheck
-    },
 
     async saveTables() {
       this.editingCheckbox = !this.editingCheckbox;
@@ -411,6 +432,11 @@ this.waitForCheck = !this.waitForCheck
         const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         this.actualSemester = this.data.actual_semester
+        this.workStatus = this.data.status
+        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
+        this.canEdit = this.data.can_edit
+
+
 
       }
       catch (e) {
@@ -548,11 +574,9 @@ this.waitForCheck = !this.waitForCheck
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
       this.theme = tittles[tittles.length - 1].title
-      this.workStatus = tittles[tittles.length - 1].status
       this.research_order = tittles[tittles.length - 1].research_order
       this.research_object = tittles[tittles.length - 1].research_object
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
-      this.waitForCheck = (tittles[tittles.length - 1].status === 'approved') || (tittles[tittles.length - 1].status === 'on review')
     }
 
   },
@@ -698,7 +722,7 @@ this.waitForCheck = !this.waitForCheck
   }
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
