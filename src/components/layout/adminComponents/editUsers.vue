@@ -4,6 +4,12 @@
   :show = this.showDataErrorForTablePlan
   ></error-for-table-plan>
 
+  <save-parameters
+      :show = showSaveTableNotification
+      :result-of-sending = resultOfSavingTables
+  >
+  </save-parameters>
+
 
   <div class="mainPage">
     <header-of-admin
@@ -85,7 +91,7 @@
             <div class="rightLine textMiniTable" style="width: 26%; text-align: center">
 
               <div  style="height: 100%; width: 100%">
-                <select  :disabled="!editCommonTable"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element['state']">
+                <select  :disabled="!editCommonTable"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.studying_status">
                   <option value="studying">Обучается</option>
                   <option value="academic"> В академическом отпуске</option>
                   <option value="graduated">Выпустился</option>
@@ -96,7 +102,7 @@
             </div>
 
             <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
-              <input :disabled='!editCommonTable' type="checkbox" v-model="element['can_edit']" class="me-3">
+              <input :disabled='!editCommonTable' type="checkbox" v-model="element['editState']" class="me-3">
             </div>
           </div>
         </div>
@@ -127,7 +133,7 @@
 
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfTeachers.length}" v-for="(element,index) in arrayOfTeachers">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              {{index}}
+              {{index + 1}}
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
@@ -159,7 +165,7 @@
 
 
 
-      <div v-if="!editTableWithGroups" class="roundBlock p-0 mt-2">
+      <div class="roundBlock p-0 mt-2">
         <div>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfGroups.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
@@ -171,10 +177,6 @@
             </div>
 
 
-
-
-
-
           </div>
 
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
@@ -183,59 +185,16 @@
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
-              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="arrayOfGroups[index]">
-              <p v-else>{{element}}</p>
+              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="element.name">
+              <p v-else>{{element.name}}</p>
             </div>
 
-          </div>
-        </div>
-
-      </div>
-
-      <div v-else class="roundBlock p-0 mt-2">
-        <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              №
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
-              Группа
-            </div>
-
-
-            <div class="textMiniTable" style="width: 10%; text-align: center">
-
-            </div>
-
-
-
-          </div>
-
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              {{index + 1}}
-            </div>
-
-            <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
-              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="arrayOfGroups[index]">
-              <p v-else>{{element}}</p>
-            </div>
-
-
-            <div class="textMiniTable" style="width: 10%; text-align: center">
-              <button v-if="editTableWithGroups" class="btnAddDeleteFiles mt-2" @click="deleteGroup(index)">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-              <button v-else class="btnAddDeleteFiles mt-2">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-            </div>
           </div>
         </div>
 
       </div>
     </div>
+
 
     <div class="roundBlock">
 
@@ -329,6 +288,53 @@
       </div>
     </div>
 
+    <div class="roundBlock">
+
+      <div class="d-flex justify-content-between" style="margin-left: 2.5%">
+        <nav class="mt-3" >
+          <p class="headingSemester">Редактирование специализации</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!editTableSpecialization" @click="buttonEditSpecialization" class="editBtn mt-3">Редактировать</button>
+          <div v-else>
+            <button class="editBtn mt-3 me-2" @click="buttonAddSpec">Добавить</button>
+            <button class="editBtn mt-3 " @click="buttonSaveSpec">Сохранить</button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfSpecialization.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              Название специализации
+            </div>
+
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfSpecialization.length}" v-for="(element,index) in arrayOfSpecialization">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="textMiniTable" style="width: 90%; text-align: center">
+              <p v-if="!editTableSpecialization">{{element.name}}</p>
+              <input v-else type="text" class="inputBox" v-model="element.name"</input>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
 
 
 
@@ -343,50 +349,36 @@ import store from "@/store/index.js";
 import axios from "axios";
 import errorNotificationForTablePlan
   from "@/components/layout/notifications/adminNotifications/errorNotificationForTablePlan.vue";
+import saveParametersEditUsers from "@/components/layout/notifications/adminNotifications/saveParametersEditUsers.vue";
+
 export default {
   name: "editUser",
   props : ["stateOfAdminPage"],
   components : {
     "headerOfAdmin": headerOfAdmin,
     "errorForTablePlan" : errorNotificationForTablePlan,
+    "saveParameters" : saveParametersEditUsers
   },
   data(){
     return {
       arrayOfStudentsCopy : [],
       arrayOfStudents : [
-        {
-          'full_name' : 'ФИО1',
-          'group_name' : 'group1',
-          'years' : 1,
-          'state' : 'graduated',
-          'can_edit' : false
-        },
-        {
-          'full_name' : 'ФИО2',
-          'group_name' : 'group2',
-          'years' : 2,
-          'state' : 'studying',
-          'can_edit' : true
-        },
+
       ],
 
       arrayOfTeachers : [
-        {
-          'full_name' : 'ФИО1'
-        }
       ],
       stateOfStudents: true,
       stateOfTeachers: true,
       stateOfMainCheckBox : false,
-      arrayOfGroups: [
-          'Б20-504',
-          'Б20-514',
-          'Б19-514',
-      ],
+      arrayOfGroups: [],
       arrayOfGroupsCopy:[],
       editTableWithGroups : false,
       editCommonTable : false,
-      arrayOfPlan : [3,4],
+      editTableSpecialization: false,
+      arrayOfPlan : [],
+      arrayOfSpecialization : ["", ""],
+      arrayOfSpecializationCopy : [],
       arrayOfPlanCopy: [],
       editTableYears : false,
       showDataErrorForTablePlan : false,
@@ -395,16 +387,13 @@ export default {
         "academic" : "В академическом отпуске",
         "expelled" : "Отчислился",
         "graduated" : "Выпустился",
-      }
+      },
+      showSaveTableNotification : false,
+      resultOfSavingTables : false,
     }
   },
   methods : {
 
-    mapSelect(index){
-      var currentState = this.arrayOfStudents[index]["state"]
-      console.log(currentState)
-      // this.arrayOfStudents[index]["state"] = "expelled"
-    },
 
     setState(index, string){
       this.arrayOfStudents[index][state] = string
@@ -442,7 +431,7 @@ export default {
       this.stateOfTeachers = !this.stateOfTeachers
       if (this.arrayOfTeachersCopy === this.arrayOfTeachers)
         return
-      /// todo save changes
+
     },
     selectAllCheckbox(){
     for (var i = 0; i < this.arrayOfStudents.length; i++)
@@ -464,8 +453,6 @@ export default {
           this.arrayOfTeachers.push(this.data["supervisor"])
           this.arrayOfStudents.push(this.data["student"])
         }
-
-
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -481,12 +468,57 @@ export default {
       this.editTableWithGroups = false
     },
 
-    buttonSaveGroup(){
-      //todo saving
+    async buttonSaveGroup(){
+      console.log(this.arrayOfGroups)
+      try {
+        const response = await axios.post(this.IP +"/administrator/enum/groups/" + localStorage.getItem("access_token"),
+            {
+              "groups" : this.arrayOfGroups
+            }
+        )
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
       this.editTableWithGroups = false
     },
     buttonAddGroup(){
-      this.arrayOfGroups.push('')
+      this.arrayOfGroups.push({
+        name : ''
+      })
+    },
+
+    buttonEditSpecialization(){
+      this.arrayOfSpecializationCopy = this.arrayOfSpecialization.slice(0)
+      this.editTableSpecialization = !this.editTableSpecialization
+    },
+
+    async buttonSaveSpec(){
+      console.log(this.arrayOfSpecialization)
+      try {
+        const response = await axios.post(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
+            {
+            "specs" : this.arrayOfSpecialization
+            }
+        )
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+      this.editTableSpecialization= false
+    },
+    buttonAddSpec(){
+      this.arrayOfSpecialization.push({
+        name : ''
+      })
+    },
+
+    deleteSpec(index){
+      this.arrayOfSpecialization.splice(index, 1)
     },
 
     deleteGroup(index){
@@ -503,7 +535,7 @@ export default {
     },
 
     buttonSaveCommonTable(){
-      //todo saving
+
       this.editCommonTable = false
     },
 
@@ -539,6 +571,14 @@ export default {
       this.arrayOfPlan.splice(index, 1)
     },
 
+    callSaveTableError(result){
+        this.resultOfSavingTables = result
+        this.showSaveTableNotification = true
+        setTimeout(() => {
+          this.showSaveTableNotification = false
+        }, 5000);
+    }
+,
     pushStudentIDToStorage(index){
       localStorage.setItem("studentID", this.arrayOfStudents[index].studentId)
       this.$store.dispatch("updateUserId", this.arrayOfStudents[index].studentId)
@@ -546,11 +586,71 @@ export default {
     pushTeacherIDToStorage(index){
     localStorage.setItem("teacherID", this.arrayOfTeachers[index].teacherId)
       //todo мб стоит пихнуть id в store
-    }
-  },
-  beforeMount() {
+    },
 
-    this.getAspsAndTeachers()
+    async getSpecializations(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
+        )
+
+        this.data = response.data
+        this.arrayOfSpecialization = this.data
+        console.log(this.data)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
+    async getGroups(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/enum/groups/" + localStorage.getItem("access_token"),
+        )
+
+        this.data = response.data
+        this.arrayOfGroups = this.data
+        console.log(this.data)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+    async getTeachers(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/supervisors/list/" + localStorage.getItem("access_token"),
+        )
+
+        this.data = response.data
+        this.arrayOfTeachers = this.data
+        console.log(this.data)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
+    async getStudents(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/students/list/" + localStorage.getItem("access_token"),
+        )
+
+        this.data = response.data
+        this.arrayOfStudents = this.data
+        console.log(this.data)
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+        console.log(e)
+      }
+    }
+
+  },
+  async beforeMount() {
+    await this.getAspsAndTeachers()
+    await this.getSpecializations()
+    await this.getGroups()
+    await this.getTeachers()
+    await this.getStudents()
 
 
 

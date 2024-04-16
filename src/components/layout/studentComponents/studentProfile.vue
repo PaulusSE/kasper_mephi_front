@@ -257,7 +257,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorize/password/change/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,

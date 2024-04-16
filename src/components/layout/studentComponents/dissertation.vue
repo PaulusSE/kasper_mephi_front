@@ -154,7 +154,7 @@
 
 
 
-      <div class="d-flex" :class="{underline: index < 10}" v-for="(element,index) in progressTableArray">
+      <div class="d-flex" :class="{underline: index < this.progressTableArray.length - 1}" v-for="(element,index) in progressTableArray">
         <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{this.topicMap[element.progress_type]}}
         </div>
@@ -425,6 +425,22 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
+
+      if (this.progressOfDissertation === this.progressOfDissertationCopy)
+        return
+
+      try {
+        const response = await axios.post(this.IP +"/students/dissertation/progress/percent/" + localStorage.getItem("access_token"),
+            { "progress": parseInt(this.progressOfDissertation)
+            }
+        )
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+
     },
 
     async getActualSemester() {
@@ -435,7 +451,6 @@ export default {
         this.workStatus = this.data.status
         this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
         this.canEdit = this.data.can_edit
-
 
 
       }
@@ -463,7 +478,7 @@ export default {
         if (feedbacks === undefined){
           this.feedbacks.push({
             semester:i+1,
-            feedback:'empty'
+            feedback:''
           })
           continue
         }
@@ -515,8 +530,19 @@ export default {
     },
 
     async fillTeacherHistory(supervisors){
-      supervisors.sort((a, b) => a.start_at < b.start_at ? 1 : -1);
+      supervisors.sort((a, b) => a.start_at > b.start_at ? 1 : -1);
       this.arrayOfTeachers = supervisors
+
+      for(var i = 0; i < this.arrayOfTeachers.length; i++){
+        this.arrayOfTeachers[i].start_at = this.arrayOfTeachers[i].start_at.slice(0,10)
+        if (this.arrayOfTeachers[i].end_at !== undefined)
+          this.arrayOfTeachers[i].end_at = this.arrayOfTeachers[i].end_at.slice(0,10)
+        else
+          this.arrayOfTeachers[i].end_at = ''
+      }
+
+
+
 
     },
 
@@ -528,21 +554,21 @@ export default {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
         )
         this.data = response.data
-
-        await this.fillTeacherHistory(this.data.supervisors)
-        await this.fillCommonInfo(this.data.dissertation_titles)
-        await this.fillProgressTable(this.data.semester_progress)
-        await this.fillThemeHistory(this.data.dissertation_titles)
-        await this.fillStatusArray(this.data.dissertations_statuses)
-        await this.fillFeedBackArray(this.data.feedback)
-
-        this.renderChildComponents = true
-
       }
       catch (e) {
         this.showWrongAnswerString = true;
         console.log(e)
       }
+
+      await this.fillTeacherHistory(this.data.supervisors)
+      await this.fillCommonInfo(this.data.dissertation_titles)
+      await this.fillProgressTable(this.data.semester_progress)
+      await this.fillThemeHistory(this.data.dissertation_titles)
+      await this.fillStatusArray(this.data.dissertations_statuses)
+      await this.fillFeedBackArray(this.data.feedback)
+      this.progressOfDissertation = this.data.student_status.progress
+      this.renderChildComponents = true
+
     },
 
     sortTopic(a, b){
@@ -582,6 +608,8 @@ export default {
   },
   async beforeMount() {
     await this.getCommonInfo()
+
+
 
 
 

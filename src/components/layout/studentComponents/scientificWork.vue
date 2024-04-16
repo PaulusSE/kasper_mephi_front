@@ -6,6 +6,12 @@
   >
   </work-send-to-check-notification>
 
+  <save-tables-notification
+  :result-of-sending = this.resultOfSavingTables
+  :show = this.showSavingTablesNotification
+  >
+  </save-tables-notification>
+
 
   <div class="mainPage">
     <header-of-student
@@ -68,13 +74,19 @@ import axios from "axios";
 import workSendToCheckNotification
   from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 import tabOfArticlesForTeacher from "@/components/layout/teacherComponents/tabOfArticlesForTeacher.vue";
+import saveTablesNotifitcation
+  from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
+import SaveTablesNotification from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
+
 export default {
   name: "scientificWork",
   components: {
+    SaveTablesNotification,
     tabOfArticlesForTeacher,
     "headerOfStudent" : headerOfStudent,
     "tabOfArticles" : tabOfArticles,
-    "workSendToCheckNotification" : workSendToCheckNotification
+    "workSendToCheckNotification" : workSendToCheckNotification,
+    "saveTablesNotification" : saveTablesNotifitcation,
   },
   props: ["stateOfStudentPage", "educationTime"],
   data() {
@@ -92,6 +104,9 @@ export default {
       canEdit: '',
       workStatus : '',
       isDataFetched : false,
+      resultOfSavingTables : false,
+      showSavingTablesNotification : false,
+      works_ids: new Map(),
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -107,7 +122,6 @@ export default {
 
   methods : {
 
-
     async fillDataForTables(data){
       this.arrayOfArticles = new Array(this.actualSemester)
       this.arrayOfReports = new Array(this.actualSemester)
@@ -121,21 +135,36 @@ export default {
 
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
-        if (data[i].publication.publication_id !== undefined){
-          var article = data[i].publication
-          this.arrayOfArticles[semester - 1].push(article)
+        for (var j = 0; j<data[i].publications.length; j++){
+          if (data[i].publications[j].publication_id !== undefined){
+            var article = data[i].publications[j]
+            this.arrayOfArticles[semester - 1].push(article)
+          }
         }
-        if (data[i].conference.conference_id !== undefined){
-          var report = data[i].conference
-          this.arrayOfReports[semester-1].push(report)
-        }
-        if (data[i].research_project.project_id !== undefined){
-          var project = data[i].research_project
-          this.arrayOfProjects[semester-1].push(project)
-        }
-      }
-    },
 
+        for (var j = 0; j<data[i].conferences.length; j++){
+          if (data[i].conferences[j].conference_id !== undefined){
+            var conf = data[i].conferences[j]
+            this.arrayOfReports[semester - 1].push(conf)
+          }
+        }
+
+        for (var j = 0; j<data[i].research_projects.length; j++){
+          if (data[i].research_projects[j].project_id !== undefined){
+            var project = data[i].research_projects[j]
+            this.arrayOfProjects[semester - 1].push(project)
+          }
+        }
+
+        this.works_ids.set(semester, data[i].works_id)
+      }
+
+
+
+
+
+
+    },
 
     buttonSmallTableAdd1(n){
       let newArticle = {
@@ -152,6 +181,7 @@ export default {
       }
       this.arrayOfArticles[n] = this.arrayOfArticles[n].concat(newArticle)
     },
+
     buttonSmallTableAdd2(n){
       let newReport = {
         conference_name: '',
@@ -168,6 +198,7 @@ export default {
       }
       this.arrayOfReports[n] = this.arrayOfReports[n].concat(newReport)
     },
+
     buttonSmallTableAdd3(n){
       let newReport = {
         project_name: '',
@@ -204,6 +235,14 @@ export default {
       }, 5000);
     },
 
+    callSaveTablesError(result) {
+      this.resultOfSavingTables = result
+      this.showSavingTablesNotification = true
+      setTimeout(() => {
+        this.showSavingTablesNotification = false
+      }, 5000);
+    },
+
     async sendToCheck() {
 
       try {
@@ -228,6 +267,10 @@ export default {
       if (JSON.stringify(this.arrayOfArticles) === JSON.stringify(this.arrayOfArticlesCopy)) {
         return
       }
+
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
+
       this.makeCopy(1)
 
       if(this.arrayOfArticles.length === 0)
@@ -236,6 +279,7 @@ export default {
       for (var i = 0; i < this.arrayOfArticles[index].length; i++){
         this.arrayOfArticles[index][i].impact = parseFloat(this.arrayOfArticles[index][i].impact)
         this.arrayOfArticles[index][i].volume = parseInt(this.arrayOfArticles[index][i].volume)
+        this.arrayOfArticles[index][i].works_id = this.works_ids.get(index+1)
       }
 
 
@@ -246,16 +290,24 @@ export default {
               "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.loadScientificWorks()
     },
 
     async saveProjects(index) {
       if (JSON.stringify(this.arrayOfProjects) === JSON.stringify(this.arrayOfProjectsCopy)) {
         return
       }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
+
       this.makeCopy(2)
 
       if(this.arrayOfProjects.length === 0)
@@ -267,6 +319,7 @@ export default {
         var tempDateEnd = new Date(this.arrayOfProjects[index][i].end_at)
         this.arrayOfProjects[index][i].start_at = tempDateStart.toISOString()
         this.arrayOfProjects[index][i].end_at = tempDateEnd.toISOString()
+        this.arrayOfProjects[index][i].works_id = this.works_ids.get(index+1)
       }
 
 
@@ -278,16 +331,24 @@ export default {
               "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.loadScientificWorks()
     },
 
     async saveReports(index) {
       if (JSON.stringify(this.arrayOfReports) === JSON.stringify(this.arrayOfReportsCopy)) {
         return
       }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
+
       this.makeCopy(3)
 
 
@@ -297,9 +358,8 @@ export default {
       for (var i = 0; i < this.arrayOfReports[index].length; i++){
         var tempDate = new Date(this.arrayOfReports[index][i].reported_at)
         this.arrayOfReports[index][i].reported_at = tempDate.toISOString()
+        this.arrayOfReports[index][i].works_id = this.works_ids.get(index+1)
       }
-
-
 
 
       try {
@@ -309,10 +369,14 @@ export default {
               "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
-        console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.loadScientificWorks()
     },
 
     makeCopy(n){
@@ -336,29 +400,25 @@ export default {
       var tempData = this.arrayOfArticles[index]
       tempData.splice(n,1)
     },
+
     deleteReport(index,n){
 
       var tempData = this.arrayOfReports[index]
       tempData.splice(n,1)
     },
+
     deleteProject(index,n){
 
       var tempData = this.arrayOfProjects[index]
       tempData.splice(n,1)
     },
 
-
-
-
-
     async loadScientificWorks() {
       try {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         await this.fillDataForTables(this.data)
-        console.log(response)
       }
-
       catch (e) {
         console.log(e)
       }

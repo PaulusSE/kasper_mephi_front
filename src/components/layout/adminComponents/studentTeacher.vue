@@ -35,12 +35,15 @@
       <div v-for="(pair,index) in arrayOfPairsStudentTeacher" >
         <div class="d-flex" :class="{underline:index !== arrayOfPairsStudentTeacher.length - 1}">
           <div class="rightLine col-6 mainText">
-            {{pair["student"]["fullName"]}}
+            <router-link to="/user" class="router-link" @click="pushStudentIDToStorage(index)">
+              {{pair.student.full_name}}
+            </router-link>
+
           </div>
           <div class="col-6 mainText">
-            <select class="form-select blockStyles mainText m-0 p-0" :disabled="stateOfButton" v-model="pair.teacherFullName" @input="inputEvent">
-              <option v-for="teacher in arrayOfTeacher" class="mainText">{{pair["supervisor"]["full_name"]}}</option> >
-            </select>
+              <select class="form-select blockStyles mainText m-0 p-0" :disabled="stateOfButton" v-model="pair.supervisor.supervisor_id"   @input="inputEvent">
+                <option v-for="teacher in arrayOfTeacher" class="mainText"  :value="teacher.supervisor_id" >{{teacher.full_name}}</option> >
+              </select>
           </div>
         </div>
       </div>
@@ -75,6 +78,15 @@ export default {
     inputEvent(){
 
     },
+    pushStudentIDToStorage(index){
+      localStorage.setItem("studentID", this.arrayOfPairsStudentTeacher[index].student.student_id);
+      this.$store.dispatch("updateUserId", this.arrayOfPairsStudentTeacher[index].student.student_id)
+    },
+    pushTeacherIDToStorage(index){
+      localStorage.setItem("teacherID", this.arrayOfTeachers[index].teacherId)
+      //todo мб стоит пихнуть id в store
+    },
+
     editPairs(){
       this.stateOfButton = !this.stateOfButton
       this.makeCopy()
@@ -87,29 +99,23 @@ export default {
       var pairs = new Array()
 
       for (var i = 0; i < this.arrayOfPairsStudentTeacher.length; i++){
-        var teacherFullName = this.arrayOfPairsStudentTeacher[i]["supervisor"]["full_name"]
-        for (var j = 0; j < this.arrayOfTeacher.length; j++){
-          if (this.arrayOfTeacher[j]["full_name"] === teacherFullName){
-            this.arrayOfPairsStudentTeacher[i]["supervisor"]["supervisor_id"] = this.arrayOfTeacher[j]["supervisor_id"]
-            break
-          }
-        }
         pairs.push({
-          "student_id": this.arrayOfPairsStudentTeacher[i]["student"]["student_id"],
-          "supervisor_id" : this.arrayOfPairsStudentTeacher[i]["supervisor"]["supervisor_id"]
+          "student_id": this.arrayOfPairsStudentTeacher[i].student.student_id,
+          "supervisor_id" : this.arrayOfPairsStudentTeacher[i].supervisor.supervisor_id
         })
       }
 
+
+
       try {
         const response = await axios.post(this.IP + "/administrator/student/change/" + localStorage.getItem("access_token"),
-            pairs
+            {"pairs" : pairs}
         )
-        console.log(response)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
       }
-
 
       this.makeCopy()
     },
@@ -132,17 +138,25 @@ export default {
         }
       }
     },
-    async getAspsAndTeachers() {
+
+    async getTeachers() {
+      try {
+        const response = await axios.get(this.IP +"/administrator/supervisors/list/" + localStorage.getItem("access_token"),
+        )
+        this.data = response.data
+        this.arrayOfTeacher = this.data
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
+    async getPairs() {
       try {
         const response = await axios.get(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"),
         )
 
         this.data = response.data
-
-        for (var i = 0; i < this.data.length; i++){
-          this.arrayOfTeacher.push(this.data["supervisor"])
-        }
-
         this.arrayOfPairsStudentTeacher = this.data
       }
       catch (e) {
@@ -150,8 +164,12 @@ export default {
       }
     }
   },
-  beforeMount() {
-    this.getAspsAndTeachers()
+  async beforeMount() {
+    await this.getPairs()
+    await this.getTeachers()
+
+
+
   }
 }
 </script>
@@ -162,6 +180,10 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.router-link {
+  text-decoration: none;
 }
 
 

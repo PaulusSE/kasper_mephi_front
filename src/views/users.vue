@@ -56,11 +56,12 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get(this.IP +  "/authorization/check/" + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +"/authorize/token/check/" + localStorage.getItem("access_token"))
         if (response.status === 200){
-          this.$store.dispatch("updateUserType", response.data.userType)
-          localStorage.setItem("userType", response.data.userType)
-          this.type = response.data.userType
+          this.$store.dispatch("updateUserType", response.data.user_type)
+          localStorage.setItem("userType", response.data.user_type)
+          localStorage.setItem("registered", response.data.registered)
+          this.type = response.data.user_type
         }
         else {
           this.$router.push('/auth')
@@ -74,9 +75,8 @@ export default {
 
     },
   async beforeMount() {
-    // await this.checkAuth()
-    // this.type = 'admin'
-    this.type = 'student'
+    await this.checkAuth()
+
 
 
     },

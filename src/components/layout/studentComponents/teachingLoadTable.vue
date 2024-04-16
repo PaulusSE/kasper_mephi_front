@@ -162,7 +162,7 @@
               <div style="height: 100%">
                 <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" :value="this.loadTypeMap[element.load_type]" v-model="element.load_type">
                   <option style="word-break: break-all" value="laboratory">лабораторная</option>
-                  <option style="word-break: break-all" value="lecture">лекция</option>
+                  <option style="word-break: break-all" value="lectures">лекция</option>
                   <option style="word-break: break-all" value="practice">семинар</option>
                   <option style="word-break: break-all" value="exam">прием зачетов и экзаменов</option>
                 </select>
@@ -224,7 +224,7 @@
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in this.individualWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.load_type}}</div>
+                <div class="textWithCarry inputBox ">{{this.loadTypeIndividualMap[work.load_type]}}</div>
               </div>
 
             </div>
@@ -270,9 +270,14 @@
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in individualWork">
             <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center">
 
-              <div>
-                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="work.load_type"></textarea>
+              <div style="height: 100%">
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" :value="this.loadTypeMap[work.load_type]" v-model="work.load_type">
+                  <option style="word-break: break-all" value="project practice">Проектная практика</option>
+                  <option style="word-break: break-all" value="bachelor">Работа с бакалаврами</option>
+                  <option style="word-break: break-all" value="masters">Работа с магистрами</option>
+                </select>
               </div>
+
             </div>
 
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
@@ -456,9 +461,14 @@ export default {
 
       loadTypeMap : {
         "practice" : "семинар",
-        "lecture" : "лекция",
+        "lectures" : "лекция",
         "laboratory" : "лабораторная",
         "exam" : "прием зачетов и экзаменов",
+      },
+      loadTypeIndividualMap : {
+        "project practice" : "Проектная практика",
+        "bachelor" : "Работа с бакалаврами",
+        "masters" : "Работа с магистрами",
       }
 
     }
@@ -471,9 +481,7 @@ export default {
       this.buttonIsOpened = !this.buttonIsOpened
     },
 
-    selectChanged(index) {
-      console.log(this.classroomWork[index])
-    },
+
 
     buttonSmallTableClicked1(){
 
@@ -521,51 +529,64 @@ export default {
 
     async saveAuditWork() {
       this.smallTableEditing1 = !this.smallTableEditing1
-      this.$emit('saveClassroomWork')
 
-      try {
-        const response = await axios.put(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteClassroomWorksID
-            }
-        )
+
+      if (this.deleteClassroomWorksID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteClassroomWorksID
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
       }
-      catch (e) {
-        console.log(e)
-      }
+
+      this.$emit('saveClassroomWork')
 
     },
     async saveIndividualWork() {
       this.smallTableEditing2 = !this.smallTableEditing2
+      if (this.deleteIndividualWorkID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP + "/students/load/individual/" + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteIndividualWorkID
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
       this.$emit('saveIndividualWork')
 
-      try {
-        const response = await axios.put(this.IP + "/students/load/individual/" + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteIndividualWorkID
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
+
     },
     async saveOtherWork() {
       this.smallTableEditing3 = !this.smallTableEditing3
+
+
+      if (this.deleteAdditionalWorkID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP + "/students/load/additional/" + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteAdditionalWorkID
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
       this.$emit('saveAdditionalWork')
-
-      try {
-        const response = await axios.put(this.IP + "/students/load/additional/" + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteAdditionalWorkID
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
-
-
     },
 
 

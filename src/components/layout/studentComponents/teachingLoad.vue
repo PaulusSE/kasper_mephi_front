@@ -5,6 +5,11 @@
   >
   </work-send-to-check-notification>
 
+  <save-tables-notification
+  :result-of-sending = this.resultOfSavingTables
+  :show = this.showSavingTablesNotification
+  >
+  </save-tables-notification>
 
   <div class="mainPage">
     <header-of-student
@@ -35,9 +40,9 @@
                          @deleteIndividualWork="(n) => deleteIndividualWork(index, n)"
                          @deleteAdditionalWork="(n) => deleteAdditionalWork(index, n)"
 
-                         @saveClassroomWork = saveClassroomWork()
-                         @saveIndividualWork = saveIndividualWork()
-                         @saveAdditionalWork = saveAdditionalWork()
+                         @saveClassroomWork = saveClassroomWork(index)
+                         @saveIndividualWork = saveIndividualWork(index)
+                         @saveAdditionalWork = saveAdditionalWork(index)
 
                          @makeCopy="(n) => makeCopy(n)"
                          @makeEditErrorNotification = callEditError
@@ -69,6 +74,9 @@ import workSendToCheckNotification
   from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 import teachingLoadTableForTeacher from "@/components/layout/teacherComponents/teachingLoadTableForTeacher.vue";
 import tabOfArticles from "@/components/layout/studentComponents/tabOfArticles.vue";
+import saveTablesNotifitcation
+  from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
+
 export default {
   name: "teachingLoad",
   components: {
@@ -76,7 +84,8 @@ export default {
     teachingLoadTableForTeacher,
     workSendToCheckNotification,
     "headerOfStudent":headerOfStudent,
-    "teachingLoadTable":teachingLoadTable
+    "teachingLoadTable":teachingLoadTable,
+    "saveTablesNotification" : saveTablesNotifitcation
   },
   props: ["stateOfStudentPage", 'educationTime'],
   data() {
@@ -92,6 +101,9 @@ export default {
       waitForCheck : false,
       workStatus : '',
       canEdit: '',
+      resultOfSavingTables : false,
+      showSavingTablesNotification : false,
+      loads_ids : new Map(),
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -113,7 +125,7 @@ export default {
         subject_name: '',
         main_teacher: '',
         load_type: '',
-        hours: '',
+        hours: 0,
         group_name: '',
       }
       this.array_classroom_load[n] = this.array_classroom_load[n].concat(newLoad)
@@ -165,9 +177,17 @@ export default {
       }, 5000);
     },
 
+    callSaveTablesError(result) {
+      this.resultOfSavingTables = result
+      this.showSavingTablesNotification = true
+      setTimeout(() => {
+        this.showSavingTablesNotification = false
+      }, 5000);
+    },
+
     async sendToCheck() {
       this.workStatus = 'on review'
-      console.log(123)
+
       try {
         const response = await axios.post(this.IP +'/students/works/review/' + localStorage.getItem("access_token"),
             {
@@ -218,66 +238,104 @@ export default {
       tempData.splice(n,1)
     },
 
-    async saveClassroomWork(){
+    async saveClassroomWork(index){
       if (JSON.stringify(this.array_classroom_load) === JSON.stringify(this.array_classroom_loadCopy)) {
         return
       }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
+
       this.makeCopy(1)
+
+      for (var j = 0; j < this.array_classroom_load[index].length; j++){
+        this.array_classroom_load[index][j].hours = parseInt(this.array_classroom_load[index][j].hours)
+        this.array_classroom_load[index][j].t_load_id = this.loads_ids.get(index + 1)
+      }
 
 
       try {
         const response = await axios.post(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_classroom_load[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "loads" : this.array_classroom_load[index],
+              "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.loadTeachingLoad()
     },
 
-    async saveIndividualWork(){
+    async saveIndividualWork(index){
       if (JSON.stringify(this.array_individual_students_load) === JSON.stringify(this.array_individual_students_loadCopy)) {
         return
       }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
       this.makeCopy(2)
 
+
+      for (var j = 0; j < this.array_individual_students_load[index].length; j++){
+        this.array_individual_students_load[index][j].students_amount = parseInt(this.array_individual_students_load[index][j].students_amount)
+        this.array_individual_students_load[index][j].t_load_id = this.loads_ids.get(index + 1)
+      }
+
+      console.log(this.array_individual_students_load[index])
 
       try {
         const response = await axios.post(this.IP +'/students/load/individual/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_individual_students_load[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "loads" : this.array_individual_students_load[index],
+              "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.loadTeachingLoad()
     },
 
-    async saveAdditionalWork(){
+    async saveAdditionalWork(index){
       if (JSON.stringify(this.array_additional_load) === JSON.stringify(this.array_additional_loadCopy)) {
         return
       }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
       this.makeCopy(3)
+
+      for (var j = 0; j < this.array_additional_load[index].length; j++){
+        this.array_additional_load[index][j].t_load_id = this.loads_ids.get(index + 1)
+      }
+
 
 
       try {
         const response = await axios.post(this.IP +'/students/load/additional/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_additional_load[this.actualSemester - 1],
-              "semester": this.actualSemester,
+              "loads" : this.array_additional_load[index],
+              "semester": index + 1,
             }
         )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
-    },
 
+      await this.loadTeachingLoad()
+    },
 
     async fillDataForTables(data){
 
@@ -290,23 +348,26 @@ export default {
         this.array_individual_students_load[i] = new Array()
         this.array_additional_load[i] = new Array()
       }
-
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
 
-        if (data[i].classroom_load.load_id !== undefined){
-          var class_load = data[i].classroom_load
+        for (var j = 0; j < data[i].classroom_loads.length; j++){
+          var class_load = data[i].classroom_loads[j]
           this.array_classroom_load[semester - 1].push(class_load)
         }
-        if (data[i].individual_students_load.load_id !== undefined){
-          var individual_load = data[i].individual_students_load
+
+        for (var j = 0; j < data[i].individual_students_loads.length; j++){
+          var individual_load = data[i].individual_students_loads[j]
           this.array_individual_students_load[semester-1].push(individual_load)
         }
-        if (data[i].additional_load.load_id !== undefined){
-          var add_load = data[i].additional_load
+
+        for (var j = 0; j < data[i].additional_loads.length; j++){
+          var add_load = data[i].additional_loads[j]
           this.array_additional_load[semester-1].push(add_load)
         }
+        this.loads_ids.set(semester, data[i].t_load_id)
       }
+
 
 
     },
@@ -316,7 +377,6 @@ export default {
         const response = await axios.get(this.IP +'/students/load/' + localStorage.getItem("access_token"))
         this.data = await response.data;
         await this.fillDataForTables(this.data)
-
       }
       catch (e) {
         console.log(e)

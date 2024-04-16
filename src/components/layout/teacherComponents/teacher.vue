@@ -52,10 +52,7 @@ export default {
     }
   },
   async beforeMount() {
-    // this.checkAuth()
-    // if (store.getters.getType !== "supervisor"){
-    //   this.$router.push('/wrongAccess')
-    // }
+
     await this.getStudents()
 
     const object1 = {

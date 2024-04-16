@@ -610,7 +610,7 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
 
               <div>
                 <input class="textWithCarry inputBox " v-model="project.start_at" type="date" style="overflow-y:auto"></input>
@@ -618,7 +618,7 @@
 
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
 
               <div>
                 <input class="textWithCarry inputBox " type="date" v-model="project.end_at"></input>
@@ -723,68 +723,74 @@ export default {
     },
     async saveArticles(){
       this.smallTableEditing1 = !this.smallTableEditing1
+
+      if(this.deleteArticlesID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteArticlesID,
+                "semester" : this.id + 1
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+
+
+
       this.$emit('saveArticles')
-
-      if(this.deleteArticlesID.length === 0)
-        return
-
-
-      try {
-        const response = await axios.put(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteArticlesID,
-              "semester" : this.id + 1
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
 
     },
     async saveReports(){
       this.smallTableEditing2 = !this.smallTableEditing2
+
+
+      if(this.deleteReportsID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteReportsID,
+                "semester" : this.id + 1
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+
       this.$emit('saveReports')
-
-      if(this.deleteReportsID.length === 0)
-        return
-
-      try {
-        const response = await axios.put(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteReportsID,
-              "semester" : this.id + 1
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
 
 
     },
     async saveProjects(){
       this.smallTableEditing3 = !this.smallTableEditing3
+
+
+
+      if(this.deleteProjectsID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteProjectsID,
+                "semester" : this.id + 1
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+
       this.$emit('saveProjects')
-
-
-      if(this.deleteProjectsID.length === 0)
-        return
-
-      console.log(this.deleteProjectsID)
-      console.log(this.actualSemester)
-
-      try {
-        const response = await axios.put(this.IP +'/students/works/projects/' + localStorage.getItem("access_token"),
-            {
-              "ids" : this.deleteProjectsID,
-              "semester" : this.id + 1
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
 
     },
     cancelChange1(){
@@ -818,7 +824,7 @@ export default {
   },
 
   beforeMount() {
-    console.log(this.id)
+
   }
 }
 </script>
