@@ -66,7 +66,7 @@
       <tab-of-student
           :full-name = student.full_name
           :group = student.group_name
-          :student_id = student.studentID
+          :student_id = student.student_id
       ></tab-of-student>
 
     </div>

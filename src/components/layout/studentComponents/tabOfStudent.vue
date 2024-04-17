@@ -76,6 +76,7 @@ export default {
     pushUserIdToStore() {
       this.$store.dispatch("updateUserId", this.student_id)
       localStorage.setItem("studentID", this.student_id)
+      console.log()
     }
   },
 

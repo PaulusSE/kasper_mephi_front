@@ -85,7 +85,7 @@
             <div class="rightLine textMiniTable" style="width: 17.3%; text-align: center">
               <div>
                 <div class="textWithCarry inputBox ">
-                  {{element.load_type }}</div>
+                  {{this.loadTypeMap[element.load_type]}}</div>
               </div>
             </div>
 
@@ -133,7 +133,7 @@
           <div class="d-flex" :class="{ underline: index !== individualWork.length-1}" v-for="(work,index) in this.individualWork">
             <div class="rightLine textMiniTable ps-3" style="width: 33.0%; text-align: center">
               <div>
-                <div class="textWithCarry inputBox ">{{work.load_type}}</div>
+                <div class="textWithCarry inputBox ">{{this.loadTypeIndividualMap[work.load_type]}}</div>
               </div>
 
             </div>
@@ -234,6 +234,17 @@ export default {
       buttonIsOpened : false,
       smallTableEditing: false,
       deleteState: false,
+      loadTypeIndividualMap : {
+        "project practice" : "Проектная практика",
+        "bachelor" : "Работа с бакалаврами",
+        "masters" : "Работа с магистрами",
+      },
+      loadTypeMap : {
+        "practice" : "семинар",
+        "lectures" : "лекция",
+        "laboratory" : "лабораторная",
+        "exam" : "прием зачетов и экзаменов",
+      },
     }
   },
   methods : {
