@@ -473,54 +473,69 @@ export default {
 
     async fillFeedBackArray(feedbacks){
 
+      var semesterObjectArray = new Array()
       for (var i = 0; i < this.actualSemester; i++){
-
-        if (feedbacks === undefined){
-          this.feedbacks.push({
-            semester:i+1,
-            feedback:''
-          })
-          continue
-        }
-
-        if (feedbacks[i] === undefined)
-          this.feedbacks.push({
-            semester:i+1,
-            feedback:''
-          })
-        else {
-          this.feedbacks.push(feedbacks[i])
-        }
+        semesterObjectArray.push({
+          semester: i + 1
+        })
       }
 
-      this.feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      if (feedbacks === undefined)
+        feedbacks = new Array()
 
+      for (var i = 0; i < feedbacks.length; i++){
+        if (feedbacks[i] === undefined)
+          return
+        var semester = feedbacks[i].semester
+        semesterObjectArray = semesterObjectArray.filter(function(obj) {
+          return obj.semester !== semester
+        })
+      }
+
+      for (var i = 0; i < semesterObjectArray.length; i++){
+        feedbacks.push({
+          semester:semesterObjectArray[i].semester,
+          feedback:''
+        })
+      }
+
+
+      feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.feedbacks = feedbacks
 
     },
 
     async fillStatusArray(statuses){
 
+      var semesterObjectArray = new Array()
       for (var i = 0; i < this.actualSemester; i++){
-
-        if (statuses === undefined){
-          this.states.push({
-            semester:i+1,
-            status:'empty'
-          })
-          continue
-        }
-
-        if (statuses[i] === undefined)
-          this.states.push({
-            semester:i+1,
-            status:'empty'
-          })
-        else {
-          this.states.push(statuses[i])
-        }
+        semesterObjectArray.push({
+          semester: i + 1
+        })
       }
 
-      this.states.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      if (statuses === undefined)
+        statuses = new Array()
+
+      for (var i = 0; i < statuses.length; i++){
+        if (statuses[i] === undefined)
+          return
+        var semester = statuses[i].semester
+        semesterObjectArray = semesterObjectArray.filter(function(obj) {
+          return obj.semester !== semester
+        })
+      }
+
+      for (var i = 0; i < semesterObjectArray.length; i++){
+        statuses.push({
+          semester:semesterObjectArray[i].semester,
+          status:'empty'
+        })
+      }
+
+
+      statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
+      this.states = statuses
 
     },
 

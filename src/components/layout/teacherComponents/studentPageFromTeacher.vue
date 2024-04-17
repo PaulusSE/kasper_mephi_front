@@ -11,18 +11,28 @@
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
+    <confirm-changing
+    v-if="this.showModalConfirmStudentStatusChange"
+    :show = true
+    :new-state = this.statusOfJob[newState]
+    @changeStudentJobStatus="changeStudentJobStatus"
+    @cancelChangeStudentJobStatus="cancelChangeStudentJobStatus"
+    >
+
+    </confirm-changing>
+
     <div class="roundBlock">
       <div class="mb-2">
         <p class="mainText text-start">Статус работы: </p>
       </div>
       <div>
-        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
+        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%"   @change="confirmChangingStudentJobStats" v-model="this.workStatus">
           <option  class="textResult1" value="approved">Принято</option>
           <option  class="textResult2" value="todo">На доработку</option>
           <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="textResult2" value="in progress">В процессе</option>
-          <option  class="textResult2" value="empty">Пусто</option>
-          <option  class="textResult2" value="on review">Ожидает проверки</option>
+          <option  class="" value="in progress">В процессе</option>
+          <option  class="" value="empty">Пусто</option>
+          <option  class="textResult4" value="on review">Ожидает проверки</option>
         </select>
       </div>
     </div>
@@ -33,10 +43,10 @@
           <nav class="checkboxBlock">
             <p class="mainText">Общая информация</p>
           </nav>
-          <nav class="checkboxBlock">
-            <button v-if="!commonInfo" class="editBtn" @click="buttonClickedCommonInfo">Редактировать</button>
-            <button v-else class="editBtn" @click="saveCommonInfo">Сохранить</button>
-          </nav>
+<!--          <nav class="checkboxBlock">-->
+<!--            <button v-if="!commonInfo" class="editBtn" @click="buttonClickedCommonInfo">Редактировать</button>-->
+<!--            <button v-else class="editBtn" @click="saveCommonInfo">Сохранить</button>-->
+<!--          </nav>-->
 
 
 
@@ -209,7 +219,7 @@
 
       <div class=" justify-content-between checkboxBlock">
         <p class="textTable">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
-
+        <input type="range"  v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
 
     </div>
@@ -236,12 +246,15 @@ import store from "@/store/index.js";
 import studentPageFromTeacherStatusTab from "@/components/layout/teacherComponents/studentPageFromTeacherStatusTab.vue";
 import axios from "axios";
 import HeaderOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
+import confirmChangingStudentStatus from "@/components/layout/models/teacherModels/confirmChangingStudentStatus.vue";
+
 export default {
   name: "studentPageFromTeacher",
   components : {
     HeaderOfStudent,
     "pageHeader" : header,
     'studentPageFromTeacherStatusTab' : studentPageFromTeacherStatusTab,
+    'confirmChanging' : confirmChangingStudentStatus
 
   },
   props : ["stateOfPage",],
@@ -257,8 +270,9 @@ export default {
       feedbacks : [],
       states : '',
       teacherFullName: "",
-      actualSemester : 1,
+      actualSemester : '',
       workStatus: '',
+      workStatusCopy: '',
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -271,6 +285,8 @@ export default {
 
       showTopicHistory : false,
       showTeacherHistory : false,
+      showModalConfirmStudentStatusChange : false,
+      newState : '',
       arrayOfTopics : [],
       arrayOfTeachers : [],
       topicMap : {
@@ -290,10 +306,17 @@ export default {
   },
   methods : {
 
+    async confirmChangingStudentJobStats(){
+      this.newState = this.workStatus
+      this.showModalConfirmStudentStatusChange = true
+    },
+
     async changeStudentJobStatus(){
+      this.copyState()
+      console.log(1235)
       try {
         const response = await axios.post(this.IP +"/supervisors/student/review/" + localStorage.getItem("access_token"), {
-              "student_id" : localStorage.getItem("studentId"),
+              "student_id" : localStorage.getItem("studentID"),
               "status" : this.workStatus,
 
             }
@@ -302,8 +325,17 @@ export default {
       catch (e) {
         console.log(e)
       }
+
+      this.showModalConfirmStudentStatusChange = false
+      this.newState = ''
     },
 
+    cancelChangeStudentJobStatus(){
+      console.log(1235)
+      this.workStatus = this.workStatusCopy
+      this.showModalConfirmStudentStatusChange = false
+      this.newState = ''
+    },
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
     },
@@ -322,7 +354,13 @@ export default {
       catch (e) {
         console.log(e)
       }
+      this.commonInfo = !this.commonInfo
 
+    },
+
+    copyState(){
+      this.workStatusCopy = this.workStatus
+      console.log(this.workStatusCopy)
     },
 
 
@@ -338,10 +376,12 @@ export default {
         const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
         this.data = await response.data
         for (var i = 0; i < this.data.length; i++){
-          if (this.data[i].student_id === localStorage.getItem("student_id")){
+          if (this.data[i].student_id === localStorage.getItem("studentID")){
             this.actualSemester = this.data[i].actual_semester
+
           }
         }
+        console.log(response)
 
       }
       catch (e) {
@@ -350,6 +390,7 @@ export default {
     },
 
     async fillThemeHistory(tittles){
+
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.arrayOfTopics = tittles
 
@@ -386,60 +427,120 @@ export default {
     },
 
     async fillCommonInfo(tittles){
-      var currentDissertationTittle = new Array()
-      for (var i = 0; i < tittles.length; i++){
-        if (tittles[i].semester === this.actualSemester){
-          currentDissertationTittle = tittles[i]
-          break
-        }
-      }
-      this.theme = currentDissertationTittle.title
-      this.workStatus = currentDissertationTittle.status
-      this.research_order = currentDissertationTittle.research_order
-      this.research_object = currentDissertationTittle.research_object
+      tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
+      this.theme = tittles[tittles.length-1].title
+      this.research_order = tittles[tittles.length-1].research_order
+      this.research_object = tittles[tittles.length-1].research_object
     },
 
     async fillFeedBackArray(feedbacks){
+
+      var semesterObjectArray = new Array()
+      for (var i = 0; i < this.actualSemester; i++){
+        semesterObjectArray.push({
+          semester: i + 1
+        })
+      }
+
+      if (feedbacks === undefined)
+        feedbacks = new Array()
+
+      for (var i = 0; i < feedbacks.length; i++){
+        if (feedbacks[i] === undefined)
+          return
+        var semester = feedbacks[i].semester
+        semesterObjectArray = semesterObjectArray.filter(function(obj) {
+          return obj.semester !== semester
+        })
+      }
+
+      for (var i = 0; i < semesterObjectArray.length; i++){
+        feedbacks.push({
+          semester:semesterObjectArray[i].semester,
+          feedback:''
+        })
+      }
+
+
       feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.feedbacks = feedbacks
     },
 
     async fillStatusArray(statuses){
+
+      var semesterObjectArray = new Array()
+      for (var i = 0; i < this.actualSemester; i++){
+        semesterObjectArray.push({
+          semester: i + 1
+        })
+      }
+
+      if (statuses === undefined)
+        statuses = new Array()
+
+      for (var i = 0; i < statuses.length; i++){
+        if (statuses[i] === undefined)
+          return
+        var semester = statuses[i].semester
+        semesterObjectArray = semesterObjectArray.filter(function(obj) {
+          return obj.semester !== semester
+        })
+      }
+
+      for (var i = 0; i < semesterObjectArray.length; i++){
+        statuses.push({
+          semester:semesterObjectArray[i].semester,
+          status:'empty'
+        })
+      }
+
+
       statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.states = statuses
+
     },
 
-    async getSpecializationAndYearOfStudy(){
-      try {
-        const response = await axios.get(this.IP +"/students/info/" + localStorage.getItem("access_token"))
-        this.data = response.data
-        this.specialization = this.data.specialization
-        this.yearOfStudy = this.data.years
-      }
-      catch (e) {
-        console.log(e)
-      }
+    async getSpecializationAndYearOfStudy(data){
+      this.specialization = data.specialization
+      this.yearOfStudy = data.years
+      this.progressOfDissertation = data.progress
     },
 
     async commonRequest(){
-      await this.getActualSemester()
+
       try {
         const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
-              "student_id" : localStorage.getItem("studentId"),
+              "student_id" : localStorage.getItem("studentID"),
             }
         )
+
         this.data = response.data
-        await this.fillStatusArray(this.data.dissertations_statuses)
-        await this.fillFeedBackArray(this.data.feedback)
-        await this.fillThemeHistory(this.data.dissertation_titles)
-        await this.fillTeacherHistory(this.data.supervisors)
-        await this.fillProgressTable(this.data.semester_progress)
-        await this.fillCommonInfo(this.data.dissertation_titles)
-        this.renderChildComponents = true
+
+
       }
+
+
       catch (e) {
         console.log(e)
       }
+
+      this.actualSemester = this.data.student_status.actual_semester
+
+      await this.fillStatusArray(this.data.dissertations_statuses)
+      await this.fillFeedBackArray(this.data.feedback)
+      await this.fillThemeHistory(this.data.dissertation_titles)
+      await this.fillTeacherHistory(this.data.supervisors)
+      await this.fillProgressTable(this.data.semester_progress)
+      await this.fillCommonInfo(this.data.dissertation_titles)
+      await this.getSpecializationAndYearOfStudy(this.data.student_status)
+      this.workStatus = this.data.student_status.status
+      this.copyState()
+      this.renderChildComponents = true
+
+
+
+
     }
   },
 
@@ -449,8 +550,9 @@ export default {
   },
 
   async beforeMount() {
+    // await this.getActualSemester()
     await this.commonRequest()
-    await this.getSpecializationAndYearOfStudy()
+
 
 
 
@@ -478,20 +580,25 @@ export default {
 .textResult1 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-
-  color:#6BDB6B;
+  color:#6BDB6B !important;
 }
 
 .textResult2 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-  color:#FFC009
+  color: #FF8000 !important
 }
 
 .textResult3 {
   font-family: "Raleway", sans-serif;
   font-weight: 550;
-  color:#FF3333;
+  color:#FF3333 !important;
+}
+
+.textResult4 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #0000CC !important;
 }
 
 @media (min-width: 800px) {

@@ -44,6 +44,7 @@ export default {
       try {
         const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
         this.arrayOfStudents = await response.data;
+        console.log(response)
 
       }
       catch (e) {
@@ -52,16 +53,7 @@ export default {
     }
   },
   async beforeMount() {
-
     await this.getStudents()
-
-    const object1 = {
-      'a': 'somestring',
-      b: 42,
-      c: false,
-    };
-
-
   }
 }
 </script>

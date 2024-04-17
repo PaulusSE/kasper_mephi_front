@@ -200,12 +200,29 @@ export default {
       this.stateOfEditing = !this.stateOfEditing
       if (this.stateOfWriting)
         this.stateOfWriting = !this.stateOfWriting
+    },
+
+    async getProfileData(){
+      try {
+        const response = await axios.get(this.IP +"/supervisors/profile/" + localStorage.getItem("access_token"))
+        this.data = response.data
+        console.log(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.academicDegree = this.data.degree
+      this.department = this.data.department
+      this.faculty = this.data.faculty
+      this.email = this.data.email
     }
   },
   beforeMount() {
     if (store.getters.getType !== "supervisor"){
       this.$router.push('/wrongAccess')
     }
+    this.getProfileData()
   }
 }
 </script>

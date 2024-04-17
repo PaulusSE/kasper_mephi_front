@@ -11,100 +11,84 @@
 @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
 @btnProfileClicked="$emit('btnProfileClicked')"
     ></headfer-of-student>
-    <div class="roundBlock">
+    <div>
 
 
-    <div class="container-fluid justify-content-between d-flex pt-1">
-      <nav>
-        <p class="mainText">Основная информация</p>
-      </nav>
+      <div class="pt-4">
+        <div class="roundBlock">
 
-      <nav>
+          <div class="container-fluid justify-content-between d-flex">
+            <nav>
+              <p class="mainText">Основная информация</p>
+            </nav>
 
-        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">
-          <p>Редактировать</p>
-        </button>
+            <!--        <nav>-->
+            <!--          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">-->
+            <!--            <p>Редактировать</p>-->
+            <!--          </button>-->
 
-        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">
-          <p>Отменить</p>
-        </button>
+            <!--          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">-->
+            <!--            <p>Отменить</p>-->
+            <!--          </button>-->
 
-        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">
-          <p>Сохранить</p>
-        </button>
-      </nav>
+            <!--          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">-->
+            <!--            <p>Сохранить</p>-->
+            <!--          </button>-->
+            <!--        </nav>-->
+          </div>
 
+          <div class="container-fluid justify-content-between d-flex">
+            <nav style="width: 100%;">
+              <label class="text ms-0">ФИО</label>
+              <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="fullName">
+            </nav>
+          </div>
 
-    </div>
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
-      </nav>
-    </div>
+          <div class="container-fluid justify-content-between d-flex">
+            <nav style="width: 50%">
+              <div style="width: 100%">
+                <label class="text ms-0">Почта</label>
+                <input type="text" class="textInput" disabled @input="inputEvent" v-model="email">
+              </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 60%">
-        <div style="width: 100%">
-          <label class="text ms-0">Почта</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
+            </nav>
+            <nav style="width: 50%;">
+              <div style="width: 100%">
+                <label class="text ms-0" >Группа</label>
+                <!--            <select class="form-select blockStyles textInput ps-2 p-0" v-model="group" @input="inputEvent" :disabled="!stateOfEditingCommonInfo">-->
+                <!--              <option v-for="group in numberOfGroups" >{{group}}</option>-->
+                <!--            </select>-->
+                <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
+              </div>
+            </nav>
+          </div>
+
+          <div class="container-fluid justify-content-between d-flex">
+            <nav style="width: 100%;">
+              <label class="text ms-0">Научная специальность</label>
+              <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="speciality">
+            </nav>
+
+          </div>
+
+          <div class="container-fluid justify-content-between d-flex">
+            <nav style="width: 50%">
+              <div style="width: 100%">
+                <label class="text ms-0">Срок обучения</label>
+                <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
+              </div>
+            </nav>
+
+            <nav style="width: 50%" >
+              <div style="width: 100%">
+                <label class="text ms-0" >Дата начала обучения</label>
+                <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
+              </div>
+            </nav>
+          </div>
         </div>
 
-      </nav>
-      <nav style="width: 30%;">
-        <div style="width: 100%">
-          <label class="text ms-0" >Группа</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="group">
-        </div>
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Научная специальность</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="speciality">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between">
-      <nav style="width: 50%">
-        <div style="width: 100%">
-          <label class="text ms-0">Срок обучения</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="studyingTime">
-        </div>
-
-      </nav>
-      <nav style="width: 50%" >
-        <div style="width: 100%">
-          <label class="text ms-0" >Дата начала обучения</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="startDateStudying">
-        </div>
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Приказ о зачислении</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
-      </nav>
-    </div>
+      </div>
 
 
   </div>
@@ -113,6 +97,7 @@
 
 <script>
 import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
+import axios from "axios";
 export default {
   name: "studentProfileForAdmin",
   props : ['stateOfPage'],
@@ -121,8 +106,35 @@ export default {
   },
   data() {
     return {
-      stateOfEditing : false,
-      stateOfWriting : false,
+      fullName: '',
+      email: '',
+      group: '',
+      speciality: '',
+      studyingTime: '',
+      startDateStudying: '',
+      department: '',
+      faculty: '',
+      admissionOrder: '',
+      fullNameCopy: "",
+      emailCopy: '',
+      groupCopy: '',
+      specialityCopy: '',
+      studyingTimeCopy: '',
+      startDateStudyingCopy: '',
+      departmentCopy: '',
+      facultyCopy: '',
+      admissionOrderCopy: '',
+      currentPassword: '',
+      newPassword: '',
+      newPasswordAgain: '',
+      stateOfSending:false,
+      resultOfSending: '',
+      errorText : '',
+      stateOfEditingCommonInfo: false,
+      stateOfWritingCommonInfo: false,
+      stateOfEditingDissertationInfo : false,
+      stateOfWritingDissertationInfo : false,
+      numberOfGroups : [],
     }
   },
   methods : {
@@ -167,10 +179,30 @@ export default {
       if (this.stateOfWriting)
         this.stateOfWriting = !this.stateOfWriting
     },
-    sendToAdacem() {
-      alert("send")
+    async getProfileData(){
+      try {
+        const response = await axios.put(this.IP +"/supervisor/student/profile/" + localStorage.getItem("access_token"), {
+          "student_id" : localStorage.getItem("studentID")
+        })
+        this.data = response.data
+        console.log(this.data)
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.group = this.data.group_name
+      this.speciality = this.data.specialization
+      this.studyingTime = this.data.years
+      this.startDateStudying = this.data.start_date.slice(0,10)
+      this.email = this.data.email
     }
+  },
+  beforeMount() {
+      this.getProfileData()
   }
+
 }
 </script>
 

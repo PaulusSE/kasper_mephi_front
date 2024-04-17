@@ -48,7 +48,7 @@
 
       <div style="margin-top: 1%">
         <router-link style="text-decoration:none" to='user' @click="pushUserIdToStore">
-          <p class="textOfHeaders"> 123 {{ fullName}} {{group}}</p>
+          <p class="textOfHeaders"> {{ fullName}} {{group}}</p>
         </router-link>
       </div>
     </div>

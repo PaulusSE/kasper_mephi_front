@@ -15,13 +15,13 @@
         <p class="mainText text-start">Статус работы: </p>
       </div>
       <div>
-        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.status">
+        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
           <option  class="textResult1" value="approved">Принято</option>
           <option  class="textResult2" value="todo">На доработку</option>
           <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="textResult2" value="in progress">В процессе</option>
-          <option  class="textResult2" value="empty">Пусто</option>
-          <option  class="textResult2" value="on review">Ожидает проверки</option>
+          <option  class="" value="in progress">В процессе</option>
+          <option  class="" value="empty">Пусто</option>
+          <option  class="textResult4" value="on review">Ожидает проверки</option>
         </select>
       </div>
     </div>
@@ -74,25 +74,34 @@ export default {
         this.array_additional_load[i] = new Array()
       }
 
+
+
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
 
-        if (data[i].classroom_load.load_id !== undefined){
-          var class_load = data[i].classroom_load
+        for (var j = 0; j < data[i].classroom_loads.length; j++){
+          var class_load = data[i].classroom_loads[j]
+          console.log(this.array_classroom_load[0])
           this.array_classroom_load[semester - 1].push(class_load)
         }
-        if (data[i].individual_students_load.load_id !== undefined){
-          var individual_load = data[i].individual_students_load
+
+        for (var j = 0; j < data[i].individual_students_loads.length; j++){
+          var individual_load = data[i].individual_students_loads[j]
           this.array_individual_students_load[semester-1].push(individual_load)
         }
-        if (data[i].additional_load.load_id !== undefined){
-          var add_load = data[i].additional_load
+
+        for (var j = 0; j < data[i].additional_loads.length; j++){
+          var add_load = data[i].additional_loads[j]
           this.array_additional_load[semester-1].push(add_load)
         }
       }
-
+      console.log(this.array_additional_load)
+      console.log(this.array_classroom_load)
+      console.log(this.array_additional_load)
 
     },
+
+
     async loadTeachingLoad() {
       try {
         const response = await axios.put(this.IP +'/supervisors/student/load/' + localStorage.getItem("access_token"),
@@ -101,37 +110,43 @@ export default {
             }
         )
         this.data = await response.data;
-        this.fillDataForTables(this.data)
-        this.workStatus = this.data.approval_status
+        console.log(this.data)
+
 
       }
       catch (e) {
         console.log(e)
       }
+
+
+      this.fillDataForTables(this.data)
+      this.workStatus = this.data.approval_status
+
     },
     async getActualSemester(){
+
       try {
-        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
-        this.data = await response.data
-        for (var i = 0; i < this.data.length; i++){
-          if (this.data[i].student_id === localStorage.getItem("student_id")){
-            this.actualSemester = this.data[i].actual_semester
-          }
-        }
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID"),
+            }
+        )
+
+        this.data = response.data
+
 
       }
+
+
       catch (e) {
         console.log(e)
       }
+      this.actualSemester = this.data.student_status.actual_semester
     },
   },
   async beforeMount() {
-    if (store.getters.getType === "student"){
-      this.$router.push('/wrongAccess')
-    }
-    await this.loadTeachingLoad()
     await this.getActualSemester()
-    await this.fillDataForTables(data)
+    await this.loadTeachingLoad()
+
 
   },
 
@@ -144,6 +159,30 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#6BDB6B !important;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #FF8000 !important
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
+.textResult4 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #0000CC !important;
 }
 
 

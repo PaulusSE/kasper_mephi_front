@@ -159,11 +159,6 @@ export default {
         this.works_ids.set(semester, data[i].works_id)
       }
 
-
-
-
-
-
     },
 
     buttonSmallTableAdd1(n){

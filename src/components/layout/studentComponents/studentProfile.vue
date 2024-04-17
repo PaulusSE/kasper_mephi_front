@@ -14,19 +14,19 @@
           <p class="mainText">Основная информация</p>
         </nav>
 
-        <nav>
-          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">
-            <p>Редактировать</p>
-          </button>
+<!--        <nav>-->
+<!--          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">-->
+<!--            <p>Редактировать</p>-->
+<!--          </button>-->
 
-          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">
-            <p>Отменить</p>
-          </button>
+<!--          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">-->
+<!--            <p>Отменить</p>-->
+<!--          </button>-->
 
-          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">
-            <p>Сохранить</p>
-          </button>
-        </nav>
+<!--          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">-->
+<!--            <p>Сохранить</p>-->
+<!--          </button>-->
+<!--        </nav>-->
       </div>
 
       <div class="container-fluid justify-content-between d-flex">
@@ -47,9 +47,10 @@
         <nav style="width: 50%;">
           <div style="width: 100%">
             <label class="text ms-0" >Группа</label>
-            <select class="form-select blockStyles textInput ps-2 p-0" v-model="group" @input="inputEvent">
-              <option v-for="group in numberOfGroups" >{{group}}</option>
-            </select>
+<!--            <select class="form-select blockStyles textInput ps-2 p-0" v-model="group" @input="inputEvent" :disabled="!stateOfEditingCommonInfo">-->
+<!--              <option v-for="group in numberOfGroups" >{{group}}</option>-->
+<!--            </select>-->
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
           </div>
         </nav>
       </div>
@@ -66,14 +67,14 @@
         <nav style="width: 50%">
           <div style="width: 100%">
             <label class="text ms-0">Срок обучения</label>
-            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
           </div>
         </nav>
 
         <nav style="width: 50%" >
           <div style="width: 100%">
             <label class="text ms-0" >Дата начала обучения</label>
-            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
           </div>
         </nav>
       </div>
@@ -86,19 +87,19 @@
             <p class="mainText">Общая информация</p>
           </nav>
 
-          <nav>
-            <button type="button" class="btn btn-primar btnedit"  @click="editDissertationInfo()" v-if="!stateOfEditingDissertationInfo">
-              <p>Редактировать</p>
-            </button>
+<!--          <nav>-->
+<!--            <button type="button" class="btn btn-primar btnedit"  @click="editDissertationInfo()" v-if="!stateOfEditingDissertationInfo">-->
+<!--              <p>Редактировать</p>-->
+<!--            </button>-->
 
-            <button type="button" class="btn btn-primar btnedit"  @click="cancelChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo">
-              <p>Отменить</p>
-            </button>
+<!--            <button type="button" class="btn btn-primar btnedit"  @click="cancelChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo">-->
+<!--              <p>Отменить</p>-->
+<!--            </button>-->
 
-            <button type="button" class="btn btn-primar btnedit"  @click="saveChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo && stateOfWritingDissertationInfo">
-              <p>Сохранить</p>
-            </button>
-          </nav>
+<!--            <button type="button" class="btn btn-primar btnedit"  @click="saveChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo && stateOfWritingDissertationInfo">-->
+<!--              <p>Сохранить</p>-->
+<!--            </button>-->
+<!--          </nav>-->
         </div>
       </div>
       <div>
@@ -215,7 +216,7 @@ export default {
       stateOfWritingCommonInfo: false,
       stateOfEditingDissertationInfo : false,
       stateOfWritingDissertationInfo : false,
-      numberOfGroups : ["Б20-504", "Б20-514", 'Б20-524'],
+      numberOfGroups : [],
     }
   },
 
@@ -277,6 +278,22 @@ export default {
       }, 5000);
     },
 
+    async getProfileData(){
+      try {
+        const response = await axios.get(this.IP +"/student/profile/" + localStorage.getItem("access_token"))
+        this.data = response.data
+        console.log(response)
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.email = this.data.email
+      this.group = this.data.group_name
+      this.speciality = this.data.specialization
+      this.startDateStudying = this.data.start_date.slice(0,10)
+      this.studyingTime = this.data.years
+    },
 
     cancelChange(){
       this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
@@ -301,12 +318,12 @@ export default {
     },
 
 
-
-    beforeMount() {
-      if (store.getters.getType !== "student"){
-        this.$router.push('/wrongAccess')
-      }
+  },
+  async beforeMount() {
+    if (store.getters.getType !== "student"){
+      this.$router.push('/wrongAccess')
     }
+    await this.getProfileData()
   }
 
 }

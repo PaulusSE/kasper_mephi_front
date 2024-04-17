@@ -73,7 +73,7 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
-              <router-link style="text-decoration: none" to="/user">{{element["full_name"]}}</router-link>
+              <router-link style="text-decoration: none" to="/user" @click="pushStudentIDToStorage(index)" >{{element["full_name"]}}</router-link>
 
             </div>
 
@@ -102,7 +102,7 @@
             </div>
 
             <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
-              <input :disabled='!editCommonTable' type="checkbox" v-model="element['editState']" class="me-3">
+              <input :disabled='!editCommonTable' type="checkbox" v-model="element.can_edit" class="me-3">
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
-              <router-link style="text-decoration: none" to="/user2">{{element["full_name"]}}</router-link>
+              <router-link style="text-decoration: none" to="/user2" @click="pushTeacherIDToStorage(index)" >{{element["full_name"]}}</router-link>
 
             </div>
           </div>
@@ -164,35 +164,78 @@
         </div>
 
 
+      <div v-if="!editTableWithGroups">
+        <div class="roundBlock p-0 mt-2">
+          <div>
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfGroups.length !== 0}">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                №
+              </div>
 
-      <div class="roundBlock p-0 mt-2">
-        <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfGroups.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              №
+              <div class=" textMiniTable" style="width: 90%; text-align: center">
+                Группа
+              </div>
+
+
+
             </div>
 
-            <div class=" textMiniTable" style="width: 90%; text-align: center">
-              Группа
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                {{index + 1}}
+              </div>
+
+              <div class="textMiniTable"  style="width: 90%; text-align: center">
+                <p >{{element.name}}</p>
+              </div>
+
+
             </div>
-
-
           </div>
 
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              {{index + 1}}
-            </div>
-
-            <div class="textMiniTable" style="width: 90%; text-align: center">
-              <input v-if="editTableWithGroups" type="text" class="inputBox" v-model="element.name">
-              <p v-else>{{element.name}}</p>
-            </div>
-
-          </div>
         </div>
-
       </div>
+      <div v-else>
+        <div class="roundBlock p-0 mt-2">
+          <div>
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfGroups.length !== 0}">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                №
+              </div>
+
+              <div class=" textMiniTable rightLine" style="width: 80%; text-align: center">
+                Группа
+              </div>
+
+              <div class=" textMiniTable" style="width: 10%; text-align: center">
+
+              </div>
+
+
+            </div>
+
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfGroups.length}" v-for="(element,index) in arrayOfGroups">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                {{index + 1}}
+              </div>
+
+              <div class="textMiniTable rightLine"  style="width: 80%; text-align: center">
+                <input type="text" class="inputBox" v-model="element.name" :disabled="element.group_id !== undefined">
+
+              </div>
+
+              <div class="textMiniTable " style="width: 10%; text-align: center">
+                <button class="btnAddDeleteFiles mt-2" @click="deleteGroup(index)">
+                  <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
 
@@ -207,6 +250,7 @@
           <button v-if="!editTableYears" @click="buttonEditTableYears" class="editBtn mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn mt-3 me-2" @click="buttonAddYear">Добавить</button>
+            <button class="editBtn mt-3 me-2" @click="buttonCancelYear">Отменить</button>
             <button class="editBtn mt-3 " @click="buttonSaveYear">Сохранить</button>
           </div>
         </nav>
@@ -214,7 +258,7 @@
 
       <div v-if="!editTableYears" class="roundBlock p-0 mt-2">
         <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfPlan.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
               №
             </div>
@@ -234,8 +278,8 @@
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
-              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]">
-              <p v-else>{{element}}</p>
+              <input type="text" class="inputBox" v-model="arrayOfPlan[index]" :disabled="arrayOfPlan[index].plan_id === undefined">
+
             </div>
 
           </div>
@@ -245,7 +289,7 @@
 
       <div v-else class="roundBlock p-0 mt-2">
         <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfPlan.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
               №
             </div>
@@ -298,39 +342,86 @@
           <button v-if="!editTableSpecialization" @click="buttonEditSpecialization" class="editBtn mt-3">Редактировать</button>
           <div v-else>
             <button class="editBtn mt-3 me-2" @click="buttonAddSpec">Добавить</button>
+            <button class="editBtn mt-3 " @click="buttonCancelSpec">Отменить</button>
             <button class="editBtn mt-3 " @click="buttonSaveSpec">Сохранить</button>
           </div>
         </nav>
       </div>
 
-      <div class="roundBlock p-0 mt-2">
-        <div>
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfSpecialization.length !== 0}">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              №
+      <div v-if="!editTableSpecialization">
+        <div class="roundBlock p-0 mt-2">
+          <div>
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfSpecialization.length !== 0}">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                №
+              </div>
+
+              <div class="textMiniTable" style="width: 90%; text-align: center">
+                Название специализации
+              </div>
+
+
             </div>
 
-            <div class="textMiniTable" style="width: 90%; text-align: center">
-              Название специализации
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfSpecialization.length}" v-for="(element,index) in arrayOfSpecialization">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                {{index + 1}}
+              </div>
+
+              <div class="textMiniTable" style="width: 90%; text-align: center">
+                <p>{{element.name}}</p>
+
+              </div>
+
             </div>
-
-
           </div>
 
-          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfSpecialization.length}" v-for="(element,index) in arrayOfSpecialization">
-            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
-              {{index + 1}}
-            </div>
-
-            <div class="textMiniTable" style="width: 90%; text-align: center">
-              <p v-if="!editTableSpecialization">{{element.name}}</p>
-              <input v-else type="text" class="inputBox" v-model="element.name"</input>
-            </div>
-
-          </div>
         </div>
-
       </div>
+      <div v-else>
+        <div class="roundBlock p-0 mt-2">
+          <div>
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfSpecialization.length !== 0}">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                №
+              </div>
+
+              <div class="textMiniTable rightLine" style="width: 83%; text-align: center">
+                Название специализации
+              </div>
+
+              <div class="textMiniTable" style="width: 7%; text-align: center">
+
+              </div>
+            </div>
+
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfSpecialization.length}" v-for="(element,index) in arrayOfSpecialization">
+              <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+                {{index + 1}}
+              </div>
+
+              <div class="textMiniTable rightLine" style="width: 83%; text-align: center">
+
+                <input type="text" class="inputBox" v-model="element.name" :disabled="element.specialization_id !== undefined" </input>
+              </div>
+
+              <div class="textMiniTable" style="width: 7%; text-align: center">
+                <button class="btnAddDeleteFiles mt-2" @click="deleteSpec(index)">
+                  <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+                </button>
+              </div>
+
+
+
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
 
 
     </div>
@@ -377,7 +468,7 @@ export default {
       editCommonTable : false,
       editTableSpecialization: false,
       arrayOfPlan : [],
-      arrayOfSpecialization : ["", ""],
+      arrayOfSpecialization : [],
       arrayOfSpecializationCopy : [],
       arrayOfPlanCopy: [],
       editTableYears : false,
@@ -390,6 +481,9 @@ export default {
       },
       showSaveTableNotification : false,
       resultOfSavingTables : false,
+      deleteSpecIds :[],
+      deleteGroupIds: [],
+      deletePlanIds: [],
     }
   },
   methods : {
@@ -397,7 +491,7 @@ export default {
 
     setState(index, string){
       this.arrayOfStudents[index][state] = string
-      console.log(string)
+
     },
 
 
@@ -435,7 +529,7 @@ export default {
     },
     selectAllCheckbox(){
     for (var i = 0; i < this.arrayOfStudents.length; i++)
-      this.arrayOfStudents[i].editState = !this.stateOfMainCheckBox
+      this.arrayOfStudents[i].can_edit = !this.stateOfMainCheckBox
     },
 
     cancelTeachers(){
@@ -450,8 +544,8 @@ export default {
         this.data = response.data
 
         for (var i = 0; i < this.data.length; i++){
-          this.arrayOfTeachers.push(this.data["supervisor"])
-          this.arrayOfStudents.push(this.data["student"])
+          this.arrayOfTeachers.push(this.data.supervisor)
+          this.arrayOfStudents.push(this.data.student)
         }
       }
       catch (e) {
@@ -469,11 +563,40 @@ export default {
     },
 
     async buttonSaveGroup(){
-      console.log(this.arrayOfGroups)
+
+
+     if (this.deleteGroupIds.length !== 0){
+
+       try {
+         const response = await axios.put(this.IP +"/administrator/enum/groups/" + localStorage.getItem("access_token"),
+             {
+               "ids" : this.deleteGroupIds
+             }
+         )
+
+       }
+       catch (e) {
+         this.showWrongAnswerString = true;
+       }
+     }
+
+      var tempData = new Array()
+
+      for (var i = 0; i < this.arrayOfGroups.length; i++){
+        if (this.arrayOfGroups[i].group_id === undefined)
+          tempData.push(this.arrayOfGroups[i])
+      }
+
+      if (tempData.length === 0)
+      {
+        this.editTableWithGroups = false
+        return
+      }
+
       try {
         const response = await axios.post(this.IP +"/administrator/enum/groups/" + localStorage.getItem("access_token"),
             {
-              "groups" : this.arrayOfGroups
+              "groups" : tempData
             }
         )
 
@@ -483,6 +606,8 @@ export default {
       }
 
       this.editTableWithGroups = false
+
+      await this.getGroups()
     },
     buttonAddGroup(){
       this.arrayOfGroups.push({
@@ -495,12 +620,45 @@ export default {
       this.editTableSpecialization = !this.editTableSpecialization
     },
 
+    buttonCancelSpec(){
+      this.arrayOfSpecialization = this.arrayOfSpecializationCopy.slice(0)
+      this.editTableSpecialization = !this.editTableSpecialization
+    },
+
     async buttonSaveSpec(){
+
+      if (this.deleteSpecIds.length !== 0){
+        try {
+          const response = await axios.put(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteSpecIds
+              }
+          )
+
+        }
+        catch (e) {
+          this.showWrongAnswerString = true;
+        }
+      }
+
+      var tempData = new Array()
+
       console.log(this.arrayOfSpecialization)
+      for (var i = 0; i < this.arrayOfSpecialization.length; i++){
+        if (this.arrayOfSpecialization[i].specialization_id === undefined)
+          tempData.push(this.arrayOfSpecialization[i])
+      }
+
+      if (tempData.length === 0){
+        this.editTableSpecialization= false
+        return
+      }
+
+
       try {
         const response = await axios.post(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
             {
-            "specs" : this.arrayOfSpecialization
+            "specs" : tempData
             }
         )
 
@@ -509,6 +667,7 @@ export default {
         this.showWrongAnswerString = true;
       }
 
+      await this.getSpecializations()
       this.editTableSpecialization= false
     },
     buttonAddSpec(){
@@ -518,10 +677,13 @@ export default {
     },
 
     deleteSpec(index){
+      this.deleteSpecIds.push(this.arrayOfSpecialization[index].specialization_id)
       this.arrayOfSpecialization.splice(index, 1)
+
     },
 
     deleteGroup(index){
+      this.deleteGroupIds.push(this.arrayOfGroups[index].group_id)
       this.arrayOfGroups.splice(index, 1)
     },
     buttonEditCommonTable() {
@@ -534,7 +696,22 @@ export default {
       this.editCommonTable = false
     },
 
-    buttonSaveCommonTable(){
+    async buttonSaveCommonTable(){
+
+      try {
+        const response = await axios.post(this.IP +"/administrator/student/status/" + localStorage.getItem("access_token"),{
+          "students" : this.arrayOfStudents
+            }
+        )
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+
+
 
       this.editCommonTable = false
     },
@@ -547,6 +724,12 @@ export default {
     buttonAddYear(){
       this.arrayOfPlan.push('')
     },
+
+    buttonCancelYear(){
+      this.arrayOfPlan = this.arrayOfPlanCopy.slice(0)
+      this.editTableYears = !this.editTableYears
+    },
+
     callEditTablePlanError() {
       this.showDataErrorForTablePlan = true
       setTimeout(() => {
@@ -580,12 +763,11 @@ export default {
     }
 ,
     pushStudentIDToStorage(index){
-      localStorage.setItem("studentID", this.arrayOfStudents[index].studentId)
-      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].studentId)
+      localStorage.setItem("studentID", this.arrayOfStudents[index].student_id)
+      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].student_id)
     },
     pushTeacherIDToStorage(index){
-    localStorage.setItem("teacherID", this.arrayOfTeachers[index].teacherId)
-      //todo мб стоит пихнуть id в store
+    localStorage.setItem("teacherID", this.arrayOfTeachers[index].supervisor_id)
     },
 
     async getSpecializations(){
@@ -595,7 +777,8 @@ export default {
 
         this.data = response.data
         this.arrayOfSpecialization = this.data
-        console.log(this.data)
+
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -609,7 +792,7 @@ export default {
 
         this.data = response.data
         this.arrayOfGroups = this.data
-        console.log(this.data)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -622,7 +805,7 @@ export default {
 
         this.data = response.data
         this.arrayOfTeachers = this.data
-        console.log(this.data)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -636,7 +819,7 @@ export default {
 
         this.data = response.data
         this.arrayOfStudents = this.data
-        console.log(this.data)
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -646,7 +829,7 @@ export default {
 
   },
   async beforeMount() {
-    await this.getAspsAndTeachers()
+    // await this.getAspsAndTeachers()
     await this.getSpecializations()
     await this.getGroups()
     await this.getTeachers()

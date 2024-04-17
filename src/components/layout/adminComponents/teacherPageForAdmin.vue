@@ -64,11 +64,8 @@
     </div>
     <div v-for="student in arrayOfStudents">
       <tab-of-student
-          :full-name = student.fullName
-          :group = student.group
-          :topic = student.topic
-          :date-of-statement = student.dateOfStatement
-          :number-of-order-of-statement = student.numberOfOrderOfStatement
+          :full-name = student.full_name
+          :group = student.group_name
           :student_id = student.studentID
       ></tab-of-student>
 
@@ -161,18 +158,38 @@ export default {
       }
     },
     async getStudents(){
+
       try {
-        const response = await axios.put(this.IP +'/admin/supervisor/students/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/administrator/supervisor/students/' + localStorage.getItem("access_token"),
             {
-              "teacherID" : localStorage.getItem("teacherID")
+              "supervisor_id" : localStorage.getItem("teacherID")
                   }
         )
         this.data = await response.data;
-        this.arrayOfStudents = this.data.array
+        this.arrayOfStudents = this.data
+
       }
       catch (e) {
         console.log(e)
       }
+    },
+    async getProfileData(){
+      try {
+        const response = await axios.put(this.IP +"/administrator/supervisors/profile/" + localStorage.getItem("access_token"), {
+          "supervisor_id" : localStorage.getItem("teacherID"),
+        })
+        this.data = response.data
+        console.log(this.data)
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.academicDegree = this.data.degree
+      this.department = this.data.department
+      this.faculty = this.data.faculty
+      this.email = this.data.email
     }
   },
   async beforeMount() {
@@ -181,6 +198,7 @@ export default {
       this.$router.push("/wrongAccess")
     }
     await this.getStudents()
+    await this.getProfileData()
   }
 }
 </script>

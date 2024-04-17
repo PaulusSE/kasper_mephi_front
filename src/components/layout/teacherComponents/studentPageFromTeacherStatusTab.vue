@@ -27,7 +27,7 @@
           <nav class="checkboxBlock justify-content-start col-3 ms-0">
             <div class="mySelectedField2 gap-3 d-flex">
               <p class="mainText">Статус</p>
-              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="this.status.status" :class="{textResult1: this.status.status === 'passed', textResult2: this.status.status === 'todo', textResult3: this.status.status === 'failed'}">
+              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="this.status" :class="{textResult1: this.status=== 'passed', textResult2: this.status === 'todo', textResult3: this.status === 'failed'}">
                 <option  class="textResult" value="empty" >Выбрать статус</option>
                 <option  class="textResult1" value="passed">Принято</option>
                 <option  class="textResult2" value="todo" >На доработку</option>
@@ -136,7 +136,7 @@ export default {
 
 
       try {
-        const response = await axios.put(this.IP +"/supervisors/dissertation/file/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/file/" + localStorage.getItem("access_token"),
             {
               "semester" : this.id + 1,
               "student_id" : localStorage.getItem("studentID")
@@ -188,8 +188,7 @@ export default {
     },
   },
   beforeMount() {
-    console.log(this.feedback)
-    console.log(this.status)
+
     this.getFiles()
 
   }

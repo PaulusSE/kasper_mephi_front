@@ -14,13 +14,13 @@
         <p class="mainText text-start">Статус работы: </p>
       </div>
       <div>
-        <select class="form-select mainText" style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.status">
+        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
           <option  class="textResult1" value="approved">Принято</option>
           <option  class="textResult2" value="todo">На доработку</option>
           <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="textResult2" value="in progress">В процессе</option>
-          <option  class="textResult2" value="empty">Пусто</option>
-          <option  class="textResult2" value="on review">Ожидает проверки</option>
+          <option  class="" value="in progress">В процессе</option>
+          <option  class="" value="empty">Пусто</option>
+          <option  class="textResult4" value="on review">Ожидает проверки</option>
         </select>
       </div>
     </div>
@@ -60,40 +60,43 @@ export default {
   },
   methods : {
     async loadScientificWorks() {
+
       try {
         const response = await axios.put(this.IP +'/supervisors/student/works/' + localStorage.getItem("access_token"),
             {
-              "student_id" : localStorage.getItem("student_id")
+              "student_id" : localStorage.getItem("studentID")
             }
         )
         this.data = await response.data;
-        await this.fillDataForTables(this.data)
-        this.workStatus = this.data.works_status
+
 
 
       }
       catch (e) {
         console.log(e)
       }
+
+      await this.fillDataForTables(this.data)
+      this.workStatus = this.data.works_status
     },
 
     async getActualSemester(){
       try {
-        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
-        this.data = await response.data
-        for (var i = 0; i < this.data.length; i++){
-          if (this.data[i].student_id === localStorage.getItem("student_id")){
-            this.actualSemester = this.data[i].actual_semester
-          }
-        }
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID"),
+            }
+        )
 
+        this.data = response.data
       }
       catch (e) {
         console.log(e)
       }
+      this.actualSemester = this.data.student_status.actual_semester
     },
 
     async fillDataForTables(data){
+
       this.arrayOfArticles = new Array(this.actualSemester)
       this.arrayOfReports = new Array(this.actualSemester)
       this.arrayOfProjects = new Array(this.actualSemester)
@@ -106,19 +109,31 @@ export default {
 
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
-        if (data[i].publication.publication_id !== undefined){
-          var article = data[i].publication
-          this.arrayOfArticles[semester - 1].push(article)
+        for (var j = 0; j<data[i].publications.length; j++){
+          if (data[i].publications[j].publication_id !== undefined){
+            var article = data[i].publications[j]
+            this.arrayOfArticles[semester - 1].push(article)
+          }
         }
-        if (data[i].conference.conference_id !== undefined){
-          var report = data[i].conference
-          this.arrayOfReports[semester-1].push(report)
+
+        for (var j = 0; j<data[i].conferences.length; j++){
+          if (data[i].conferences[j].conference_id !== undefined){
+            var conf = data[i].conferences[j]
+            this.arrayOfReports[semester - 1].push(conf)
+          }
         }
-        if (data[i].research_project.project_id !== undefined){
-          var project = data[i].research_project
-          this.arrayOfProjects[semester-1].push(project)
+
+        for (var j = 0; j<data[i].research_projects.length; j++){
+          if (data[i].research_projects[j].project_id !== undefined){
+            var project = data[i].research_projects[j]
+            this.arrayOfProjects[semester - 1].push(project)
+          }
         }
       }
+
+
+
+
     },
 
 
@@ -126,10 +141,9 @@ export default {
 
 
   async beforeMount() {
-
     await this.getActualSemester()
     await this.loadScientificWorks()
-    await this.fillDataForTables(data)
+
 
   }
 
@@ -146,6 +160,31 @@ export default {
   padding:0;
   box-sizing: border-box;
 }
+
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#6BDB6B !important;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #FF8000 !important
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
+.textResult4 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #0000CC !important;
+}
+
 
 @media (min-width: 800px) {
 
