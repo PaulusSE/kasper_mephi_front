@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "header",
   methods: {
@@ -62,6 +64,28 @@ export default {
       localStorage.setItem("userType", '')
       localStorage.setItem("registered", '')
       localStorage.setItem("teacherId", '')
+    },
+    async getUserName() {
+      if (localStorage.getItem("userType") === 'student') {
+        try {
+          const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+          this.data = await response.data;
+          this.userName = this.data.full_name
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+      if (localStorage.getItem("userType") === 'supervisor') {}
+      try {
+        const response = await axios.get(this.IP +'/supervisors/profile/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+        this.userName = this.data.full_name
+      }
+      catch (e) {
+        console.log(e)
+      }
     }
   },
   data(){
@@ -69,12 +93,15 @@ export default {
       userName : ''
     }
   },
-  beforeMount() {
-    if (localStorage.getItem("user_type") === 'admin'){
+  async beforeMount() {
+    await this.getUserName()
+
+    if (localStorage.getItem("userType") === 'admin'){
       this.userName = 'Администратор'
-      return
     }
-    //todo else
+
+
+
   }
 }
 </script>

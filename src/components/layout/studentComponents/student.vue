@@ -4,6 +4,7 @@
                 @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                 @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                @btnReportingClicked="buttonManageStudentPageClicked(5)"
                 :state-of-student-page = stateOfStudentPage
                 :education-time = educationTime
   ></dissertation>
@@ -11,6 +12,7 @@
                    @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                    @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                    @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                   @btnReportingClicked="buttonManageStudentPageClicked(5)"
                    :state-of-student-page = stateOfStudentPage
                    :education-time = educationTime
   ></scientific-work>
@@ -18,23 +20,37 @@
                  @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                  @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                 @btnReportingClicked="buttonManageStudentPageClicked(5)"
                  :state-of-student-page = stateOfStudentPage
                  :education-time = educationTime
   ></teaching-load>
+  <report v-if="stateOfStudentPage === 5"
+                 @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                 @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                 @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                 :state-of-student-page = stateOfStudentPage
+                 :education-time = educationTime
+  ></report>
+
 </template>
 
 <script>
 import dissertation from "@/components/layout/studentComponents/dissertation.vue";
 import scientificWork from "@/components/layout/studentComponents/scientificWork.vue";
 import teachingLoad from "@/components/layout/studentComponents/teachingLoad.vue";
+import report from "@/components/layout/studentComponents/report.vue";
 import store from "@/store/index.js";
+import Report from "@/components/layout/adminComponents/report.vue";
 export default {
   name: "student",
   props : ["stateOfStudentPage"],
   components: {
+    Report,
     "dissertation": dissertation,
     "scientificWork": scientificWork,
     "teachingLoad" : teachingLoad,
+    "report" : report
   },
   data() {
     return {
@@ -50,9 +66,7 @@ export default {
     if (localStorage.getItem('registered') === 'false')
       this.$router.push('/registration')
 
-    // if (store.getters.getType !== "student"){
-    //   this.$router.push('/wrongAccess')
-    // }
+
   }
 }
 </script>

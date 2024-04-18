@@ -32,6 +32,13 @@
         </router-link>
       </nav>
 
+      <nav>
+        <router-link to="#">
+          <button class="btn" :class="{btn_active: stateOfStudentPage === 5, btn_disactive: stateOfStudentPage !==5}" @click="$emit('btnReportingClicked')"><p style="word-break: break-all">Отчетность</p>
+          </button>
+        </router-link>
+      </nav>
+
     </div>
   </div>
 

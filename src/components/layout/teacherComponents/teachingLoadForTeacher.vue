@@ -7,24 +7,11 @@
     @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
     @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
     @btnProfileClicked="$emit('btnProfileClicked')"
+    @btnReportingClicked="$emit('btnReportingClicked')"
     :state-of-student-page = this.stateOfPage
 ></header-of-student>
 
-    <div class="roundBlock">
-      <div class="mb-2">
-        <p class="mainText text-start">Статус работы: </p>
-      </div>
-      <div>
-        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
-          <option  class="textResult1" value="approved">Принято</option>
-          <option  class="textResult2" value="todo">На доработку</option>
-          <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="" value="in progress">В процессе</option>
-          <option  class="" value="empty">Пусто</option>
-          <option  class="textResult4" value="on review">Ожидает проверки</option>
-        </select>
-      </div>
-    </div>
+
 
 <teaching-load-table-for-teacher v-for="(n, index) in this.actualSemester"
                                  :id = index

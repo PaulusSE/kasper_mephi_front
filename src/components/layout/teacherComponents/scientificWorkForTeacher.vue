@@ -6,30 +6,18 @@
       @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
       @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
       @btnProfileClicked="$emit('btnProfileClicked')"
+      @btnReportingClicked="$emit('btnReportingClicked')"
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
-    <div class="roundBlock">
-      <div class="mb-2">
-        <p class="mainText text-start">Статус работы: </p>
-      </div>
-      <div>
-        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%" @change="changeStudentJobStatus" v-model="this.workStatus">
-          <option  class="textResult1" value="approved">Принято</option>
-          <option  class="textResult2" value="todo">На доработку</option>
-          <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="" value="in progress">В процессе</option>
-          <option  class="" value="empty">Пусто</option>
-          <option  class="textResult4" value="on review">Ожидает проверки</option>
-        </select>
-      </div>
-    </div>
+
 
     <tab-of-articles-for-teacher v-for="(n, index) in this.actualSemester"
                      :id = index
                      :articles = this.arrayOfArticles[index]
                      :reports = this.arrayOfReports[index]
                      :projects = this.arrayOfProjects[index]
+                     :patents = this.arrayOfPatents[index]
     ></tab-of-articles-for-teacher>
   </div>
 
@@ -45,10 +33,9 @@ export default {
   data() {
     return {
       arrayOfArticles: [],
-      arrayOfReports : [
-      ],
-      arrayOfProjects:[
-      ],
+      arrayOfReports : [],
+      arrayOfProjects:[],
+      arrayOfPatents: [],
       actualSemester: '',
       workStatus : '',
     }
@@ -100,11 +87,13 @@ export default {
       this.arrayOfArticles = new Array(this.actualSemester)
       this.arrayOfReports = new Array(this.actualSemester)
       this.arrayOfProjects = new Array(this.actualSemester)
+      this.arrayOfPatents = new Array(this.actualSemester)
 
       for (var i = 0; i < this.actualSemester; i++){
         this.arrayOfArticles[i] = new Array()
         this.arrayOfReports[i] = new Array()
         this.arrayOfProjects[i] = new Array()
+        this.arrayOfPatents[i] = new Array()
       }
 
       for (var i = 0; i<data.length; i++){
@@ -120,18 +109,26 @@ export default {
           if (data[i].conferences[j].conference_id !== undefined){
             var conf = data[i].conferences[j]
             this.arrayOfReports[semester - 1].push(conf)
+
           }
+
         }
 
         for (var j = 0; j<data[i].research_projects.length; j++){
           if (data[i].research_projects[j].project_id !== undefined){
             var project = data[i].research_projects[j]
             this.arrayOfProjects[semester - 1].push(project)
+
           }
         }
+
+        // for (var j = 0; j<data[i].patents.length; j++){
+        //   if (data[i].patents[j].patent_id !== undefined){
+        //     var patent = data[i].patents[j]
+        //     this.arrayOfPatents[semester - 1].push(patent)
+        //   }
+        // }
       }
-
-
 
 
     },

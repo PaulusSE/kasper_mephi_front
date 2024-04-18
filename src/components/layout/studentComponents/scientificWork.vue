@@ -18,6 +18,7 @@
         @btnDissertationClicked="$emit('btnDissertationClicked')"
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
+        @btnReportingClicked="$emit('btnReportingClicked')"
         :state-of-student-page = stateOfStudentPage
     ></header-of-student>
 
@@ -29,6 +30,7 @@
                      :articles = this.arrayOfArticles[index]
                      :reports = this.arrayOfReports[index]
                      :projects = this.arrayOfProjects[index]
+                     :patents = this.arrayOfPatents[index]
                      :actual-semester = this.actualSemester
 
 
@@ -37,10 +39,13 @@
     @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
     @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
     @buttonSmallTableAdd3=buttonSmallTableAdd3(index)
+    @buttonSmallTableAdd4=buttonSmallTableAdd4(index)
     :canEdit = this.canEdit
+
     @saveArticles = saveArticles(index)
     @saveProjects = saveProjects(index)
     @saveReports = saveReports(index)
+    @savePatents = savePatents(index)
 
     @makeCopy="(n) => makeCopy(n)"
     @makeEditErrorNotification = callEditError
@@ -48,17 +53,11 @@
     @deleteArticle="(n) => deleteArticle(index, n)"
     @deleteReport="(n) => deleteReport(index, n)"
     @deleteProject="(n) => deleteProject(index, n)"
+    @deletePatents="(n) => deletePatent(index, n)"
 
     ></tab-of-articles>
 
-    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%" v-if="isDataFetched">
-      <div class="text-start" style="margin-left: 2.5%">
-        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
-      </div>
-      <div>
-        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-      </div>
-    </div>
+
 
   </div>
 
@@ -98,6 +97,8 @@ export default {
       arrayOfReportsCopy : [],
       arrayOfProjects:[],
       arrayOfProjectsCopy:[],
+      arrayOfPatents:[],
+      arrayOfPatentsCopy:[],
       showEditError: false,
       waitForCheck : true,
       actualSemester: 1,
@@ -126,11 +127,13 @@ export default {
       this.arrayOfArticles = new Array(this.actualSemester)
       this.arrayOfReports = new Array(this.actualSemester)
       this.arrayOfProjects = new Array(this.actualSemester)
+      this.arrayOfPatents = new Array(this.actualSemester)
 
       for (var i = 0; i < this.actualSemester; i++){
         this.arrayOfArticles[i] = new Array()
         this.arrayOfReports[i] = new Array()
         this.arrayOfProjects[i] = new Array()
+        this.arrayOfPatents[i] = new Array()
       }
 
       for (var i = 0; i<data.length; i++){
@@ -153,6 +156,13 @@ export default {
           if (data[i].research_projects[j].project_id !== undefined){
             var project = data[i].research_projects[j]
             this.arrayOfProjects[semester - 1].push(project)
+          }
+        }
+
+        for (var j = 0; j<data[i].patents.length; j++){
+          if (data[i].patents[j].patent_id !== undefined){
+            var patent = data[i].patents[j]
+            this.arrayOfPatents[semester - 1].push(patent)
           }
         }
 
@@ -204,6 +214,14 @@ export default {
       }
       this.arrayOfProjects[n] = this.arrayOfProjects[n].concat(newReport)
     },
+    buttonSmallTableAdd4(n){
+      let newReport = {
+        patent_name: '',
+        date: '',
+        patent_type: '',
+      }
+      this.arrayOfPatents[n] = this.arrayOfPatents[n].concat(newReport)
+    },
 
     cancelChange(n){
       if (n === 1){
@@ -221,6 +239,11 @@ export default {
        for (var i = 0; i < this.arrayOfProjectsCopy.length; i++)
          this.arrayOfProjects[i] = this.arrayOfProjectsCopy[i].slice();
      }
+      if (n === 4){
+        this.arrayOfPatents.length = 0
+        for (var i = 0; i < this.arrayOfPatentsCopy.length; i++)
+          this.arrayOfPatents[i] = this.arrayOfPatentsCopy[i].slice();
+      }
     },
 
     callEditError() {
@@ -374,6 +397,40 @@ export default {
       await this.loadScientificWorks()
     },
 
+    async savePatents(index) {
+      if (JSON.stringify(this.arrayOfPatents) === JSON.stringify(this.arrayOfPatentsCopy)) {
+        return
+      }
+      if (this.showSavingTablesNotification)
+        this.showSavingTablesNotification = false
+
+      this.makeCopy(4)
+
+
+      if(this.arrayOfPatents.length === 0)
+        return
+
+      for (var i = 0; i < this.arrayOfPatents[index].length; i++){
+        this.arrayOfReports[index][i].works_id = this.works_ids.get(index+1)
+      }
+
+      try {
+        const response = await axios.post(this.IP +'/students/works/patents/' + localStorage.getItem("access_token"),
+            {
+              "patents" : this.arrayOfPatents[index],
+              "semester": index + 1,
+            }
+        )
+        if (response.status === 200)
+          this.callSaveTablesError(true)
+      }
+      catch (e) {
+        this.callSaveTablesError(false)
+      }
+
+      await this.loadScientificWorks()
+    },
+
     makeCopy(n){
       if (n === 1) {
         this.arrayOfArticlesCopy.length = 0
@@ -386,6 +443,10 @@ export default {
       if (n === 3) {
         this.arrayOfProjectsCopy.length = 0
         this.arrayOfProjectsCopy = JSON.parse(JSON.stringify(this.arrayOfProjects));
+      }
+      if (n === 4) {
+        this.arrayOfPatentsCopy.length = 0
+        this.arrayOfPatentsCopy = JSON.parse(JSON.stringify(this.arrayOfPatents));
       }
 
 
@@ -405,6 +466,11 @@ export default {
     deleteProject(index,n){
 
       var tempData = this.arrayOfProjects[index]
+      tempData.splice(n,1)
+    },
+    deletePatent(index,n){
+
+      var tempData = this.arrayOfPatents[index]
       tempData.splice(n,1)
     },
 

@@ -20,6 +20,7 @@
         @btnDissertationClicked="$emit('btnDissertationClicked')"
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
+        @btnReportingClicked="$emit('btnReportingClicked')"
         :state-of-student-page = stateOfStudentPage
     ></header-of-student>
 
@@ -36,41 +37,6 @@
       </nav>
     </div>
     <div>
-      <div class="container-fluid justify-content-between d-flex mb-3">
-
-        <nav class="inputWidth">
-          <div class="d-flex">
-            <label class="text">Тема диссертации</label>
-            <div>
-              <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
-              <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
-            </div>
-          </div>
-
-          <input type="text" class="textInput" :disabled="!editingInfo"  v-model="theme">
-        </nav>
-      </div>
-
-      <div v-if="showTopicHistory" class="myBox roundBlock p-0">
-        <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
-          <div class="rightLine col-6 mainText">
-            <p class="text">№ семестра</p>
-          </div>
-          <div class="col-6 textTable" >
-            Тема
-          </div>
-        </div>
-
-        <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length} - 1" v-for="(element,index) in arrayOfTopics">
-          <div class="rightLine col-6 mainText" :class="{underline: index < this.arrayOfTopics.length - 1}">
-            <p class="text">{{element.semester}}</p>
-          </div>
-          <div class="col-6 textTable" :class="{underline: index < this.arrayOfTopics.length - 1}">
-            {{element.title}}
-          </div>
-        </div>
-
-      </div>
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
@@ -106,6 +72,50 @@
 
       </div>
 
+
+      <div class="container-fluid justify-content-between d-flex mb-3">
+        <nav class="inputWidth">
+          <div class="d-flex">
+            <label class="text">Тема диссертации</label>
+            <div>
+              <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
+              <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
+            </div>
+          </div>
+
+          <input type="text" class="textInput" :disabled="!editingInfo"  v-model="theme">
+        </nav>
+      </div>
+
+
+      <div v-if="showTopicHistory" class="myBox roundBlock p-0">
+        <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
+          <div class="rightLine col-6 mainText">
+            <p class="text">№ семестра</p>
+          </div>
+          <div class="col-6 textTable" >
+            Тема
+          </div>
+        </div>
+
+        <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length} - 1" v-for="(element,index) in arrayOfTopics">
+          <div class="rightLine col-6 mainText" :class="{underline: index < this.arrayOfTopics.length - 1}">
+            <p class="text">{{element.semester}}</p>
+          </div>
+          <div class="col-6 textTable" :class="{underline: index < this.arrayOfTopics.length - 1}">
+            {{element.title}}
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex mb-3">
+        <nav class="inputWidth">
+          <label class="text">Приказ об утверждении</label>
+          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">
+        </nav>
+      </div>
+
+
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
           <label class="text">Объект исследования</label>
@@ -115,10 +125,11 @@
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
-          <label class="text">Приказ исследования</label>
+          <label class="text">Предмет об утверждении</label>
           <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">
         </nav>
       </div>
+
     </div>
 
 
@@ -146,7 +157,7 @@
         <div class="col-4 textTable rightLine">
 
         </div>
-        <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{hightlightActualSemesterColumn : actualSemester === index + 1, rightLine : index + 1 < 8}">
+        <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{rightLine : index + 1 < 8}">
           {{index + 1}}
         </div>
 
@@ -158,38 +169,68 @@
         <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{this.topicMap[element.progress_type]}}
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 1}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.first :disabled="!(actualSemester === 1) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1 && !this.canEdit}" v-model=element.first :disabled="!(((this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 2}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.second :disabled="!(actualSemester === 2) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 2 && this.actualSemester > 2 && !this.canEdit}" v-model=element.second :disabled="!(((this.actualSemester === 2)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 2)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 2)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 2)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 2)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 3}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.third :disabled="!(actualSemester === 3) || !editingCheckbox" >
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 3 && this.actualSemester > 3 && !this.canEdit }" v-model=element.third :disabled="!(((this.actualSemester === 3)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 3)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 3)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 3)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 3)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 4}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.forth :disabled="!(actualSemester === 4) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 4 && this.actualSemester > 4 && !this.canEdit}" v-model=element.forth :disabled="!(((this.actualSemester === 4)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 4)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 4)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 4)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 4)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 5}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.fifth :disabled="!(actualSemester === 5) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 5 && this.actualSemester > 5 && !this.canEdit}" v-model=element.fifth :disabled="!(((this.actualSemester === 5)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 5)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 5)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 5)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 5)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 6}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.sixth :disabled="!(actualSemester === 6) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 6 && this.actualSemester > 6 && !this.canEdit}" v-model=element.sixth :disabled="!(((this.actualSemester === 6)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 6)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 6)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 6)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 6)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 7}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.seventh :disabled="!(actualSemester === 7) || !editingCheckbox">
+        <div class="col-1 mainText myInput rightLine" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 7 && this.actualSemester > 7 && !this.canEdit}" v-model=element.seventh :disabled="!(((this.actualSemester === 7)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 7)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 7)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 7)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 7)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
-        <div class="col-1 mainText myInput" :class="{hightlightActualSemesterColumn : actualSemester === 8}">
-          <input type="checkbox" class="form-check-input myCheckBox"  v-model=element.eighth :disabled="!(actualSemester === 8) || !editingCheckbox">
+        <div class="col-1 mainText myInput" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 8 && this.actualSemester > 8 && !this.canEdit}" v-model=element.eighth :disabled="!(((this.actualSemester === 8)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 8)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 8)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 8)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 8)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
 
       </div>
     </div>
 
-      <div class=" justify-content-between checkboxBlock">
-        <p class="textTable">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
+      <div class="checkboxBlock d-flex">
+        <p class="textTable text-start">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
+        <button v-if="!showProgressHistory" class="editBtn ms-2" @click="changeProgressHistoryState">История прогресса</button>
+        <button v-else class="editBtn ms-2" @click="changeProgressHistoryState">Скрыть</button>
+      </div>
+
+      <div v-if="showProgressHistory" class="myBox roundBlock p-0">
+        <div class="d-flex" :class="{underline : arrayOfProgress.length !== 0}" >
+          <div class="rightLine col-6 textTable">
+            <p class="">Семестр</p>
+          </div>
+          <div class="col-6 textTable" >
+            Прогресс
+          </div>
+        </div>
+
+        <div class="d-flex" :class="{underline:index < this.arrayOfProgress.length - 1}" v-for="(element,index) in arrayOfProgress">
+          <div class="rightLine col-6 mainText">
+            <p class="text">{{element.semester}}</p>
+          </div>
+          <div class="col-6 textTable text">
+            {{element.progress}}
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <div>
         <input type="range"  v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
+
+
 
     </div>
 
@@ -214,16 +255,6 @@
       ></dissertation-tab>
 
     </div>
-
-    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%">
-      <div class="text-start" style="margin-left: 2.5%">
-        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
-      </div>
-      <div>
-        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-      </div>
-    </div>
-
 
 
   </div>
@@ -299,8 +330,10 @@ export default {
       showEditError: false,
       showTopicHistory : false,
       showTeacherHistory : false,
+      showProgressHistory: false,
       arrayOfTopics : [],
       arrayOfTeachers : [],
+      arrayOfProgress: [],
       topicMap : {
         'intro' : 'Введение',
         'ch. 1' : 'Глава 1',
@@ -356,6 +389,10 @@ export default {
 
     changeTopicHistoryState(){
       this.showTopicHistory = !this.showTopicHistory
+    },
+
+    changeProgressHistoryState(){
+      this.showProgressHistory = !this.showProgressHistory
     },
 
     changeTeacherHistoryState(){
@@ -447,16 +484,16 @@ export default {
       try {
         const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
         this.data = await response.data;
-        this.actualSemester = this.data.actual_semester
-        this.workStatus = this.data.status
-        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
-        this.canEdit = this.data.can_edit
-
-
       }
       catch (e) {
         console.log(e)
       }
+
+
+      this.actualSemester = this.data.actual_semester
+      this.workStatus = this.data.status
+      this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
+      this.canEdit = this.data.can_edit
     },
 
     makeNotification(resultStatus) {
@@ -688,6 +725,15 @@ export default {
     margin-bottom:10px;
   }
 
+  .myCheckBoxInActive{
+    zoom: 0.5;
+    accent-color: white;
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
+  }
+
   .myInput{
 
     display: grid !important;
@@ -837,6 +883,15 @@ export default {
     border: 0 !important;
     margin-top:10px;
     margin-bottom:10px;
+  }
+
+  .myCheckBoxInActive{
+    zoom: 0.5;
+    accent-color: white;
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
   }
 
   .myInput{
@@ -1002,6 +1057,15 @@ export default {
     border: 0 !important;
     margin-top:5px;
     margin-bottom:5px;
+  }
+
+  .myCheckBoxInActive{
+    zoom: 0.5;
+    accent-color: white;
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
   }
 
   .myInput{

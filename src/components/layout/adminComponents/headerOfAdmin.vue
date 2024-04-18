@@ -3,7 +3,7 @@
     <div class="d-flex myContainer">
       <nav>
         <router-link to="#">
-          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')"><p style="word-break: break-all;">Настройка пар</p>
+          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')"><p style="word-break: break-all;">Пары</p>
           </button>
         </router-link>
       </nav>
@@ -51,117 +51,191 @@ export default {
   box-sizing: border-box;
 }
 
-@media (min-width: 1700px){
+@media (min-width: 1200px){
   .myContainer {
-
-    padding-top: 0.5rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-bottom: 1rem;
   }
 
   .btn_active {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
-    font-size: 1.2rem !important;
+    font-size: 1.05rem !important;
     border: solid 0.12em #0055BB !important;
     border-radius: 11px !important;
     color: #0055BB !important;
-    padding: 0.2rem !important;
+
+
   }
 
   .btn_disactive {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
-    font-size: 1.2rem !important;
+    font-size: 1.05rem !important;
     border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-    padding: 0.2rem !important;
 
   }
 
   nav {
     margin-right: 0.6rem;
 
+  }
+
+  .btnBox {
+    width: 95%;
+    margin:auto;
+  }
+
+  div input {
+    border-width: 0.15em !important;
+    height: 60px !important;
+    border-radius: 0.7em !important;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .myContainer {
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-bottom: 1rem;
+  }
+
+  .btn_active {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.7rem !important;
+    border: solid 0.12em #0055BB !important;
+    border-radius: 11px !important;
+    color: #0055BB !important;
+    padding: 0.25rem;
+
+
+  }
+
+  .btn_disactive {
+    font-family: "Raleway", sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 0.7rem !important;
+    border: solid 0.10em #7C7F86 !important;
+    border-radius: 11px !important;
+    color: #7C7F86 !important;
+    padding: 0.25rem;
+
+  }
+
+  nav {
+    margin-right: 0.6rem;
 
   }
 
   .btnBox {
     width: 95%;
     margin:auto;
-    margin-bottom: 1rem;
+  }
+
+  div input {
+    border-width: 0.15em !important;
+
+    border-radius: 0.7em !important;
+    width: 100% !important;
   }
 }
 
-@media (max-width: 1700px){
+@media (max-width: 700px) {
   .myContainer {
-
-    padding-top: 0.5rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-bottom: 1rem;
   }
 
   .btn_active {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
-    font-size: 1rem !important;
-    border: solid 0.15em #0055BB !important;
+    font-size: 0.6rem !important;
+    border: solid 0.12em #0055BB !important;
     border-radius: 11px !important;
     color: #0055BB !important;
-    padding: 0
+    padding: 0.25rem !important;
+
+
   }
 
   .btn_disactive {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
-    font-size: 1rem !important;
-    border: solid 0.15em #7C7F86 !important;
+    font-size: 0.6rem !important;
+    border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-    padding: 0
+    padding: 0.25rem !important;
 
   }
 
   nav {
-    margin-right: 0.2rem;
-
+    margin-right: 0.3rem;
   }
 
   .btnBox {
-    margin-left: 2.5%;
-    margin-bottom: 1rem;
+    width: 95%;
+    margin:auto;
+  }
+
+  div input {
+    border-width: 0.15em !important;
+
+    border-radius: 0.7em !important;
+    width: 100% !important;
   }
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
   .myContainer {
-    padding-top: 0.5rem;
+    width: 100%;
+    padding-top: 0.7rem;
+    padding-bottom: 1rem;
   }
+
   .btn_active {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
     font-size: 0.5rem !important;
-    border: solid 0.15em #0055BB !important;
+    border: solid 0.12em #0055BB !important;
     border-radius: 11px !important;
     color: #0055BB !important;
-    padding: 0
+    padding: 0;
+
+
   }
 
   .btn_disactive {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
     font-size: 0.5rem !important;
-    border: solid 0.15em #7C7F86 !important;
+    border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-    padding: 0
+    padding: 0;
 
   }
 
   nav {
     margin-right: 0.2rem;
-
   }
 
   .btnBox {
-    margin-left: 2.5%;
-    margin-bottom: 1rem;
+    width: 95%;
+    margin:auto;
+  }
+
+  div input {
+    border-width: 0.15em !important;
+
+    border-radius: 0.7em !important;
+    width: 100% !important;
   }
 }
 

@@ -95,7 +95,7 @@
             <div class="rightLine textMiniTable" style="width: 10.15%;">
 
               <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start" >
+                <label class="textCheckBox inputBox text-start " >
                   <input type="checkbox" v-model="article.wac" disabled/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
                   <input type="checkbox" v-model="article.rinc" disabled/>РИНЦ</label>
@@ -652,6 +652,140 @@
       </div>
     </div>
 
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Патенты</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%" v-if="!(this.actualSemester === id+1)&&canEdit&&!waitForCheck||(this.actualSemester === id+1)&&!canEdit&&!waitForCheck||(this.actualSemester === id+1)&&canEdit&&!waitForCheck">
+
+          <button v-if="!smallTableEditing4" @click="buttonSmallTableClicked4" class="editBtn2 mt-3" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
+          <div v-else>
+            <button class="editBtn2 mt-3 me-2" @click="this.$emit('buttonSmallTableAdd4')" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Добавить</button>
+            <button class="editBtn2 mt-3 me-2" @click="cancelChange4" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Отменить</button>
+            <button class="editBtn2 mt-3 " @click="savePatents" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
+          </div>
+        </nav>
+      </div>
+      <div class="roundBlock p-0 mt-2">
+
+        <div v-if="!smallTableEditing4">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: patents.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              Наименование патента
+            </div>
+
+
+            <div class="textMiniTable rightLine" style="width: 35%; text-align: center">
+             Тип
+            </div>
+
+            <div class="textMiniTable" style="width: 20%; text-align: center">
+              Дата
+            </div>
+
+
+
+          </div>
+
+          <div class="d-flex " :class="{ underline: index !== patents.length-1}" v-for="(patent,index) in patents">
+
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{patent.patent_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%;">
+              <div class="textWithCarry inputBox ">{{this.patentsMap[patent.patent_type]}}</div>
+
+            </div>
+
+            <div class="textMiniTable" style="width: 20%;">
+              <div class="textWithCarry inputBox ">{{patent.date}}</div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div v-if="smallTableEditing4">
+
+          <div class="d-flex " style="vertical-align: baseline;" :class="{ underline: patents.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
+              Наименование патента
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
+              Тип
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              Дата
+            </div>
+
+            <div class="textMiniTable" style="width: 6%; text-align: center">
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" :class="{ underline: index !== patents.length-1}" v-for="(patent,index) in patents">
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
+              <div>
+                <textarea class="textWithCarry inputBox " v-model="patent.patent_name" rows="4" style="overflow-y:auto"></textarea>
+              </div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
+
+              <div style="height: 100%; width: 100%">
+                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);"  v-model="patent.patent_type">
+                  <option value="option1">Свидетельство о регистрации программ ЭВМ</option>
+                  <option value="option2">Свидетельство о регистрации базы данных</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              <div>
+                <input class="textWithCarry inputBox " type="date" v-model="patent.date">
+              </div>
+            </div>
+
+
+
+            <div class="textMiniTable" style="width: 6%; text-align: center; padding-right: 0" >
+              <button class="btnAddDeleteFiles mt-2" @click="deletePatents(index)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">
+                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
 
   </div>
 
@@ -665,16 +799,18 @@ import axios from "axios";
 
 export default {
   name: "tabOfArticles",
-  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester", "canEdit"],
+  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester", "canEdit", "patents"],
   data() {
     return {
       buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
+      smallTableEditing4 : false,
       deleteArticlesID : [],
       deleteProjectsID : [],
       deleteReportsID : [],
+      deletePatentsID: [],
       publicationMap: {
         "to print" : "Принято в печать",
         "published" : "Опубликовано",
@@ -683,6 +819,10 @@ export default {
       conferenceMap: {
         "registered" : "Зарегистрировался",
         "performed " : "Выступил",
+      },
+      patentsMap: {
+        "option1" : "Свидетельство о регистрации программ ЭВМ",
+        "option2" : "Свидетельство о регистрации базы данных",
       }
     }
   },
@@ -721,6 +861,17 @@ export default {
       this.smallTableEditing3 = !this.smallTableEditing3
       this.$emit("makeCopy", 3)
     },
+
+    buttonSmallTableClicked4(){
+      if (this.waitForCheck){
+        this.$emit("makeEditErrorNotification")
+        return
+      }
+
+      this.smallTableEditing4= !this.smallTableEditing4
+      this.$emit("makeCopy", 4)
+    },
+
     async saveArticles(){
       this.smallTableEditing1 = !this.smallTableEditing1
 
@@ -793,6 +944,32 @@ export default {
       this.$emit('saveProjects')
 
     },
+
+    async savePatents(){
+      this.smallTableEditing4 = !this.smallTableEditing4
+
+
+
+      if(this.deletePatentsID.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/works/patents/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deletePatentsID,
+                "semester" : this.id + 1
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+
+      this.$emit('savePatents')
+
+    },
+
     cancelChange1(){
       this.$emit('updatePage', 1)
       this.deleteArticlesID.length = 0
@@ -808,6 +985,11 @@ export default {
       this.deleteProjectsID.length = 0
       this.smallTableEditing3 = !this.smallTableEditing3
     },
+    cancelChange4(){
+      this.$emit('updatePage', 4)
+      this.deletePatentsID.length = 0
+      this.smallTableEditing4 = !this.smallTableEditing4
+    },
 
     deleteArticle(myIndex){
       this.deleteArticlesID.push(this.articles[myIndex].publication_id)
@@ -820,6 +1002,10 @@ export default {
     deleteProject(myIndex){
       this.deleteProjectsID.push(this.projects[myIndex].project_id)
       this.$emit('deleteProject', myIndex)
+    },
+    deletePatents(myIndex){
+      this.deletePatentsID.push(this.patents[myIndex].patent_id)
+      this.$emit('deletePatent', myIndex)
     }
   },
 

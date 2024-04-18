@@ -10,6 +10,7 @@
 @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
 @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
 @btnProfileClicked="$emit('btnProfileClicked')"
+@btnReportingClicked="$emit('btnReportingClicked')"
     ></headfer-of-student>
     <div>
 

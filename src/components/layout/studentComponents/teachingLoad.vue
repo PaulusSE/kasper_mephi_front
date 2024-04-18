@@ -17,6 +17,8 @@
         @btnDissertationClicked="$emit('btnDissertationClicked')"
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
+        @btnReportingClicked="$emit('btnReportingClicked')"
+
         :state-of-student-page = stateOfStudentPage
 
     ></header-of-student>
@@ -50,14 +52,7 @@
 
     ></teaching-load-table>
 
-    <div class="text-end pb-2 roundBlock" style="margin-right: 2.5%" v-if="isDataFetched">
-      <div class="text-start" style="margin-left: 2.5%">
-        <p>Статус работы: {{workStatusMap[workStatus]}}</p>
-      </div>
-      <div>
-        <button v-if="!waitForCheck" type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendToCheck()">Отправить на проверку</button>
-      </div>
-    </div>
+
 
 
 

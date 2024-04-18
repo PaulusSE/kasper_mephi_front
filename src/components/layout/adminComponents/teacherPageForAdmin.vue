@@ -82,6 +82,7 @@ import header from "@/components/layout/header.vue";
 import tabOfStudent from "@/components/layout/studentComponents/tabOfStudent.vue";
 import axios from "axios";
 import store from "@/store/index.js";
+
 export default {
   name: "teacherPageForAdmin",
   components : {
@@ -203,7 +204,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped >
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
 
 
 * {
@@ -212,6 +216,9 @@ export default {
   box-sizing: border-box;
 }
 
+
+
+
 @media (min-width: 800px) {
   .mainText {
     color:#7C7F86;
@@ -219,6 +226,9 @@ export default {
     font-size: 1.2rem;
   }
 
+  input {
+    height: 2.5rem !important;
+  }
 
   .mainPage {
     width: 70%;
@@ -262,7 +272,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2.5rem;
+
     font-size: 1rem;
     padding-left: 0.5rem;
   }
@@ -302,6 +312,10 @@ export default {
     color:#7C7F86;
     font-weight: 300;
     font-size: 1rem;
+  }
+
+  input {
+    height: 2.2rem !important;
   }
 
 
@@ -347,7 +361,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2rem;
+
     font-size: 0.9rem;
     padding-left: 0.5rem;
   }
@@ -387,6 +401,10 @@ export default {
     color:#7C7F86;
     font-weight: 300;
     font-size: 0.8rem;
+  }
+
+  input {
+    height: 2rem !important;
   }
 
   .mainPage {
@@ -430,7 +448,6 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2rem;
     font-size: 0.8rem;
     padding-left: 0.5rem;
   }

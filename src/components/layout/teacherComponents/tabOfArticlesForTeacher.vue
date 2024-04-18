@@ -84,14 +84,14 @@
             <div class="rightLine textMiniTable" style="width: 10.15%;">
 
               <div style="height: 100%">
-                <label class="textCheckBox inputBox text-start checkboxFont" >
-                  <input type="checkbox" class="ms-0"  v-model="article.wac" disabled style="word-break: break-word"/>ВАК</label>
-                <label class="textCheckBox inputBox text-start checkboxFont">
-                  <input type="checkbox" class="ms-0" v-model="article.rinc" disabled style="word-break: break-word"/>РИНЦ</label>
-                <label class="textCheckBox inputBox text-start checkboxFont">
-                  <input type="checkbox" v-model="article.scopus" disabled style="word-break: break-word"/>Scopus</label>
-                <label class="textCheckBox inputBox text-start checkboxFont">
-                  <input type="checkbox" v-model="article.wos" disabled style="word-break: break-word"/>WoS</label>
+                <label class="textCheckBox inputBox text-start " >
+                  <input type="checkbox"  v-model="article.wac" disabled/>ВАК</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.rinc" disabled/>РИНЦ</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.scopus" disabled/>Scopus</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.wos" disabled/>WoS</label>
               </div>
 
 
@@ -316,6 +316,64 @@
       </div>
     </div>
 
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Патенты</p>
+        </nav>
+      </div>
+      <div class="roundBlock p-0 mt-2">
+
+        <div v-if="!smallTableEditing4">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: patents.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              Наименование патента
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              Тип
+
+            </div>
+
+            <div class=" textMiniTable" style="width: 20%; text-align: center">
+              Дата
+            </div>
+
+          </div>
+
+          <div class="d-flex " :class="{ underline: index !== patents.length-1}" v-for="(patent,index) in patents">
+
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{patent.patent_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%;">
+              <div class="textWithCarry inputBox ">{{this.patentsMap[patent.patent_type]}}</div>
+            </div>
+
+            <div class="textMiniTable" style="width: 20%;">
+              <div class="textWithCarry inputBox ">{{patent.date}}</div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
 
   </div>
 
@@ -326,13 +384,14 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles","reports","projects" , "id"],
+  props: ["articles","reports","projects" , "id", "patents"],
   data() {
     return {
       buttonIsOpened : false,
-      smallTableEditing1 : false,
-      smallTableEditing2 : false,
-      smallTableEditing3 : false,
+      patentsMap: {
+        "option1" : "Свидетельство о регистрации программ ЭВМ",
+        "option2" : "Свидетельство о регистрации базы данных",
+      }
     }
   },
   methods : {
@@ -369,6 +428,15 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.textCheckBox {
+  border: 0 !important;
+  resize: none;
+  width: 100%;
+  overflow-x:hidden;
+  overflow-y:hidden;
+  font-size: 0.95rem;
 }
 
 

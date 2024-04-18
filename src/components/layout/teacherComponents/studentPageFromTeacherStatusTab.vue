@@ -22,24 +22,6 @@
     </div>
     <div v-if="buttonIsOpened">
 
-      <div class="roundBlock ">
-        <div class="d-flex justify-content-between mt-3">
-          <nav class="checkboxBlock justify-content-start col-3 ms-0">
-            <div class="mySelectedField2 gap-3 d-flex">
-              <p class="mainText">Статус</p>
-              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="this.status" :class="{textResult1: this.status=== 'passed', textResult2: this.status === 'todo', textResult3: this.status === 'failed'}">
-                <option  class="textResult" value="empty" >Выбрать статус</option>
-                <option  class="textResult1" value="passed">Принято</option>
-                <option  class="textResult2" value="todo" >На доработку</option>
-                <option  class="textResult3" value="failed">Не сдано</option>
-              </select>
-            </div>
-          </nav>
-
-        </div>
-        <div>
-
-        </div>
 
 
         <div class="roundBlock">
@@ -54,7 +36,6 @@
           </ul>
         </div>
 
-      </div>
 
 
       <div class="roundBlock">

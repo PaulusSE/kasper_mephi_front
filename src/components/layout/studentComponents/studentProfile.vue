@@ -57,7 +57,7 @@
 
       <div class="container-fluid justify-content-between d-flex">
         <nav style="width: 100%;">
-          <label class="text ms-0">Научная специальность</label>
+          <label class="text ms-0">Номер телефона</label>
           <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="speciality">
         </nav>
 
@@ -77,59 +77,6 @@
             <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
           </div>
         </nav>
-      </div>
-    </div>
-
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between mt-1">
-        <div class="container-fluid justify-content-between d-flex">
-          <nav>
-            <p class="mainText">Общая информация</p>
-          </nav>
-
-<!--          <nav>-->
-<!--            <button type="button" class="btn btn-primar btnedit"  @click="editDissertationInfo()" v-if="!stateOfEditingDissertationInfo">-->
-<!--              <p>Редактировать</p>-->
-<!--            </button>-->
-
-<!--            <button type="button" class="btn btn-primar btnedit"  @click="cancelChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo">-->
-<!--              <p>Отменить</p>-->
-<!--            </button>-->
-
-<!--            <button type="button" class="btn btn-primar btnedit"  @click="saveChangeDissertationInfo()" v-if="stateOfEditingDissertationInfo && stateOfWritingDissertationInfo">-->
-<!--              <p>Сохранить</p>-->
-<!--            </button>-->
-<!--          </nav>-->
-        </div>
-      </div>
-      <div>
-        <div class="container-fluid justify-content-between d-flex">
-          <nav class="inputWidth">
-            <label class="text">Тема диссертации</label>
-            <input type="text" class="textInput" :disabled="!stateOfEditingDissertationInfo"  v-model="theme">
-          </nav>
-        </div>
-
-        <div class="container-fluid justify-content-between d-flex">
-          <nav class="inputWidth">
-            <label class="text">Научный руководитель</label>
-            <input type="text" class="textInput" disabled  v-model="teacherFullName">
-          </nav>
-        </div>
-
-        <div class="container-fluid justify-content-between d-flex">
-          <nav class="inputWidth">
-            <label class="text">Номер приказа об утверждении</label>
-            <input type="text" class="textInput" disabled  v-model="numberOfOrderOfStatement">
-          </nav>
-        </div>
-
-        <div class="container-fluid justify-content-between d-flex">
-          <nav class="inputWidth">
-            <label class="text">Дата приказа об утверждении</label>
-            <input type="text" class="textInput" disabled v-model="dateOfOrderOfStatement">
-          </nav>
-        </div>
       </div>
     </div>
 

@@ -8,6 +8,7 @@
       @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
       @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
       @btnProfileClicked="$emit('btnProfileClicked')"
+      @btnReportingClicked="$emit('btnReportingClicked')"
       :state-of-student-page = this.stateOfPage
   ></header-of-student>
 
@@ -21,21 +22,7 @@
 
     </confirm-changing>
 
-    <div class="roundBlock">
-      <div class="mb-2">
-        <p class="mainText text-start">Статус работы: </p>
-      </div>
-      <div>
-        <select class="form-select mainText" :class="{textResult1 : this.workStatus === 'approved', textResult2: this.workStatus === 'todo', textResult3: this.workStatus === 'failed', textResult4: this.workStatus === 'on review'}"  style="border-radius: 20px; width: 90%; margin-left: 5%"   @change="confirmChangingStudentJobStats" v-model="this.workStatus">
-          <option  class="textResult1" value="approved">Принято</option>
-          <option  class="textResult2" value="todo">На доработку</option>
-          <option  class="textResult3" value="failed">Не сдано</option>
-          <option  class="" value="in progress">В процессе</option>
-          <option  class="" value="empty">Пусто</option>
-          <option  class="textResult4" value="on review">Ожидает проверки</option>
-        </select>
-      </div>
-    </div>
+
 
     <div>
       <div class="roundBlock">
@@ -50,42 +37,6 @@
 
 
 
-
-        </div>
-        <div class="container-fluid justify-content-between d-flex mb-3">
-          <nav class="inputWidth">
-            <div class="d-flex">
-              <div class="text">Тема диссертации</div>
-              <div class="text">
-
-                <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
-                <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
-              </div>
-
-            </div>
-
-            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
-          </nav>
-        </div>
-
-        <div v-if="showTopicHistory" class="myBox roundBlock p-0">
-          <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
-            <div class="rightLine col-6 mainText">
-              <p class="textTable">№ семестра</p>
-            </div>
-            <div class="col-6 textTable" >
-              Тема
-            </div>
-          </div>
-
-          <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length - 1}" v-for="(element,index) in arrayOfTopics">
-            <div class="rightLine col-6 textTable">
-              <p class="text">{{element.semester}}</p>
-            </div>
-            <div class="col-6 textTable" >
-              {{element.title}}
-            </div>
-          </div>
 
         </div>
 
@@ -123,6 +74,53 @@
 
         </div>
 
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <div class="d-flex">
+              <div class="text">Тема диссертации</div>
+              <div class="text">
+
+                <button v-if="!showTopicHistory" class="editBtn ms-2" @click="changeTopicHistoryState">Список тем</button>
+                <button v-else class="editBtn ms-2" @click="changeTopicHistoryState">Скрыть</button>
+              </div>
+
+            </div>
+
+            <input type="text" class="textInput" :disabled="!commonInfo"  v-model="theme">
+          </nav>
+        </div>
+
+
+
+        <div v-if="showTopicHistory" class="myBox roundBlock p-0">
+          <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
+            <div class="rightLine col-6 mainText">
+              <p class="textTable">№ семестра</p>
+            </div>
+            <div class="col-6 textTable" >
+              Тема
+            </div>
+          </div>
+
+          <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length - 1}" v-for="(element,index) in arrayOfTopics">
+            <div class="rightLine col-6 textTable">
+              <p class="text">{{element.semester}}</p>
+            </div>
+            <div class="col-6 textTable" >
+              {{element.title}}
+            </div>
+          </div>
+        </div>
+
+        <div class="container-fluid justify-content-between d-flex mb-3">
+          <nav class="inputWidth">
+            <label class="text">Приказ об утверждении</label>
+            <input type="text" class="textInput" disabled v-model="research_order">
+          </nav>
+        </div>
+
+
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Год обучения (курс)</label>
@@ -146,7 +144,7 @@
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Приказ исследования</label>
+            <label class="text">Предмет исследования</label>
             <input type="text" class="textInput" disabled v-model="research_order">
           </nav>
         </div>
@@ -177,7 +175,7 @@
 
           </div>
 
-          <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{hightlightActualSemesterColumn : actualSemester === index + 1, rightLine : index + 1 < 8}">
+          <div class="col-1 textTable"  v-for="(number, index) in 8"  :class="{rightLine : index + 1 < 8}">
             {{index + 1}}
           </div>
 
@@ -189,36 +187,62 @@
           <div class="col-4 textTable rightLine">
             {{this.topicMap[value.progress_type]}}
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 1}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.first disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox" :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1}" v-model=value.first disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 2}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.second disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 2 && this.actualSemester > 2}" v-model=value.second disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 3}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.third disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 3 && this.actualSemester > 3}" v-model=value.third disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 4}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.forth disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 4 && this.actualSemester > 4}" v-model=value.forth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 5}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.fifth disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 5 && this.actualSemester > 5}" v-model=value.fifth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 6}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.sixth disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 6 && this.actualSemester > 6}" v-model=value.sixth disabled>
           </div>
-          <div class="col-1 textTable myInput rightLine" :class="{hightlightActualSemesterColumn : actualSemester === 7}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.seventh disabled>
+          <div class="col-1 textTable myInput rightLine" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 7 && this.actualSemester > 7}" v-model=value.seventh disabled>
           </div>
-          <div class="col-1 textTable myInput" :class="{hightlightActualSemesterColumn : actualSemester === 8}">
-            <input type="checkbox" class="form-check-input myCheckBox"  v-model=value.eighth disabled>
+          <div class="col-1 textTable myInput" >
+            <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 8 && this.actualSemester > 8}" v-model=value.eighth disabled>
           </div>
 
         </div>
       </div>
 
-      <div class=" justify-content-between checkboxBlock">
+      <div class=" d-flex checkboxBlock">
         <p class="textTable">Процент выполнения диссертационного исследования {{this.progressOfDissertation}} %</p>
+        <button v-if="!showProgressHistory" class="editBtn ms-2" @click="changeProgressHistoryState">История прогресса</button>
+        <button v-else class="editBtn ms-2" @click="changeProgressHistoryState">Скрыть</button>
+      </div>
+
+      <div v-if="showProgressHistory" class="myBox roundBlock p-0">
+        <div class="d-flex" :class="{underline : arrayOfProgress.length !== 0}" >
+          <div class="rightLine col-6 textTable">
+            <p class="">Семестр</p>
+          </div>
+          <div class="col-6 textTable" >
+            Прогресс
+          </div>
+        </div>
+
+        <div class="d-flex" :class="{underline:index < this.arrayOfProgress.length - 1}" v-for="(element,index) in arrayOfProgress">
+          <div class="rightLine col-6 textTable">
+            <p class="text">{{element.semester}}</p>
+          </div>
+          <div class="col-6 textTable text">
+            <p class="text">{{element.progress}}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
         <input type="range"  v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
 
@@ -285,10 +309,12 @@ export default {
 
       showTopicHistory : false,
       showTeacherHistory : false,
+      showProgressHistory : false,
       showModalConfirmStudentStatusChange : false,
       newState : '',
       arrayOfTopics : [],
       arrayOfTeachers : [],
+      arrayOfProgress: [],
       topicMap : {
         'intro' : 'Введение',
         'ch. 1' : 'Глава 1',
@@ -369,6 +395,10 @@ export default {
     },
     changeTeacherHistoryState(){
       this.showTeacherHistory = !this.showTeacherHistory
+    },
+
+    changeProgressHistoryState(){
+      this.showProgressHistory = !this.showProgressHistory
     },
 
     async getActualSemester(){
@@ -615,6 +645,15 @@ export default {
     margin:auto;
     border: 0 !important;
   }
+
+  .myCheckBoxInActive{
+    zoom: 0.5;
+    accent-color: white;
+    width: 60% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
+  }
   .myInput{
 
     display: grid !important;
@@ -758,6 +797,15 @@ export default {
     border: 0 !important;
   }
 
+  .myCheckBoxInActive{
+    zoom: 0.45;
+    accent-color: white;
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
+  }
+
   .myInput{
 
     display: grid !important;
@@ -894,12 +942,22 @@ export default {
   }
 
 
+
   .myCheckBox{
     zoom: 0.45;
     accent-color: white;
     width: 50% !important;
     margin:auto;
     border: 0 !important;
+  }
+
+  .myCheckBoxInActive{
+    zoom: 0.45;
+    accent-color: white;
+    width: 50% !important;
+    margin:auto;
+    border: 0 !important;
+    background-color:grey !important;
   }
 
   .myInput{

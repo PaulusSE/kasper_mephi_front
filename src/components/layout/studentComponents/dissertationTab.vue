@@ -23,13 +23,6 @@
     <div v-if="buttonIsOpened">
       <div class="d-flex justify-content-between">
 
-        <nav class="checkboxBlock">
-          <div class="d-flex gap-2">
-            <p class="statusLine">Статус:</p>
-            <p class="statusLine" :class="{textResult1: statusOfJob[this.status] === 'Сдано', textResult2:statusOfJob[this.status] === 'На доработку', textResult3 : statusOfJob[this.status] === 'Не сдано'}">{{statusOfJob[this.status]}}</p>
-          </div>
-        </nav>
-
       </div>
 
 
@@ -68,7 +61,7 @@
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
-              Отправить
+              Загрузить
             </p>
           </div>
         </button>
