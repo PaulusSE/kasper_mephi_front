@@ -607,29 +607,8 @@ export default {
   font-weight: 400 !important;
 }
 
-.textResult1 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color:#6BDB6B !important;
-}
 
-.textResult2 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color: #FF8000 !important
-}
 
-.textResult3 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color:#FF3333 !important;
-}
-
-.textResult4 {
-  font-family: "Raleway", sans-serif;
-  font-weight: 550;
-  color: #0000CC !important;
-}
 
 @media (min-width: 800px) {
   .checkboxBlock{

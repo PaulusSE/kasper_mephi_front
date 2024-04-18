@@ -1,5 +1,6 @@
 <template>
 
+
   <dissertation v-if="stateOfStudentPage === 1"
                 @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"

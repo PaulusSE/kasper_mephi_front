@@ -1,5 +1,25 @@
 <template>
 
+  <confirm-sending-to-check
+
+  :show=showModalConfirmSending
+  @closeWindow = closeWindowStudent
+  >
+  </confirm-sending-to-check>
+
+  <confirm-changing-student-status
+      :show = showModalChangingStudentStatus
+      @closeWindow = closeWindowTeacher
+      @callChangeError = callChangeError
+  >
+
+  </confirm-changing-student-status>
+
+  <notification-error
+  :show = showNotificationChangeError
+  :message = errorChangeMessage
+  ></notification-error>
+
 
   <div class="btnBox">
     <div class="d-flex myContainer">
@@ -40,6 +60,14 @@
       </nav>
 
     </div>
+
+    <div v-if="this.userType === 'student'">
+      <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendEverythingToCheck()">Отправить работу на проверку</button>
+    </div>
+
+    <div v-if="this.userType === 'supervisor' || this.userType === 'admin'">
+      <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
+    </div>
   </div>
 
 </template>
@@ -47,17 +75,57 @@
 <script>
 import {useStore} from "vuex";
 import store from "@/store/index.js";
+import confirmSendingToCheck from "@/components/layout/models/studentModels/confirmSendingToCheck.vue";
+import confirmChangingStudentStatus from "@/components/layout/models/teacherModels/confirmChangingStudentStatus.vue";
+import notificationError from "@/components/layout/notifications/studentNotifications/notificationError.vue";
 
 export default {
   name: "headerOfStudent",
-  props: ["stateOfStudentPage"],
+  props: ["stateOfStudentPage", "confirmChangingStudentStatus"],
   data() {
     return {
       userType: localStorage.getItem("userType"),
+      showModalConfirmSending: false,
+      showModalChangingStudentStatus: false,
+      showNotificationChangeError : false,
+      errorChangeMessage : "Все разделе должны быть подтверждены!"
 
     }
   },
+  components : {
+
+    "confirmSendingToCheck": confirmSendingToCheck,
+    "confirmChangingStudentStatus": confirmChangingStudentStatus,
+    "notificationError" : notificationError
+  },
+  methods: {
+    sendEverythingToCheck(){
+      this.showModalConfirmSending = true
+    },
+
+    estimateStudentPage(){
+      this.showModalChangingStudentStatus = true
+    },
+
+
+    closeWindowStudent(){
+      this.showModalConfirmSending = false
+    },
+    closeWindowTeacher(){
+      this.showModalChangingStudentStatus = false
+    },
+    callChangeError(){
+      this.showNotificationChangeError = true
+      setTimeout(() => {
+        this.showNotificationChangeError = false
+      }, 5000);
+    }
+
+  },
   async beforeMount() {
+    this.userType = localStorage.getItem("userType")
+    console.log(this.userType)
+    console.log(this.userType === 'student')
   },
   async beforeCreate() {
 
@@ -80,6 +148,7 @@ export default {
     padding-bottom: 1rem;
   }
 
+
   .btn_active {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
@@ -91,6 +160,16 @@ export default {
 
   }
 
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.3rem;
+    margin: 0 !important;
+    color:white !important;
+  }
+
   .btn_disactive {
     font-family: "Raleway", sans-serif !important;
     font-weight: 500 !important;
@@ -98,7 +177,6 @@ export default {
     border: solid 0.10em #7C7F86 !important;
     border-radius: 11px !important;
     color: #7C7F86 !important;
-
   }
 
   nav {
@@ -108,15 +186,10 @@ export default {
 
   .btnBox {
     width: 95%;
-    margin:auto;
+    margin: auto auto 1rem;
   }
 
-  div input {
-    border-width: 0.15em !important;
-    height: 60px !important;
-    border-radius: 0.7em !important;
-    width: 100% !important;
-  }
+
 }
 
 @media (max-width: 1200px) {
@@ -134,8 +207,16 @@ export default {
     border-radius: 11px !important;
     color: #0055BB !important;
     padding: 0.25rem;
+  }
 
-
+  .loggining {
+    font-size: 1rem !important;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    padding: 0.3rem;
+    margin: 0 !important;
+    color:white !important;
   }
 
   .btn_disactive {
@@ -156,7 +237,7 @@ export default {
 
   .btnBox {
     width: 95%;
-    margin:auto;
+    margin: auto auto 1rem;
   }
 
   div input {
@@ -172,6 +253,16 @@ export default {
     width: 100%;
     padding-top: 0.7rem;
     padding-bottom: 1rem;
+  }
+
+  .loggining {
+    font-size: 0.9rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
   .btn_active {
@@ -203,7 +294,7 @@ export default {
 
   .btnBox {
     width: 95%;
-    margin:auto;
+    margin: auto auto 1rem;
   }
 
   div input {
@@ -219,6 +310,16 @@ export default {
     width: 100%;
     padding-top: 0.7rem;
     padding-bottom: 1rem;
+  }
+
+  .loggining {
+    font-size: 0.8rem !important;
+    padding: 0.3rem;
+    background-color: #0055bb !important;
+    font-weight: 300 !important;
+    border-radius: 0.7em !important;
+    margin: 0 !important;
+    color:white !important;
   }
 
   .btn_active {
@@ -250,8 +351,10 @@ export default {
 
   .btnBox {
     width: 95%;
-    margin:auto;
+    margin: auto auto 1rem;
+
   }
+
 
   div input {
     border-width: 0.15em !important;

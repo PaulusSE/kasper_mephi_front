@@ -1,13 +1,51 @@
 <script>
+import axios from "axios";
+
 export default {
   name: "confirmChaningStudentStatus",
   data() {
     return {
-
+      dissertationText : '',
+      scientificWorkText: '',
+      teachingLoadText: '',
+      status:'',
+      mark:'',
+      scientificWorkChecked : false,
+      teachingLoadChecked : false,
     }
     },
-  props : ["show", "newState"],
+  props : ["show"],
   methods : {
+    async changeStatus() {
+
+
+      if (!this.scientificWorkChecked || !this.teachingLoadChecked || this.status === '' || this.mark === ''){
+        this.$emit("callChangeError")
+        return
+      }
+      this.$emit("closeWindow")
+
+
+      var tempData = this.dissertationText + "$" + this.scientificWorkText + "$" + this.teachingLoadText
+      console.log(tempData)
+      try {
+        const response = await axios.post(this.IP +"" + localStorage.getItem("access_token"),
+            {
+              "comment" : tempData,
+              "status" : this.status,
+              "mark" : this.mark
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
+    cancel(){
+      this.$emit("closeWindow")
+    },
 
   }
 }
@@ -17,7 +55,7 @@ export default {
 
 <template>
 
-  <div class="confirmBlock">
+  <div class="confirmBlock" v-if="show">
     <div class="confirmBlockContent">
       <slot>
 
@@ -25,16 +63,82 @@ export default {
             Подтверждение изменения статуса аспиранта
         </div>
         <div class="roundBlock">
-          <p class="textMiniTable" style="word-break:break-word">
-            Вы уверены, что хотите изменить статус аспиранта на "{{newState}}"
-          </p>
+
+
+          <div class="roundBlock mt-2">
+            <div>
+              <p class="mainText text-start">Диссертация</p>
+            </div>
+            <div class="roundBlock mt-3" >
+              <div class="d-flex gap-2 mb-3 mt-2">
+                <div>
+                  <p class="textMiniTable text-start">Оценка (макс 100)</p>
+                </div>
+                <div>
+                  <input type="number" v-model="mark" class="textInput" min="0" max="100">
+                </div>
+              </div>
+
+              <div class="d-flex gap-2">
+                <div>
+                  <p class="textMiniTable text-start">Статус</p>
+                </div>
+                <div>
+                  <select class="form-select mySelectedField" id="inputGroupSelect02" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
+                    <option  class="textResult">Выбрать статус</option>
+                    <option  class="textResult1">Принято</option>
+                    <option  class="textResult2">На доработку</option>
+                    <option  class="textResult3">Не сдано</option>
+                  </select>
+                </div>
+
+              </div>
+
+            </div>
+            <div>
+              <p class="textMiniTable text-start">Комментарий к диссертации</p>
+              <textarea v-model="dissertationText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            </div>
+          </div>
+
+          <div class="roundBlock mt-2">
+            <div>
+              <p class="mainText text-start">Научная работа</p>
+            </div>
+
+            <div>
+              <label class="textMiniTable inputBox text-start" >
+                <input type="checkbox" class="me-1 myCheckBox" v-model="scientificWorkChecked" />Научная работа просмотрена</label>
+            </div>
+
+            <div>
+              <p class="textMiniTable text-start">Комментарий к научной работе</p>
+              <textarea v-model="scientificWorkText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            </div>
+          </div>
+
+          <div class="roundBlock mt-2">
+            <div>
+              <p class="mainText text-start">Педагогическая нагрузка</p>
+            </div>
+
+            <div>
+              <label class="textMiniTable inputBox text-start" >
+                <input type="checkbox" class="me-1 myCheckBox"  v-model="teachingLoadChecked" />Педагогическая нагрузка просмотрена</label>
+            </div>
+
+            <div>
+              <p class="textMiniTable text-start">Комментарий к научной работе</p>
+              <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            </div>
+          </div>
 
           <div class="d-flex justify-content-between mt-2 pt-2 pb-2 mb-2">
             <nav  class="text-center ms-2">
-              <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="this.$emit('changeStudentJobStatus')">Изменить</button>
+              <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="changeStatus">Подтвердить</button>
             </nav>
             <nav  class="text-center me-2">
-              <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="this.$emit('cancelChangeStudentJobStatus')">Отмена</button>
+              <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="cancel">Отмена</button>
             </nav>
           </div>
         </div>
@@ -63,15 +167,45 @@ export default {
   position: fixed;
   display: flex;
   padding-top: 0;
+  z-index: 2 !important;
 }
 
-.confirmBlockContent {
-  margin: auto;
-  background : white;
-  border-radius : 12px;
-  min-height: 50px;
-  padding: 0.5rem;
+.textInput {
+  font-size: 1rem;
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  font-weight: 400;
+  border-width: 2px 2px 2px 2px !important;
+  border-color: #7c7f86 !important;
+  height: 2rem !important;
+  padding-left:0.5rem;
 }
+
+
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#6BDB6B !important;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #FF8000 !important
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
+.myCheckBox {
+  zoom:1.3
+}
+
 
 
 @media (min-width: 800px) {
@@ -84,6 +218,15 @@ export default {
     text-align: center;
     word-break: break-all;
 
+  }
+
+  .confirmBlockContent {
+    margin: auto;
+    background : white;
+    border-radius : 12px;
+    min-height: 50px;
+    padding: 0.5rem;
+    width: 70%;
   }
 
 
@@ -140,6 +283,15 @@ export default {
     padding-right: 0.1rem;
   }
 
+  .confirmBlockContent {
+    margin: auto;
+    background : white;
+    border-radius : 12px;
+    min-height: 50px;
+    padding: 0.5rem;
+    width: 80%;
+  }
+
   .mainPage {
     width: 80%;
 
@@ -193,6 +345,15 @@ export default {
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
+
+  .confirmBlockContent {
+    margin: auto;
+    background : white;
+    border-radius : 12px;
+    min-height: 50px;
+    padding: 0.5rem;
+    width: 90%;
+  }
 
   .textMiniTable{
     color: #7C7F86;

@@ -16,12 +16,15 @@
 
 
   <div class="mainPage">
+
+
     <header-of-student
         @btnDissertationClicked="$emit('btnDissertationClicked')"
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
         :state-of-student-page = stateOfStudentPage
+        @btnSendEverythingToCheck="$emit('btnSendEverythingToCheck')"
     ></header-of-student>
 
     <div class="roundBlock">
@@ -54,7 +57,7 @@
       <div v-if="showTeacherHistory" class="myBox roundBlock p-0">
         <div class="d-flex" :class="{underline : arrayOfTeachers.length !== 0}" >
           <div class="rightLine col-6 mainText">
-            <p class="text">Научный руководитель</p>
+            Научный руководитель
           </div>
           <div class="col-6 textTable" >
             Период
@@ -63,7 +66,7 @@
 
         <div class="d-flex" :class="{underline:index < this.arrayOfTeachers.length - 1}" v-for="(element,index) in arrayOfTeachers">
           <div class="rightLine col-6 mainText">
-            <p class="text">{{element.full_name}}</p>
+            {{element.full_name}}
           </div>
           <div class="col-6 textTable" >
             {{element.start_at}} - {{element.end_at}}
@@ -90,8 +93,8 @@
 
       <div v-if="showTopicHistory" class="myBox roundBlock p-0">
         <div class="d-flex" :class="{underline : arrayOfTopics.length !== 0}" >
-          <div class="rightLine col-6 mainText">
-            <p class="text">№ семестра</p>
+          <div class="rightLine col-6 textTable">
+            № семестра
           </div>
           <div class="col-6 textTable" >
             Тема
@@ -100,7 +103,7 @@
 
         <div class="d-flex" :class="{underline:index < this.arrayOfTopics.length} - 1" v-for="(element,index) in arrayOfTopics">
           <div class="rightLine col-6 mainText" :class="{underline: index < this.arrayOfTopics.length - 1}">
-            <p class="text">{{element.semester}}</p>
+            {{element.semester}}
           </div>
           <div class="col-6 textTable" :class="{underline: index < this.arrayOfTopics.length - 1}">
             {{element.title}}
@@ -165,11 +168,11 @@
 
 
 
-      <div class="d-flex" :class="{underline: index < this.progressTableArray.length - 1}" v-for="(element,index) in progressTableArray">
+      <div class="d-flex" :class="{underline: index < this.progressTableArray.length - 1}" v-for="(element,index) in progressTableArray" >
         <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{this.topicMap[element.progress_type]}}
         </div>
-        <div class="col-1 mainText myInput rightLine" >
+        <div class="col-1 mainText myInput rightLine">
           <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1 && !this.canEdit}" v-model=element.first :disabled="!(((this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
         </div>
         <div class="col-1 mainText myInput rightLine" >
@@ -275,8 +278,7 @@ import dissertationTab from "@/components/layout/studentComponents/dissertationT
 import store from "@/store/index.js";
 import axios from "axios";
 import rangeNotification from "@/components/layout/notifications/studentNotifications/rangeNotification.vue";
-import workSendToCheckNotification
-  from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
+import workSendToCheckNotification from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
 
 export default {
   name: "dissertation",
@@ -367,6 +369,12 @@ export default {
 
       this.editingInfo = !this.editingInfo
     },
+
+    btnSendEverythingToCheck(){
+      console.log(123)
+    },
+
+
     async saveCommonInfo(){
 
       try {
@@ -419,26 +427,6 @@ export default {
 
 
 
-    async sendToCheck() {
-
-      try {
-        const response = await axios.post(this.IP +"/students/dissertation/review/" + localStorage.getItem("access_token"),
-            {
-              "semester" : this.actualSemester
-            }
-        )
-        if (response.status === 200){
-          this.waitForCheck = true
-          this.workStatus = 'on review'
-        }
-      }
-      catch (e) {
-        this.showWrongAnswerString = true;
-      }
-
-      this.workStatus = 'on review'
-      this.waitForCheck = true
-    },
 
 
     async saveTables() {
@@ -451,7 +439,6 @@ export default {
         }, 5000);
 
       }
-
 
       try {
         const response = await axios.post(this.IP +"/students/dissertation/progress/" + localStorage.getItem("access_token"),
@@ -711,6 +698,7 @@ export default {
     padding: 0.3rem;
     margin: 0 !important;
     color:white !important;
+
   }
 
 
@@ -723,6 +711,7 @@ export default {
     border: 0 !important;
     margin-top:10px;
     margin-bottom:10px;
+    ;
   }
 
   .myCheckBoxInActive{
