@@ -259,8 +259,6 @@
       </div>
     </div>
 
-
-
     <div class="roundBlock" v-if="buttonIsOpened">
       <div class="d-flex justify-content-between">
         <nav class="mt-3" style="margin-left: 2.5%">

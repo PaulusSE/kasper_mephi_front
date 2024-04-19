@@ -61,13 +61,51 @@
 
     </div>
 
-    <div v-if="this.userType === 'student'">
-      <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendEverythingToCheck()">Отправить работу на проверку</button>
+
+
+    <div>
+
+      <div v-if="this.userType === 'student' && stateOfStudentPage!==5">
+        <div v-if="workStatus !== 'on review' || workStatus !== 'passed' ">
+          <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendEverythingToCheck()">Отправить работу на проверку</button>
+        </div>
+
+        <div class="d-flex gap-2">
+          <p class="mainText text-start">
+            Статус отчета :
+          </p>
+          <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
+            {{this.statusMap[workStatus]}}
+          </p>
+        </div>
+
+      </div>
+
+      <div v-if="(this.userType === 'supervisor' || this.userType === 'admin') && (stateOfStudentPage !== 4 && stateOfStudentPage !== 5)">
+        <div v-if="workStatus === 'on review'">
+          <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
+        </div>
+        <div class="d-flex gap-2">
+          <p class="mainText text-start">
+            Статус отчета :
+          </p>
+          <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
+            {{this.statusMap[workStatus]}}
+          </p>
+        </div>
+
+      </div>
+
+
+
     </div>
 
-    <div v-if="this.userType === 'supervisor' || this.userType === 'admin'">
-      <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
-    </div>
+
+
+
+
+
+
   </div>
 
 </template>
@@ -81,14 +119,22 @@ import notificationError from "@/components/layout/notifications/studentNotifica
 
 export default {
   name: "headerOfStudent",
-  props: ["stateOfStudentPage", "confirmChangingStudentStatus"],
+  props: ["stateOfStudentPage", "confirmChangingStudentStatus", "workStatus"],
   data() {
     return {
       userType: localStorage.getItem("userType"),
       showModalConfirmSending: false,
       showModalChangingStudentStatus: false,
       showNotificationChangeError : false,
-      errorChangeMessage : "Все разделе должны быть подтверждены!"
+      errorChangeMessage : "Все разделе должны быть подтверждены!",
+      statusMap : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Принято',
+        'in progress': 'В процессе',
+        'empty' : "Не заполнено",
+        'on review': "Ожидает проверки"
+      },
 
     }
   },
@@ -124,8 +170,7 @@ export default {
   },
   async beforeMount() {
     this.userType = localStorage.getItem("userType")
-    console.log(this.userType)
-    console.log(this.userType === 'student')
+
   },
   async beforeCreate() {
 
@@ -141,11 +186,35 @@ export default {
   box-sizing: border-box;
 }
 
+
+.textResult1 {
+  font-weight: 550;
+  color:#6BDB6B !important;
+
+}
+
+.textResult2 {
+  font-weight: 550;
+  color:#FFC009 !important
+}
+
+.textResult3 {
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
 @media (min-width: 1200px){
   .myContainer {
     width: 100%;
     padding-top: 0.7rem;
     padding-bottom: 1rem;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.3rem;
+    text-align: center;
   }
 
 
@@ -209,6 +278,13 @@ export default {
     padding: 0.25rem;
   }
 
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
   .loggining {
     font-size: 1rem !important;
     background-color: #0055bb !important;
@@ -253,6 +329,13 @@ export default {
     width: 100%;
     padding-top: 0.7rem;
     padding-bottom: 1rem;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1.1rem;
+    text-align: center;
   }
 
   .loggining {
@@ -310,6 +393,13 @@ export default {
     width: 100%;
     padding-top: 0.7rem;
     padding-bottom: 1rem;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 400;
+    font-size: 1rem;
+    text-align: center;
   }
 
   .loggining {

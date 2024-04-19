@@ -10,17 +10,8 @@
       @btnProfileClicked="$emit('btnProfileClicked')"
       @btnReportingClicked="$emit('btnReportingClicked')"
       :state-of-student-page = this.stateOfPage
+      :work-status = this.workStatus
   ></header-of-student>
-
-    <confirm-changing
-    v-if="this.showModalConfirmStudentStatusChange"
-    :show = true
-    :new-state = this.statusOfJob[newState]
-    @changeStudentJobStatus="changeStudentJobStatus"
-    @cancelChangeStudentJobStatus="cancelChangeStudentJobStatus"
-    >
-
-    </confirm-changing>
 
 
 
@@ -256,6 +247,29 @@
                                           v-if="renderChildComponents"
     ></student-page-from-teacher-status-tab>
 
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий аспиранта к диссертации</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Предыдущий комментарий научного руководителя</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
 
 
   </div>
@@ -281,7 +295,7 @@ export default {
     'confirmChanging' : confirmChangingStudentStatus
 
   },
-  props : ["stateOfPage",],
+  props : ["stateOfPage", "actualSemester", "workStatus"],
   data(){
     return {
       renderChildComponents : true,
@@ -294,9 +308,7 @@ export default {
       feedbacks : [],
       states : '',
       teacherFullName: "",
-      actualSemester : '',
-      workStatus: '',
-      workStatusCopy: '',
+
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -332,36 +344,9 @@ export default {
   },
   methods : {
 
-    async confirmChangingStudentJobStats(){
-      this.newState = this.workStatus
-      this.showModalConfirmStudentStatusChange = true
-    },
 
-    async changeStudentJobStatus(){
-      this.copyState()
-      console.log(1235)
-      try {
-        const response = await axios.post(this.IP +"/supervisors/student/review/" + localStorage.getItem("access_token"), {
-              "student_id" : localStorage.getItem("studentID"),
-              "status" : this.workStatus,
 
-            }
-        )
-      }
-      catch (e) {
-        console.log(e)
-      }
 
-      this.showModalConfirmStudentStatusChange = false
-      this.newState = ''
-    },
-
-    cancelChangeStudentJobStatus(){
-      console.log(1235)
-      this.workStatus = this.workStatusCopy
-      this.showModalConfirmStudentStatusChange = false
-      this.newState = ''
-    },
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
     },
@@ -384,10 +369,6 @@ export default {
 
     },
 
-    copyState(){
-      this.workStatusCopy = this.workStatus
-      console.log(this.workStatusCopy)
-    },
 
 
     changeTopicHistoryState(){
@@ -401,23 +382,7 @@ export default {
       this.showProgressHistory = !this.showProgressHistory
     },
 
-    async getActualSemester(){
-      try {
-        const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
-        this.data = await response.data
-        for (var i = 0; i < this.data.length; i++){
-          if (this.data[i].student_id === localStorage.getItem("studentID")){
-            this.actualSemester = this.data[i].actual_semester
 
-          }
-        }
-        console.log(response)
-
-      }
-      catch (e) {
-        console.log(e)
-      }
-    },
 
     async fillThemeHistory(tittles){
 
@@ -555,7 +520,6 @@ export default {
         console.log(e)
       }
 
-      this.actualSemester = this.data.student_status.actual_semester
 
       await this.fillStatusArray(this.data.dissertations_statuses)
       await this.fillFeedBackArray(this.data.feedback)
@@ -564,7 +528,6 @@ export default {
       await this.fillProgressTable(this.data.semester_progress)
       await this.fillCommonInfo(this.data.dissertation_titles)
       await this.getSpecializationAndYearOfStudy(this.data.student_status)
-      this.workStatus = this.data.student_status.status
       this.copyState()
       this.renderChildComponents = true
 
@@ -580,7 +543,7 @@ export default {
   },
 
   async beforeMount() {
-    // await this.getActualSemester()
+
     await this.commonRequest()
 
 

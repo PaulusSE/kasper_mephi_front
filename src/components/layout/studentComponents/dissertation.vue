@@ -25,6 +25,7 @@
         @btnReportingClicked="$emit('btnReportingClicked')"
         :state-of-student-page = stateOfStudentPage
         @btnSendEverythingToCheck="$emit('btnSendEverythingToCheck')"
+        :work-status = workStatus
     ></header-of-student>
 
     <div class="roundBlock">
@@ -247,8 +248,6 @@
 
       <dissertation-tab v-for="(number, index) in actualSemester"
                         :id=number
-                        :feedback = this.feedbacks[index].feedback
-                        :status = this.states[index].status
                         :state-of-sending = this.stateOfSending
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemester
@@ -257,6 +256,18 @@
                         v-if="renderChildComponents"
       ></dissertation-tab>
 
+    </div>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий к диссертациии</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
     </div>
 
 
@@ -288,7 +299,7 @@ export default {
   "dissertationTab" : dissertationTab,
   "rangeNotification" : rangeNotification,
   "workSendToCheckNotification" : workSendToCheckNotification,
-  props: ["stateOfStudentPage", "educationTime"],
+  props: ["stateOfStudentPage", "actualSemester", "canEdit", "waitForCheck", "workStatus"],
 
   data(){
     return {
@@ -298,9 +309,9 @@ export default {
       editingCheckbox : false,
       theme : "",
       teacherFullName : "",
-      actualSemester: "",
       states : [],
-      canEdit: '',
+
+
       stateOfSending:false,
       resultOfSending: '',
       arrayWithFilesId: [],
@@ -311,8 +322,6 @@ export default {
       research_object:'',
       research_order : '',
 
-      waitForCheck : false,
-      workStatus : '',
       workStatusMap : {
         "todo" : "Отправлено на доработку",
         "approved" : "Принято",
@@ -370,9 +379,7 @@ export default {
       this.editingInfo = !this.editingInfo
     },
 
-    btnSendEverythingToCheck(){
-      console.log(123)
-    },
+
 
 
     async saveCommonInfo(){
@@ -467,21 +474,6 @@ export default {
 
     },
 
-    async getActualSemester() {
-      try {
-        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
-        this.data = await response.data;
-      }
-      catch (e) {
-        console.log(e)
-      }
-
-
-      this.actualSemester = this.data.actual_semester
-      this.workStatus = this.data.status
-      this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
-      this.canEdit = this.data.can_edit
-    },
 
     makeNotification(resultStatus) {
       if (resultStatus === 200)
@@ -495,73 +487,73 @@ export default {
     },
 
 
-    async fillFeedBackArray(feedbacks){
+    // async fillFeedBackArray(feedbacks){
+    //
+    //   var semesterObjectArray = new Array()
+    //   for (var i = 0; i < this.actualSemester; i++){
+    //     semesterObjectArray.push({
+    //       semester: i + 1
+    //     })
+    //   }
+    //
+    //   if (feedbacks === undefined)
+    //     feedbacks = new Array()
+    //
+    //   for (var i = 0; i < feedbacks.length; i++){
+    //     if (feedbacks[i] === undefined)
+    //       return
+    //     var semester = feedbacks[i].semester
+    //     semesterObjectArray = semesterObjectArray.filter(function(obj) {
+    //       return obj.semester !== semester
+    //     })
+    //   }
+    //
+    //   for (var i = 0; i < semesterObjectArray.length; i++){
+    //     feedbacks.push({
+    //       semester:semesterObjectArray[i].semester,
+    //       feedback:''
+    //     })
+    //   }
+    //
+    //
+    //   feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
+    //   this.feedbacks = feedbacks
+    //
+    // },
 
-      var semesterObjectArray = new Array()
-      for (var i = 0; i < this.actualSemester; i++){
-        semesterObjectArray.push({
-          semester: i + 1
-        })
-      }
-
-      if (feedbacks === undefined)
-        feedbacks = new Array()
-
-      for (var i = 0; i < feedbacks.length; i++){
-        if (feedbacks[i] === undefined)
-          return
-        var semester = feedbacks[i].semester
-        semesterObjectArray = semesterObjectArray.filter(function(obj) {
-          return obj.semester !== semester
-        })
-      }
-
-      for (var i = 0; i < semesterObjectArray.length; i++){
-        feedbacks.push({
-          semester:semesterObjectArray[i].semester,
-          feedback:''
-        })
-      }
-
-
-      feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.feedbacks = feedbacks
-
-    },
-
-    async fillStatusArray(statuses){
-
-      var semesterObjectArray = new Array()
-      for (var i = 0; i < this.actualSemester; i++){
-        semesterObjectArray.push({
-          semester: i + 1
-        })
-      }
-
-      if (statuses === undefined)
-        statuses = new Array()
-
-      for (var i = 0; i < statuses.length; i++){
-        if (statuses[i] === undefined)
-          return
-        var semester = statuses[i].semester
-        semesterObjectArray = semesterObjectArray.filter(function(obj) {
-          return obj.semester !== semester
-        })
-      }
-
-      for (var i = 0; i < semesterObjectArray.length; i++){
-        statuses.push({
-          semester:semesterObjectArray[i].semester,
-          status:'empty'
-        })
-      }
-
-
-      statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.states = statuses
-
-    },
+    // async fillStatusArray(statuses){
+    //
+    //   var semesterObjectArray = new Array()
+    //   for (var i = 0; i < this.actualSemester; i++){
+    //     semesterObjectArray.push({
+    //       semester: i + 1
+    //     })
+    //   }
+    //
+    //   if (statuses === undefined)
+    //     statuses = new Array()
+    //
+    //   for (var i = 0; i < statuses.length; i++){
+    //     if (statuses[i] === undefined)
+    //       return
+    //     var semester = statuses[i].semester
+    //     semesterObjectArray = semesterObjectArray.filter(function(obj) {
+    //       return obj.semester !== semester
+    //     })
+    //   }
+    //
+    //   for (var i = 0; i < semesterObjectArray.length; i++){
+    //     statuses.push({
+    //       semester:semesterObjectArray[i].semester,
+    //       status:'empty'
+    //     })
+    //   }
+    //
+    //
+    //   statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
+    //   this.states = statuses
+    //
+    // },
 
     async fillThemeHistory(tittles){
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
@@ -580,14 +572,11 @@ export default {
           this.arrayOfTeachers[i].end_at = ''
       }
 
-
-
-
     },
 
 
     async getCommonInfo() {
-      await this.getActualSemester()
+      // await this.getActualSemester()
 
       try {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
@@ -603,8 +592,8 @@ export default {
       await this.fillCommonInfo(this.data.dissertation_titles)
       await this.fillProgressTable(this.data.semester_progress)
       await this.fillThemeHistory(this.data.dissertation_titles)
-      await this.fillStatusArray(this.data.dissertations_statuses)
-      await this.fillFeedBackArray(this.data.feedback)
+      // await this.fillStatusArray(this.data.dissertations_statuses)
+      // await this.fillFeedBackArray(this.data.feedback)
       this.progressOfDissertation = this.data.student_status.progress
       this.renderChildComponents = true
 

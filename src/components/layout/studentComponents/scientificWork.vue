@@ -20,6 +20,7 @@
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
         :state-of-student-page = stateOfStudentPage
+        :work-status = workStatus
     ></header-of-student>
 
 
@@ -58,6 +59,18 @@
     ></tab-of-articles>
 
 
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий к научной работе</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
 
   </div>
 
@@ -87,7 +100,7 @@ export default {
     "workSendToCheckNotification" : workSendToCheckNotification,
     "saveTablesNotification" : saveTablesNotifitcation,
   },
-  props: ["stateOfStudentPage", "educationTime"],
+  props: ["stateOfStudentPage", "educationTime", "actualSemester", "canEdit", "waitForCheck", "workStatus"],
   data() {
     return {
       isTableEditing: false,
@@ -100,10 +113,7 @@ export default {
       arrayOfPatents:[],
       arrayOfPatentsCopy:[],
       showEditError: false,
-      waitForCheck : true,
-      actualSemester: 1,
-      canEdit: '',
-      workStatus : '',
+
       isDataFetched : false,
       resultOfSavingTables : false,
       showSavingTablesNotification : false,
@@ -158,13 +168,13 @@ export default {
             this.arrayOfProjects[semester - 1].push(project)
           }
         }
-
-        for (var j = 0; j<data[i].patents.length; j++){
-          if (data[i].patents[j].patent_id !== undefined){
-            var patent = data[i].patents[j]
-            this.arrayOfPatents[semester - 1].push(patent)
-          }
-        }
+        //
+        // for (var j = 0; j<data[i].patents.length; j++){
+        //   if (data[i].patents[j].patent_id !== undefined){
+        //     var patent = data[i].patents[j]
+        //     this.arrayOfPatents[semester - 1].push(patent)
+        //   }
+        // }
 
         this.works_ids.set(semester, data[i].works_id)
       }
@@ -478,34 +488,20 @@ export default {
       try {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
-        await this.fillDataForTables(this.data)
       }
       catch (e) {
         console.log(e)
       }
+      await this.fillDataForTables(this.data)
     },
 
-    async getActualSemester() {
-      try {
-        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
-        this.data = await response.data;
-        this.actualSemester = this.data.actual_semester
-        this.workStatus = this.data.status
-        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
-        this.canEdit = this.data.can_edit
-      }
-      catch (e) {
-        console.log(e)
-      }
-    }
+
 
   },
   async beforeMount() {
-    await this.getActualSemester()
     await this.loadScientificWorks()
     this.isDataFetched = true
-
-
+    console.log(this.actualSemester)
 
   }
 }
@@ -605,7 +601,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.5rem;
     text-align: center;
 
 
@@ -722,7 +718,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.3rem;
     text-align: center;
 
 
@@ -839,7 +835,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.2rem;
     text-align: center;
 
 

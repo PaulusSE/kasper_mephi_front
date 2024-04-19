@@ -2,12 +2,16 @@
 
 
   <dissertation v-if="stateOfStudentPage === 1"
+
                 @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                 @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                 @btnReportingClicked="buttonManageStudentPageClicked(5)"
                 :state-of-student-page = stateOfStudentPage
-                :education-time = educationTime
+                :actual-semester = actualSemester
+                :can-edit = canEdit
+                :work-status = workStatus
+                :wait-for-check = waitForCheck
   ></dissertation>
   <scientific-work v-if="stateOfStudentPage === 2"
                    @btnDissertationClicked="buttonManageStudentPageClicked(1)"
@@ -15,7 +19,11 @@
                    @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                    @btnReportingClicked="buttonManageStudentPageClicked(5)"
                    :state-of-student-page = stateOfStudentPage
-                   :education-time = educationTime
+                   :actual-semester = actualSemester
+                   :can-edit = canEdit
+                   :work-status = workStatus
+                   :wait-for-check = waitForCheck
+
   ></scientific-work>
   <teaching-load v-if="stateOfStudentPage === 3"
                  @btnDissertationClicked="buttonManageStudentPageClicked(1)"
@@ -23,7 +31,11 @@
                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
                  :state-of-student-page = stateOfStudentPage
-                 :education-time = educationTime
+                 :actual-semester = actualSemester
+                 :can-edit = canEdit
+                 :work-status = workStatus
+                 :wait-for-check = waitForCheck
+
   ></teaching-load>
   <report v-if="stateOfStudentPage === 5"
                  @btnDissertationClicked="buttonManageStudentPageClicked(1)"
@@ -31,7 +43,7 @@
                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
                  :state-of-student-page = stateOfStudentPage
-                 :education-time = educationTime
+
   ></report>
 
 </template>
@@ -43,6 +55,7 @@ import teachingLoad from "@/components/layout/studentComponents/teachingLoad.vue
 import report from "@/components/layout/studentComponents/report.vue";
 import store from "@/store/index.js";
 import Report from "@/components/layout/adminComponents/report.vue";
+import axios from "axios";
 export default {
   name: "student",
   props : ["stateOfStudentPage"],
@@ -55,17 +68,37 @@ export default {
   },
   data() {
     return {
-      educationTime:2,
+      actualSemester : '',
+      canEdit: false,
+      waitForCheck : false,
+      workStatus : 'in progress',
     }
   },
   methods : {
     buttonManageStudentPageClicked(index){
       this.$emit("buttonManageStudentPageClicked", index)
-    }
+    },
+    async getActualSemester() {
+      try {
+        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.actualSemester = this.data.actual_semester
+
+      this.workStatus = this.data.status
+      this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
+      this.canEdit = this.data.can_edit
+    },
   },
-  beforeMount() {
+  async beforeMount() {
     if (localStorage.getItem('registered') === 'false')
       this.$router.push('/registration')
+    await this.getActualSemester()
+
 
 
   }

@@ -18,7 +18,7 @@
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
-
+        :work-status = workStatus
         :state-of-student-page = stateOfStudentPage
 
     ></header-of-student>
@@ -52,11 +52,22 @@
 
     ></teaching-load-table>
 
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий к педагогической нагрузке</p>
+        </nav>
+      </div>
 
-
-
+      <div>
+        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
 
   </div>
+
+
+
 
 </template>
 
@@ -82,7 +93,7 @@ export default {
     "teachingLoadTable":teachingLoadTable,
     "saveTablesNotification" : saveTablesNotifitcation
   },
-  props: ["stateOfStudentPage", 'educationTime'],
+  props: ["stateOfStudentPage", 'educationTime', "actualSemester", "canEdit", "waitForCheck", "workStatus"],
   data() {
     return {
       array_classroom_load:[],
@@ -91,11 +102,8 @@ export default {
       array_individual_students_loadCopy: [],
       array_additional_load: [],
       array_additional_loadCopy: [],
-      actualSemester : 1,
       showEditError: false,
-      waitForCheck : false,
-      workStatus : '',
-      canEdit: '',
+
       resultOfSavingTables : false,
       showSavingTablesNotification : false,
       loads_ids : new Map(),
@@ -378,24 +386,10 @@ export default {
       }
     },
 
-    async getActualSemester() {
-      try {
-        const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
-        this.data = await response.data;
-        this.actualSemester = this.data.actual_semester
-        this.canEdit = this.data.can_edit
-        this.workStatus = this.data.status
-        this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
 
-      }
-      catch (e) {
-        console.log(e)
-      }
-    }
 
   },
   async beforeMount() {
-    await this.getActualSemester()
     await this.loadTeachingLoad()
     this.isDataFetched = true
 
@@ -486,7 +480,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.5rem;
     text-align: center;
 
 
@@ -586,7 +580,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.3rem;
     text-align: center;
 
 
@@ -686,7 +680,7 @@ export default {
   .mainText{
     color:#7C7F86;
     font-weight: 300;
-    font-size:30px;
+    font-size:1.2rem;
     text-align: center;
 
 

@@ -17,7 +17,8 @@
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
-
+                               :actual-semester = actualSemester
+                               :work-status = workStatusForTeacher
     ></student-page-from-teacher>
     <scientific-work-for-teacher v-if="stateOfPage === 2"
                                  :state-of-page = this.stateOfPage
@@ -26,6 +27,8 @@
                                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                  @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                                 :actual-semester = actualSemester
+                                 :work-status = workStatusForTeacher
     ></scientific-work-for-teacher>
     <teaching-load-for-teacher v-if="stateOfPage === 3"
                                :state-of-page = this.stateOfPage
@@ -33,6 +36,8 @@
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               :actual-semester = actualSemester
+                               :work-status = workStatusForTeacher
     ></teaching-load-for-teacher>
     <student-profile-for-admin v-if="stateOfPage === 4"
                                :state-of-page = this.stateOfPage
@@ -42,14 +47,14 @@
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
     ></student-profile-for-admin>
-    <student-report v-if="stateOfPage === 5"
-                               :state-of-page = this.stateOfPage
+    <report v-if="stateOfPage === 5"
+                               :stateOfStudentPage = this.stateOfPage
                                @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
-    ></student-report>
+    ></report>
   </div>
 
 
@@ -64,21 +69,23 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import scientificWorkForTeacher from "@/components/layout/teacherComponents/scientificWorkForTeacher.vue";
 import teachingLoadForTeacher from "@/components/layout/teacherComponents/teachingLoadForTeacher.vue";
 import studentProfileForAdmin from "@/components/layout/adminComponents/studentProfileForAdmin.vue";
-import studentReportForTeacher from "@/components/layout/teacherComponents/studentReportForTeacher.vue";
+import report from "@/components/layout/studentComponents/report.vue";
 import store from "@/store/index.js";
 
 import {h} from "vue";
 import axios from "axios";
+import Report from "@/components/layout/adminComponents/report.vue";
 export default {
   name: "studentPageMainComponent",
   components : {
+    Report,
     "studentPageFromTeacher" : studentPageFromTeacher,
     "pageHeader" : header,
     "headerOfStudent" : headerOfStudent,
     "scientificWorkForTeacher" : scientificWorkForTeacher,
     "teachingLoadForTeacher" : teachingLoadForTeacher,
     "studentProfileForAdmin" : studentProfileForAdmin,
-    "studentReport" : studentReportForTeacher
+    "report" : report
   },
   data() {
     return {
@@ -86,6 +93,8 @@ export default {
       userType : '',
       userName: '',
       group: '',
+      actualSemester : '',
+      workStatusForTeacher : 'in progress',
     }
   },
   methods : {
@@ -124,14 +133,18 @@ export default {
       }
       this.userName = this.data.full_name
       this.group = this.data.group_name
-    }
+      this.actualSemester = this.data.actual_semester
+      this.workStatusForTeacher = this.data.status
+    },
+
   },
   async beforeMount() {
-    this.checkAuth()
+    await this.checkAuth()
     if (localStorage.getItem("userType") === "student"){
       this.$router.push('/wrongAccess')
     }
-    this.getStudentName()
+    await this.getStudentName()
+
 
 
   },

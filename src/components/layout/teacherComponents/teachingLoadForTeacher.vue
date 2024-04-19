@@ -9,6 +9,7 @@
     @btnProfileClicked="$emit('btnProfileClicked')"
     @btnReportingClicked="$emit('btnReportingClicked')"
     :state-of-student-page = this.stateOfPage
+    :work-status = this.workStatus
 ></header-of-student>
 
 
@@ -19,6 +20,30 @@
                                  :individual-work="array_individual_students_load[index]"
                                  :other-work="array_additional_load[index]"
 ></teaching-load-table-for-teacher>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий аспиранта к педагогичкской нагрузке</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Предыдущий комментарий научного руководителя</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
 
 
 
@@ -33,7 +58,7 @@ import axios from "axios";
 import store from "@/store/index.js";
 export default {
   name: "teachingLoadForTeacher",
-  props : ['stateOfPage'],
+  props : ['stateOfPage', "actualSemester", "workStatus"],
   components : {
     "headerOfStudent" : headerOfStudent,
     "teachingLoadTableForTeacher" : teachingLoadTableForTeacher
@@ -43,8 +68,7 @@ export default {
       array_classroom_load:[],
       array_individual_students_load: [],
       array_additional_load: [],
-      actualSemester : '',
-      workStatus : '',
+
     }
   },
   methods : {
@@ -106,32 +130,12 @@ export default {
       }
 
 
-      this.fillDataForTables(this.data)
-      this.workStatus = this.data.approval_status
+      await this.fillDataForTables(this.data)
 
     },
-    async getActualSemester(){
 
-      try {
-        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
-              "student_id" : localStorage.getItem("studentID"),
-            }
-        )
-
-        this.data = response.data
-
-
-      }
-
-
-      catch (e) {
-        console.log(e)
-      }
-      this.actualSemester = this.data.student_status.actual_semester
-    },
   },
   async beforeMount() {
-    await this.getActualSemester()
     await this.loadTeachingLoad()
 
 
@@ -174,30 +178,12 @@ export default {
 
 
 @media (min-width: 800px){
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
-
-  }
-
 
 
   .checkboxBlock{
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
   }
 
   .roundBlock {
@@ -208,16 +194,6 @@ export default {
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
 
-  }
-
-
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
   }
 
 

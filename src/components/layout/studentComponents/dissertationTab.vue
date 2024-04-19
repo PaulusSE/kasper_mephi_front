@@ -67,24 +67,6 @@
         </button>
       </div>
 
-      <div class="roundBlock mt-2">
-        <div class="d-flex justify-content-between mt-1 mb-1">
-          <nav class="checkboxBlock">
-            <p class="mainText">Комментарий научного руководителя</p>
-          </nav>
-        </div>
-
-        <div>
-
-          <p v-if="feedback === ''" class="mainText noFeedBack">Рецензия отсутствует</p>
-
-          <p v-else class="">
-            <textarea disabled v-model="this.feedback" rows=5 class="form-control feedback" aria-label="With textarea"></textarea>
-          </p>
-        </div>
-      </div>
-
-
     </div>
   </div>
 
@@ -134,9 +116,6 @@ export default {
       link.href = window.URL.createObjectURL(blob);
       link.download = this.explanationaryNoteFilename;
       link.click()
-
-
-
     },
 
     deleteTitlePage(){
@@ -226,8 +205,6 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
-
-
     }
   },
   beforeMount() {

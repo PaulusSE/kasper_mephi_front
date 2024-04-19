@@ -11,11 +11,88 @@
         :state-of-admin-page = stateOfAdminPage
     ></header-of-admin>
 
-    <div style="text-align: center; height: 5rem; margin-top: 3rem">
-      В разработке
+    <div class="roundBlock">
+
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" >
+          <p class="headingSemester">Оценка за НИР</p>
+        </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!editMarks" @click="editMarksClicked" class="editBtn mt-3">Редактировать</button>
+          <div v-else class="d-flex">
+            <button class="editBtn mt-3 me-2" @click="cancelEditMarks">Отменить</button>
+            <button class="editBtn mt-3 " @click="saveMarks">Сохранить</button>
+          </div>
+        </nav>
+
+      </div>
+
+      <div class="roundBlock p-0 mt-2">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              ФИО
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
+              Год
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              Группа
+
+            </div>
+
+            <div class="textMiniTable" style="width: 25%; text-align: center">
+              Оценка
+            </div>
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfStudents.length}" v-for="(element,index) in arrayOfStudents">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+              <router-link style="text-decoration: none" to="/user" @click="pushStudentIDToStorage(index)" >{{element["full_name"]}}</router-link>
+
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
+              {{element["years"]}} курс
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              {{ element["group_name"] }}
+
+            </div>
+
+              <div class="textMiniTable" style="width: 24%; text-align: center">
+                <div v-if="!editMarks">
+                  {{ element.group_name }}
+                </div>
+                <div v-else class="me-3">
+                  <input type="text" class="inputBox ps-3" v-model="element.name">
+                </div>
+
+              </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="redArea"></div>
+
 
   </div>
 
@@ -30,6 +107,37 @@ export default {
   components : {
     "headerOfAdmin": headerOfAdmin,
   },
+  data(){
+    return {
+      arrayOfStudents: [
+        {
+          full_name : "ФИО1",
+          group_name :"Б20-504",
+          studying_status: "studying"
+        },
+        {
+          full_name : "ФИО2",
+          group_name :"Б20-514",
+          studying_status: "expelled"
+        }
+      ],
+      arrayOfStudentsCopy : [],
+      editMarks : false,
+    }
+  },
+  methods : {
+    editMarksClicked(){
+      this.editMarks = !this.editMarks
+      this.arrayOfStudentsCopy = this.arrayOfStudents.slice(0)
+    },
+    saveMarks(){
+      this.editMarks = !this.editMarks
+    },
+    cancelEditMarks(){
+      this.editMarks = false
+      this.arrayOfStudents = this.arrayOfStudentsCopy.slice(0)
+    },
+  },
   beforeMount() {
 
   }
@@ -37,17 +145,58 @@ export default {
 </script>
 
 <style scoped>
-@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
-@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
-@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+.rightLine {
+  border-right:  solid 0.12em #DEDEDE !important;
+}
 
 
-*{
-  margin: 0;
-  padding: 0;
+.inputBox {
+  border: 0 !important;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 0 !important;
+  color:#000000;
+  background-color: white;
+  outline: none !important;
+  width: 100%;
 }
 
 @media (min-width: 800px) {
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+  }
+
+  .trashLogo{
+    width:32px !important;
+    height: 32px !important;
+  }
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:18px;
+    text-align: center;
+    word-break: break-all;
+
+  }
+
   .mainPage {
     width: 70%;
 
@@ -61,9 +210,76 @@ export default {
     margin: 1.5% auto 1%;
     padding: 0 0 1.5%;
   }
+
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+
+  .linkStyle {
+
+    text-decoration: none;
+    color:#0055BB !important;
+  }
 }
 
 @media (max-width: 800px) {
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.9rem;
+  }
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.9rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
   .mainPage {
     width: 80%;
 
@@ -77,11 +293,143 @@ export default {
     margin: 1.5% auto 1%;
     padding: 0 0 1.5%;
   }
+
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
+  }
+
+  .linkStyle {
+    text-decoration: none;
+    color:#0055BB;
+  }
 }
 
-@media (pointer: coarse) and (max-width: 400px)  {
-  /*!* Для проверки телефонов!**/
-}
+@media (pointer: coarse) and (max-width: 400px) {
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+    font-size: 0.8rem;
+  }
 
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.7rem !important;
+  }
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  .trashLogo{
+    width:15px !important;
+    height: 15px !important;
+
+  }
+
+
+  .mainPage {
+    width: 90%;
+
+    background: rgba(255, 255, 255, 1);
+    opacity: 1;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
+    margin: 1.5% auto 1%;
+    padding: 0 0 1.5%;
+  }
+
+  .headerText{
+    margin-top: 0!important;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 0.8rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 !important;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:0.6rem !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
+  }
+
+  .linkStyle {
+    padding-bottom: 0.75rem;
+    text-decoration: none;
+
+  }
+}
 
 </style>

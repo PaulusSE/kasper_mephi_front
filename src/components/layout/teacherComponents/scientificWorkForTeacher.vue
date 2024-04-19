@@ -8,6 +8,7 @@
       @btnProfileClicked="$emit('btnProfileClicked')"
       @btnReportingClicked="$emit('btnReportingClicked')"
       :state-of-student-page = this.stateOfPage
+      :work-status = this.workStatus
   ></header-of-student>
 
 
@@ -19,7 +20,33 @@
                      :projects = this.arrayOfProjects[index]
                      :patents = this.arrayOfPatents[index]
     ></tab-of-articles-for-teacher>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий аспиранта к научной работе</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Предыдущий комментарий научного руководителя</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
   </div>
+
 
 </template>
 
@@ -36,11 +63,11 @@ export default {
       arrayOfReports : [],
       arrayOfProjects:[],
       arrayOfPatents: [],
-      actualSemester: '',
-      workStatus : '',
+
+
     }
   },
-  props : ['stateOfPage'],
+  props : ['stateOfPage', "actualSemester", "workStatus"],
   components : {
     "headerOfStudent" : headerOfStudent,
     "tabOfArticlesForTeacher" : tabOfArticlesForTeacher,
@@ -64,23 +91,9 @@ export default {
       }
 
       await this.fillDataForTables(this.data)
-      this.workStatus = this.data.works_status
     },
 
-    async getActualSemester(){
-      try {
-        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
-              "student_id" : localStorage.getItem("studentID"),
-            }
-        )
 
-        this.data = response.data
-      }
-      catch (e) {
-        console.log(e)
-      }
-      this.actualSemester = this.data.student_status.actual_semester
-    },
 
     async fillDataForTables(data){
 
@@ -138,7 +151,6 @@ export default {
 
 
   async beforeMount() {
-    await this.getActualSemester()
     await this.loadScientificWorks()
 
 
@@ -194,6 +206,11 @@ export default {
     padding: 0 1% 1%;
 
   }
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
+  }
 
 
 
@@ -209,11 +226,7 @@ export default {
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
+
 
   ul p{
     color: #000000;
