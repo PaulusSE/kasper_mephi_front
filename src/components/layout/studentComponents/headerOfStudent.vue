@@ -70,13 +70,24 @@
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendEverythingToCheck()">Отправить работу на проверку</button>
         </div>
 
-        <div class="d-flex gap-2">
-          <p class="mainText text-start">
-            Статус отчета :
-          </p>
-          <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
-            {{this.statusMap[workStatus]}}
-          </p>
+        <div class="d-flex gap-2 justify-content-between">
+          <div class="d-flex">
+            <p class="mainText text-start">
+              Статус отчета :
+            </p>
+            <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
+              {{this.statusMap[workStatus]}}
+            </p>
+          </div>
+          <div class="d-flex">
+            <p class="mainText text-start">
+              Текущая оценка :
+            </p>
+            <p class="mainText text-start " >
+              123
+            </p>
+          </div>
+
         </div>
 
       </div>
@@ -85,13 +96,24 @@
         <div v-if="workStatus === 'on review'">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
         </div>
-        <div class="d-flex gap-2">
-          <p class="mainText text-start">
-            Статус отчета :
-          </p>
-          <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
-            {{this.statusMap[workStatus]}}
-          </p>
+        <div class="d-flex gap-2 justify-content-between">
+          <div class="d-flex">
+            <p class="mainText text-start">
+              Статус отчета :
+            </p>
+            <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
+              {{this.statusMap[workStatus]}}
+            </p>
+          </div>
+          <div class="d-flex">
+            <p class="mainText text-start">
+              Текущая оценка :
+            </p>
+            <p class="mainText text-start">
+              100?
+            </p>
+          </div>
+
         </div>
 
       </div>
@@ -126,7 +148,7 @@ export default {
       showModalConfirmSending: false,
       showModalChangingStudentStatus: false,
       showNotificationChangeError : false,
-      errorChangeMessage : "Все разделе должны быть подтверждены!",
+      errorChangeMessage : "Все разделе должны быть подтверждены, статус и оценка проставлены!",
       statusMap : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',

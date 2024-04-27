@@ -116,6 +116,13 @@
         <nav class="mt-3" >
           <p class="headingSemester">Научные руководители</p>
         </nav>
+        <nav class="text-end" style="margin-right: 2.5%">
+          <button v-if="!editTeachers" @click="buttonEditTeachers" class="editBtn mt-3">Редактировать</button>
+          <div v-else class="d-flex">
+            <button class="editBtn mt-3 me-2" @click="buttonCancelEditTeachers">Отменить</button>
+            <button class="editBtn mt-3 " @click="buttonSaveTeachers">Сохранить</button>
+          </div>
+        </nav>
       </div>
 
       <div class="roundBlock p-0 mt-2">
@@ -125,8 +132,12 @@
               №
             </div>
 
-            <div class="textMiniTable" style="width: 90%; text-align: center">
+            <div class="textMiniTable rightLine" style="width: 48%; text-align: center">
               ФИО
+            </div>
+
+            <div class="textMiniTable" style="width: 38%; text-align: center">
+              Статус
             </div>
 
           </div>
@@ -136,11 +147,23 @@
               {{index + 1}}
             </div>
 
-            <div class="textMiniTable" style="width: 90%; text-align: center">
+            <div class="textMiniTable rightLine" style="width: 48%; text-align: center">
               <router-link style="text-decoration: none" to="/user2" @click="pushTeacherIDToStorage(index)" >{{element["full_name"]}}</router-link>
-
             </div>
+
+            <div class="textMiniTable" style="width: 38%; text-align: center">
+              <div  style="height: 100%; width: 100%">
+                <select  :disabled="!editTeachers"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.studying_status">
+                  <option value="active">Работает</option>
+                  <option value="inactive"> Уволен</option>
+
+                </select>
+              </div>
+            </div>
+
+
           </div>
+
         </div>
 
       </div>
@@ -155,7 +178,7 @@
           </nav>
           <nav class="text-end" style="margin-right: 2.5%">
             <button v-if="!editTableWithGroups" @click="buttonEditGroups" class="editBtn mt-3">Редактировать</button>
-            <div v-else>
+            <div v-else class="d-flex gap-1">
               <button class="editBtn mt-3 me-2" @click="buttonAddGroup">Добавить</button>
               <button class="editBtn mt-3 me-2" @click="buttonCancelChangeGroups">Отменить</button>
               <button class="editBtn mt-3 " @click="buttonSaveGroup">Сохранить</button>
@@ -248,7 +271,7 @@
         </nav>
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editTableYears" @click="buttonEditTableYears" class="editBtn mt-3">Редактировать</button>
-          <div v-else>
+          <div v-else class="d-flex gap-1">
             <button class="editBtn mt-3 me-2" @click="buttonAddYear">Добавить</button>
             <button class="editBtn mt-3 me-2" @click="buttonCancelYear">Отменить</button>
             <button class="editBtn mt-3 " @click="buttonSaveYear">Сохранить</button>
@@ -313,7 +336,7 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
-              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]">
+              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]" >
               <p v-else>{{element}}</p>
             </div>
 
@@ -340,7 +363,7 @@
         </nav>
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editTableSpecialization" @click="buttonEditSpecialization" class="editBtn mt-3">Редактировать</button>
-          <div v-else>
+          <div v-else class="d-flex gap-1">
             <button class="editBtn mt-3 me-2" @click="buttonAddSpec">Добавить</button>
             <button class="editBtn mt-3 " @click="buttonCancelSpec">Отменить</button>
             <button class="editBtn mt-3 " @click="buttonSaveSpec">Сохранить</button>
@@ -457,8 +480,8 @@ export default {
 
       ],
 
-      arrayOfTeachers : [
-      ],
+      arrayOfTeachers : [],
+      arrayOfTeachersCopy : [],
       stateOfStudents: true,
       stateOfTeachers: true,
       stateOfMainCheckBox : false,
@@ -467,6 +490,7 @@ export default {
       editTableWithGroups : false,
       editCommonTable : false,
       editTableSpecialization: false,
+      editTeachers : false,
       arrayOfPlan : [],
       arrayOfSpecialization : [],
       arrayOfSpecializationCopy : [],
@@ -478,6 +502,10 @@ export default {
         "academic" : "В академическом отпуске",
         "expelled" : "Отчислился",
         "graduated" : "Выпустился",
+      },
+      teacherStatusMap: {
+        "active" : "Работает",
+        "inactive" : "Уволен"
       },
       showSaveTableNotification : false,
       resultOfSavingTables : false,
@@ -491,7 +519,18 @@ export default {
 
     setState(index, string){
       this.arrayOfStudents[index][state] = string
+    },
 
+    buttonEditTeachers(){
+      this.editTeachers = true
+      this.arrayOfTeachersCopy = JSON.parse(JSON.stringify(this.arrayOfTeachers));
+    },
+    buttonCancelEditTeachers(){
+      this.editTeachers = false
+      this.arrayOfTeachers = JSON.parse(JSON.stringify(this.arrayOfTeachersCopy));
+    },
+    buttonSaveTeachers(){
+      this.editTeachers = false
     },
 
 
@@ -709,10 +748,6 @@ export default {
         this.showWrongAnswerString = true;
       }
 
-
-
-
-
       this.editCommonTable = false
     },
 
@@ -825,7 +860,9 @@ export default {
         this.showWrongAnswerString = true;
         console.log(e)
       }
-    }
+    },
+
+
 
   },
   async beforeMount() {

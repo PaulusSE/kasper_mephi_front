@@ -56,12 +56,22 @@
       </div>
 
       <div class="container-fluid justify-content-between d-flex">
-        <nav style="width: 100%;">
-          <label class="text ms-0">Номер телефона</label>
-          <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="speciality">
-        </nav>
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Номер телефона</label>
+            <input type="text" class="textInput" disabled @input="inputEvent" v-model="phoneNumber">
+          </div>
 
+        </nav>
+        <nav style="width: 50%;">
+          <div style="width: 100%">
+            <label class="text ms-0" >Категория</label>
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
+          </div>
+        </nav>
       </div>
+
+
 
       <div class="container-fluid justify-content-between d-flex">
         <nav style="width: 50%">

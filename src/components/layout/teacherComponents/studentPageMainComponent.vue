@@ -54,6 +54,7 @@
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               :actual-semester = actualSemester
     ></report>
   </div>
 

@@ -261,7 +261,19 @@
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Комментарий к диссертациии</p>
+          <p class="mainText">Комментарий аспиранта к диссертациии</p>
+        </nav>
+      </div>
+
+      <div>
+        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+      </div>
+    </div>
+
+    <div class="roundBlock">
+      <div class="d-flex justify-content-between">
+        <nav class="checkboxBlock">
+          <p class="mainText">Комментарий научного руководителя к диссертациии</p>
         </nav>
       </div>
 
@@ -572,6 +584,8 @@ export default {
           this.arrayOfTeachers[i].end_at = ''
       }
 
+      this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
+
     },
 
 
@@ -587,11 +601,40 @@ export default {
         this.showWrongAnswerString = true;
         console.log(e)
       }
+      console.log(this.data)
 
-      await this.fillTeacherHistory(this.data.supervisors)
-      await this.fillCommonInfo(this.data.dissertation_titles)
-      await this.fillProgressTable(this.data.semester_progress)
-      await this.fillThemeHistory(this.data.dissertation_titles)
+      try {
+        await this.fillTeacherHistory(this.data.supervisors)
+      }
+      catch(e) {
+        console.log(e)
+      }
+
+      try {
+        await this.fillCommonInfo(this.data.dissertation_titles)
+      }
+      catch(e) {
+        console.log(e)
+      }
+
+      try {
+        await this.fillProgressTable(this.data.semester_progress)
+      }
+      catch(e) {
+        console.log(e)
+      }
+
+      try {
+        await this.fillThemeHistory(this.data.dissertation_titles)
+      }
+      catch(e) {
+        console.log(e)
+      }
+
+
+
+
+
       // await this.fillStatusArray(this.data.dissertations_statuses)
       // await this.fillFeedBackArray(this.data.feedback)
       this.progressOfDissertation = this.data.student_status.progress

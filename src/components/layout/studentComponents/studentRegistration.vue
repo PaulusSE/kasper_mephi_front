@@ -41,6 +41,13 @@
       </nav>
     </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Номер телефона</label>
+        <input type="date" class="blockStyles" v-model="phoneNumber" @input="inputEvent" >
+      </nav>
+    </div>
+
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -107,6 +114,7 @@ export default {
       email: '',
       teacherID: '',
       errorMessage: '',
+      phoneNumber: '',
       department: '',
       specializationID: '',
       dateOfBeginning:'',
@@ -190,6 +198,7 @@ export default {
               "start_date" : this.dateOfBeginning,
               "number_of_years" : parseInt(this.numberOfYears),
               "supervisor_id" : this.teacherID,
+              "phone_number" : this.phoneNumber
             }
         )
 

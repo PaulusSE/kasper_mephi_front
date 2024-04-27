@@ -43,6 +43,7 @@
                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
                  :state-of-student-page = stateOfStudentPage
+                  :actual-semester = actualSemester
 
   ></report>
 

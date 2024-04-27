@@ -10,6 +10,7 @@ export default {
       teachingLoadText: '',
       status:'',
       mark:'',
+      dissertationWorkChecked : false,
       scientificWorkChecked : false,
       teachingLoadChecked : false,
     }
@@ -18,8 +19,7 @@ export default {
   methods : {
     async changeStatus() {
 
-
-      if (!this.scientificWorkChecked || !this.teachingLoadChecked || this.status === '' || this.mark === ''){
+      if (!this.dissertationWorkChecked || !this.scientificWorkChecked || !this.teachingLoadChecked || this.status === '' || this.mark === ''){
         this.$emit("callChangeError")
         return
       }
@@ -91,7 +91,11 @@ export default {
                     <option  class="textResult3">Не сдано</option>
                   </select>
                 </div>
+              </div>
 
+              <div>
+                <label class="textMiniTable inputBox text-start" >
+                  <input type="checkbox" class="me-1 myCheckBox" v-model="dissertationWorkChecked" />Диссертация просмотрена</label>
               </div>
 
             </div>

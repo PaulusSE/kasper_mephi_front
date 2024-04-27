@@ -65,11 +65,19 @@
           </div>
 
           <div class="container-fluid justify-content-between d-flex">
-            <nav style="width: 100%;">
-              <label class="text ms-0">Научная специальность</label>
-              <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="speciality">
-            </nav>
+            <nav style="width: 50%">
+              <div style="width: 100%">
+                <label class="text ms-0">Номер телефона</label>
+                <input type="text" class="textInput" disabled @input="inputEvent" v-model="phoneNumber">
+              </div>
 
+            </nav>
+            <nav style="width: 50%;">
+              <div style="width: 100%">
+                <label class="text ms-0" >Категория</label>
+                <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
+              </div>
+            </nav>
           </div>
 
           <div class="container-fluid justify-content-between d-flex">
@@ -110,7 +118,7 @@ export default {
       fullName: '',
       email: '',
       group: '',
-      speciality: '',
+      phoneNumber: '',
       studyingTime: '',
       startDateStudying: '',
       department: '',
@@ -119,7 +127,7 @@ export default {
       fullNameCopy: "",
       emailCopy: '',
       groupCopy: '',
-      specialityCopy: '',
+      phoneNumberCopy: '',
       studyingTimeCopy: '',
       startDateStudyingCopy: '',
       departmentCopy: '',
@@ -144,7 +152,7 @@ export default {
       this.fullNameCopy = this.fullName
       this.emailCopy = this.email
       this.groupCopy = this.group
-      this.specialityCopy = this.speciality
+      this.phoneNumberCopy = this.phoneNumber
       this.studyingTimeCopy = this.studyingTime
       this.startDateStudyingCopy = this.startDateStudying
       this.departmentCopy = this.department
@@ -164,7 +172,7 @@ export default {
       this.fullName = this.fullNameCopy
       this.email = this.emailCopy
       this.group = this.groupCopy
-      this.speciality = this.specialityCopy
+      this.phoneNumber = this.phoneNumberCopy
       this.studyingTime = this.studyingTimeCopy
       this.startDateStudying = this.startDateStudyingCopy
       this.department = this.departmentCopy
@@ -194,7 +202,7 @@ export default {
       }
       this.fullName = this.data.full_name
       this.group = this.data.group_name
-      this.speciality = this.data.specialization
+      this.phoneNumber = this.data.phone_number
       this.studyingTime = this.data.years
       this.startDateStudying = this.data.start_date.slice(0,10)
       this.email = this.data.email

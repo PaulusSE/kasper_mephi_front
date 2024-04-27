@@ -7,12 +7,12 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-      <nav>
-        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>
-        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>
-        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>
+<!--      <nav>-->
+<!--        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>-->
+<!--        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>-->
+<!--        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>-->
+<!--      </nav>-->
 
-      </nav>
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -52,7 +52,20 @@
         <label class="text ms-0">Факультет</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Номер телефона</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="phoneNumber">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
+      </nav>
     </div>
 
 
@@ -103,7 +116,8 @@ export default {
       facultyCopy: '',
       stateOfEditing: false,
       stateOfWriting: false,
-      arrayOfStudents : []
+      arrayOfStudents : [],
+      phoneNumber : '',
     }
   },
   methods : {
@@ -219,6 +233,7 @@ export default {
 
 
 
+
 @media (min-width: 800px) {
   .mainText {
     color:#7C7F86;
@@ -272,7 +287,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-
+    border-width: 0.1rem !important;
     font-size: 1rem;
     padding-left: 0.5rem;
   }
@@ -361,7 +376,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-
+    border-width: 0.1rem !important;
     font-size: 0.9rem;
     padding-left: 0.5rem;
   }
@@ -450,6 +465,7 @@ export default {
     border-radius: 0.7em;
     font-size: 0.8rem;
     padding-left: 0.5rem;
+    border-width: 0.1rem !important;
   }
 
   div nav label {

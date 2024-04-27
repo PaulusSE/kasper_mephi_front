@@ -1,327 +1,349 @@
 <script>
-import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 import axios from "axios";
 import utf8 from "utf8";
-import reportTab from "@/components/layout/studentComponents/report-tab.vue";
 
 export default {
-  name: "report",
+  name: "report-tab",
   data() {
     return {
+      editComments : false,
+      editExams : false,
 
-      arrayOfExams:[],
-      deleteExamsIds: [],
-      userType: '',
-      attestationMarks: [],
-      supervisorMarks: [],
-      arrayOfComment1: [],
-      arrayOfComment2: [],
-
+      presentationFile : '',
+      presentationFilename : 'name',
+      windowOpened : false,
     }
   },
-  components: {headerOfStudent,
-  "reportTab" : reportTab
-  },
-  props: ["stateOfStudentPage", "actualSemester"],
+  props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType"],
   methods : {
-
-    addExam(){
-      let newExam = {
-        exam_type: '',
-        mark: '',
-        set_at: '',
-        semester: '',
-      }
-      this.arrayOfExams = this.arrayOfExams.concat(newExam)
-    },
-    deleteExam(index){
-
-      // this.deleteExamsIds.push(this.arrayOfExams[index].exam_id)
-      this.arrayOfExams.splice(index,1)
+    buttonClicked(){
+      this.windowOpened = !this.windowOpened
     },
 
+    async saveComments(){
+      this.editComments = !this.editComments
 
-    async getMarks(){
-      if (this.userType === 'student'){
-        try {
-          const response = await axios.get(this.IP +"/students/marks/" + localStorage.getItem("access_token"))
-          this.data = response.data
-          console.log(response)
-        }
-        catch (e) {
-          this.showWrongAnswerString = true;
-        }
+      try {
+        const response = await axios.post(this.IP +"/students/report/comments/" + localStorage.getItem("access_token"),
+            {
+              "dissertation_comment" : this.comment1,
+              "dissertation_plan" : this.comment2
+            },
+        )
+        this.data = response.data
       }
-
-      else {
-        try {
-          const response = await axios.put(this.IP +"/supervisors/student/marks/" + localStorage.getItem("access_token"),
-              {
-                "student_id" : localStorage.getItem("studentID"),
-              },
-          )
-          this.data = response.data
-        }
-        catch (e) {
-          this.showWrongAnswerString = true;
-        }
+      catch (e) {
+        console.log(e)
       }
-      this.fillMarks(this.data)
-
+    },
+    commentClicked(){
+      this.editComments = !this.editComments
+    },
+    editExamsClicked(){
+      this.editExams = !this.editExams
     },
 
-    fillMarks(data) {
+    async saveExams(){
+      this.editExams = !this.editExams
 
-      this.attestationMarks = data.attestation_marks === undefined ? [] : data.attestation_marks;
-      this.supervisorMarks = data.supervisor_marks === undefined ? [] : data.supervisor_marks
-
-      this.arrayOfExams = new Array(this.actualSemester)
-
-      for (var i = 0; i < this.actualSemester; i++){
-        this.arrayOfExams[i] = new Array()
-      }
-
-      try{
-        for (var i = 0; i<data.exams.length; i++){
-          var exam = data.exams[i]
-          this.arrayOfExams[exam.semester - 1].push(exam)
-        }
+      try {
+        const response = await axios.post(this.IP +"/students/exams/" + localStorage.getItem("access_token"),
+            {
+              "marks" : this.arrayOfExams,
+            },
+        )
+        this.data = response.data
       }
       catch (e) {
         console.log(e)
       }
 
-      this.attestationMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.arrayOfExams.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.supervisorMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-
-      console.log(this.attestationMarks)
-      console.log(this.arrayOfExams)
-      console.log(this.supervisorMarks)
     },
 
-    async getComments(){
-      if (this.userType === 'student'){
-        try {
-          const response = await axios.get(this.IP +"/students/report/comments/" + localStorage.getItem("access_token"),
-          )
-          this.data = response.data
-          console.log(response)
-        }
-        catch (e) {
-          console.log(e)
-        }
-      }
-      else {
-        try {
-          const response = await axios.put(this.IP +"/supervisors/report/comments/" + localStorage.getItem("access_token"),
-              {
-                "student_id": localStorage.getItem("studentID"),
-              }
-          )
-          this.data = response.data
-        }
-        catch (e) {
-          console.log(e)
-        }
-      }
-
-      try{
-        this.fillComments1(this.data.dissertation_comments)
-        this.fillComments2(this.data.dissertation_plans)
-      }
-      catch (e){
-        console.log(e)
-      }
+    async downloadFile(){
+      await this.getFiles()
+      const blob = new Blob([this.presentationFile]);
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = this.presentationFilename;
+      link.click()
     },
 
-    fillComments1(data){
-      var semesterObjectArray = new Array()
-      for (var i = 0; i < this.actualSemester; i++){
-        semesterObjectArray.push({
-          semester: i + 1
-        })
+    async getFiles() {
+
+      try {
+        const response = await axios.put(this.IP +"" + localStorage.getItem("access_token"),
+            {
+              "semester" : this.id
+            },
+            {
+              responseType: 'blob',
+            }
+        )
+        if (response.status === 200) {
+          this.presentationFilename = utf8.decode(response.headers["content-disposition"])
+          this.presentationFile = response.data
+        }
+
+
       }
-
-      if (data === undefined)
-        data = new Array()
-
-
-      for (var i = 0; i < data.length; i++){
-        if (data[i] === undefined)
-          return
-        var semester = data[i].semester
-        semesterObjectArray = semesterObjectArray.filter(function(obj) {
-          return obj.semester !== semester
-        })
+      catch (e) {
+        this.showWrongAnswerString = true;
       }
-
-      for (var i = 0; i < semesterObjectArray.length; i++){
-        data.push({
-          semester:semesterObjectArray[i].semester,
-          commentary: '',
-        })
-      }
-      data.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.arrayOfComment1 = data
-
     },
-    fillComments2(data){
-      var semesterObjectArray = new Array()
-      for (var i = 0; i < this.actualSemester; i++){
-        semesterObjectArray.push({
-          semester: i + 1
-        })
-      }
-
-      if (data === undefined)
-        data = new Array()
-
-
-      for (var i = 0; i < data.length; i++){
-        if (data[i] === undefined)
-          return
-        var semester = data[i].semester
-        semesterObjectArray = semesterObjectArray.filter(function(obj) {
-          return obj.semester !== semester
-        })
-      }
-
-      for (var i = 0; i < semesterObjectArray.length; i++){
-        data.push({
-          semester:semesterObjectArray[i].semester,
-          plan_text: '',
-        })
-      }
-
-      data.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.arrayOfComment2 = data
-    }
-
-
   },
   async beforeMount() {
-    this.userType = localStorage.getItem("userType");
-    await this.getComments()
-    await this.getMarks()
-
-
+    // await this.getFiles()
+    console.log(this.comment1)
+    console.log(this.comment2)
 
   }
 }
 </script>
 
 <template>
-<div class="mainPage">
-  <header-of-student
-      @btnDissertationClicked="$emit('btnDissertationClicked')"
-      @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
-      @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
-      @btnReportingClicked="$emit('btnReportingClicked')"
-      @btnProfileClicked="$emit('btnProfileClicked')"
-      :state-of-student-page = stateOfStudentPage
-  ></header-of-student>
 
-  <report-tab
-      v-for="(number, index) in actualSemester"
-      :id=number
-  :comment1 = this.arrayOfComment1[index]
-  :comment2 = this.arrayOfComment2[index]
-  :array-of-exams = this.arrayOfExams[index]
-      :user-type = this.userType
-
-  ></report-tab>
-
-  <div class="roundBlock" >
+  <div class="roundBlock">
     <div class="d-flex justify-content-between">
-      <nav class="mt-3" style="margin-left: 2.5%">
-        <p class="mainText">Аттестация</p>
-      </nav>
+
+      <div class="d-flex gap-1 m-1">
+        <p class="headingSemester" >{{id}} семестр</p>
+      </div>
+
+      <div v-if="windowOpened">
+        <button class="my-2 semestrButtonActive" @click=buttonClicked>
+          <img  src="../../../../static/figures/arrowleft.png" class="imgSize">
+        </button>
+
+      </div>
+      <div v-else>
+        <button class="my-2 semestrButtonActive" @click=buttonClicked>
+          <img  src="../../../../static/figures/arrowdown.png" class="imgSize">
+        </button>
+      </div>
     </div>
 
+    <div v-if="windowOpened">
 
-    <div class="d-flex justify-content-between">
-      <nav class="mt-3" style="margin-left: 2.5%">
-        <p class="mainText">Аттестационная оценка</p>
-      </nav>
-    </div>
-    <div class="roundBlock p-0 mt-2">
-      <div>
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: attestationMarks.length !== 0}">
-          <div class="rightLine textMiniTable" style="width: 20%; text-align: center;">
-            Семестр
+      <div class="roundBlock">
+        <div class="d-flex justify-content-end m-2">
+          <div v-if="userType === 'student'" class="d-flex">
+            <nav v-if="!editComments">
+              <button class="editBtn2" @click="commentClicked" >Редактировать</button>
+            </nav>
+            <nav v-else>
+              <button class="editBtn2" @click="saveComments" >Сохранить</button>
+            </nav>
+          </div>
+        </div>
+        <div class="roundBlock">
+
+          <div class="d-flex justify-content-between mt-1">
+            <nav class="checkboxBlock">
+              <p class="mainText mt-0">Комментарий к текущей диссертации</p>
+            </nav>
           </div>
 
+          <div>
 
-          <div class="textMiniTable" style="width: 78%; text-align: center">
-            Оценка
+
+            <div class="container-fluid justify-content-between d-flex mb-3">
+              <nav class="inputWidth">
+                <div>
+                  <textarea  v-model="comment1.commentary" :disabled="!editComments" rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+                </div>
+              </nav>
+            </div>
+
+
+
           </div>
 
 
         </div>
 
-        <div class="d-flex " :class="{ underline: index !== attestationMarks.length-1}" v-for="(marks,index) in attestationMarks">
+        <div class="roundBlock">
+          <div class="d-flex justify-content-between mt-1">
+            <nav class="checkboxBlock">
+              <p class="mainText mt-0">План работы на следующей семестр</p>
+            </nav>
+            <!--      <div v-if="userType === 'student'">-->
+            <!--        <nav v-if="!editComment2">-->
+            <!--          <button class="editBtn" @click="comment2Clicked" >Редактировать</button>-->
+            <!--        </nav>-->
+            <!--        <nav v-else>-->
+            <!--          <button class="editBtn" @click="saveComment2" >Сохранить</button>-->
+            <!--        </nav>-->
+            <!--      </div>-->
 
-          <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
-
-            {{marks.semester}}
           </div>
-          <div class="rightLine textMiniTable" style="width: 78%; text-align: center">
+          <div>
+
+            <div class="container-fluid justify-content-between d-flex mb-3">
+              <nav class="inputWidth">
+                <div>
+                  <textarea  v-model="comment2.plan_text" :disabled="!editComments" rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="roundBlock">
+        <div class="d-flex justify-content-between mt-1">
+          <nav class="checkboxBlock">
+            <p class="mainText mt-0">Презентация</p>
+          </nav>
+        </div>
+
+
+
+
+        <div class="roundBlock">
+          <div class="m-2">
+
             <div>
-              <div class="textWithCarry inputBox ">{{marks.mark}}</div>
+              <p class="textMainPage mt-0">Скачать презентацию</p>
+            </div>
+
+            <div>
+              <button class="downloadFile" @click="downloadFile"><p style="word-break: break-word">{{this.presentationFilename}}</p></button>
             </div>
           </div>
 
 
         </div>
 
+
+
       </div>
-    </div>
 
-    <div class="d-flex justify-content-between">
-      <nav class="mt-3" style="margin-left: 2.5%">
-        <p class="mainText">Оценка научного руководителя</p>
-      </nav>
-    </div>
-    <div class="roundBlock p-0 mt-2">
-      <div>
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: supervisorMarks.length !== 0}">
-          <div class="rightLine textMiniTable" style="width: 20%; text-align: center;">
-            Семестр
+      <div class="roundBlock" >
+        <div class="d-flex justify-content-between">
+          <nav class="mt-3" style="margin-left: 2.5%">
+            <p class="mainText">Кандидатские экзамены</p>
+          </nav>
+          <div v-if="userType === 'student'" >
+            <nav class="text-end" style="margin-right: 2.5%" >
+              <button v-if="!editExams" @click="editExamsClicked" class="editBtn2 mt-3">Редактировать</button>
+              <div v-else class="d-flex">
+                <button class="editBtn2 mt-3 me-2" @click="addExam">Добавить</button>
+                <button class="editBtn2 mt-3 " @click="saveExams" >Сохранить</button>
+              </div>
+            </nav>
           </div>
-
-
-          <div class="textMiniTable" style="width: 78%; text-align: center">
-            Оценка
-          </div>
-
 
         </div>
+        <div class="roundBlock p-0 mt-2">
 
-        <div class="d-flex " :class="{ underline: index !== supervisorMarks.length-1}" v-for="(marks,index) in supervisorMarks">
+          <div v-if="!editExams">
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfExams.length !== 0}">
+              <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+                №
+              </div>
 
-          <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
+                Специальность
+              </div>
 
-            {{marks.semester}}
-          </div>
-          <div class="rightLine textMiniTable" style="width: 78%; text-align: center">
-            <div>
-              <div class="textWithCarry inputBox ">{{marks.mark}}</div>
+
+              <div class="textMiniTable" style="width: 45%; text-align: center">
+                Оценка
+              </div>
+
+
+
+
             </div>
+
+            <div class="d-flex " :class="{ underline: index !== arrayOfExams.length-1}" v-for="(exam,index) in arrayOfExams">
+
+              <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+                {{index + 1}}
+              </div>
+              <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
+                <div>
+                  <div class="textWithCarry inputBox ">{{exam.exam_type}}</div>
+                </div>
+              </div>
+
+              <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
+                <div>
+                  <div class="textWithCarry inputBox ">{{exam.mark}}</div>
+                </div>
+              </div>
+
+
+            </div>
+
           </div>
 
+          <div v-if="editExams">
+
+            <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfExams.length !== 0}">
+              <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+                №
+              </div>
+
+              <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+                Специальность
+              </div>
+
+
+              <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+                Оценка
+
+              </div>
+
+
+              <div class="textMiniTable" style="width: 10%; text-align: center">
+
+              </div>
+
+            </div>
+
+            <div class="d-flex " :class="{ underline: index !== arrayOfExams.length-1}" v-for="(exam,index) in arrayOfExams">
+              <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+                {{index + 1}}
+              </div>
+
+              <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+                <div>
+                  <textarea class="textWithCarry inputBox" v-model="exam.exam_type" rows="3"></textarea>
+                </div>
+              </div>
+
+              <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
+                <div>
+                  <textarea class="textWithCarry inputBox" rows="3" v-model="exam.mark"></textarea>
+                </div>
+              </div>
+
+
+              <div class="textMiniTable" style="width: 10%; text-align: center; padding-right: 0" >
+                <button class="btnAddDeleteFiles mt-2" @click="deleteExam(index)">
+                  <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+                </button>
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
-
       </div>
+
+
+
     </div>
-
-
 
   </div>
 
 
-</div>
+
 </template>
 
 <style scoped>
@@ -356,12 +378,11 @@ export default {
 
   .headingSemester {
 
-    margin-top:1%;
-    margin-left: 1%;
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:1.3rem;
+
 
   }
 
@@ -557,8 +578,7 @@ export default {
 
   .headingSemester {
 
-    margin-top:1%;
-    margin-left: 1%;
+
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
@@ -753,8 +773,6 @@ export default {
 
   .headingSemester {
 
-    margin-top:0.5%;
-    margin-left: 1%;
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
@@ -944,7 +962,6 @@ export default {
   }
 
 }
-
 
 
 </style>

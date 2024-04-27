@@ -13,11 +13,11 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-<!--      <nav>-->
-<!--        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>-->
-<!--        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>-->
-<!--        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>-->
-<!--      </nav>-->
+      <nav>
+        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>
+        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>
+        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>
+      </nav>
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -57,7 +57,20 @@
         <label class="text ms-0">Факультет</label>
         <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Номер телефона</label>
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="phoneNumber">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
+      </nav>
     </div>
 
 
@@ -124,13 +137,15 @@ export default {
       departmentCopy: '',
       facultyCopy: '',
       stateOfEditing: false,
-      stateOfWriting: false,
+
       currentPassword: '',
       newPassword: '',
       newPasswordAgain: '',
       stateOfSending:false,
       resultOfSending: '',
       errorText : '',
+      phoneNumber : '',
+      phoneNumberCopy : '',
     }
   },
   methods : {
@@ -142,13 +157,11 @@ export default {
       this.departmentCopy = this.department
       this.facultyCopy = this.faculty
       this.academicDegreeCopy = this.academicDegree
+      this.phoneNumberCopy = this.phoneNumber
     },
     inputEvent(){
       if (this.errorText !== '')
         this.errorText = ''
-      if(!this.stateOfWriting){
-        this.stateOfWriting = !this.stateOfWriting
-      }
     },
 
     async changePassword(){
@@ -191,15 +204,14 @@ export default {
       this.department = this.departmentCopy
       this.faculty = this.facultyCopy
       this.academicDegree = this.academicDegreeCopy
+      this.phoneNumber = this.phoneNumberCopy
 
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+
 
     },
     saveChange(){
       this.stateOfEditing = !this.stateOfEditing
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+
     },
 
     async getProfileData(){

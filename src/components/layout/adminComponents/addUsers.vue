@@ -27,29 +27,11 @@
           <p class="loadText">Аспиранты</p>
         </div>
 
-        <div v-if="studentsFile.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
+        <div>
+          <textarea  v-model="newStudents"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ studentsFile.name }} загружен</p>
-        </div>
 
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteStudentFile">
-              <img class="imgSize" v-if="studentsFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
-            </button>
-          </div>
-
-          <div class="image-upload">
-            <label for="file-input2">
-              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input2" type="file" @input="inputStudentFile"/>
-          </div>
-        </div>
 
 
       </div>
@@ -60,37 +42,28 @@
           <p class="loadText">Научные руководители</p>
         </div>
 
-        <div v-if="teachersFile.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
+        <div>
+          <textarea  v-model="newTeachers"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ teachersFile.name }} загружен</p>
-        </div>
 
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteTeacherFile">
-              <img class="imgSize" v-if="teachersFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
-            </button>
-          </div>
+      </div>
 
-          <div class="image-upload">
-            <label for="file-input">
-              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input" type="file" @input="inputTeacherFile"/>
-          </div>
-        </div>
+      <div class="roundBlock">
+        <p class="loadText">
+          Формат для загрузки пользователей в систему
+        </p>
+        <p>
+          Адресс электронной почты через пробел: email1@mail.com email2@gmail.com ...
+        </p>
       </div>
 
       <div class="myBtn" >
-        <button class="sendFilesBtn p-2" @click="sendFiles">
+        <button class="sendFilesBtn p-2" @click="addUsers">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
-              Сохранить
+              Добавить пользователей
             </p>
           </div>
 
@@ -108,6 +81,8 @@ import sendingFilesWithUsersNotification
 import SendingFilesNotification
   from "@/components/layout/notifications/studentNotifications/sendingFilesNotification.vue";
 import store from "@/store/index.js";
+import axios from "axios";
+import utf8 from "utf8";
 export default {
   name: "addUser",
   props : ["stateOfAdminPage"],
@@ -118,34 +93,40 @@ export default {
   },
   data() {
     return {
-      studentsFile : [],
-      teachersFile : [],
+      newStudents : [],
+      newTeachers : [],
       stateOfSending : false,
-      resultOfSending : false,
+      resultOfSending: false,
+
     }
   },
   methods: {
-    deleteStudentFile(){
-      this.studentsFile = []
+
+    async addUsers(){
+      try {
+        const response = await axios.put(this.IP +"" + localStorage.getItem("access_token"),
+            {
+              "students" : this.newStudents,
+              "teachers" : this.newTeachers
+            }
+        )
+        if (response.status === 200) {
+          this.resultOfSending = true
+        }
+
+
+      }
+      catch (e) {
+        this.resultOfSending = false
+      }
+      this.callNotification()
+
     },
-    deleteTeacherFile(){
-      this.teachersFile = []
-    },
-    inputStudentFile(){
-      this.studentsFile = event.target.files[0]
-    },
-    inputTeacherFile(){
-      this.teachersFile = event.target.files[0]
-    },
-    sendFiles(){
+    callNotification(){
       this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
-
-      console.log("Sending files")
-      this.studentsFile = []
-      this.teachersFile = []
     }
   },
   beforeMount() {

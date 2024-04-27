@@ -38,27 +38,7 @@
 
 
 
-      <div class="roundBlock">
-        <div class="d-flex justify-content-between">
-          <nav class="checkboxBlock">
-            <p class="mainText">Рецензия</p>
-          </nav>
-          <nav>
-            <button v-if="!editingReview" class="editBtn pt-1 ps-0" @click="buttonEditReview">Редактировать</button>
-            <button v-else class="editBtn pt-1 ps-1" @click="saveReview">Сохранить</button>
-          </nav>
-        </div>
 
-        <div v-if="!editingReview">
-          <p v-if="feedback.feedback === ''" class="textTable">Рецензия отсутствует</p>
-          <p v-else style="font-size:20px; font-weight: 350">
-            <textarea disabled v-model="feedback.feedback" rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
-          </p>
-        </div>
-        <div v-else>
-          <textarea v-model="feedback.feedback"  rows=5 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-        </div>
-      </div>
 
     </div>
 

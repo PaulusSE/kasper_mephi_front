@@ -13,6 +13,20 @@
 
     <div class="roundBlock">
 
+<!--      <div class="mt-2">-->
+<!--        <select class="form-select">-->
+<!--          <option>-->
+<!--            Год1-->
+<!--          </option>-->
+<!--          <option>-->
+<!--            Год2-->
+<!--          </option>-->
+<!--          <option>-->
+<!--            Год3-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
+
       <div class="d-flex justify-content-between">
         <nav class="mt-3" >
           <p class="headingSemester">Оценка за НИР</p>
@@ -40,7 +54,7 @@
 
 
             <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
-              Год
+              Семестр
             </div>
 
 
@@ -67,18 +81,18 @@
 
 
             <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
-              {{element["years"]}} курс
+              {{element["years"]}}
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
-              {{ element["group_name"] }}
+              {{ element.group_name}}
 
             </div>
 
               <div class="textMiniTable" style="width: 24%; text-align: center">
                 <div v-if="!editMarks">
-                  {{ element.group_name }}
+                  {{ element.mark }}
                 </div>
                 <div v-else class="me-3">
                   <input type="text" class="inputBox ps-3" v-model="element.name">
@@ -101,6 +115,7 @@
 <script>
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
+import axios from "axios";
 export default {
   name: "report",
   props : ["stateOfAdminPage"],
@@ -109,18 +124,7 @@ export default {
   },
   data(){
     return {
-      arrayOfStudents: [
-        {
-          full_name : "ФИО1",
-          group_name :"Б20-504",
-          studying_status: "studying"
-        },
-        {
-          full_name : "ФИО2",
-          group_name :"Б20-514",
-          studying_status: "expelled"
-        }
-      ],
+      arrayOfStudents: [],
       arrayOfStudentsCopy : [],
       editMarks : false,
     }
@@ -130,16 +134,51 @@ export default {
       this.editMarks = !this.editMarks
       this.arrayOfStudentsCopy = this.arrayOfStudents.slice(0)
     },
-    saveMarks(){
+    async saveMarks(){
       this.editMarks = !this.editMarks
+      console.log(this.arrayOfStudents)
+      try {
+        const response = await axios.post(this.IP +"/administrator/student/attestation/marks/" + localStorage.getItem("access_token"),
+            {
+              "attestation_marks": this.arrayOfStudents,
+                 }
+        )
+
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+
     },
+
+    pushStudentIDToStorage(index){
+      localStorage.setItem("studentID", this.arrayOfStudents[index].student_id)
+      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].student_id)
+    },
+
     cancelEditMarks(){
       this.editMarks = false
       this.arrayOfStudents = this.arrayOfStudentsCopy.slice(0)
     },
-  },
-  beforeMount() {
 
+    async getStudents(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/students/list/" + localStorage.getItem("access_token"),
+        )
+
+        this.data = response.data
+        this.arrayOfStudents = this.data
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+        console.log(e)
+      }
+    }
+  },
+  async beforeMount() {
+      await this.getStudents()
   }
 }
 </script>
