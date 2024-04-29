@@ -23,9 +23,13 @@
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
+        @updateAllStudentsComponents = updateStudentStatusAndComments()
         :state-of-student-page = stateOfStudentPage
         @btnSendEverythingToCheck="$emit('btnSendEverythingToCheck')"
         :work-status = workStatus
+        :actual-semester = this.actualSemester
+        :supervisor-mark = this.supervisorMark
+
     ></header-of-student>
 
     <div class="roundBlock">
@@ -112,12 +116,12 @@
         </div>
       </div>
 
-      <div class="container-fluid justify-content-between d-flex mb-3">
-        <nav class="inputWidth">
-          <label class="text">Приказ об утверждении</label>
-          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">
-        </nav>
-      </div>
+<!--      <div class="container-fluid justify-content-between d-flex mb-3">-->
+<!--        <nav class="inputWidth">-->
+<!--          <label class="text">Приказ об утверждении</label>-->
+<!--          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">-->
+<!--        </nav>-->
+<!--      </div>-->
 
 
       <div class="container-fluid justify-content-between d-flex mb-3">
@@ -129,8 +133,8 @@
 
       <div class="container-fluid justify-content-between d-flex mb-3">
         <nav class="inputWidth">
-          <label class="text">Предмет об утверждении</label>
-          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_order">
+          <label class="text">Предмет исследования</label>
+          <input type="text" class="textInput" :disabled="!editingInfo" v-model="research_subject">
         </nav>
       </div>
 
@@ -174,28 +178,28 @@
           {{this.topicMap[element.progress_type]}}
         </div>
         <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1 && !this.canEdit}" v-model=element.first :disabled="!(((this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 1)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 1)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1 && !this.canEdit}" v-model=element.first :disabled="!editingCheckbox || (this.actualSemester !== 1) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 2 && this.actualSemester > 2 && !this.canEdit}" v-model=element.second :disabled="!(((this.actualSemester === 2)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 2)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 2)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 2)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 2)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 2 && this.actualSemester > 2 && !this.canEdit}" v-model=element.second :disabled="!editingCheckbox || (this.actualSemester !== 2) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 3 && this.actualSemester > 3 && !this.canEdit }" v-model=element.third :disabled="!(((this.actualSemester === 3)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 3)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 3)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 3)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 3)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 3 && this.actualSemester > 3 && !this.canEdit }" v-model=element.third :disabled="!editingCheckbox || (this.actualSemester !== 3) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 4 && this.actualSemester > 4 && !this.canEdit}" v-model=element.forth :disabled="!(((this.actualSemester === 4)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 4)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 4)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 4)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 4)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 4 && this.actualSemester > 4 && !this.canEdit}" v-model=element.forth :disabled="!editingCheckbox || (this.actualSemester !== 4) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 5 && this.actualSemester > 5 && !this.canEdit}" v-model=element.fifth :disabled="!(((this.actualSemester === 5)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 5)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 5)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 5)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 5)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 5 && this.actualSemester > 5 && !this.canEdit}" v-model=element.fifth :disabled="!editingCheckbox || (this.actualSemester !== 5) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 6 && this.actualSemester > 6 && !this.canEdit}" v-model=element.sixth :disabled="!(((this.actualSemester === 6)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 6)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 6)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 6)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 6)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 6 && this.actualSemester > 6 && !this.canEdit}" v-model=element.sixth :disabled="!editingCheckbox || (this.actualSemester !== 6) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 7 && this.actualSemester > 7 && !this.canEdit}" v-model=element.seventh :disabled="!(((this.actualSemester === 7)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 7)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 7)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 7)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 7)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 7 && this.actualSemester > 7 && !this.canEdit}" v-model=element.seventh :disabled="!editingCheckbox || (this.actualSemester !== 7) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 8 && this.actualSemester > 8 && !this.canEdit}" v-model=element.eighth :disabled="!(((this.actualSemester === 8)||this.editingCheckbox || this.canEdit || this.waitForCheck) && ((this.actualSemester === 8)||this.editingCheckbox || !this.canEdit || this.waitForCheck) && ((this.actualSemester === 8)||!this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 8)||this.editingCheckbox || this.canEdit || this.waitForCheck) && (!(this.actualSemester === 8)||this.editingCheckbox || !this.canEdit || this.waitForCheck))">
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 8 && this.actualSemester > 8 && !this.canEdit}" v-model=element.eighth :disabled="!editingCheckbox || (this.actualSemester !== 8) && !this.canEdit">
         </div>
 
       </div>
@@ -222,7 +226,7 @@
             <p class="text">{{element.semester}}</p>
           </div>
           <div class="col-6 textTable text">
-            {{element.progress}}
+            {{element.progressiveness}}
           </div>
         </div>
 
@@ -261,24 +265,36 @@
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Комментарий аспиранта к диссертациии</p>
+          <p class="mainText">Комментарий аспиранта к отчету</p>
+        </nav>
+      </div>
+
+      <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
+        <nav class="checkboxBlock">
+          <p class="textMainPage">{{studentFeedBackDate}}</p>
         </nav>
       </div>
 
       <div>
-        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-model="studentFeedBack"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
       </div>
     </div>
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Комментарий научного руководителя к диссертациии</p>
+          <p class="mainText">Комментарий научного руководителя к отчету</p>
         </nav>
       </div>
 
+      <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
+      <nav class="checkboxBlock">
+        <p class="textMainPage">{{teacherFeedBackDate}}</p>
+      </nav>
+    </div>
+
       <div>
-        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-model="teacherFeedback"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
       </div>
     </div>
 
@@ -311,7 +327,7 @@ export default {
   "dissertationTab" : dissertationTab,
   "rangeNotification" : rangeNotification,
   "workSendToCheckNotification" : workSendToCheckNotification,
-  props: ["stateOfStudentPage", "actualSemester", "canEdit", "waitForCheck", "workStatus"],
+  props: ["stateOfStudentPage", "actualSemester", "canEdit", "waitForCheck", "workStatus", "supervisorMark"],
 
   data(){
     return {
@@ -333,6 +349,7 @@ export default {
 
       research_object:'',
       research_order : '',
+      research_subject: '',
 
       workStatusMap : {
         "todo" : "Отправлено на доработку",
@@ -376,6 +393,12 @@ export default {
       statusDefaultValue : {
         status : ""
       },
+
+      teacherFeedback : '',
+      teacherFeedBackDate: '',
+      studentFeedBack : '',
+      studentFeedBackDate: '',
+
     }
 
   }
@@ -391,6 +414,11 @@ export default {
       this.editingInfo = !this.editingInfo
     },
 
+    async updateStudentStatusAndComments() {
+      await this.getComments()
+      this.$emit('updateAllStudentsComponents')
+    },
+
 
 
 
@@ -401,13 +429,14 @@ export default {
             {
               "research_object": this.research_object,
               "research_order": this.research_order,
+              "research_subject": this.research_subject,
               "title": this.theme
             }
         )
 
       }
       catch (e) {
-        // this.showWrongAnswerString = true;
+
         console.log(e)
 
       }
@@ -472,6 +501,8 @@ export default {
       if (this.progressOfDissertation === this.progressOfDissertationCopy)
         return
 
+
+
       try {
         const response = await axios.post(this.IP +"/students/dissertation/progress/percent/" + localStorage.getItem("access_token"),
             { "progress": parseInt(this.progressOfDissertation)
@@ -496,6 +527,37 @@ export default {
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
+    },
+
+
+    async getComments(){
+      try {
+        const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token"))
+
+        this.data = response.data
+        console.log(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      try {
+        this.data.feedback.sort((a, b) => a.semester > b.semester ? 1 : -1);
+        this.teacherFeedback = this.data.feedback[0].feedback
+        this.teacherFeedBackDate = this.data.feedback[0].updated_at
+      }
+      catch (e){
+        console.log(e)
+      }
+
+      try {
+        this.data.students_comments.sort((a, b) => a.semester > b.semester ? 1 : -1);
+        this.studentFeedBack = this.data.students_comments[0].commentary
+        this.studentFeedBackDate = this.data.students_comments[0].commented_at
+      }
+      catch (e){
+        console.log(e)
+      }
     },
 
 
@@ -585,12 +647,20 @@ export default {
       }
 
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
+    },
 
+    async fillProgressHistory(progress){
+      progress.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
+
+      this.arrayOfProgress = progress
+      this.progressOfDissertation = this.arrayOfProgress[this.arrayOfProgress.length - 1].progressiveness
     },
 
 
+
     async getCommonInfo() {
-      // await this.getActualSemester()
+
 
       try {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
@@ -601,7 +671,7 @@ export default {
         this.showWrongAnswerString = true;
         console.log(e)
       }
-      console.log(this.data)
+
 
       try {
         await this.fillTeacherHistory(this.data.supervisors)
@@ -631,13 +701,20 @@ export default {
         console.log(e)
       }
 
+      try {
+        await this.fillProgressHistory(this.data.progresses)
+      }
+      catch(e) {
+        console.log(e)
+      }
+
 
 
 
 
       // await this.fillStatusArray(this.data.dissertations_statuses)
       // await this.fillFeedBackArray(this.data.feedback)
-      this.progressOfDissertation = this.data.student_status.progress
+
       this.renderChildComponents = true
 
     },
@@ -670,15 +747,18 @@ export default {
     async fillCommonInfo(tittles){
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
+      console.log(tittles[tittles.length - 1])
       this.theme = tittles[tittles.length - 1].title
       this.research_order = tittles[tittles.length - 1].research_order
       this.research_object = tittles[tittles.length - 1].research_object
+      this.research_subject = tittles[tittles.length - 1].research_subject
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
     }
 
   },
   async beforeMount() {
     await this.getCommonInfo()
+    await this.getComments()
 
 
 

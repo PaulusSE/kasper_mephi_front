@@ -10,19 +10,19 @@ export default {
       teachingLoadText: '',
     }
   },
-  props : ["show"],
+  props : ["show", "actualSemester"],
   methods : {
     cancel(){
       this.$emit("closeWindow")
     },
     async send(){
       this.$emit("closeWindow")
-      var tempData = this.dissertationText + "$" + this.scientificWorkText + "$" + this.teachingLoadText
-      console.log(tempData)
+
+
       try {
-        const response = await axios.post(this.IP +"" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/students/review/" + localStorage.getItem("access_token"),
             {
-              "comment" : tempData
+              "commentary" : this.dissertationText
             }
         )
 
@@ -30,8 +30,16 @@ export default {
       catch (e) {
         console.log(e)
       }
+
+      this.updateAllStudentsComponents()
+    },
+    updateAllStudentsComponents() {
+      this.$emit("updateAllStudentsComponents")
     }
-  }
+  },
+
+
+
 }
 
 </script>
@@ -72,24 +80,24 @@ export default {
 
           <div class="roundBlock">
             <p class="textMiniTable text-start" style="word-break:break-word">
-              Комментарий к диссертации
+              Комментарий к отчету
             </p>
-            <textarea v-model="dissertationText" rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            <textarea v-model="dissertationText" rows=12 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
           </div>
 
-          <div class="roundBlock">
-            <p class="textMiniTable text-start" style="word-break:break-word">
-              Комментарий к научной работе
-            </p>
-            <textarea  v-model="scientificWorkText" rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-          </div>
+<!--          <div class="roundBlock">-->
+<!--            <p class="textMiniTable text-start" style="word-break:break-word">-->
+<!--              Комментарий к научной работе-->
+<!--            </p>-->
+<!--            <textarea  v-model="scientificWorkText" rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
+<!--          </div>-->
 
-          <div class="roundBlock">
-            <p class="textMiniTable text-start" style="word-break:break-word">
-              Комментарий к педагогической нагрузке
-            </p>
-            <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-          </div>
+<!--          <div class="roundBlock">-->
+<!--            <p class="textMiniTable text-start" style="word-break:break-word">-->
+<!--              Комментарий к педагогической нагрузке-->
+<!--            </p>-->
+<!--            <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
+<!--          </div>-->
 
 
         </div>

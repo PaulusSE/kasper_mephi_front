@@ -15,7 +15,7 @@ export default {
       teachingLoadChecked : false,
     }
     },
-  props : ["show"],
+  props : ["show", "actualSemester", "currentMark"],
   methods : {
     async changeStatus() {
 
@@ -26,27 +26,49 @@ export default {
       this.$emit("closeWindow")
 
 
-      var tempData = this.dissertationText + "$" + this.scientificWorkText + "$" + this.teachingLoadText
-      console.log(tempData)
       try {
-        const response = await axios.post(this.IP +"" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/supervisors/student/review/" + localStorage.getItem("access_token"),
             {
-              "comment" : tempData,
-              "status" : this.status,
-              "mark" : this.mark
+              "student_id" : localStorage.getItem("studentID"),
+              "status" : this.status
             }
         )
-
       }
       catch (e) {
         console.log(e)
       }
+
+
+      try {
+        const response = await axios.post(this.IP +"/supervisors/student/feedback/" + localStorage.getItem("access_token"),
+            {
+              "feedback" : {
+                "mark" : this.mark,
+                "semester" : this.actualSemester,
+                "feedback" : this.dissertationText
+              },
+              "student_id" : localStorage.getItem("studentID"),
+            }
+        )
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      this.updateStatusAllTeachersComponents()
 
     },
     cancel(){
       this.$emit("closeWindow")
     },
 
+    updateStatusAllTeachersComponents() {
+      this.$emit("updateStatusAllTeachersComponents");
+    }
+
+  },
+  beforeMount() {
+    this.mark = this.currentMark
   }
 }
 
@@ -86,9 +108,9 @@ export default {
                 <div>
                   <select class="form-select mySelectedField" id="inputGroupSelect02" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
                     <option  class="textResult">Выбрать статус</option>
-                    <option  class="textResult1">Принято</option>
-                    <option  class="textResult2">На доработку</option>
-                    <option  class="textResult3">Не сдано</option>
+                    <option  class="textResult1" value="approved" >Принято</option>
+                    <option  class="textResult2" value="todo"  >На доработку</option>
+                    <option  class="textResult3" value="failed" >Не сдано</option>
                   </select>
                 </div>
               </div>
@@ -100,7 +122,7 @@ export default {
 
             </div>
             <div>
-              <p class="textMiniTable text-start">Комментарий к диссертации</p>
+              <p class="textMiniTable text-start">Комментарий к отчету</p>
               <textarea v-model="dissertationText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
             </div>
           </div>
@@ -115,10 +137,10 @@ export default {
                 <input type="checkbox" class="me-1 myCheckBox" v-model="scientificWorkChecked" />Научная работа просмотрена</label>
             </div>
 
-            <div>
-              <p class="textMiniTable text-start">Комментарий к научной работе</p>
-              <textarea v-model="scientificWorkText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-            </div>
+<!--            <div>-->
+<!--              <p class="textMiniTable text-start">Комментарий к научной работе</p>-->
+<!--              <textarea v-model="scientificWorkText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
+<!--            </div>-->
           </div>
 
           <div class="roundBlock mt-2">
@@ -131,10 +153,10 @@ export default {
                 <input type="checkbox" class="me-1 myCheckBox"  v-model="teachingLoadChecked" />Педагогическая нагрузка просмотрена</label>
             </div>
 
-            <div>
-              <p class="textMiniTable text-start">Комментарий к научной работе</p>
-              <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-            </div>
+<!--            <div>-->
+<!--              <p class="textMiniTable text-start">Комментарий к научной работе</p>-->
+<!--              <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
+<!--            </div>-->
           </div>
 
           <div class="d-flex justify-content-between mt-2 pt-2 pb-2 mb-2">

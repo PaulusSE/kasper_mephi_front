@@ -68,6 +68,13 @@
       </nav>
     </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Статус</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="this.teacherStatusMap[status]">
+      </nav>
+    </div>
+
 
   </div>
 
@@ -118,6 +125,12 @@ export default {
       stateOfWriting: false,
       arrayOfStudents : [],
       phoneNumber : '',
+      status : '',
+
+      teacherStatusMap : {
+        "false" : "Работает",
+        "true" : "Не работает",
+      }
     }
   },
   methods : {
@@ -205,6 +218,7 @@ export default {
       this.department = this.data.department
       this.faculty = this.data.faculty
       this.email = this.data.email
+      this.status = this.data.archived
     }
   },
   async beforeMount() {

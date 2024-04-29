@@ -9,8 +9,12 @@
       @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
       @btnProfileClicked="$emit('btnProfileClicked')"
       @btnReportingClicked="$emit('btnReportingClicked')"
+      @updateStatusAllTeachersComponents = updateStudentStatusAndComments()
+
       :state-of-student-page = this.stateOfPage
       :work-status = this.workStatus
+      :actual-semester = this.actualSemester
+      :supervisor-mark = this.supervisorMark
   ></header-of-student>
 
 
@@ -104,12 +108,12 @@
           </div>
         </div>
 
-        <div class="container-fluid justify-content-between d-flex mb-3">
-          <nav class="inputWidth">
-            <label class="text">Приказ об утверждении</label>
-            <input type="text" class="textInput" disabled v-model="research_order">
-          </nav>
-        </div>
+<!--        <div class="container-fluid justify-content-between d-flex mb-3">-->
+<!--          <nav class="inputWidth">-->
+<!--            <label class="text">Приказ об утверждении</label>-->
+<!--            <input type="text" class="textInput" disabled v-model="research_order">-->
+<!--          </nav>-->
+<!--        </div>-->
 
 
         <div class="container-fluid justify-content-between d-flex mb-3">
@@ -136,7 +140,7 @@
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
             <label class="text">Предмет исследования</label>
-            <input type="text" class="textInput" disabled v-model="research_order">
+            <input type="text" class="textInput" disabled v-model="research_subject">
           </nav>
         </div>
 
@@ -227,7 +231,7 @@
             <p class="text">{{element.semester}}</p>
           </div>
           <div class="col-6 textTable text">
-            <p class="text">{{element.progress}}</p>
+            <p class="text">{{element.progressiveness}}</p>
           </div>
         </div>
 
@@ -250,24 +254,36 @@
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Комментарий аспиранта к диссертации</p>
+          <p class="mainText">Комментарий аспиранта к отчету</p>
+        </nav>
+      </div>
+
+      <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
+        <nav class="checkboxBlock">
+          <p class="textMainPage">{{studentFeedBackDate}}</p>
         </nav>
       </div>
 
       <div>
-        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-model="studentFeedBack"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
       </div>
     </div>
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
-          <p class="mainText">Предыдущий комментарий научного руководителя</p>
+          <p class="mainText">Комментарий научного руководителя к отчету</p>
+        </nav>
+      </div>
+
+      <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
+        <nav class="checkboxBlock">
+          <p class="textMainPage">{{teacherFeedBackDate}}</p>
         </nav>
       </div>
 
       <div>
-        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-model="teacherFeedback"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
       </div>
     </div>
 
@@ -295,7 +311,7 @@ export default {
     'confirmChanging' : confirmChangingStudentStatus
 
   },
-  props : ["stateOfPage", "actualSemester", "workStatus"],
+  props : ["stateOfPage", "actualSemester", "workStatus", "supervisorMark"],
   data(){
     return {
       renderChildComponents : true,
@@ -304,6 +320,7 @@ export default {
       theme : "",
       research_object:'',
       research_order : '',
+      research_subject: '',
       specialization: '',
       feedbacks : [],
       states : '',
@@ -338,14 +355,54 @@ export default {
         'end' : 'Заключение',
         'literature' : 'Список литературы',
         'abstract' : 'Автореферат',
-      }
+      },
+
+      teacherFeedback : '',
+      teacherFeedBackDate: '',
+      studentFeedBack : '',
+      studentFeedBackDate: '',
     }
 
   },
   methods : {
 
+    async updateStudentStatusAndComments() {
+      await this.getComments()
+      this.$emit('updateStatusAllTeachersComponents')
+    },
 
 
+    async getComments(){
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
+          "student_id" : localStorage.getItem("studentID"),
+        })
+
+        this.data = response.data
+        console.log(this.data)
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      try {
+        this.data.feedback.sort((a, b) => a.semester > b.semester ? 1 : -1);
+        this.teacherFeedback = this.data.feedback[0].feedback
+        this.teacherFeedBackDate = this.data.feedback[0].updated_at
+      }
+      catch (e){
+        console.log(e)
+      }
+
+      try {
+        this.data.students_comments.sort((a, b) => a.semester > b.semester ? 1 : -1);
+        this.studentFeedBack = this.data.students_comments[0].commentary
+        this.studentFeedBackDate = this.data.students_comments[0].commented_at
+      }
+      catch (e){
+        console.log(e)
+      }
+    },
 
     buttonClickedCommonInfo() {
       this.commonInfo = !this.commonInfo
@@ -427,6 +484,7 @@ export default {
       this.theme = tittles[tittles.length-1].title
       this.research_order = tittles[tittles.length-1].research_order
       this.research_object = tittles[tittles.length-1].research_object
+      this.research_subject = tittles[tittles.length-1].research_subject
     },
 
     async fillFeedBackArray(feedbacks){
@@ -502,6 +560,14 @@ export default {
       this.progressOfDissertation = data.progress
     },
 
+    async fillProgressHistory(progress){
+      progress.sort((a, b) => a.semester > b.semester ? 1 : -1);
+
+
+      this.arrayOfProgress = progress
+      this.progressOfDissertation = this.arrayOfProgress[this.arrayOfProgress.length - 1].progressiveness
+    },
+
     async commonRequest(){
 
       try {
@@ -509,6 +575,7 @@ export default {
               "student_id" : localStorage.getItem("studentID"),
             }
         )
+
 
         this.data = response.data
 
@@ -520,15 +587,61 @@ export default {
         console.log(e)
       }
 
+      try {
+        await this.fillStatusArray(this.data.dissertations_statuses)
+      }
+      catch (e){
+        console.log(e)
+      }
 
-      await this.fillStatusArray(this.data.dissertations_statuses)
-      await this.fillFeedBackArray(this.data.feedback)
-      await this.fillThemeHistory(this.data.dissertation_titles)
-      await this.fillTeacherHistory(this.data.supervisors)
-      await this.fillProgressTable(this.data.semester_progress)
-      await this.fillCommonInfo(this.data.dissertation_titles)
-      await this.getSpecializationAndYearOfStudy(this.data.student_status)
-      this.copyState()
+      try {
+        await this.fillFeedBackArray(this.data.feedback)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillThemeHistory(this.data.dissertation_titles)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillCommonInfo(this.data.dissertation_titles)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillThemeHistory(this.data.dissertation_titles)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillTeacherHistory(this.data.supervisors)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillProgressTable(this.data.semester_progress)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.getSpecializationAndYearOfStudy(this.data.student_status)
+      }
+      catch (e){
+        console.log(e)
+      }
+      try {
+        await this.fillProgressHistory(this.data.progresses)
+      }
+      catch (e){
+        console.log(e)
+      }
       this.renderChildComponents = true
 
 
@@ -540,10 +653,11 @@ export default {
   async beforeCreate(){
     this.$store.dispatch("updateUserId", localStorage.getItem("studentID"))
 
+
   },
 
   async beforeMount() {
-
+    await this.getComments()
     await this.commonRequest()
 
 

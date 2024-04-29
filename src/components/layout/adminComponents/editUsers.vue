@@ -153,9 +153,9 @@
 
             <div class="textMiniTable" style="width: 38%; text-align: center">
               <div  style="height: 100%; width: 100%">
-                <select  :disabled="!editTeachers"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.studying_status">
-                  <option value="active">Работает</option>
-                  <option value="inactive"> Уволен</option>
+                <select  :disabled="!editTeachers"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.archived">
+                  <option value="false">Работает</option>
+                  <option value="true"> Уволен</option>
 
                 </select>
               </div>
@@ -267,7 +267,7 @@
 
       <div class="d-flex justify-content-between" style="margin-left: 2.5%">
         <nav class="mt-3" >
-          <p class="headingSemester">Редактирование актуального плана обучения</p>
+          <p class="headingSemester">Редактирование количество семестров обучения</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editTableYears" @click="buttonEditTableYears" class="editBtn mt-3">Редактировать</button>
@@ -287,10 +287,8 @@
             </div>
 
             <div class="textMiniTable" style="width: 90%; text-align: center">
-              План (лет)
+              Количество семестров
             </div>
-
-
 
 
           </div>
@@ -300,9 +298,8 @@
               {{index + 1}}
             </div>
 
-            <div class="textMiniTable" style="width: 90%; text-align: center">
-              <input type="text" class="inputBox" v-model="arrayOfPlan[index]" :disabled="arrayOfPlan[index].plan_id === undefined">
-
+            <div class="textMiniTable me-3" style="width: 88%; text-align: center">
+              <input type="text" class="inputBox ps-3" v-model="arrayOfPlan[index].amount" disabled>
             </div>
 
           </div>
@@ -318,7 +315,7 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
-              План (лет)
+              Количество семестров
             </div>
 
 
@@ -336,16 +333,13 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 80%; text-align: center">
-              <input v-if="editTableYears" type="text" class="inputBox" v-model="arrayOfPlan[index]" >
-              <p v-else>{{element}}</p>
+              <input v-if="editTableYears" type="text" class="inputBox" v-model="element.amount" :disabled="element.amount_id !== undefined">
+              <p v-else>{{element.amount}}</p>
             </div>
 
 
             <div class="textMiniTable" style="width: 10%; text-align: center">
-              <button v-if="editTableWithGroups" class="btnAddDeleteFiles mt-2" @click="buttonDeleteYear(index)">
-                <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-              </button>
-              <button v-else class="btnAddDeleteFiles mt-2">
+              <button class="btnAddDeleteFiles mt-2" @click="buttonDeleteYear(index)">
                 <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
               </button>
             </div>
@@ -504,8 +498,8 @@ export default {
         "graduated" : "Выпустился",
       },
       teacherStatusMap: {
-        "active" : "Работает",
-        "inactive" : "Уволен"
+        "false" : "Работает",
+        "true" : "Уволен"
       },
       showSaveTableNotification : false,
       resultOfSavingTables : false,
@@ -529,23 +523,29 @@ export default {
       this.editTeachers = false
       this.arrayOfTeachers = JSON.parse(JSON.stringify(this.arrayOfTeachersCopy));
     },
-    buttonSaveTeachers(){
+    async buttonSaveTeachers(){
       this.editTeachers = false
+
+
+      if (this.arrayOfTeachers === this.arrayOfTeachersCopy)
+        return
+
+      try {
+        const response = await axios.get(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"),
+        )
+        this.data = response.data
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+
+      await this.getTeachers()
     },
 
 
-    deleteStudent(index){
 
-      this.arrayOfStudents.splice(index,1) /// Временно
-    },
-    deleteTeacher(index){
 
-      this.arrayOfTeachers.splice(index,1) /// Временно
-    },
-    editStudentsButton(){
-      this.stateOfStudents = !this.stateOfStudents
-      this.arrayOfStudentsCopy = this.arrayOfStudents.slice(0)
-    },
     saveStudents(){
       this.stateOfStudents = !this.stateOfStudents
       if (this.arrayOfStudentsCopy === this.arrayOfStudents)
@@ -615,7 +615,8 @@ export default {
 
        }
        catch (e) {
-         this.showWrongAnswerString = true;
+         console.log(e)
+         this.callSaveTableError()
        }
      }
 
@@ -641,7 +642,8 @@ export default {
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
+        this.callSaveTableError()
       }
 
       this.editTableWithGroups = false
@@ -676,13 +678,14 @@ export default {
 
         }
         catch (e) {
-          this.showWrongAnswerString = true;
+          this.callSaveTableError()
+          console.log(e)
         }
       }
 
       var tempData = new Array()
 
-      console.log(this.arrayOfSpecialization)
+
       for (var i = 0; i < this.arrayOfSpecialization.length; i++){
         if (this.arrayOfSpecialization[i].specialization_id === undefined)
           tempData.push(this.arrayOfSpecialization[i])
@@ -703,7 +706,8 @@ export default {
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
+        this.callSaveTableError()
       }
 
       await this.getSpecializations()
@@ -745,7 +749,8 @@ export default {
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
+        this.callSaveTableError()
       }
 
       this.editCommonTable = false
@@ -757,7 +762,9 @@ export default {
     },
 
     buttonAddYear(){
-      this.arrayOfPlan.push('')
+      this.arrayOfPlan.push({
+        "amount" : '',
+      })
     },
 
     buttonCancelYear(){
@@ -772,21 +779,74 @@ export default {
       }, 5000);
     },
 
-    buttonSaveYear(){
+    async buttonSaveYear(){
+
+
+      if (this.deletePlanIds.length !== 0) {
+        try {
+          const response = await axios.put(this.IP +"/administrator/enum/amounts/" + localStorage.getItem("access_token"),{
+                "ids" : this.deletePlanIds
+              }
+          )
+
+          if (response.status === 200) {
+            this.deleteSpecIds.length = 0
+          }
+
+        }
+        catch (e) {
+          this.callSaveTableError()
+          console.log(e)
+        }
+      }
+
+
       for (var i = 0; i < this.arrayOfPlan.length; i++){
-        if (!/^\d+$/.test(this.arrayOfPlan[i])){
+        console.log(this.arrayOfPlan[i].amount)
+        if (!/^\d+$/.test(this.arrayOfPlan[i].amount)){
           this.arrayOfPlan = this.arrayOfPlanCopy.slice(0)
           this.callEditTablePlanError()
           return
         }
       }
-      //todo saving
 
 
+      var tempData = new Array()
+
+
+      for (var i = 0; i < this.arrayOfPlan.length; i++){
+        if (this.arrayOfPlan[i].amount_id === undefined)
+          tempData.push(this.arrayOfPlan[i])
+      }
+
+      if (tempData.length === 0){
+        this.editTableYears= false
+        return
+      }
+
+      try {
+        const response = await axios.post(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
+            {
+              "specs" : tempData
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+        this.callSaveTableError()
+      }
+
+      await this.getSemesters()
       this.editTableYears = false
     },
     buttonDeleteYear(index){
+
+      this.deletePlanIds.push(this.arrayOfPlan[index].amount_id)
       this.arrayOfPlan.splice(index, 1)
+
+
+
     },
 
     callSaveTableError(result){
@@ -841,6 +901,7 @@ export default {
         this.data = response.data
         this.arrayOfTeachers = this.data
 
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -862,16 +923,61 @@ export default {
       }
     },
 
+    async getSemesters(){
+      try {
+        const response = await axios.get(this.IP +"/administrator/enum/amounts/" + localStorage.getItem("access_token"))
+
+        this.data = response.data
+
+        this.arrayOfPlan = this.data
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+        console.log(e)
+      }
+    },
+
+
+
 
 
   },
   async beforeMount() {
-    // await this.getAspsAndTeachers()
-    await this.getSpecializations()
-    await this.getGroups()
-    await this.getTeachers()
-    await this.getStudents()
+    try{
+      await this.getSpecializations()
+    }
+    catch (e){
+      console.log(e)
+    }
 
+    try{
+      await this.getGroups()
+    }
+    catch (e){
+      console.log(e)
+    }
+
+    try{
+      await this.getTeachers()
+    }
+    catch (e){
+      console.log(e)
+    }
+
+    try{
+      await this.getStudents()
+    }
+    catch (e){
+      console.log(e)
+    }
+
+    try{
+      await this.getSemesters()
+    }
+    catch (e){
+      console.log(e)
+    }
 
 
   }

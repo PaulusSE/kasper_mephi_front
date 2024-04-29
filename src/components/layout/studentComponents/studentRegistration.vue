@@ -44,7 +44,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Номер телефона</label>
-        <input type="date" class="blockStyles" v-model="phoneNumber" @input="inputEvent" >
+        <input type="tel" class="blockStyles" v-model="phoneNumber" @input="inputEvent">
       </nav>
     </div>
 
@@ -161,8 +161,8 @@ export default {
         return
       }
 
-      if (this.enrollmentOrder === ''){
-        this.errorMessage = 'Поле приказ о зачислении не должно быть пустым'
+      if (this.phoneNumber === ''){
+        this.errorMessage = 'Поле номер телефона не должно быть пустым'
         return;
       }
 
@@ -222,7 +222,6 @@ export default {
         const response = await axios.get(this.IP +"/student/supervisors/list/" + localStorage.getItem('access_token'),
         )
         this.arrayOfTeachers = response.data
-
         }
 
       catch (e) {

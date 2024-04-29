@@ -95,7 +95,7 @@
                   {{ element.mark }}
                 </div>
                 <div v-else class="me-3">
-                  <input type="text" class="inputBox ps-3" v-model="element.name">
+                  <input type="text" class="inputBox ps-3" v-model="element.mark">
                 </div>
 
               </div>
@@ -136,7 +136,12 @@ export default {
     },
     async saveMarks(){
       this.editMarks = !this.editMarks
-      console.log(this.arrayOfStudents)
+
+      for (var student of this.arrayOfStudents){
+        student.semester = student.actual_semester
+        student.mark = parseInt(student.mark)
+      }
+
       try {
         const response = await axios.post(this.IP +"/administrator/student/attestation/marks/" + localStorage.getItem("access_token"),
             {
@@ -168,6 +173,7 @@ export default {
         )
 
         this.data = response.data
+
         this.arrayOfStudents = this.data
 
       }
@@ -175,7 +181,36 @@ export default {
         this.showWrongAnswerString = true;
         console.log(e)
       }
-    }
+
+      await this.fillMarks()
+    },
+
+    async fillMarks() {
+
+      for (var i = 0; i < this.arrayOfStudents.length; i++){
+
+        var studentID = this.arrayOfStudents[i].student_id
+
+        try {
+          const response = await axios.put(this.IP +"/supervisors/student/marks/" + localStorage.getItem("access_token"), {
+            "student_id" : studentID
+              }
+          )
+
+          this.data = response.data
+          this.data.attestation_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
+          this.arrayOfStudents[i].mark = this.data.attestation_marks[0].mark
+
+        }
+        catch (e) {
+          console.log(e)
+        }
+
+
+      }
+
+    },
+
   },
   async beforeMount() {
       await this.getStudents()

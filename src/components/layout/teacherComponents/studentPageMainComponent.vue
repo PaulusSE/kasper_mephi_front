@@ -11,14 +11,19 @@
 
   <div>
     <student-page-from-teacher v-if="stateOfPage === 1"
+
                                :state-of-page = this.stateOfPage
                                @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               @updateStatusAllTeachersComponents = updateStatus()
+
                                :actual-semester = actualSemester
                                :work-status = workStatusForTeacher
+                               :supervisor-mark = supervisorMark
+
     ></student-page-from-teacher>
     <scientific-work-for-teacher v-if="stateOfPage === 2"
                                  :state-of-page = this.stateOfPage
@@ -27,8 +32,11 @@
                                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                  @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                                 @updateStatusAllTeachersComponents = updateStatus()
+
                                  :actual-semester = actualSemester
                                  :work-status = workStatusForTeacher
+                                 :supervisor-mark = this.supervisorMark
     ></scientific-work-for-teacher>
     <teaching-load-for-teacher v-if="stateOfPage === 3"
                                :state-of-page = this.stateOfPage
@@ -36,8 +44,11 @@
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
                                @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               @updateStatusAllTeachersComponents = updateStatus()
+
                                :actual-semester = actualSemester
                                :work-status = workStatusForTeacher
+                               :supervisor-mark = this.supervisorMark
     ></teaching-load-for-teacher>
     <student-profile-for-admin v-if="stateOfPage === 4"
                                :state-of-page = this.stateOfPage
@@ -96,6 +107,8 @@ export default {
       group: '',
       actualSemester : '',
       workStatusForTeacher : 'in progress',
+      supervisorMark: '',
+
     }
   },
   methods : {
@@ -138,13 +151,40 @@ export default {
       this.workStatusForTeacher = this.data.status
     },
 
+    async getStudentMark() {
+
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/marks/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID")
+            }
+        )
+        this.data = response.data
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      this.data.supervisor_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
+      this.supervisorMark = this.data.supervisor_marks[0].mark
+
+    },
+
+    async updateStatus(){
+      await this.getStudentMark()
+      await this.getStudentName()
+    }
+
   },
   async beforeMount() {
     await this.checkAuth()
     if (localStorage.getItem("userType") === "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.getStudentMark()
     await this.getStudentName()
+
+
+
 
 
 

@@ -4,13 +4,21 @@
 
   :show=showModalConfirmSending
   @closeWindow = closeWindowStudent
+  :actual-semester = this.actualSemester
+  @updateAllStudentsComponents = "$emit('updateAllStudentsComponents')"
+
   >
   </confirm-sending-to-check>
 
   <confirm-changing-student-status
+
       :show = showModalChangingStudentStatus
       @closeWindow = closeWindowTeacher
       @callChangeError = callChangeError
+      :actual-semester = this.actualSemester
+      :current-mark = supervisorMark
+      @updateStatusAllTeachersComponents = "$emit('updateStatusAllTeachersComponents')"
+
   >
 
   </confirm-changing-student-status>
@@ -66,9 +74,10 @@
     <div>
 
       <div v-if="this.userType === 'student' && stateOfStudentPage!==5">
-        <div v-if="workStatus !== 'on review' || workStatus !== 'passed' ">
+        <div v-if="!(workStatus === 'on review' || workStatus === 'approved')">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="sendEverythingToCheck()">Отправить работу на проверку</button>
         </div>
+
 
         <div class="d-flex gap-2 justify-content-between">
           <div class="d-flex">
@@ -77,6 +86,7 @@
             </p>
             <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
               {{this.statusMap[workStatus]}}
+
             </p>
           </div>
           <div class="d-flex">
@@ -84,7 +94,7 @@
               Текущая оценка :
             </p>
             <p class="mainText text-start " >
-              123
+              {{this.supervisorMark}}
             </p>
           </div>
 
@@ -93,7 +103,7 @@
       </div>
 
       <div v-if="(this.userType === 'supervisor' || this.userType === 'admin') && (stateOfStudentPage !== 4 && stateOfStudentPage !== 5)">
-        <div v-if="workStatus === 'on review'">
+        <div v-if="workStatus === 'on review' || workStatus === 'approved'  ">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
         </div>
         <div class="d-flex gap-2 justify-content-between">
@@ -110,7 +120,7 @@
               Текущая оценка :
             </p>
             <p class="mainText text-start">
-              100?
+              {{this.supervisorMark}}
             </p>
           </div>
 
@@ -141,7 +151,7 @@ import notificationError from "@/components/layout/notifications/studentNotifica
 
 export default {
   name: "headerOfStudent",
-  props: ["stateOfStudentPage", "confirmChangingStudentStatus", "workStatus"],
+  props: ["stateOfStudentPage", "confirmChangingStudentStatus", "workStatus", "actualSemester", "supervisorMark"],
   data() {
     return {
       userType: localStorage.getItem("userType"),
@@ -152,7 +162,7 @@ export default {
       statusMap : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
-        'passed' : 'Принято',
+        'approved' : 'Принято',
         'in progress': 'В процессе',
         'empty' : "Не заполнено",
         'on review': "Ожидает проверки"
@@ -192,6 +202,7 @@ export default {
   },
   async beforeMount() {
     this.userType = localStorage.getItem("userType")
+
 
   },
   async beforeCreate() {

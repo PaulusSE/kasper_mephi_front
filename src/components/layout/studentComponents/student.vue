@@ -7,22 +7,26 @@
                 @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                 @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                 @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                @updateAllStudentsComponents = updateStatus()
                 :state-of-student-page = stateOfStudentPage
                 :actual-semester = actualSemester
                 :can-edit = canEdit
                 :work-status = workStatus
                 :wait-for-check = waitForCheck
+                :supervisor-mark = this.supervisorMark
   ></dissertation>
   <scientific-work v-if="stateOfStudentPage === 2"
                    @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                    @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                    @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                    @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                   @updateAllStudentsComponents = updateStatus()
                    :state-of-student-page = stateOfStudentPage
                    :actual-semester = actualSemester
                    :can-edit = canEdit
                    :work-status = workStatus
                    :wait-for-check = waitForCheck
+                   :supervisor-mark = this.supervisorMark
 
   ></scientific-work>
   <teaching-load v-if="stateOfStudentPage === 3"
@@ -30,11 +34,13 @@
                  @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                 @updateAllStudentsComponents = updateStatus()
                  :state-of-student-page = stateOfStudentPage
                  :actual-semester = actualSemester
                  :can-edit = canEdit
                  :work-status = workStatus
                  :wait-for-check = waitForCheck
+                 :supervisor-mark = this.supervisorMark
 
   ></teaching-load>
   <report v-if="stateOfStudentPage === 5"
@@ -73,6 +79,7 @@ export default {
       canEdit: false,
       waitForCheck : false,
       workStatus : 'in progress',
+      supervisorMark: ''
     }
   },
   methods : {
@@ -94,12 +101,33 @@ export default {
       this.waitForCheck = this.workStatus === 'approved' || this.workStatus === 'on review'
       this.canEdit = this.data.can_edit
     },
+
+    async getSupervisorMark() {
+      try {
+        const response = await axios.get(this.IP +'/students/marks/' + localStorage.getItem("access_token"))
+        this.data = await response.data;
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      this.data.supervisor_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
+      this.supervisorMark = this.data.supervisor_marks[0].mark
+
+
+    },
+    async updateStatus(){
+      await this.getActualSemester()
+      await this.getSupervisorMark()
+    }
+
   },
   async beforeMount() {
     if (localStorage.getItem('registered') === 'false')
       this.$router.push('/registration')
     await this.getActualSemester()
-
+    await this.getSupervisorMark()
 
 
   }

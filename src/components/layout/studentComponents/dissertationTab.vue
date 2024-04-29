@@ -57,7 +57,7 @@
       </div>
 
       <div class="text-end" v-if="this.id === this.actualSemester">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="waitForCheck" :class="{disabledText : waitForCheck}" >
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="waitForCheck"  >
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">

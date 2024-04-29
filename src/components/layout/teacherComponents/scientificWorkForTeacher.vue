@@ -7,8 +7,11 @@
       @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
       @btnProfileClicked="$emit('btnProfileClicked')"
       @btnReportingClicked="$emit('btnReportingClicked')"
+      @updateStatusAllTeachersComponents = "$emit('updateStatusAllTeachersComponents')"
       :state-of-student-page = this.stateOfPage
       :work-status = this.workStatus
+      :actual-semester = this.actualSemester
+      :supervisor-mark = this.supervisorMark
   ></header-of-student>
 
 
@@ -21,29 +24,29 @@
                      :patents = this.arrayOfPatents[index]
     ></tab-of-articles-for-teacher>
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between">
-        <nav class="checkboxBlock">
-          <p class="mainText">Комментарий аспиранта к научной работе</p>
-        </nav>
-      </div>
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Комментарий аспиранта к научной работе</p>-->
+<!--        </nav>-->
+<!--      </div>-->
 
-      <div>
-        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
-      </div>
-    </div>
+<!--      <div>-->
+<!--        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between">
-        <nav class="checkboxBlock">
-          <p class="mainText">Предыдущий комментарий научного руководителя</p>
-        </nav>
-      </div>
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Предыдущий комментарий научного руководителя</p>-->
+<!--        </nav>-->
+<!--      </div>-->
 
-      <div>
-        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
-      </div>
-    </div>
+<!--      <div>-->
+<!--        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 
@@ -67,7 +70,7 @@ export default {
 
     }
   },
-  props : ['stateOfPage', "actualSemester", "workStatus"],
+  props : ['stateOfPage', "actualSemester", "workStatus", "supervisorMark"],
   components : {
     "headerOfStudent" : headerOfStudent,
     "tabOfArticlesForTeacher" : tabOfArticlesForTeacher,

@@ -202,10 +202,11 @@ export default {
       }
       this.fullName = this.data.full_name
       this.group = this.data.group_name
-      this.phoneNumber = this.data.phone_number
+      this.phoneNumber = this.data.phone
       this.studyingTime = this.data.years
       this.startDateStudying = this.data.start_date.slice(0,10)
       this.email = this.data.email
+
     }
   },
   beforeMount() {

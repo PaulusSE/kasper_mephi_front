@@ -153,6 +153,7 @@ export default {
       startDateStudying: '',
       department: '',
       faculty: '',
+      phoneNumber: '',
       admissionOrder: '',
       fullNameCopy: "",
       emailCopy: '',
@@ -239,7 +240,7 @@ export default {
       try {
         const response = await axios.get(this.IP +"/student/profile/" + localStorage.getItem("access_token"))
         this.data = response.data
-        console.log(response)
+
       }
       catch (e) {
         console.log(e)
@@ -250,6 +251,8 @@ export default {
       this.speciality = this.data.specialization
       this.startDateStudying = this.data.start_date.slice(0,10)
       this.studyingTime = this.data.years
+      this.phoneNumber = this.data.phone
+
     },
 
     cancelChange(){

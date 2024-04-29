@@ -71,7 +71,6 @@ export default {
     },
 
     fillMarks(data) {
-
       this.attestationMarks = data.attestation_marks === undefined ? [] : data.attestation_marks;
       this.supervisorMarks = data.supervisor_marks === undefined ? [] : data.supervisor_marks
 
@@ -205,6 +204,8 @@ export default {
     await this.getComments()
     await this.getMarks()
 
+    console.log(this.attestationMarks)
+
 
 
   }
@@ -266,7 +267,7 @@ export default {
 
             {{marks.semester}}
           </div>
-          <div class="rightLine textMiniTable" style="width: 78%; text-align: center">
+          <div class=" textMiniTable" style="width: 78%; text-align: center">
             <div>
               <div class="textWithCarry inputBox ">{{marks.mark}}</div>
             </div>
@@ -300,11 +301,11 @@ export default {
 
         <div class="d-flex " :class="{ underline: index !== supervisorMarks.length-1}" v-for="(marks,index) in supervisorMarks">
 
-          <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+          <div class="textMiniTable rightLine" style="width: 20%; text-align: center">
 
             {{marks.semester}}
           </div>
-          <div class="rightLine textMiniTable" style="width: 78%; text-align: center">
+          <div class="textMiniTable" style="width: 78%; text-align: center">
             <div>
               <div class="textWithCarry inputBox ">{{marks.mark}}</div>
             </div>

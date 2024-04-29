@@ -31,8 +31,17 @@
           <textarea  v-model="newStudents"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
+        <div class="myBtn mt-2" >
+          <button class="sendFilesBtn p-2" @click="addStudents">
+            <div class="d-flex justify-content-around">
+              <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
+              <p class="loadText">
+                Добавить аспирнтов
+              </p>
+            </div>
 
-
+          </button>
+        </div>
 
       </div>
 
@@ -46,6 +55,18 @@
           <textarea  v-model="newTeachers"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
+        <div class="myBtn mt-2" >
+          <button class="sendFilesBtn p-2" @click="addTeachers">
+            <div class="d-flex justify-content-around">
+              <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
+              <p class="loadText">
+                Добавить научных руководителей
+              </p>
+            </div>
+
+          </button>
+        </div>
+
 
       </div>
 
@@ -54,21 +75,10 @@
           Формат для загрузки пользователей в систему
         </p>
         <p>
-          Адресс электронной почты через пробел: email1@mail.com email2@gmail.com ...
+          Адресс электронной почты через точку с запятой : email1@mail.com; email2@gmail.com;
         </p>
       </div>
 
-      <div class="myBtn" >
-        <button class="sendFilesBtn p-2" @click="addUsers">
-          <div class="d-flex justify-content-around">
-            <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
-            <p class="loadText">
-              Добавить пользователей
-            </p>
-          </div>
-
-        </button>
-      </div>
     </div>
 
   </div>
@@ -102,12 +112,11 @@ export default {
   },
   methods: {
 
-    async addUsers(){
+    async addStudents(){
       try {
-        const response = await axios.put(this.IP +"" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/administrator/users/students/" + localStorage.getItem("access_token"),
             {
-              "students" : this.newStudents,
-              "teachers" : this.newTeachers
+              "users" : this.newStudents
             }
         )
         if (response.status === 200) {
@@ -122,6 +131,28 @@ export default {
       this.callNotification()
 
     },
+
+    async addTeachers(){
+      try {
+        const response = await axios.post(this.IP +"/administrator/users/supervisors/" + localStorage.getItem("access_token"),
+            {
+              "users" : this.newTeachers
+            }
+        )
+        if (response.status === 200) {
+          this.resultOfSending = true
+        }
+
+
+      }
+      catch (e) {
+        this.resultOfSending = false
+      }
+      this.callNotification()
+
+    },
+
+
     callNotification(){
       this.stateOfSending = true
       setTimeout(() => {

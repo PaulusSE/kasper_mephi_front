@@ -19,8 +19,11 @@
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
+        @updateAllStudentsComponents = "$emit('updateAllStudentsComponents')"
         :state-of-student-page = stateOfStudentPage
         :work-status = workStatus
+        :actual-semester = this.actualSemester
+        :supervisor-mark = this.supervisorMark
     ></header-of-student>
 
 
@@ -59,17 +62,17 @@
     ></tab-of-articles>
 
 
-    <div class="roundBlock">
-      <div class="d-flex justify-content-between">
-        <nav class="checkboxBlock">
-          <p class="mainText">Комментарий к научной работе</p>
-        </nav>
-      </div>
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Комментарий к научной работе</p>-->
+<!--        </nav>-->
+<!--      </div>-->
 
-      <div>
-        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
-      </div>
-    </div>
+<!--      <div>-->
+<!--        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
   </div>
@@ -100,7 +103,7 @@ export default {
     "workSendToCheckNotification" : workSendToCheckNotification,
     "saveTablesNotification" : saveTablesNotifitcation,
   },
-  props: ["stateOfStudentPage", "educationTime", "actualSemester", "canEdit", "waitForCheck", "workStatus"],
+  props: ["stateOfStudentPage", "educationTime", "actualSemester", "canEdit", "waitForCheck", "workStatus", "supervisorMark"],
   data() {
     return {
       isTableEditing: false,
