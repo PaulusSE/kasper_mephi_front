@@ -27,7 +27,7 @@
       <nav style="width: 100%;">
         <label class="text m-0">Актуальный семестр</label>
         <select class="form-select blockStyles" v-model="actualSemester" @input="inputEvent">
-          <option v-for="number in 8" >{{number}}</option>
+          <option v-for="number in this.maxSemester" >{{number}}</option>
         </select>
       </nav>
     </div>
@@ -59,9 +59,9 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Длительность обучения (лет)</label>
-        <select class="form-select blockStyles" v-model="numberOfYears" @input="inputEvent">
-          <option>3</option>
-          <option>4</option>
+        <select class="form-select blockStyles" v-model="semesterID" @click="inputEvent">
+          <option v-for="element in numberOfSemesters" :value="element.amount" >{{element.amount}}</option>
+
 
         </select>
       </nav>
@@ -121,10 +121,12 @@ export default {
       actualSemester:'',
       groupID: '',
 
-      numberOfYears: '',
+      maxSemester: '',
+      semesterID: '',
       arrayOfTeachers: [],
       arrayOfSpecialization : [],
       numberOfGroups : [],
+      numberOfSemesters: [],
     }
   },
   methods: {
@@ -171,7 +173,7 @@ export default {
         return;
       }
 
-      if (this.numberOfYears === ''){
+      if (this.semesterID === ''){
         this.errorMessage = 'Поле длительность обучения не должно быть пустым'
         return;
       }
@@ -196,7 +198,8 @@ export default {
               "specialization_id" : this.specializationID,
               "actual_semester" : parseInt(this.actualSemester),
               "start_date" : this.dateOfBeginning,
-              "number_of_years" : parseInt(this.numberOfYears),
+              "phone" : this.phoneNumber,
+              "number_of_years" : this.semesterID,
               "supervisor_id" : this.teacherID,
               "phone_number" : this.phoneNumber
             }
@@ -212,6 +215,7 @@ export default {
     },
     inputEvent() {
       this.errorMessage = ''
+
     },
 
     redirectToMain() {
@@ -256,6 +260,23 @@ export default {
       }
     },
 
+    async getListOfSemesters(){
+      try {
+        const response = await axios.get(this.IP +"/students/enum/amounts/" + localStorage.getItem('access_token'),
+        )
+        this.data = response.data
+        this.numberOfSemesters = this.data
+      }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+      this.numberOfSemesters.sort((a, b) => a.amount > b.amount ? 1 : -1);
+      this.maxSemester = this.numberOfSemesters[this.numberOfSemesters.length - 1].amount;
+
+    },
+
     async checkAuth() {
       try {
         const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
@@ -278,6 +299,8 @@ export default {
     await this.getListOfTeachers()
     await this.getListOfGroups()
     await this.getListOfSpecializations()
+    await this.getListOfSemesters()
+
   }
 }
 </script>

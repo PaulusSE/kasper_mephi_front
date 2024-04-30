@@ -22,7 +22,7 @@ export default {
   components: {headerOfStudent,
   "reportTab" : reportTab
   },
-  props: ["stateOfStudentPage", "actualSemester"],
+  props: ["stateOfStudentPage", "actualSemester", "waitForCheck", "actualSemester"],
   methods : {
 
     addExam(){
@@ -230,6 +230,8 @@ export default {
   :comment2 = this.arrayOfComment2[index]
   :array-of-exams = this.arrayOfExams[index]
       :user-type = this.userType
+      :wait-for-check = waitForCheck
+      :actual-semester = actualSemester
 
   ></report-tab>
 

@@ -50,6 +50,7 @@
                  @btnReportingClicked="buttonManageStudentPageClicked(5)"
                  :state-of-student-page = stateOfStudentPage
                   :actual-semester = actualSemester
+                  :wait-for-check = waitForCheck
 
   ></report>
 

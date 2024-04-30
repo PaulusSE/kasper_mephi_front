@@ -164,8 +164,19 @@ export default {
         console.log(e)
       }
 
-      this.data.supervisor_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
-      this.supervisorMark = this.data.supervisor_marks[0].mark
+      try{
+        this.data.supervisor_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
+      }
+      catch (e){
+        console.log(e)
+      }
+
+      try{
+        this.supervisorMark = this.data.supervisor_marks[0].mark
+      }
+      catch (e){
+        console.log(e)
+      }
 
     },
 
@@ -182,6 +193,8 @@ export default {
     }
     await this.getStudentMark()
     await this.getStudentName()
+
+    console.log(this.actualSemester)
 
 
 

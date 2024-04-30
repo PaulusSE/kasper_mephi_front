@@ -824,10 +824,14 @@ export default {
         return
       }
 
+      for (var element of tempData){
+        element.amount = parseInt(element.amount)
+      }
+
       try {
-        const response = await axios.post(this.IP +"/administrator/enum/specializations/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/administrator/enum/amounts/" + localStorage.getItem("access_token"),
             {
-              "specs" : tempData
+              "amounts" : tempData
             }
         )
 
