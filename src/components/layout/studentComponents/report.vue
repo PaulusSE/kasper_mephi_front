@@ -105,7 +105,7 @@ export default {
           const response = await axios.get(this.IP +"/students/report/comments/" + localStorage.getItem("access_token"),
           )
           this.data = response.data
-          console.log(response)
+
         }
         catch (e) {
           console.log(e)
@@ -127,6 +127,12 @@ export default {
 
       try{
         this.fillComments1(this.data.dissertation_comments)
+      }
+      catch (e){
+        console.log(e)
+      }
+
+      try{
         this.fillComments2(this.data.dissertation_plans)
       }
       catch (e){
@@ -204,7 +210,7 @@ export default {
     await this.getComments()
     await this.getMarks()
 
-    console.log(this.attestationMarks)
+
 
 
 

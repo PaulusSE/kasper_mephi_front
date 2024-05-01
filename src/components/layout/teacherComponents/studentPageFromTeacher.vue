@@ -260,7 +260,7 @@
 
       <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{studentFeedBackDate}}</p>
+          <p class="textMainPage">{{studentFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -278,7 +278,7 @@
 
       <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{teacherFeedBackDate}}</p>
+          <p class="textMainPage">{{teacherFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -575,13 +575,8 @@ export default {
               "student_id" : localStorage.getItem("studentID"),
             }
         )
-
-
         this.data = response.data
-
-
       }
-
 
       catch (e) {
         console.log(e)

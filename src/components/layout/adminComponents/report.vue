@@ -173,7 +173,6 @@ export default {
         )
 
         this.data = response.data
-
         this.arrayOfStudents = this.data
 
       }
@@ -182,7 +181,14 @@ export default {
         console.log(e)
       }
 
-      await this.fillMarks()
+      try {
+        await this.fillMarks()
+      }
+      catch (e){
+        console.log(e)
+      }
+
+
     },
 
     async fillMarks() {

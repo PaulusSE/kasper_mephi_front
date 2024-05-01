@@ -44,7 +44,7 @@ export default {
       try {
         const response = await axios.get(this.IP +'/supervisors/student/list/' + localStorage.getItem("access_token"))
         this.arrayOfStudents = await response.data;
-        console.log(response)
+
 
       }
       catch (e) {

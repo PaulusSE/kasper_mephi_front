@@ -194,7 +194,7 @@ export default {
           "student_id" : localStorage.getItem("studentID")
         })
         this.data = response.data
-        console.log(this.data)
+
 
       }
       catch (e) {
@@ -204,8 +204,13 @@ export default {
       this.group = this.data.group_name
       this.phoneNumber = this.data.phone
       this.studyingTime = this.data.years
-      this.startDateStudying = this.data.start_date.slice(0,10)
       this.email = this.data.email
+      try {
+        this.startDateStudying = this.data.start_date.slice(0,10)
+      }
+      catch (e){
+        console.log(e)
+      }
 
     }
   },

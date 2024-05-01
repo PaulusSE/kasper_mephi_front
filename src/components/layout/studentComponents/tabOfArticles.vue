@@ -611,7 +611,7 @@
             <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
 
               <div>
-                <input class="textWithCarry inputBox " v-model="project.start_at" type="date" style="overflow-y:auto"></input>
+                <input class="textWithCarry inputBox" v-model="project.start_at" type="date" style="overflow-y:auto"></input>
               </div>
 
             </div>

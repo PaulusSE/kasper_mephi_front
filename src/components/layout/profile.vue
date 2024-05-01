@@ -48,7 +48,7 @@ export default {
     },
   },
   async beforeMount() {
-    if (localStorage.getItem('registered') === 'false')
+    if (localStorage.getItem('registered') === 'false' && localStorage.getItem('userType') === 'student')
       this.$router.push('/registration')
     await this.checkAuth()
 

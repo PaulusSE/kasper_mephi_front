@@ -194,7 +194,6 @@ export default {
     await this.getStudentMark()
     await this.getStudentName()
 
-    console.log(this.actualSemester)
 
 
 

@@ -29,7 +29,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Почта</label>
-        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
+        <input type="text" class="textInput" disabled @input="inputEvent" v-model="email">
       </nav>
 
     </div>
@@ -66,12 +66,12 @@
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Звание</label>
-        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-    </div>
+<!--    <div class="container-fluid justify-content-between d-flex">-->
+<!--      <nav style="width: 100%;">-->
+<!--        <label class="text ms-0">Звание</label>-->
+<!--        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">-->
+<!--      </nav>-->
+<!--    </div>-->
 
 
   </div>
@@ -209,8 +209,22 @@ export default {
 
 
     },
-    saveChange(){
+    async saveChange(){
       this.stateOfEditing = !this.stateOfEditing
+
+      try {
+        const response = await axios.post(this.IP +"/authorize/registration/supervisor/" + localStorage.getItem("access_token"), {
+          "degree": this.academicDegree,
+          "department": this.department,
+          "faculty": this.faculty,
+          "full_name": this.fullName,
+          "phone": this.phoneNumber
+        })
+
+      }
+      catch (e) {
+        console.log(e)
+      }
 
     },
 
@@ -218,7 +232,7 @@ export default {
       try {
         const response = await axios.get(this.IP +"/supervisors/profile/" + localStorage.getItem("access_token"))
         this.data = response.data
-        console.log(this.data)
+        console.log(response)
       }
       catch (e) {
         console.log(e)
@@ -228,6 +242,7 @@ export default {
       this.department = this.data.department
       this.faculty = this.data.faculty
       this.email = this.data.email
+      this.phoneNumber = this.data.phone
     }
   },
   beforeMount() {

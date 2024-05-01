@@ -34,7 +34,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Специлазация</label>
+        <label class="text m-0">Специализация</label>
         <select class="form-select blockStyles" v-model="specializationID" @input="inputEvent">
           <option v-for="spec in this.arrayOfSpecialization" :value="spec.specialization_id">{{spec.name}}</option>
         </select>
@@ -72,7 +72,7 @@
         <label class="text m-0">Научный руководитель</label>
         <select class="form-select blockStyles" v-model="teacherID" @input="inputEvent">
         <option v-for="teacher in arrayOfTeachers" :value="teacher.supervisor_id">{{teacher.full_name}}</option>
-        <option >Нет в списке</option>
+
         </select>
       </nav>
     </div>

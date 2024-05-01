@@ -151,33 +151,54 @@ export default {
 
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
-        for (var j = 0; j<data[i].publications.length; j++){
-          if (data[i].publications[j].publication_id !== undefined){
-            var article = data[i].publications[j]
-            this.arrayOfArticles[semester - 1].push(article)
+
+        try {
+          for (var j = 0; j<data[i].publications.length; j++){
+            if (data[i].publications[j].publication_id !== undefined){
+              var article = data[i].publications[j]
+              this.arrayOfArticles[semester - 1].push(article)
+            }
           }
+        }
+        catch (e) {
+          console.log(e)
         }
 
-        for (var j = 0; j<data[i].conferences.length; j++){
-          if (data[i].conferences[j].conference_id !== undefined){
-            var conf = data[i].conferences[j]
-            this.arrayOfReports[semester - 1].push(conf)
+        try {
+          for (var j = 0; j<data[i].conferences.length; j++){
+            if (data[i].conferences[j].conference_id !== undefined){
+              var conf = data[i].conferences[j]
+              this.arrayOfReports[semester - 1].push(conf)
+            }
           }
+        }
+        catch (e) {
+          console.log(e)
         }
 
-        for (var j = 0; j<data[i].research_projects.length; j++){
-          if (data[i].research_projects[j].project_id !== undefined){
-            var project = data[i].research_projects[j]
-            this.arrayOfProjects[semester - 1].push(project)
+        try {
+          for (var j = 0; j<data[i].research_projects.length; j++){
+            if (data[i].research_projects[j].project_id !== undefined){
+              var project = data[i].research_projects[j]
+              this.arrayOfProjects[semester - 1].push(project)
+            }
           }
         }
-        //
-        // for (var j = 0; j<data[i].patents.length; j++){
-        //   if (data[i].patents[j].patent_id !== undefined){
-        //     var patent = data[i].patents[j]
-        //     this.arrayOfPatents[semester - 1].push(patent)
-        //   }
-        // }
+        catch (e) {
+          console.log(e)
+        }
+
+        try {
+          for (var j = 0; j<data[i].patents.length; j++){
+            if (data[i].patents[j].patent_id !== undefined){
+              var patent = data[i].patents[j]
+              this.arrayOfPatents[semester - 1].push(patent)
+            }
+          }
+        }
+        catch (e) {
+          console.log(e)
+        }
 
         this.works_ids.set(semester, data[i].works_id)
       }
@@ -504,7 +525,7 @@ export default {
   async beforeMount() {
     await this.loadScientificWorks()
     this.isDataFetched = true
-    console.log(this.actualSemester)
+
 
   }
 }

@@ -94,26 +94,37 @@ export default {
       for (var i = 0; i<data.length; i++){
         var semester = data[i].semester
 
-        for (var j = 0; j < data[i].classroom_loads.length; j++){
-          var class_load = data[i].classroom_loads[j]
-          console.log(this.array_classroom_load[0])
-          this.array_classroom_load[semester - 1].push(class_load)
+        try {
+          for (var j = 0; j < data[i].classroom_loads.length; j++){
+            var class_load = data[i].classroom_loads[j]
+            console.log(this.array_classroom_load[0])
+            this.array_classroom_load[semester - 1].push(class_load)
+          }
+        }
+        catch (e) {
+          console.log(e)
         }
 
-        for (var j = 0; j < data[i].individual_students_loads.length; j++){
-          var individual_load = data[i].individual_students_loads[j]
-          this.array_individual_students_load[semester-1].push(individual_load)
+        try {
+          for (var j = 0; j < data[i].individual_students_loads.length; j++){
+            var individual_load = data[i].individual_students_loads[j]
+            this.array_individual_students_load[semester-1].push(individual_load)
+          }
+        }
+        catch (e) {
+          console.log(e)
         }
 
-        for (var j = 0; j < data[i].additional_loads.length; j++){
-          var add_load = data[i].additional_loads[j]
-          this.array_additional_load[semester-1].push(add_load)
+        try {
+          for (var j = 0; j < data[i].additional_loads.length; j++){
+            var add_load = data[i].additional_loads[j]
+            this.array_additional_load[semester-1].push(add_load)
+          }
+        }
+        catch (e) {
+          console.log(e)
         }
       }
-      console.log(this.array_additional_load)
-      console.log(this.array_classroom_load)
-      console.log(this.array_additional_load)
-
     },
 
 
@@ -127,12 +138,10 @@ export default {
         this.data = await response.data;
         console.log(this.data)
 
-
       }
       catch (e) {
         console.log(e)
       }
-
 
       await this.fillDataForTables(this.data)
 

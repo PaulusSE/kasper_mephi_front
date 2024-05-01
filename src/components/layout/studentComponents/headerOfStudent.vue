@@ -80,18 +80,18 @@
 
 
         <div class="d-flex gap-2 justify-content-between">
-          <div class="d-flex">
+          <div class="d-flex gap-2">
             <p class="mainText text-start">
-              Статус отчета :
+              Статус отчета:
             </p>
             <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
               {{this.statusMap[workStatus]}}
 
             </p>
           </div>
-          <div class="d-flex">
+          <div class="d-flex gap-2">
             <p class="mainText text-start">
-              Текущая оценка :
+              Текущая оценка:
             </p>
             <p class="mainText text-start " >
               {{this.supervisorMark}}
@@ -107,17 +107,17 @@
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
         </div>
         <div class="d-flex gap-2 justify-content-between">
-          <div class="d-flex">
+          <div class="d-flex gap-2">
             <p class="mainText text-start">
-              Статус отчета :
+              Статус отчета:
             </p>
             <p class="mainText text-start " :class="{textResult1 : workStatus === 'passed', textResult2 : workStatus === 'todo', textResult3 : workStatus === 'failed'}">
               {{this.statusMap[workStatus]}}
             </p>
           </div>
-          <div class="d-flex">
+          <div class="d-flex gap-2">
             <p class="mainText text-start">
-              Текущая оценка :
+              Текущая оценка:
             </p>
             <p class="mainText text-start">
               {{this.supervisorMark}}

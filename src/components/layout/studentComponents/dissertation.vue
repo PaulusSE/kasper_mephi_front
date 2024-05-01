@@ -271,7 +271,7 @@
 
       <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{studentFeedBackDate}}</p>
+          <p class="textMainPage">{{studentFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -289,7 +289,7 @@
 
       <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
       <nav class="checkboxBlock">
-        <p class="textMainPage">{{teacherFeedBackDate}}</p>
+        <p class="textMainPage">{{teacherFeedBackDate.slice(0,10)}}</p>
       </nav>
     </div>
 
@@ -535,7 +535,7 @@ export default {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token"))
 
         this.data = response.data
-        console.log(this.data)
+
       }
       catch (e) {
         console.log(e)
@@ -660,8 +660,6 @@ export default {
 
 
     async getCommonInfo() {
-
-
       try {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token")
         )
@@ -709,9 +707,6 @@ export default {
       }
 
 
-
-
-
       // await this.fillStatusArray(this.data.dissertations_statuses)
       // await this.fillFeedBackArray(this.data.feedback)
 
@@ -747,7 +742,7 @@ export default {
     async fillCommonInfo(tittles){
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
-      console.log(tittles[tittles.length - 1])
+
       this.theme = tittles[tittles.length - 1].title
       this.research_order = tittles[tittles.length - 1].research_order
       this.research_object = tittles[tittles.length - 1].research_object
