@@ -536,7 +536,8 @@ export default {
         try {
           const response = await axios.put(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
               {
-                "ids" : this.deleteClassroomWorksID
+                "ids" : this.deleteClassroomWorksID,
+                "semester" : this.id + 1
               }
           )
         }
@@ -555,7 +556,8 @@ export default {
         try {
           const response = await axios.put(this.IP + "/students/load/individual/" + localStorage.getItem("access_token"),
               {
-                "ids" : this.deleteIndividualWorkID
+                "ids" : this.deleteIndividualWorkID,
+                "semester" : this.id + 1
               }
           )
         }
@@ -577,7 +579,8 @@ export default {
         try {
           const response = await axios.put(this.IP + "/students/load/additional/" + localStorage.getItem("access_token"),
               {
-                "ids" : this.deleteAdditionalWorkID
+                "ids" : this.deleteAdditionalWorkID,
+                "semester" : this.id + 1
               }
           )
         }

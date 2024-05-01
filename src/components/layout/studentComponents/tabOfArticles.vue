@@ -888,9 +888,6 @@ export default {
         }
       }
 
-
-
-
       this.$emit('saveArticles')
 
     },

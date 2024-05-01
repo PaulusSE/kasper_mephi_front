@@ -45,7 +45,7 @@ export default {
               "feedback" : {
                 "mark" : this.mark,
                 "semester" : this.actualSemester,
-                "feedback" : this.dissertationText
+                "feedback" : this.dissertationText + '\n' +this.scientificWorkText + '\n' + this.teachingLoadText
               },
               "student_id" : localStorage.getItem("studentID"),
             }
@@ -137,10 +137,10 @@ export default {
                 <input type="checkbox" class="me-1 myCheckBox" v-model="scientificWorkChecked" />Научная работа просмотрена</label>
             </div>
 
-<!--            <div>-->
-<!--              <p class="textMiniTable text-start">Комментарий к научной работе</p>-->
-<!--              <textarea v-model="scientificWorkText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
-<!--            </div>-->
+            <div>
+              <p class="textMiniTable text-start">Комментарий к научной работе</p>
+              <textarea v-model="scientificWorkText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            </div>
           </div>
 
           <div class="roundBlock mt-2">
@@ -153,10 +153,10 @@ export default {
                 <input type="checkbox" class="me-1 myCheckBox"  v-model="teachingLoadChecked" />Педагогическая нагрузка просмотрена</label>
             </div>
 
-<!--            <div>-->
-<!--              <p class="textMiniTable text-start">Комментарий к научной работе</p>-->
-<!--              <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>-->
-<!--            </div>-->
+            <div>
+              <p class="textMiniTable text-start">Комментарий к научной работе</p>
+              <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
+            </div>
           </div>
 
           <div class="d-flex justify-content-between mt-2 pt-2 pb-2 mb-2">

@@ -12,6 +12,12 @@ export default {
       presentationFile : '',
       presentationFilename : 'пока нет',
       windowOpened : false,
+
+      examTypeMap : {
+        0: "Английский",
+        1: "Философия",
+        2: "Специальность"
+      }
     }
   },
   props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType", "waitForCheck", "actualSemester"],
@@ -43,21 +49,9 @@ export default {
       this.editExams = !this.editExams
     },
 
-    async saveExams(){
+    saveExams(){
       this.editExams = !this.editExams
-
-      try {
-        const response = await axios.post(this.IP +"/students/exams/" + localStorage.getItem("access_token"),
-            {
-              "marks" : this.arrayOfExams,
-            },
-        )
-        this.data = response.data
-      }
-      catch (e) {
-        console.log(e)
-      }
-
+      this.$emit('saveExams')
     },
 
     async downloadFile(){
@@ -94,7 +88,6 @@ export default {
   },
   async beforeMount() {
     // await this.getFiles()
-    console.log(this.actualSemester)
 
   }
 }
@@ -227,8 +220,8 @@ export default {
             <nav class="text-end" style="margin-right: 2.5%" >
               <button v-if="!editExams" @click="editExamsClicked" class="editBtn2 mt-3">Редактировать</button>
               <div v-else class="d-flex">
-                <button class="editBtn2 mt-3 me-2" @click="addExam">Добавить</button>
-                <button class="editBtn2 mt-3 " @click="saveExams" >Сохранить</button>
+                <button class="editBtn2 mt-3 me-2" @click="this.$emit('addExam')">Добавить</button>
+                <button class="editBtn2 mt-3 " @click="saveExams()" >Сохранить</button>
               </div>
             </nav>
           </div>
@@ -243,7 +236,7 @@ export default {
               </div>
 
               <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
-                Специальность
+                Экзамен
               </div>
 
 
@@ -264,13 +257,13 @@ export default {
               </div>
               <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
                 <div>
-                  <div class="textWithCarry inputBox ">{{exam.exam_type}}</div>
+                  <div class="textWithCarry inputBox ">{{this.examTypeMap[exam.exam_type]}}</div>
                 </div>
               </div>
 
-              <div class="rightLine textMiniTable" style="width: 45%; text-align: center">
+              <div class="textMiniTable ps-2" style="width: 42%; text-align: center">
                 <div>
-                  <div class="textWithCarry inputBox ">{{exam.mark}}</div>
+                  <div class="textWithCarry inputBox me-2">{{exam.mark}}</div>
                 </div>
               </div>
 
@@ -287,7 +280,7 @@ export default {
               </div>
 
               <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
-                Специальность
+                Экзамен
               </div>
 
 
@@ -310,8 +303,12 @@ export default {
               </div>
 
               <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
-                <div>
-                  <textarea class="textWithCarry inputBox" v-model="exam.exam_type" rows="3"></textarea>
+                <div style="height: 100%; width: 100%">
+                  <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="exam.exam_type">
+                    <option value="0">Английский</option>
+                    <option value="1">Философия</option>
+                    <option value="2">Специальность</option>
+                  </select>
                 </div>
               </div>
 

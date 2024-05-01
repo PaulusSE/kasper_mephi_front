@@ -451,7 +451,18 @@ export default {
     async fillTeacherHistory(supervisors){
       supervisors.sort((a, b) => a.start_at > b.start_at ? 1 : -1);
       this.arrayOfTeachers = supervisors
+
+
+      for(var i = 0; i < this.arrayOfTeachers.length; i++){
+        this.arrayOfTeachers[i].start_at = this.arrayOfTeachers[i].start_at.slice(0,10)
+        if (this.arrayOfTeachers[i].end_at !== undefined)
+          this.arrayOfTeachers[i].end_at = this.arrayOfTeachers[i].end_at.slice(0,10)
+        else
+          this.arrayOfTeachers[i].end_at = ''
+      }
+
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
+
     },
 
     sortTopic(a, b){

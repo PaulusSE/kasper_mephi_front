@@ -513,6 +513,10 @@ export default {
         this.showWrongAnswerString = true;
       }
 
+      this.arrayOfProgress[this.arrayOfProgress.length - 1].progressiveness = this.progressOfDissertation //todo check
+
+
+
 
 
     },

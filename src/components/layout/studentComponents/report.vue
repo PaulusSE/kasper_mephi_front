@@ -25,19 +25,45 @@ export default {
   props: ["stateOfStudentPage", "actualSemester", "waitForCheck", "actualSemester"],
   methods : {
 
-    addExam(){
+    addExam(index){
+
       let newExam = {
         exam_type: '',
         mark: '',
         set_at: '',
         semester: '',
       }
-      this.arrayOfExams = this.arrayOfExams.concat(newExam)
+      this.arrayOfExams[index] = this.arrayOfExams[index].concat(newExam)
     },
     deleteExam(index){
 
       // this.deleteExamsIds.push(this.arrayOfExams[index].exam_id)
       this.arrayOfExams.splice(index,1)
+    },
+
+    async saveExams(){
+
+      for (var i = 0; i < this.arrayOfExams.length; i++) {
+        for (var exam of this.arrayOfExams[i]){
+          exam.semester = i + 1
+          exam.mark = parseInt(exam.mark)
+          exam.exam_type = parseInt(exam.exam_type)
+        }
+      }
+
+      console.log(this.arrayOfExams[this.arrayOfExams.length - 1])
+      try {
+        const response = await axios.post(this.IP +"/students/exams/" + localStorage.getItem("access_token"),
+            {
+              "marks" : this.arrayOfExams[this.arrayOfExams.length - 1],
+            },
+        )
+        this.data = response.data
+      }
+      catch (e) {
+        console.log(e)
+      }
+
     },
 
 
@@ -46,7 +72,7 @@ export default {
         try {
           const response = await axios.get(this.IP +"/students/marks/" + localStorage.getItem("access_token"))
           this.data = response.data
-          console.log(response)
+
         }
         catch (e) {
           this.showWrongAnswerString = true;
@@ -94,9 +120,7 @@ export default {
       this.arrayOfExams.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.supervisorMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
-      console.log(this.attestationMarks)
-      console.log(this.arrayOfExams)
-      console.log(this.supervisorMarks)
+
     },
 
     async getComments(){
@@ -238,6 +262,8 @@ export default {
       :user-type = this.userType
       :wait-for-check = waitForCheck
       :actual-semester = actualSemester
+      @addExam=addExam(index)
+      @saveExams=saveExams()
 
   ></report-tab>
 

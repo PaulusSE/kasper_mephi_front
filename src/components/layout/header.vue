@@ -77,14 +77,15 @@ export default {
         }
       }
 
-      if (localStorage.getItem("userType") === 'supervisor') {}
-      try {
-        const response = await axios.get(this.IP +'/supervisors/profile/' + localStorage.getItem("access_token"))
-        this.data = await response.data;
-        this.userName = this.data.full_name
-      }
-      catch (e) {
-        console.log(e)
+      if (localStorage.getItem("userType") === 'supervisor') {
+        try {
+          const response = await axios.get(this.IP +'/supervisors/profile/' + localStorage.getItem("access_token"))
+          this.data = await response.data;
+          this.userName = this.data.full_name
+        }
+        catch (e) {
+          console.log(e)
+        }
       }
     }
   },
