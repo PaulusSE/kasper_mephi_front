@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   server:
-    image: "jackblack178/vue1:v0.1.2"
+    image: "jackblack178/kasper-front:0.1.4"
     ports:
       - "80:5173"
     restart: always
