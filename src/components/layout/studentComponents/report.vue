@@ -117,9 +117,9 @@ export default {
       }
 
       this.attestationMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-      this.arrayOfExams.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.supervisorMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
+      console.log(this.arrayOfExams)
 
     },
 
@@ -233,6 +233,7 @@ export default {
     this.userType = localStorage.getItem("userType");
     await this.getComments()
     await this.getMarks()
+
 
 
 

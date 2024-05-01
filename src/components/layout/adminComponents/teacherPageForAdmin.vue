@@ -219,6 +219,7 @@ export default {
       this.faculty = this.data.faculty
       this.email = this.data.email
       this.status = this.data.archived
+      this.phoneNumber = this.data.phone
     }
   },
   async beforeMount() {

@@ -14,9 +14,9 @@ export default {
       windowOpened : false,
 
       examTypeMap : {
-        0: "Английский",
-        1: "Философия",
-        2: "Специальность"
+        1: "Английский",
+        2: "Философия",
+        3: "Специальность"
       }
     }
   },
@@ -305,9 +305,9 @@ export default {
               <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
                 <div style="height: 100%; width: 100%">
                   <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="exam.exam_type">
-                    <option value="0">Английский</option>
-                    <option value="1">Философия</option>
-                    <option value="2">Специальность</option>
+                    <option value="1">Английский</option>
+                    <option value="2">Философия</option>
+                    <option value="3">Специальность</option>
                   </select>
                 </div>
               </div>

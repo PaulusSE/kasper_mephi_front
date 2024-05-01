@@ -81,7 +81,7 @@
 
 
             <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
-              {{element["years"]}}
+              {{element.actual_semester}}
             </div>
 
 
@@ -173,6 +173,7 @@ export default {
         )
 
         this.data = response.data
+        console.log(this.data)
         this.arrayOfStudents = this.data
 
       }
@@ -220,6 +221,7 @@ export default {
   },
   async beforeMount() {
       await this.getStudents()
+
   }
 }
 </script>

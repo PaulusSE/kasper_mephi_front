@@ -178,7 +178,7 @@
 
 
 
-        <div class="d-flex" :class="{underline:index !== 10}" v-for="(value,index) in progressTableArray">
+        <div class="d-flex" :class="{underline:index < this.progressTableArray.length - 1 }" v-for="(value,index) in progressTableArray">
           <div class="col-4 textTable rightLine">
             {{this.topicMap[value.progress_type]}}
           </div>
