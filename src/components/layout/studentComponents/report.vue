@@ -22,7 +22,7 @@ export default {
   components: {headerOfStudent,
   "reportTab" : reportTab
   },
-  props: ["stateOfStudentPage", "actualSemester", "waitForCheck", "actualSemester"],
+  props: ["stateOfStudentPage", "actualSemester", "waitForCheck", "actualSemester", "canEdit"],
   methods : {
 
     addExam(index){
@@ -41,7 +41,7 @@ export default {
       this.arrayOfExams.splice(index,1)
     },
 
-    async saveExams(){
+    async saveExams(index){
 
       for (var i = 0; i < this.arrayOfExams.length; i++) {
         for (var exam of this.arrayOfExams[i]){
@@ -51,11 +51,11 @@ export default {
         }
       }
 
-      console.log(this.arrayOfExams[this.arrayOfExams.length - 1])
+
       try {
         const response = await axios.post(this.IP +"/students/exams/" + localStorage.getItem("access_token"),
             {
-              "marks" : this.arrayOfExams[this.arrayOfExams.length - 1],
+              "marks" : this.arrayOfExams[index - 1],
             },
         )
         this.data = response.data
@@ -119,7 +119,6 @@ export default {
       this.attestationMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.supervisorMarks.sort((a, b) => a.semester > b.semester ? 1 : -1);
 
-      console.log(this.arrayOfExams)
 
     },
 
@@ -264,7 +263,8 @@ export default {
       :wait-for-check = waitForCheck
       :actual-semester = actualSemester
       @addExam=addExam(index)
-      @saveExams=saveExams()
+      @saveExams=saveExams(number)
+      :can-edit = this.canEdit
 
   ></report-tab>
 

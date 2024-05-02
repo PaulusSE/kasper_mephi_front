@@ -51,6 +51,7 @@
                  :state-of-student-page = stateOfStudentPage
                   :actual-semester = actualSemester
                   :wait-for-check = waitForCheck
+                  :can-edit = canEdit
 
   ></report>
 

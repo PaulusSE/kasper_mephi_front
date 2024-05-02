@@ -682,7 +682,7 @@
              Тип
             </div>
 
-            <div class="textMiniTable" style="width: 20%; text-align: center">
+            <div class="textMiniTable" style="width: 18%; text-align: center">
               Дата
             </div>
 
@@ -707,8 +707,8 @@
 
             </div>
 
-            <div class="textMiniTable" style="width: 20%;">
-              <div class="textWithCarry inputBox ">{{patent.date}}</div>
+            <div class="textMiniTable" style="width: 18%;">
+              <div class="textWithCarry inputBox">{{patent.date.slice(0,10)}}</div>
             </div>
 
           </div>
@@ -758,8 +758,8 @@
 
               <div style="height: 100%; width: 100%">
                 <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);"  v-model="patent.patent_type">
-                  <option value="option1">Свидетельство о регистрации программ ЭВМ</option>
-                  <option value="option2">Свидетельство о регистрации базы данных</option>
+                  <option value="software">Свидетельство о регистрации программ ЭВМ</option>
+                  <option value="database">Свидетельство о регистрации базы данных</option>
                 </select>
               </div>
             </div>
@@ -819,8 +819,8 @@ export default {
         "performed " : "Выступил",
       },
       patentsMap: {
-        "option1" : "Свидетельство о регистрации программ ЭВМ",
-        "option2" : "Свидетельство о регистрации базы данных",
+        "software" : "Свидетельство о регистрации программ ЭВМ",
+        "database" : "Свидетельство о регистрации базы данных",
       }
     }
   },
@@ -1001,6 +1001,7 @@ export default {
     deletePatents(myIndex){
       this.deletePatentsID.push(this.patents[myIndex].patent_id)
       this.$emit('deletePatent', myIndex)
+
     }
   },
 

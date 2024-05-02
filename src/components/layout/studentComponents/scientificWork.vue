@@ -57,7 +57,7 @@
     @deleteArticle="(n) => deleteArticle(index, n)"
     @deleteReport="(n) => deleteReport(index, n)"
     @deleteProject="(n) => deleteProject(index, n)"
-    @deletePatents="(n) => deletePatent(index, n)"
+    @deletePatent="(n) => deletePatent(index, n)"
 
     ></tab-of-articles>
 
@@ -202,6 +202,7 @@ export default {
 
         this.works_ids.set(semester, data[i].works_id)
       }
+
 
     },
 
@@ -445,7 +446,9 @@ export default {
         return
 
       for (var i = 0; i < this.arrayOfPatents[index].length; i++){
-        this.arrayOfReports[index][i].works_id = this.works_ids.get(index+1)
+        this.arrayOfPatents[index][i].works_id = this.works_ids.get(index+1)
+        var tempDate = new Date(this.arrayOfPatents[index][i].date)
+        this.arrayOfPatents[index][i].date = tempDate.toISOString()
       }
 
       try {
@@ -503,7 +506,7 @@ export default {
       tempData.splice(n,1)
     },
     deletePatent(index,n){
-
+      console.log(123)
       var tempData = this.arrayOfPatents[index]
       tempData.splice(n,1)
     },
@@ -512,6 +515,7 @@ export default {
       try {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
+        console.log(this.data)
       }
       catch (e) {
         console.log(e)

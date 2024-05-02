@@ -47,7 +47,7 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
 
 
-          <div class="image-upload" v-if="this.id === this.actualSemester">
+          <div class="image-upload" v-if="this.id === this.actualSemester || canEdit">
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <div class="text-end" v-if="this.id === this.actualSemester">
+      <div class="text-end" v-if="this.id === this.actualSemester || canEdit">
         <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="waitForCheck"  >
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
@@ -94,7 +94,7 @@ export default {
       },
     }
   },
-  props : ['id','status', 'feedback', 'stateOfSending', 'actualSemester', 'waitForCheck'],
+  props : ['id','status', 'feedback', 'stateOfSending', 'actualSemester', 'waitForCheck', 'canEdit'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)

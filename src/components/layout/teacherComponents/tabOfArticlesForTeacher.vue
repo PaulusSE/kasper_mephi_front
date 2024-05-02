@@ -363,7 +363,7 @@
             </div>
 
             <div class="textMiniTable" style="width: 20%;">
-              <div class="textWithCarry inputBox ">{{patent.date}}</div>
+              <div class="textWithCarry inputBox ">{{patent.date.slice(0,10)}}</div>
             </div>
           </div>
 
@@ -389,8 +389,8 @@ export default {
     return {
       buttonIsOpened : false,
       patentsMap: {
-        "option1" : "Свидетельство о регистрации программ ЭВМ",
-        "option2" : "Свидетельство о регистрации базы данных",
+        "software" : "Свидетельство о регистрации программ ЭВМ",
+        "database" : "Свидетельство о регистрации базы данных",
       }
     }
   },

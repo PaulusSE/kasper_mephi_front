@@ -235,7 +235,7 @@
 
 
       <div>
-        <input type="range"  v-model="progressOfDissertation" :disabled="!editingCheckbox">
+        <input type="range" v-model="progressOfDissertation" :disabled="!editingCheckbox">
       </div>
 
 
@@ -258,6 +258,7 @@
                         :waitForCheck = waitForCheck
                         @makeEditErrorNotification = callEditError
                         v-if="renderChildComponents"
+                        :can-edit = this.canEdit
       ></dissertation-tab>
 
     </div>

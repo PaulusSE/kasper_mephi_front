@@ -20,7 +20,7 @@ export default {
       }
     }
   },
-  props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType", "waitForCheck", "actualSemester"],
+  props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType", "waitForCheck", "actualSemester", "canEdit"],
   methods : {
     buttonClicked(){
       this.windowOpened = !this.windowOpened
@@ -33,7 +33,8 @@ export default {
         const response = await axios.post(this.IP +"/students/report/comments/" + localStorage.getItem("access_token"),
             {
               "dissertation_comment" : this.comment1,
-              "dissertation_plan" : this.comment2
+              "dissertation_plan" : this.comment2,
+              "semester" : this.id
             },
         )
         this.data = response.data
@@ -119,7 +120,7 @@ export default {
 
       <div class="roundBlock">
         <div class="d-flex justify-content-end m-2">
-          <div v-if="userType === 'student' && !waitForCheck && actualSemester === id" class="d-flex">
+          <div v-if="userType === 'student' && !waitForCheck && (actualSemester === id || canEdit)" class="d-flex">
             <nav v-if="!editComments">
               <button class="editBtn2" @click="commentClicked" >Редактировать</button>
             </nav>
@@ -216,7 +217,7 @@ export default {
           <nav class="mt-3" style="margin-left: 2.5%">
             <p class="mainText">Кандидатские экзамены</p>
           </nav>
-          <div v-if="userType === 'student' && !waitForCheck && actualSemester === id" >
+          <div v-if="userType === 'student' && !waitForCheck && (actualSemester === id || canEdit)" >
             <nav class="text-end" style="margin-right: 2.5%" >
               <button v-if="!editExams" @click="editExamsClicked" class="editBtn2 mt-3">Редактировать</button>
               <div v-else class="d-flex">
