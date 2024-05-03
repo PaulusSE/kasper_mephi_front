@@ -2,7 +2,7 @@
 
   <Transition name="slide-fade" v-if="show">
     <div class="v-notification">
-      <div class="alert alert-danger" role="alert">
+      <div class="alert alert-warning" role="alert">
         <img src="../../../../../static/figures/triangle.svg" alt="failedSending" class="failedSendingImage">
         {{message}}
       </div>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "sendingFilesNotification",
+  name: "notificationWarning",
   props : ["show", "message"],
   data() {
     return {

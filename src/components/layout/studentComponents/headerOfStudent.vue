@@ -103,7 +103,7 @@
       </div>
 
       <div v-if="(this.userType === 'supervisor' || this.userType === 'admin') && (stateOfStudentPage !== 4 && stateOfStudentPage !== 5)">
-        <div v-if="workStatus === 'on review' || workStatus === 'approved'  ">
+        <div v-if="workStatus === 'on review' || workStatus === 'approved' || workStatus === 'failed'  ">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="estimateStudentPage()">Поставить оценку и статус</button>
         </div>
         <div class="d-flex gap-2 justify-content-between">

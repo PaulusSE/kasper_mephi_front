@@ -12,6 +12,15 @@
   >
   </save-tables-notification>
 
+  <warning
+      :show=showWarningNotification
+      :message = warningMessage
+  >
+
+  </warning>
+
+
+
 
   <div class="mainPage">
     <header-of-student
@@ -25,6 +34,7 @@
         :actual-semester = this.actualSemester
         :supervisor-mark = this.supervisorMark
     ></header-of-student>
+
 
 
 
@@ -79,6 +89,7 @@
 
 
 
+
 </template>
 
 <script>
@@ -92,6 +103,7 @@ import tabOfArticlesForTeacher from "@/components/layout/teacherComponents/tabOf
 import saveTablesNotifitcation
   from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
 import SaveTablesNotification from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
+import notificationWarning from "@/components/layout/notifications/studentNotifications/notificationWarning.vue";
 
 export default {
   name: "scientificWork",
@@ -102,6 +114,7 @@ export default {
     "tabOfArticles" : tabOfArticles,
     "workSendToCheckNotification" : workSendToCheckNotification,
     "saveTablesNotification" : saveTablesNotifitcation,
+    "warning" : notificationWarning,
   },
   props: ["stateOfStudentPage", "educationTime", "actualSemester", "canEdit", "waitForCheck", "workStatus", "supervisorMark"],
   data() {
@@ -128,7 +141,11 @@ export default {
         "in progress" : "В процессе выполнения",
         "empty" : "Пусто",
         "failed" : "Не сдано",
-      }
+      },
+
+      showWarningNotification : false,
+      warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные работы',
+
     }
 
   },
@@ -288,6 +305,13 @@ export default {
       }, 5000);
     },
 
+    callWarningNotification() {
+      this.showWarningNotification = true
+      setTimeout(() => {
+        this.showWarningNotification = false
+      }, 5000);
+    },
+
     callSaveTablesError(result) {
       this.resultOfSavingTables = result
       this.showSavingTablesNotification = true
@@ -326,6 +350,12 @@ export default {
 
       this.makeCopy(1)
 
+      var currentLength = this.arrayOfArticles[index].length
+      this.arrayOfArticles[index] = this.arrayOfArticles[index].filter(item => !(item.name === '' || item.status === ''))
+      if (this.arrayOfArticles[index].length !== currentLength){
+        this.callWarningNotification()
+      }
+
       if(this.arrayOfArticles.length === 0)
         return
 
@@ -336,6 +366,7 @@ export default {
       }
 
 
+
       try {
         const response = await axios.post(this.IP +'/students/works/publications/' + localStorage.getItem("access_token"),
             {
@@ -343,7 +374,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -363,16 +394,29 @@ export default {
 
       this.makeCopy(2)
 
+      var currentLength = this.arrayOfReports[index].length
+      this.arrayOfProjects[index] = this.arrayOfProjects[index].filter(item => !(item.report_name === '' || item.reported_at === '' || item.conference_name === '' || item.status === ''))
+      if (this.arrayOfProjects[index].length !== currentLength){
+        this.callWarningNotification()
+      }
+
+
+
       if(this.arrayOfProjects.length === 0)
         return
 
 
       for (var i = 0; i < this.arrayOfProjects[index].length; i++){
-        var tempDateStart = new Date(this.arrayOfProjects[index][i].start_at)
-        var tempDateEnd = new Date(this.arrayOfProjects[index][i].end_at)
-        this.arrayOfProjects[index][i].start_at = tempDateStart.toISOString()
-        this.arrayOfProjects[index][i].end_at = tempDateEnd.toISOString()
-        this.arrayOfProjects[index][i].works_id = this.works_ids.get(index+1)
+        try {
+          var tempDateStart = new Date(this.arrayOfProjects[index][i].start_at)
+          var tempDateEnd = new Date(this.arrayOfProjects[index][i].end_at)
+          this.arrayOfProjects[index][i].start_at = tempDateStart.toISOString()
+          this.arrayOfProjects[index][i].end_at = tempDateEnd.toISOString()
+          this.arrayOfProjects[index][i].works_id = this.works_ids.get(index+1)
+        }
+        catch (e) {
+          console.log(e)
+        }
       }
 
 
@@ -384,7 +428,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -404,16 +448,31 @@ export default {
 
       this.makeCopy(3)
 
+      var currentLength = this.arrayOfReports[index].length
+      console.log(this.arrayOfReports[index])
+      this.arrayOfReports[index] = this.arrayOfReports[index].filter(item => !(item.conference_name === '' || item.report_name === '' || item.reported_at === '' || item.status === ''))
+      if (this.arrayOfReports[index].length !== currentLength){
+        this.callWarningNotification()
+      }
+      console.log(this.arrayOfReports[index])
+
 
       if(this.arrayOfReports.length === 0)
         return
 
       for (var i = 0; i < this.arrayOfReports[index].length; i++){
-        var tempDate = new Date(this.arrayOfReports[index][i].reported_at)
-        this.arrayOfReports[index][i].reported_at = tempDate.toISOString()
-        this.arrayOfReports[index][i].works_id = this.works_ids.get(index+1)
-      }
 
+        try {
+          var tempDate = new Date(this.arrayOfReports[index][i].reported_at)
+          this.arrayOfReports[index][i].reported_at = tempDate.toISOString()
+          this.arrayOfReports[index][i].works_id = this.works_ids.get(index+1)
+        }
+        catch (e){
+          console.log(e)
+        }
+
+
+      }
 
       try {
         const response = await axios.post(this.IP +'/students/works/conferences/' + localStorage.getItem("access_token"),
@@ -422,7 +481,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -442,13 +501,28 @@ export default {
       this.makeCopy(4)
 
 
+
+      var currentLength = this.arrayOfPatents[index].length
+      this.arrayOfPatents[index] = this.arrayOfPatents[index].filter(item => !(item.patent_name === '' || item.patent_type === ''))
+      if (this.arrayOfPatents[index].length !== currentLength){
+        this.callWarningNotification()
+      }
+
+
+
       if(this.arrayOfPatents.length === 0)
         return
 
       for (var i = 0; i < this.arrayOfPatents[index].length; i++){
-        this.arrayOfPatents[index][i].works_id = this.works_ids.get(index+1)
-        var tempDate = new Date(this.arrayOfPatents[index][i].date)
-        this.arrayOfPatents[index][i].date = tempDate.toISOString()
+
+        try {
+          this.arrayOfPatents[index][i].works_id = this.works_ids.get(index+1)
+          var tempDate = new Date(this.arrayOfPatents[index][i].date)
+          this.arrayOfPatents[index][i].date = tempDate.toISOString()
+        }
+        catch (e){
+          console.log(e)
+        }
       }
 
       try {
@@ -458,7 +532,8 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        console.log(response)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -506,7 +581,7 @@ export default {
       tempData.splice(n,1)
     },
     deletePatent(index,n){
-      console.log(123)
+
       var tempData = this.arrayOfPatents[index]
       tempData.splice(n,1)
     },
@@ -515,7 +590,7 @@ export default {
       try {
         const response = await axios.get(this.IP +'/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
-        console.log(this.data)
+
       }
       catch (e) {
         console.log(e)

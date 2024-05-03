@@ -61,8 +61,16 @@
         <label class="text m-0">Длительность обучения (лет)</label>
         <select class="form-select blockStyles" v-model="semesterID" @click="inputEvent">
           <option v-for="element in numberOfSemesters" :value="element.amount" >{{element.amount}}</option>
+        </select>
+      </nav>
+    </div>
 
-
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Категория</label>
+        <select class="form-select blockStyles" v-model="category" @click="inputEvent">
+          <option value="Бюджетный">Бюджетный</option>
+          <option value="Платный">Платный</option>
         </select>
       </nav>
     </div>
@@ -120,6 +128,7 @@ export default {
       dateOfBeginning:'',
       actualSemester:'',
       groupID: '',
+      category: '',
 
       maxSemester: '',
       semesterID: '',
@@ -173,6 +182,11 @@ export default {
         return;
       }
 
+      if (this.category === ''){
+        this.errorMessage = 'Поле категория  не должно быть пустым'
+        return;
+      }
+
       if (this.semesterID === ''){
         this.errorMessage = 'Поле длительность обучения не должно быть пустым'
         return;
@@ -201,7 +215,8 @@ export default {
               "phone" : this.phoneNumber,
               "number_of_years" : this.semesterID,
               "supervisor_id" : this.teacherID,
-              "phone_number" : this.phoneNumber
+              "phone_number" : this.phoneNumber,
+              "category" : this.category
             }
         )
 

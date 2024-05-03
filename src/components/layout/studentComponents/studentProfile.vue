@@ -66,7 +66,7 @@
         <nav style="width: 50%;">
           <div style="width: 100%">
             <label class="text ms-0" >Категория</label>
-            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="category">
           </div>
         </nav>
       </div>
@@ -168,6 +168,8 @@ export default {
       newPassword: '',
       newPasswordAgain: '',
       stateOfSending:false,
+      category: '',
+
       resultOfSending: '',
       errorText : '',
       stateOfEditingCommonInfo: false,
@@ -252,6 +254,7 @@ export default {
       this.startDateStudying = this.data.start_date.slice(0,10)
       this.studyingTime = this.data.years
       this.phoneNumber = this.data.phone
+      this.category = this.data.category
 
     },
 

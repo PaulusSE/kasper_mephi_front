@@ -11,6 +11,11 @@
   >
   </save-tables-notification>
 
+  <warning
+  :show=showWarningNotification
+  :message = warningMessage
+  ></warning>
+
   <div class="mainPage">
     <header-of-student
 
@@ -85,6 +90,8 @@ import teachingLoadTableForTeacher from "@/components/layout/teacherComponents/t
 import tabOfArticles from "@/components/layout/studentComponents/tabOfArticles.vue";
 import saveTablesNotifitcation
   from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
+import notificationWarning from "@/components/layout/notifications/studentNotifications/notificationWarning.vue";
+
 
 export default {
   name: "teachingLoad",
@@ -94,7 +101,8 @@ export default {
     workSendToCheckNotification,
     "headerOfStudent":headerOfStudent,
     "teachingLoadTable":teachingLoadTable,
-    "saveTablesNotification" : saveTablesNotifitcation
+    "saveTablesNotification" : saveTablesNotifitcation,
+    "warning" : notificationWarning
   },
   props: ["stateOfStudentPage", 'educationTime', "actualSemester", "canEdit", "waitForCheck", "workStatus", "supervisorMark"],
   data() {
@@ -119,6 +127,9 @@ export default {
         "failed" : "Не сдано",
       },
       isDataFetched : false,
+
+      showWarningNotification : false,
+      warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные работы',
 
     }
   },
@@ -180,6 +191,13 @@ export default {
       this.showEditError = true
       setTimeout(() => {
         this.showEditError = false
+      }, 5000);
+    },
+
+    callWarningNotification() {
+      this.showWarningNotification = true
+      setTimeout(() => {
+        this.showWarningNotification = false
       }, 5000);
     },
 
@@ -253,6 +271,11 @@ export default {
 
       this.makeCopy(1)
 
+      var currentLength = this.array_classroom_load[index].length
+      this.array_classroom_load[index] = this.array_classroom_load[index].filter(item => !(item.subject_name === '' || item.group_name === '' || item.main_teacher === '' || item.load_type === '' || item.hours === ''))
+      if (currentLength !== this.array_classroom_load[index].length)
+        this.callWarningNotification()
+
       for (var j = 0; j < this.array_classroom_load[index].length; j++){
         this.array_classroom_load[index][j].hours = parseInt(this.array_classroom_load[index][j].hours)
         this.array_classroom_load[index][j].t_load_id = this.loads_ids.get(index + 1)
@@ -266,7 +289,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -285,6 +308,13 @@ export default {
         this.showSavingTablesNotification = false
       this.makeCopy(2)
 
+      var currentLength = this.array_individual_students_load[index].length
+      this.array_individual_students_load[index] = this.array_individual_students_load[index].filter(item => !(item.load_type === '' || item.students_amount === ''))
+      if (currentLength !== this.array_individual_students_load[index].length)
+        this.callWarningNotification()
+
+
+
 
       for (var j = 0; j < this.array_individual_students_load[index].length; j++){
         this.array_individual_students_load[index][j].students_amount = parseInt(this.array_individual_students_load[index][j].students_amount)
@@ -300,7 +330,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {
@@ -319,6 +349,15 @@ export default {
         this.showSavingTablesNotification = false
       this.makeCopy(3)
 
+
+      var currentLength = this.array_additional_load[index].length
+      this.array_additional_load[index] = this.array_additional_load[index].filter(item => !(item.name === '' || item.volume === ''))
+      if (currentLength !== this.array_additional_load[index].length)
+        this.callWarningNotification()
+
+
+
+
       for (var j = 0; j < this.array_additional_load[index].length; j++){
         this.array_additional_load[index][j].t_load_id = this.loads_ids.get(index + 1)
       }
@@ -332,7 +371,7 @@ export default {
               "semester": index + 1,
             }
         )
-        if (response.status === 200)
+        if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }
       catch (e) {

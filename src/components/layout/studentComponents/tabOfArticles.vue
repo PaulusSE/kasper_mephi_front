@@ -146,12 +146,12 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              Наименование<br>работы
+              Наименование<br>работы*
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
-              Статус
+              Статус*
 
             </div>
 
@@ -209,7 +209,7 @@
 
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="article.vac" />ВАК</label>
+                  <input type="checkbox" v-model="article.wac" />ВАК</label>
                 <label class="textCheckBox inputBox text-start">
                   <input type="checkbox" v-model="article.rinc"/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
@@ -332,7 +332,7 @@
             <div class="rightLine textMiniTable" style="width: 11.15%;">
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.vac" disabled/>ВАК</label>
+                  <input type="checkbox" v-model="report.wac" disabled/>ВАК</label>
                 <label class="textCheckBox inputBox text-start">
                   <input type="checkbox" v-model="report.rinc" disabled/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
@@ -372,12 +372,12 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 25.5%; text-align: center">
-              Наименование<br>доклада
+              Наименование<br>доклада*
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
-              Статус
+              Статус*
 
             </div>
 
@@ -387,11 +387,11 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              Название конференции
+              Название конференции*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
-              Дата
+              Дата*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
@@ -430,7 +430,7 @@
             <div class="rightLine textMiniTable" style="width: 14.65%; text-align: center">
               <div style="height: 100%">
                 <label class="textCheckBox inputBox text-start" >
-                  <input type="checkbox" v-model="report.vac" />ВАК</label>
+                  <input type="checkbox" v-model="report.wac" />ВАК</label>
                 <label class="textCheckBox inputBox text-start">
                   <input type="checkbox" v-model="report.rinc"/>РИНЦ</label>
                 <label class="textCheckBox inputBox text-start">
@@ -569,17 +569,17 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 23.5%; text-align: center">
-              Наименование проекта (гранта)
+              Наименование проекта (гранта)*
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
-              Дата начала
+              Дата начала*
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
-              Дата окончания
+              Дата окончания*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 22.5%; text-align: center">
@@ -723,16 +723,16 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
-              Наименование патента
+              Наименование патента*
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
-              Тип
+              Тип*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
-              Дата
+              Дата*
             </div>
 
             <div class="textMiniTable" style="width: 6%; text-align: center">

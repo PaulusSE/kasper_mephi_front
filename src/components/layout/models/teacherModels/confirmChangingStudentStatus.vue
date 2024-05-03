@@ -45,7 +45,7 @@ export default {
               "feedback" : {
                 "mark" : this.mark,
                 "semester" : this.actualSemester,
-                "feedback" : this.dissertationText + '\n' +this.scientificWorkText + '\n' + this.teachingLoadText
+                "feedback" :  'Диссертация: ' +  this.dissertationText + '\n' + 'Научная работа: ' +this.scientificWorkText + '\n' + 'Педагогическая нагрузка: ' + this.teachingLoadText
               },
               "student_id" : localStorage.getItem("studentID"),
             }

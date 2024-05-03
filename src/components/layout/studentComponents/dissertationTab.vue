@@ -1,5 +1,13 @@
 <template>
 
+  <notification-error
+  :show = showNotificationError
+  :message = this.errorMessage
+  >
+
+  </notification-error>
+
+
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
@@ -76,9 +84,13 @@
 <script>
 import axios from "axios";
 import utf8 from "utf8"
+import notificationError from "@/components/layout/notifications/studentNotifications/notificationError.vue";
 
 export default {
   name: "dissertationTab",
+  components : {
+    notificationError,
+  },
   data()  {
     return {
       buttonIsOpened : false,
@@ -86,6 +98,10 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+
+      showNotificationError : false,
+      errorMessage : '',
+
       statusOfJob : {
         'todo': 'На доработку',
         'failed' : 'Не сдано',
@@ -149,11 +165,22 @@ export default {
         return
       }
 
-      // if (this.tittlePageFile.length === 0 && this.explanationaryNoteFile.length === 0)
-      //   return
 
       if (this.explanationaryNoteFile.length === 0)
         return
+
+
+    if (this.explanationaryNoteFile.size / (1024 * 1024) > this.fileMaxSizeMB){
+      this.errorMessage = 'Файл слишком большой' + '\n' + 'Максимальный размер файла: ' + this.fileMaxSizeMB + "Мб"
+      this.showNotificationError = true
+      setTimeout(() => {
+        this.showNotificationError = false
+      }, 5000);
+
+      return
+    }
+
+
 
       const obj = {
         'semester': this.id

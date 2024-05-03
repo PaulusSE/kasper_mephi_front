@@ -108,25 +108,25 @@
         <div v-else>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: classroomWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 31%; text-align: center;">
-              Дисциплина
+              Дисциплина*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 12.1%; text-align: center">
-              Группы
+              Группы*
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 20.7%; text-align: center">
-              Основной<br>преподователь
+              Основной<br>преподователь*
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 16.4%; text-align: center">
-              Тип занятий
+              Тип занятий*
             </div>
 
             <div class="textMiniTable ps-3 rightLine" style="width: 15.8%; text-align: center">
-              Часы
+              Часы*
             </div>
 
             <div class="textMiniTable ps-3" style="width: 4%; text-align: center">
@@ -249,11 +249,11 @@
         <div v-else>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: individualWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center;">
-              Тип
+              Тип*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
-              Количество студентов
+              Количество студентов*
             </div>
 
 
@@ -375,11 +375,11 @@
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: otherWork.length !== 0}">
             <div class="rightLine textMiniTable ps-3" style="width: 32%; text-align: center;">
               Наименование
-              нагрузки
+              нагрузки*
             </div>
 
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
-              Объем (в любых ед. измерения)
+              Объем (в любых ед. измерения)*
             </div>
 
 
