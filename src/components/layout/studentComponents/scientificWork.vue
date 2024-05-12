@@ -449,12 +449,12 @@ export default {
       this.makeCopy(3)
 
       var currentLength = this.arrayOfReports[index].length
-      console.log(this.arrayOfReports[index])
+
       this.arrayOfReports[index] = this.arrayOfReports[index].filter(item => !(item.conference_name === '' || item.report_name === '' || item.reported_at === '' || item.status === ''))
       if (this.arrayOfReports[index].length !== currentLength){
         this.callWarningNotification()
       }
-      console.log(this.arrayOfReports[index])
+
 
 
       if(this.arrayOfReports.length === 0)
@@ -532,7 +532,7 @@ export default {
               "semester": index + 1,
             }
         )
-        console.log(response)
+
         if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
       }

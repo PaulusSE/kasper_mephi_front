@@ -7,6 +7,17 @@
       :result-of-sending = resultOfSending
   ></change-password-notification>
 
+  <confirm-change-email
+  :show="showChangeEmailConfirmation"
+  :current-email = this.emailCopy
+  :new-email = this.email
+  @confirmChangingEmail = confirmChangingEmail
+  @cancelChangingEmail = cancelChangingEmail
+  >
+  </confirm-change-email>
+
+
+
   <div class="mainPage">
     <div class="container-fluid justify-content-between d-flex">
       <nav>
@@ -26,20 +37,29 @@
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
+    <div class="container-fluid justify-content-between d-flex" v-if="this.showEmailField">
       <nav style="width: 100%;">
         <label class="text ms-0">Почта</label>
-        <input type="text" class="textInput" disabled @input="inputEvent" v-model="email">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
       </nav>
 
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
+    <div class="container-fluid justify-content-between d-flex" v-if="!stateOfEditing">
       <nav style="width: 100%;">
         <label class="text ms-0">Ученая степень</label>
-        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
+        <input  disabled type="text" class="textInput"  @input="inputEvent" v-model="academicDegree">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex" v-else>
+      <nav style="width: 100%;">
+        <label class="text m-0">Ученая степень</label>
+        <select class="form-select blockStyles" v-model="academicDegree" @click="inputEvent">
+          <option value="Кандидат наук">Кандидат наук</option>
+          <option value="Доктор наук">Доктор наук</option>
+        </select>
+      </nav>
     </div>
 
 
@@ -54,16 +74,17 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
+        <label class="text ms-0">Факультет (институт)</label>
         <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Номер телефона</label>
-        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="phoneNumber">
+        <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
+        <MaskInput v-model="phoneNumber" class="textInput" :disabled="!stateOfEditing" @input="inputEvent"  mask="+7 (###) ###-##-##" />
       </nav>
+
     </div>
 
 <!--    <div class="container-fluid justify-content-between d-flex">-->
@@ -120,9 +141,13 @@
 import store from "@/store/index.js";
 import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 import axios from "axios";
+import confirmChangeEmail from "@/components/layout/models/studentModels/confirmChangeEmail.vue";
+
+
+
 export default {
   name: "teacherProfile",
-  components : {changePasswordNotification},
+  components : {changePasswordNotification, confirmChangeEmail},
   "changePasswordNotification" : changePasswordNotification,
   data() {
     return {
@@ -146,6 +171,9 @@ export default {
       errorText : '',
       phoneNumber : '',
       phoneNumberCopy : '',
+
+      showEmailField: true,
+      showChangeEmailConfirmation : false,
     }
   },
   methods : {
@@ -159,10 +187,60 @@ export default {
       this.academicDegreeCopy = this.academicDegree
       this.phoneNumberCopy = this.phoneNumber
     },
+
+checkPhoneNumber() {
+  var element = document.getElementById('phone');
+var maskOptions = {
+    mask: '+7(000)000-00-00',
+    lazy: false
+} 
+var mask = new IMask(element, maskOptions);
+
+var element2 = document.getElementById('email');
+var maskOptions2 = {    
+    mask:function (value) {
+                if(/^[a-z0-9_\.-]+$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}\.$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}\.[a-z]{1,4}$/.test(value))
+                    return true;
+                return false;
+                    },
+    lazy: false
+} 
+var mask2 = new IMask(element2, maskOptions2);
+
+var element3 = document.getElementById('card');
+var maskOptions3 = {
+    mask: '0000 0000 0000 0000',
+    lazy: false
+} 
+var mask3 = new IMask(element3, maskOptions3);
+},
+
     inputEvent(){
       if (this.errorText !== '')
         this.errorText = ''
     },
+
+    confirmChangingEmail() {
+      this.showChangeEmailConfirmation = false
+    },
+
+    cancelChangingEmail(){
+      this.showChangeEmailConfirmation = false
+      this.email = this.emailCopy
+    },
+
 
     async changePassword(){
       if (this.currentPassword.length === 0 || this.newPassword.length === 0 || this.newPasswordAgain.length === 0){
@@ -221,6 +299,12 @@ export default {
           "phone": this.phoneNumber
         })
 
+        
+        if (response.status === 200){
+          if (localStorage.getItem('registered') === 'false')
+          localStorage.setItem('registered', true)
+        }
+
       }
       catch (e) {
         console.log(e)
@@ -232,7 +316,6 @@ export default {
       try {
         const response = await axios.get(this.IP +"/supervisors/profile/" + localStorage.getItem("access_token"))
         this.data = response.data
-        console.log(response)
       }
       catch (e) {
         console.log(e)
@@ -250,6 +333,7 @@ export default {
       this.$router.push('/wrongAccess')
     }
     this.getProfileData()
+    this.showEmailField = localStorage.getItem('registered') === 'true'
   }
 }
 </script>
@@ -287,6 +371,16 @@ export default {
     border-color: #7c7f86 !important;
     height: 2rem !important;
     padding-left:0.5rem;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 
@@ -406,6 +500,16 @@ export default {
     color:#7C7F86;
     font-weight: 400;
     font-size: 1rem;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 
@@ -543,6 +647,16 @@ export default {
 
     margin-left: 20%;
     margin-right: 20%;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 

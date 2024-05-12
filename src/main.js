@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from "@/router/index.js";
 import store from "@/store/index.js";
+import { MaskInput } from 'vue-3-mask';
 
 
 let app = createApp(App)
@@ -12,6 +13,7 @@ app.config.globalProperties.fileMaxSizeMB = 150
 
 app.use(router)
 app.use(store)
+app.component('MaskInput', MaskInput);
 
 app.mount('#app')
 

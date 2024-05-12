@@ -49,7 +49,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
+        <label class="text ms-0">Факультет (институт)</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
     </div>
@@ -61,12 +61,12 @@
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Звание</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-    </div>
+<!--    <div class="container-fluid justify-content-between d-flex">-->
+<!--      <nav style="width: 100%;">-->
+<!--        <label class="text ms-0">Звание</label>-->
+<!--        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">-->
+<!--      </nav>-->
+<!--    </div>-->
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -207,7 +207,6 @@ export default {
           "supervisor_id" : localStorage.getItem("teacherID"),
         })
         this.data = response.data
-        console.log(this.data)
 
       }
       catch (e) {

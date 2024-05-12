@@ -145,7 +145,7 @@
 
     <div class="roundBlock">
       <div class="d-flex justify-content-between checkboxBlock">
-        <p class="mainText">Текущее состояние диссертации</p>
+        <p class="mainText">Укажите разделы диссертации, над которыми вы работали в текущем семестре</p>
         <button v-if="!editingCheckbox" @click="editTables" class="editBtn2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Редактировать</button>
         <button v-else @click="saveTables" class="editBtn2" :disabled="waitForCheck" :class="{disabledText : waitForCheck}">Сохранить</button>
       </div>
@@ -272,7 +272,7 @@
 
       <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{studentFeedBackDate.slice(0,10)}}</p>
+          <p class="textMainPage">Дата комментария: {{studentFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -290,7 +290,7 @@
 
       <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
       <nav class="checkboxBlock">
-        <p class="textMainPage">{{teacherFeedBackDate.slice(0,10)}}</p>
+        <p class="textMainPage">Дата комментария: {{teacherFeedBackDate.slice(0,10)}}</p>
       </nav>
     </div>
 

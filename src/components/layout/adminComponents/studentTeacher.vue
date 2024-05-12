@@ -162,6 +162,7 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
+      this.arrayOfPairsStudentTeacher = this.arrayOfPairsStudentTeacher.filter(item => !(item.student.studying_status !== 'studying'))
     }
   },
   async beforeMount() {

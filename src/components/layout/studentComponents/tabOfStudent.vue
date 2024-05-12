@@ -7,52 +7,15 @@
 
 
 
-<!--  <div class="roundBlock">-->
-<!--    <div class="d-flex justify-content-between nameLink" >-->
-
-<!--      <div v-if="!buttonIsOpened">-->
-<!--        <div class="textOfHeaders">{{fullName}} {{group}}</div>-->
-<!--      </div>-->
-
-<!--      <div v-else style="margin-top: 1%">-->
-<!--        <router-link style="text-decoration:none" to='user' @click="pushUserIdToStore">-->
-<!--          <p class="textOfHeaders">{{ fullName}} {{group}}</p>-->
-<!--        </router-link>-->
-<!--      </div>-->
-
-<!--      <div v-if="buttonIsOpened" style="margin-right: 3%">-->
-<!--        <button class="my-2 semestrButtonActive" @click="buttonClicked">-->
-<!--          <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">-->
-<!--        </button>-->
-<!--      </div>-->
-
-<!--      <div v-else style="margin-right: 3%">-->
-<!--        <button class="my-2 semestrButtonActive" @click=buttonClicked>-->
-<!--          <img src="../../../../static/figures/arrowdown.png" class="semestrImgActive">-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-
-
-<!--    <div class="roundBlock" v-if="buttonIsOpened">-->
-<!--      <p class="mainText mb-2 ms-4" >Общая информация</p>-->
-<!--      <div v-if="buttonIsOpened" class="textInTheBox">-->
-<!--        <p>Тема: <p class="dataText">{{topic}}</p></p>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--  </div>-->
-
   <div class="roundBlock">
-    <div class="d-flex justify-content-between nameLink" >
+    <div class="d-flex nameLink" >
 
-      <div style="margin-top: 1%">
+      <div>
         <router-link style="text-decoration:none" to='user' @click="pushUserIdToStore">
           <p class="textOfHeaders"> {{ fullName}} {{group}}</p>
         </router-link>
       </div>
     </div>
-
   </div>
 
 
@@ -102,13 +65,13 @@ export default {
   }
 
   .textOfHeaders {
-    margin-top: 7%;
+    margin-top: 2%;
     text-decoration: none !important;
     font-size: 25px;
   }
 
   .nameLink {
-    padding-left: 2.5% !important;
+    padding-left: 1% !important;
     font-family: "Raleway", sans-serif !important;
     font-weight: 400 !important;
 
@@ -184,7 +147,7 @@ export default {
   }
 
   .nameLink {
-    padding-left: 2.5% !important;
+    padding-left: 1% !important;
     font-family: "Raleway", sans-serif !important;
     font-weight: 400 !important;
 
@@ -258,7 +221,7 @@ export default {
   }
 
   .nameLink {
-    padding-left: 2.5% !important;
+    padding-left: 1% !important;
     font-family: "Raleway", sans-serif !important;
     font-weight: 400 !important;
   }

@@ -362,7 +362,7 @@
               <div class="textWithCarry inputBox ">{{this.patentsMap[patent.patent_type]}}</div>
             </div>
 
-            <div class="textMiniTable" style="width: 20%;">
+            <div class="textMiniTable" style="width: 18%;">
               <div class="textWithCarry inputBox ">{{patent.date.slice(0,10)}}</div>
             </div>
           </div>

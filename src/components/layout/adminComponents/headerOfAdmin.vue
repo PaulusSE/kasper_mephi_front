@@ -3,7 +3,7 @@
     <div class="d-flex myContainer">
       <nav>
         <router-link to="#">
-          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')"><p style="word-break: break-all;">Пары</p>
+          <button class="btn " :class="{btn_active: stateOfAdminPage === 1, btn_disactive: stateOfAdminPage !==1}" @click="$emit('btnStudentTeacherButtonClicked')"><p style="word-break: break-all;">Привязка</p>
           </button>
         </router-link>
       </nav>

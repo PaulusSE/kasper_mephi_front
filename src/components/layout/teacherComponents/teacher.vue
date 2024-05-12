@@ -1,20 +1,77 @@
 <template>
 
   <div class="mainPage">
-    <div class="aspirantText">
+    <div class="mainText">
       <p>Аспиранты</p>
     </div>
-    <div v-for="student in arrayOfStudents">
-      <tab-of-student
-      :full-name = student.full_name
-      :group = student.group_name
-      :topic = student.topic
-      :date-of-statement = student.dateOfStatement
-      :number-of-order-of-statement = student.numberOfOrderOfStatement
-      :student_id = student.student_id
-      ></tab-of-student>
 
-  </div>
+
+    <div>
+
+      <div class="roundBlock p-0 mt-2" v-if="arrayOfStudents.length !== 0">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+              ФИО
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              Семестр
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              Длительность обучения (cеместров)
+            </div>
+
+
+            <div class="textMiniTable" style="width: 20%; text-align: center">
+              Группа
+
+            </div>
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfStudents.length}" v-for="(element,index) in arrayOfStudents">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+              <router-link style="text-decoration: none" to="/user" @click="pushUserIdToStore(index)" >{{element["full_name"]}}</router-link>
+
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              {{element.actual_semester}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              {{element.years}}
+            </div>
+
+
+            <div class="textMiniTable" style="width: 20%; text-align: center">
+              {{ element.group_name}}
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div v-else class="text-center textMainPage">
+        За вами нет закрепленных аспирантов
+      </div>
+    </div>
+
+
   </div>
 
 
@@ -33,7 +90,8 @@ export default {
   },
   data(){
     return {
-      arrayOfStudents : [{}]
+      arrayOfStudents : [{}],
+      fullName :"",
     }
   },
   methods: {
@@ -50,19 +108,29 @@ export default {
       catch (e) {
         console.log(e)
       }
-    }
+
+      this.arrayOfStudents.sort((a, b) => a.actual_semester > b.actual_semester ? 1 : -1);
+      this.arrayOfStudents = this.arrayOfStudents.filter(item => !(item.studying_status !== 'studying'))
+
+    },
+    pushUserIdToStore(index) {
+      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].student_id)
+      localStorage.setItem("studentID", this.arrayOfStudents[index].student_id)
+      console.log()
+    },
+
+
   },
   async beforeMount() {
+    if (localStorage.getItem('registered') === 'false')
+      this.$router.push('/profile')
+
     await this.getStudents()
   }
 }
 </script>
 
 <style scoped>
-@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
-@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
-@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
-
 
 * {
   margin:0;
@@ -70,92 +138,53 @@ export default {
   box-sizing: border-box;
 }
 
+.rightLine {
+  border-right:  solid 0.12em #DEDEDE !important;
+}
+
+
+.inputBox {
+  border: 0 !important;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 0 !important;
+  color:#000000;
+  background-color: white;
+  outline: none !important;
+  width: 100%;
+}
+
 @media (min-width: 800px) {
-  .aspirantText {
-    font-family: "Raleway", sans-serif !important;
-    border: solid 0.12em #0055BB !important;
-    border-radius: 12px;
-    display:inline-block;
-    margin-left: 2.5%;
-    margin-bottom: 3%;
-    color: #0055BB !important;
-    font-weight: 500;
-    font-size:22px;
-    padding-bottom: 0.2%;
-    padding-top: 0.2%;
-    padding-right: 1%;
-    padding-left: 1%;
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
   }
 
-  .semestrButtonActive {
-    border:0 !important;
-    width: 3%;
-    height: 100%;
-    max-width: 42px;
-    margin-top: 0 !important;
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
     background-color: white;
   }
 
-  .textOfHeaders {
-    margin-top: 7%;
-    text-decoration: none !important;
-    font-size: 25px;
+  .trashLogo{
+    width:32px !important;
+    height: 32px !important;
   }
 
-  .nameLink {
-    padding-left: 2.5% !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 400 !important;
-
-  }
-
-
-  .roundBlock {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    width: 95%;
-    margin:auto;
-    margin-bottom: 2% !important;
-  }
-
-
-  .mainText {
+  .textMiniTable{
     color: #7C7F86;
-    font-weight: 100;
-    font-size: 30px;
-  }
-
-
-  .textInTheBox {
-
-    color: black !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 500 !important;
-    font-size:22px !important;
-    margin-left: 2% !important;
-  }
-
-  .dataText{
-    font-weight: 400 !important;
-    display: inline;
-  }
-
-
-
-
-
-  ul p{
-    color: #000000;
     font-family: "Raleway", sans-serif;
-    font-weight: 900;
-    font-size:22px;
-    margin-left: 2%;
+    font-weight: 500;
+    font-size:18px;
+    text-align: center;
+    word-break: break-word
+
   }
-
-
 
   .mainPage {
-    width: 70% !important;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -165,97 +194,83 @@ export default {
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
     margin: 1.5% auto 1%;
-    padding: 0 0 0.5%;
-    padding-top: 1.5%;
+    padding: 0 0 1.5%;
+  }
+
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+    margin-left: 2.5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+
+  .linkStyle {
+
+    text-decoration: none;
+    color:#0055BB !important;
   }
 }
 
 @media (max-width: 800px) {
-  .aspirantText {
-    font-family: "Raleway", sans-serif !important;
-    border: solid 0.12em #0055BB !important;
-    border-radius: 12px;
-    display:inline-block;
-    margin-left: 2.5%;
-    margin-bottom: 3%;
-    color: #0055BB !important;
-    font-weight: 500;
-    font-size:22px;
-    padding-bottom: 0.2%;
-    padding-top: 0.2%;
-    padding-right: 1%;
-    padding-left: 1%;
-  }
-
-  .semestrButtonActive {
-    border:0 !important;
-    width: 3%;
-    height: 100%;
-    max-width: 42px;
-    margin-top: 0 !important;
-    background-color: white;
-  }
-
-  .textOfHeaders {
-    margin-top: 7%;
-    text-decoration: none !important;
-    font-size: 25px;
-  }
-
-  .nameLink {
-    padding-left: 2.5% !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 400 !important;
-
-  }
-
-
-  .roundBlock {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
+  .editBtnStudents{
     width: 95%;
     margin:auto;
-    margin-bottom: 2% !important;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.9rem;
   }
 
 
-  .mainText {
+  .textMiniTable{
     color: #7C7F86;
-    font-weight: 100;
-    font-size: 30px;
-  }
-
-
-  .textInTheBox {
-
-    color: black !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 500 !important;
-    font-size:22px !important;
-    margin-left: 2% !important;
-  }
-
-  .dataText{
-    font-weight: 400 !important;
-    display: inline;
-  }
-
-
-
-
-
-  ul p{
-    color: #000000;
     font-family: "Raleway", sans-serif;
-    font-weight: 900;
-    font-size:22px;
-    margin-left: 2%;
+    font-weight: 500;
+    font-size:0.9rem;
+    text-align: center;
+    word-break: break-word;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
   }
-
-
 
   .mainPage {
-    width: 80% !important;
+    width: 80%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -265,97 +280,89 @@ export default {
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
     margin: 1.5% auto 1%;
-    padding: 0 0 0.5%;
-    padding-top: 1.5%;
+    padding: 0 0 1.5%;
+  }
+
+  .headerText{
+    margin-top: 1rem;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 1.2rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 1% 1%;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:23px !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
+  }
+
+  .linkStyle {
+    text-decoration: none;
+    color:#0055BB;
   }
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
-  .aspirantText {
-    font-family: "Raleway", sans-serif !important;
-    border: solid 0.12em #0055BB !important;
-    border-radius: 12px;
-    display:inline-block;
-    margin-left: 2.5%;
-    margin-bottom: 3%;
-    color: #0055BB !important;
-    font-weight: 500;
-    font-size:0.8rem ;
-    padding-bottom: 0.2%;
-    padding-top: 0.2%;
-    padding-right: 1%;
-    padding-left: 1%;
-  }
-
-  .semestrButtonActive {
-    border:0 !important;
-    width: 3%;
-    height: 100%;
-    max-width: 42px;
-    margin-top: 0 !important;
-    background-color: white;
-  }
-
-  .textOfHeaders {
-    margin-top: 7%;
-    text-decoration: none !important;
-    font-size: 25px;
-  }
-
-  .nameLink {
-    padding-left: 2.5% !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 400 !important;
-
-  }
-
-
-  .roundBlock {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
+  .editBtnStudents{
     width: 95%;
     margin:auto;
-    margin-bottom: 2% !important;
+    text-align:right;
+    font-size: 0.8rem;
   }
 
-
-  .mainText {
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.7rem !important;
+  }
+  .textMiniTable{
     color: #7C7F86;
-    font-weight: 100;
-    font-size: 30px;
-  }
-
-
-  .textInTheBox {
-
-    color: black !important;
-    font-family: "Raleway", sans-serif !important;
-    font-weight: 500 !important;
-    font-size:22px !important;
-    margin-left: 2% !important;
-  }
-
-  .dataText{
-    font-weight: 400 !important;
-    display: inline;
-  }
-
-
-
-
-
-  ul p{
-    color: #000000;
     font-family: "Raleway", sans-serif;
-    font-weight: 900;
-    font-size:22px;
-    margin-left: 2%;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-word;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
   }
 
+  .trashLogo{
+    width:15px !important;
+    height: 15px !important;
+
+  }
 
 
   .mainPage {
-    width: 90% !important;
+    width: 90%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -365,9 +372,55 @@ export default {
     border-bottom-right-radius: 25px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.25);
     margin: 1.5% auto 1%;
-    padding: 0 0 0.5%;
-    padding-top: 1.5%;
+    padding: 0 0 1.5%;
+  }
+
+  .headerText{
+    margin-top: 0!important;
+    color:#7C7F86;
+    font-weight: 300;
+    font-size: 0.8rem;
+    margin-left: 2.5% ;
+    /*Отступ такой потому, что ширина roundBlock 95% 2.5% = (100 - 95)% / 2*/
+  }
+
+  .roundBlock {
+    border: solid 0.12em #DEDEDE;
+    border-radius: 20px;
+    width: 95%;
+    margin:auto;
+    margin-bottom: 2% !important;
+    padding: 0 !important;
+  }
+
+  .mainText{
+    color:#7C7F86;
+    font-weight: 450;
+    font-size:0.6rem !important;
+    text-align: start;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
+  }
+
+  .linkStyle {
+    padding-bottom: 0.75rem;
+    text-decoration: none;
+
   }
 }
+
+
 
 </style>

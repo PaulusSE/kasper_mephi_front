@@ -13,19 +13,6 @@
 
     <div class="roundBlock">
 
-<!--      <div class="mt-2">-->
-<!--        <select class="form-select">-->
-<!--          <option>-->
-<!--            Год1-->
-<!--          </option>-->
-<!--          <option>-->
-<!--            Год2-->
-<!--          </option>-->
-<!--          <option>-->
-<!--            Год3-->
-<!--          </option>-->
-<!--        </select>-->
-<!--      </div>-->
 
       <div class="d-flex justify-content-between">
         <nav class="mt-3" >
@@ -173,7 +160,7 @@ export default {
         )
 
         this.data = response.data
-        console.log(this.data)
+
         this.arrayOfStudents = this.data
 
       }
@@ -188,6 +175,9 @@ export default {
       catch (e){
         console.log(e)
       }
+
+      this.arrayOfStudents.sort((a, b) => a.actual_semester > b.actual_semester ? 1 : -1);
+      this.arrayOfStudents = this.arrayOfStudents.filter(item => !(item.studying_status !== 'studying'))
 
 
     },

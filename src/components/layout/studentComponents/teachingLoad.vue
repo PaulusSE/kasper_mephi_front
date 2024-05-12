@@ -129,7 +129,7 @@ export default {
       isDataFetched : false,
 
       showWarningNotification : false,
-      warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные работы',
+      warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные нагрузки',
 
     }
   },

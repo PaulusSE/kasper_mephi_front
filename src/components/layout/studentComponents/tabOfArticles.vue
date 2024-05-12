@@ -451,7 +451,7 @@
             <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
 
               <div>
-                <input class="textWithCarry inputBox "  type="date" v-model="report.reported_at"></input>
+                <input class="textWithCarry inputBox "  type="date" min="2000-01-01" v-model="report.reported_at"></input>
               </div>
             </div>
 
@@ -611,7 +611,7 @@
             <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
 
               <div>
-                <input class="textWithCarry inputBox" v-model="project.start_at" type="date" style="overflow-y:auto"></input>
+                <input class="textWithCarry inputBox" v-model="project.start_at" type="date" min="2000-01-01" style="overflow-y:auto"></input>
               </div>
 
             </div>
@@ -619,7 +619,7 @@
             <div class="rightLine textMiniTable" style="width: 13%; text-align: center">
 
               <div>
-                <input class="textWithCarry inputBox " type="date" v-model="project.end_at"></input>
+                <input class="textWithCarry inputBox " type="date" min="2000-01-01" v-model="project.end_at"></input>
               </div>
             </div>
 
@@ -766,7 +766,7 @@
 
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
               <div>
-                <input class="textWithCarry inputBox " type="date" v-model="patent.date">
+                <input class="textWithCarry inputBox " type="date" min="2000-01-01"  v-model="patent.date">
               </div>
             </div>
 

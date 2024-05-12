@@ -23,9 +23,10 @@
     <div class="roundBlock">
 
       <div class="d-flex justify-content-between">
-        <nav class="mt-3" >
-          <p class="headingSemester">Доступ аспирантов</p>
+        <nav class="mt-3 d-flex" >
+          <p class="headingSemester">Обучающиеся и находящиеся в академическом отпуске аспиранты</p>
         </nav>
+
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editCommonTable" @click="buttonEditCommonTable" class="editBtn mt-3">Редактировать</button>
           <div v-else class="d-flex">
@@ -36,6 +37,8 @@
 
       </div>
 
+
+      
       <div class="roundBlock p-0 mt-2">
         <div>
           <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents.length !== 0}">
@@ -49,7 +52,7 @@
 
 
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              Год
+              Актуальный семестр
             </div>
 
 
@@ -73,13 +76,13 @@
             </div>
 
             <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
-              <router-link style="text-decoration: none" to="/user" @click="pushStudentIDToStorage(index)" >{{element["full_name"]}}</router-link>
+              <router-link style="text-decoration: none" to="/user" @click="pushStudentIDToStorage(index, 1)" >{{element["full_name"]}}</router-link>
 
             </div>
 
 
             <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
-              {{element["years"]}} курс
+              {{element.actual_semester}} курс
             </div>
 
 
@@ -102,13 +105,92 @@
             </div>
 
             <div class="textMiniTable ps-3" style="width: 10%; text-align: center">
-              <input :disabled='!editCommonTable' type="checkbox" v-model="element.can_edit" class="me-3">
+              <input :disabled='!editCommonTable' type="checkbox" @change="checkIfAllSelected" v-model="element.can_edit" class="me-3">
             </div>
           </div>
         </div>
 
       </div>
+
+      <button v-if="showGraduatedAndExpelledStudents" class="editBtn ms-2" @click="changeShowAllApsState">Скрыть весь список</button>
+      <button v-else class="editBtn ms-2" @click="changeShowAllApsState">Показать выпустившихся и исключенных аспирантов</button>
+
+
+      <div class="d-flex justify-content-between" v-if="showGraduatedAndExpelledStudents">
+        <nav class="mt-3" >
+          <p class="headingSemester">Выпустившиеся и отчисленные аспиранты</p>
+        </nav>
+
+      </div>
+
+      <div class="roundBlock p-0 mt-2" v-if="showGraduatedAndExpelledStudents">
+        <div>
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfStudents2.length !== 0}">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
+              ФИО
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              Актуальный семестр
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              Группа
+
+            </div>
+
+            <div class="textMiniTable" style="width: 23%; text-align: center">
+              Статус
+            </div>
+
+          </div>
+
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfStudents2.length}" v-for="(element,index) in arrayOfStudents2">
+            <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+              {{index + 1}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 28%; text-align: center">
+              <router-link style="text-decoration: none" to="/user" @click="pushStudentIDToStorage(index, 2)" >{{element["full_name"]}}</router-link>
+
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              {{element.actual_semester}} курс
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              {{ element["group_name"] }}
+
+            </div>
+
+            <div class="textMiniTable me-3" style="width: 23%; text-align: center">
+
+              <div  style="height: 100%; width: 100%" class="ps-3">
+                <select  :disabled="!editCommonTable"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.studying_status">
+                  <option value="studying">Обучается</option>
+                  <option value="academic"> В академическом отпуске</option>
+                  <option value="graduated">Выпустился</option>
+                  <option value="expelled">Отчислился</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
+
+
 
     <div class="roundBlock">
 
@@ -154,8 +236,8 @@
             <div class="textMiniTable" style="width: 38%; text-align: center">
               <div  style="height: 100%; width: 100%">
                 <select  :disabled="!editTeachers"   class="textMiniTable inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="element.archived">
-                  <option value="false">Работает</option>
-                  <option value="true"> Уволен</option>
+                  <option value=false>Работает</option>
+                  <option value=true> Уволен</option>
 
                 </select>
               </div>
@@ -353,7 +435,7 @@
 
       <div class="d-flex justify-content-between" style="margin-left: 2.5%">
         <nav class="mt-3" >
-          <p class="headingSemester">Редактирование специализации</p>
+          <p class="headingSemester">Редактирование специальностей</p>
         </nav>
         <nav class="text-end" style="margin-right: 2.5%">
           <button v-if="!editTableSpecialization" @click="buttonEditSpecialization" class="editBtn mt-3">Редактировать</button>
@@ -374,7 +456,7 @@
               </div>
 
               <div class="textMiniTable" style="width: 90%; text-align: center">
-                Название специализации
+                Название специальности
               </div>
 
 
@@ -404,7 +486,7 @@
               </div>
 
               <div class="textMiniTable rightLine" style="width: 83%; text-align: center">
-                Название специализации
+                Название специальности
               </div>
 
               <div class="textMiniTable" style="width: 7%; text-align: center">
@@ -448,7 +530,6 @@
 
   </div>
 
-
 </template>
 
 <script>
@@ -470,9 +551,10 @@ export default {
   data(){
     return {
       arrayOfStudentsCopy : [],
-      arrayOfStudents : [
+      arrayOfStudents : [],
 
-      ],
+      arrayOfStudentsCopy2 : [],
+      arrayOfStudents2 : [],
 
       arrayOfTeachers : [],
       arrayOfTeachersCopy : [],
@@ -483,6 +565,7 @@ export default {
       arrayOfGroupsCopy:[],
       editTableWithGroups : false,
       editCommonTable : false,
+      editCommonTable2 : false,
       editTableSpecialization: false,
       editTeachers : false,
       arrayOfPlan : [],
@@ -498,21 +581,26 @@ export default {
         "graduated" : "Выпустился",
       },
       teacherStatusMap: {
-        "false" : "Работает",
-        "true" : "Уволен"
+        false : "Работает",
+        true : "Уволен"
       },
       showSaveTableNotification : false,
       resultOfSavingTables : false,
       deleteSpecIds :[],
       deleteGroupIds: [],
       deletePlanIds: [],
+
+      showGraduatedAndExpelledStudents: false,
     }
   },
   methods : {
 
-
     setState(index, string){
       this.arrayOfStudents[index][state] = string
+    },
+
+    changeShowAllApsState() {
+this.showGraduatedAndExpelledStudents = !this.showGraduatedAndExpelledStudents  
     },
 
     buttonEditTeachers(){
@@ -530,10 +618,18 @@ export default {
       if (this.arrayOfTeachers === this.arrayOfTeachersCopy)
         return
 
+
+      for (var teacher of this.arrayOfTeachers)
+        teacher.archived = teacher.archived === 'true'
+
+
+
       try {
-        const response = await axios.get(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"), {
+          "ids" : this.arrayOfTeachers
+            }
         )
-        this.data = response.data
+
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -569,6 +665,16 @@ export default {
     selectAllCheckbox(){
     for (var i = 0; i < this.arrayOfStudents.length; i++)
       this.arrayOfStudents[i].can_edit = !this.stateOfMainCheckBox
+    },
+
+    checkIfAllSelected(){
+      this.stateOfMainCheckBox = true
+      for (var student of this.arrayOfStudents){
+        if (!student.can_edit){
+          this.stateOfMainCheckBox = false
+          return
+        }
+      }
     },
 
     cancelTeachers(){
@@ -734,16 +840,28 @@ export default {
       this.editCommonTable = true
     },
 
+    buttonEditCommonTable2() {
+      this.arrayOfStudentsCopy2 = JSON.parse(JSON.stringify(this.arrayOfStudents2));
+      this.editCommonTable2 = true
+    },
+
     buttonCancelChangeCommonTable(){
       this.arrayOfStudents = JSON.parse(JSON.stringify(this.arrayOfStudentsCopy));
       this.editCommonTable = false
     },
 
+    buttonCancelChangeCommonTable2(){
+      this.arrayOfStudents2 = JSON.parse(JSON.stringify(this.arrayOfStudentsCopy2));
+      this.editCommonTable2 = false
+    },
+
     async buttonSaveCommonTable(){
+
+
 
       try {
         const response = await axios.post(this.IP +"/administrator/student/status/" + localStorage.getItem("access_token"),{
-          "students" : this.arrayOfStudents
+          "students" : this.arrayOfStudents.concat(this.arrayOfStudents2)
             }
         )
 
@@ -754,6 +872,8 @@ export default {
       }
 
       this.editCommonTable = false
+      await this.getStudents()
+
     },
 
     buttonEditTableYears() {
@@ -802,7 +922,7 @@ export default {
 
 
       for (var i = 0; i < this.arrayOfPlan.length; i++){
-        console.log(this.arrayOfPlan[i].amount)
+
         if (!/^\d+$/.test(this.arrayOfPlan[i].amount)){
           this.arrayOfPlan = this.arrayOfPlanCopy.slice(0)
           this.callEditTablePlanError()
@@ -861,9 +981,19 @@ export default {
         }, 5000);
     }
 ,
-    pushStudentIDToStorage(index){
-      localStorage.setItem("studentID", this.arrayOfStudents[index].student_id)
-      this.$store.dispatch("updateUserId", this.arrayOfStudents[index].student_id)
+    pushStudentIDToStorage(index, key){
+
+      if (key === 1){
+        localStorage.setItem("studentID", this.arrayOfStudents[index].student_id)
+        this.$store.dispatch("updateUserId", this.arrayOfStudents[index].student_id)
+      }
+
+      if (key === 2) {
+        localStorage.setItem("studentID", this.arrayOfStudents2[index].student_id)
+        this.$store.dispatch("updateUserId", this.arrayOfStudents2[index].student_id)
+      }
+
+
     },
     pushTeacherIDToStorage(index){
     localStorage.setItem("teacherID", this.arrayOfTeachers[index].supervisor_id)
@@ -918,13 +1048,23 @@ export default {
         )
 
         this.data = response.data
-        this.arrayOfStudents = this.data
+
 
       }
       catch (e) {
         this.showWrongAnswerString = true;
         console.log(e)
       }
+
+      this.sortStudents(this.data)
+
+      this.stateOfMainCheckBox = true
+
+      for (var student of this.arrayOfStudents){
+        if (student.can_edit === undefined)
+          this.stateOfMainCheckBox = false
+      }
+
     },
 
     async getSemesters(){
@@ -942,7 +1082,25 @@ export default {
       }
     },
 
+    sortStudents(data){
 
+      const weights = {
+        "studying" : 0,
+        "academic" : 1,
+        "graduated" : 2,
+        "expelled" : 3,
+      }
+
+      this.arrayOfStudents = data
+      this.arrayOfStudents.sort((a, b) => weights[a.studying_status] === weights[b.studying_status] && a.actual_semester < b.actual_semester ? 1 : -1);
+      this.arrayOfStudents.sort((a, b) => weights[a.studying_status] > weights[b.studying_status] ? 1 : -1);
+
+      this.arrayOfStudents2 = JSON.parse(JSON.stringify(this.arrayOfStudents));
+
+      this.arrayOfStudents = this.arrayOfStudents.filter(item => !(item.studying_status === 'expelled' || item.studying_status === 'graduated'))
+      this.arrayOfStudents2 = this.arrayOfStudents2.filter(item => !(item.studying_status === 'studying' || item.studying_status === 'academic'))
+
+    }
 
 
 

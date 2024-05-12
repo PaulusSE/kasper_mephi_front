@@ -257,10 +257,9 @@
           <p class="mainText">Комментарий аспиранта к отчету</p>
         </nav>
       </div>
-
       <div class="d-flex justify-content-between" v-if="studentFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{studentFeedBackDate.slice(0,10)}}</p>
+          <p class="textMainPage">Дата комментария: {{studentFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -278,7 +277,7 @@
 
       <div class="d-flex justify-content-between" v-if="teacherFeedBackDate.length !== 0">
         <nav class="checkboxBlock">
-          <p class="textMainPage">{{teacherFeedBackDate.slice(0,10)}}</p>
+          <p class="textMainPage">Дата комментария: {{teacherFeedBackDate.slice(0,10)}}</p>
         </nav>
       </div>
 
@@ -379,7 +378,7 @@ export default {
         })
 
         this.data = response.data
-        console.log(this.data)
+
       }
       catch (e) {
         console.log(e)
@@ -462,6 +461,7 @@ export default {
       }
 
       this.teacherFullName = this.arrayOfTeachers[this.arrayOfTeachers.length - 1].full_name
+
 
     },
 
@@ -587,6 +587,7 @@ export default {
             }
         )
         this.data = response.data
+
       }
 
       catch (e) {

@@ -3,6 +3,9 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import axios from "axios";
 import utf8 from "utf8";
 import reportTab from "@/components/layout/studentComponents/report-tab.vue";
+import notificationWarning from "@/components/layout/notifications/studentNotifications/notificationWarning.vue";
+import saveTablesNotifitcation
+  from "@/components/layout/notifications/studentNotifications/saveTablesNotifitcation.vue";
 
 export default {
   name: "report",
@@ -17,10 +20,19 @@ export default {
       arrayOfComment1: [],
       arrayOfComment2: [],
 
+      resultOfSavingTables : false,
+      showSavingTablesNotification : false,
+
+      showWarningNotification : false,
+      warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные экзамены',
+
     }
   },
   components: {headerOfStudent,
-  "reportTab" : reportTab
+  "reportTab" : reportTab,
+    "warning" : notificationWarning,
+    "saveTablesNotification" : saveTablesNotifitcation,
+
   },
   props: ["stateOfStudentPage", "actualSemester", "waitForCheck", "actualSemester", "canEdit"],
   methods : {
@@ -41,7 +53,31 @@ export default {
       this.arrayOfExams.splice(index,1)
     },
 
+    callSaveTablesError(result) {
+      this.resultOfSavingTables = result
+      this.showSavingTablesNotification = true
+      setTimeout(() => {
+        this.showSavingTablesNotification = false
+      }, 5000);
+    },
+
+    callWarningNotification() {
+      this.showWarningNotification = true
+      setTimeout(() => {
+        this.showWarningNotification = false
+      }, 5000);
+    },
+
     async saveExams(index){
+
+      var currentLength = this.arrayOfExams[index - 1].length
+      console.log(this.arrayOfExams[index - 1])
+      this.arrayOfExams[index - 1] = this.arrayOfExams[index - 1].filter(item => !(item.mark === '' || item.exam_type === ''))
+      if (this.arrayOfExams[index - 1].length !== currentLength){
+        this.callWarningNotification()
+      }
+      console.log(this.arrayOfExams[index - 1])
+
 
       for (var i = 0; i < this.arrayOfExams.length; i++) {
         for (var exam of this.arrayOfExams[i]){
@@ -59,10 +95,15 @@ export default {
             },
         )
         this.data = response.data
+        if (response.status === 200 || response.status === 202)
+          this.callSaveTablesError(true)
       }
       catch (e) {
         console.log(e)
+        this.callSaveTablesError(false)
       }
+
+      await this.getMarks()
 
     },
 
@@ -109,6 +150,7 @@ export default {
       try{
         for (var i = 0; i<data.exams.length; i++){
           var exam = data.exams[i]
+          exam.mark = exam.mark === undefined ? 0 : exam.mark
           this.arrayOfExams[exam.semester - 1].push(exam)
         }
       }
@@ -243,6 +285,22 @@ export default {
 </script>
 
 <template>
+
+
+  <save-tables-notification
+      :result-of-sending = this.resultOfSavingTables
+      :show = this.showSavingTablesNotification
+  >
+  </save-tables-notification>
+
+  <warning
+      :show=showWarningNotification
+      :message = warningMessage
+  >
+
+  </warning>
+
+
 <div class="mainPage">
   <header-of-student
       @btnDissertationClicked="$emit('btnDissertationClicked')"

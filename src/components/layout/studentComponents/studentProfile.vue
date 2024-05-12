@@ -4,6 +4,15 @@
       :result-of-sending = resultOfSending
   ></change-password-notification>
 
+  <confirm-change-email
+  :show="showChangeEmailConfirmation"
+  :current-email = this.emailCopy
+  :new-email = this.email
+  @confirmChangingEmail = confirmChangingEmail
+  @cancelChangingEmail = cancelChangingEmail
+  >
+  </confirm-change-email>
+
   <page-header></page-header>
 
   <div class="mainPage pt-4">
@@ -14,19 +23,19 @@
           <p class="mainText">Основная информация</p>
         </nav>
 
-<!--        <nav>-->
-<!--          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">-->
-<!--            <p>Редактировать</p>-->
-<!--          </button>-->
+        <nav>
+          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">
+            <p>Редактировать</p>
+          </button>
 
-<!--          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">-->
-<!--            <p>Отменить</p>-->
-<!--          </button>-->
+          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">
+            <p>Отменить</p>
+          </button>
 
-<!--          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">-->
-<!--            <p>Сохранить</p>-->
-<!--          </button>-->
-<!--        </nav>-->
+          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">
+            <p>Сохранить</p>
+          </button>
+        </nav>
       </div>
 
       <div class="container-fluid justify-content-between d-flex">
@@ -36,44 +45,49 @@
         </nav>
       </div>
 
-      <div class="container-fluid justify-content-between d-flex">
+      <div class="container-fluid justify-content-between d-flex gap-3">
         <nav style="width: 50%">
           <div style="width: 100%">
             <label class="text ms-0">Почта</label>
-            <input type="text" class="textInput" disabled @input="inputEvent" v-model="email">
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="email">
           </div>
 
         </nav>
         <nav style="width: 50%;">
-          <div style="width: 100%">
-            <label class="text ms-0" >Группа</label>
-<!--            <select class="form-select blockStyles textInput ps-2 p-0" v-model="group" @input="inputEvent" :disabled="!stateOfEditingCommonInfo">-->
-<!--              <option v-for="group in numberOfGroups" >{{group}}</option>-->
-<!--            </select>-->
-            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="group">
-          </div>
+          <nav style="width: 100%;" >
+            <label class="text ms-0">Группа</label>
+            <select class="form-select blockStyles textInput p-0" :disabled="!stateOfEditingCommonInfo"   v-model="group" @click="inputEvent">
+              <option :value="group" v-for="group in numberOfGroups" >{{group.name}}</option>
+            </select>
+          </nav>
+
         </nav>
       </div>
 
-      <div class="container-fluid justify-content-between d-flex">
+      <div class="container-fluid justify-content-between d-flex gap-3">
         <nav style="width: 50%">
           <div style="width: 100%">
-            <label class="text ms-0">Номер телефона</label>
-            <input type="text" class="textInput" disabled @input="inputEvent" v-model="phoneNumber">
+            <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
+            <MaskInput v-model="phoneNumber" class="textInput"  @input="inputEvent"  mask="+7 (###) ###-##-##"/>
           </div>
 
         </nav>
+
+
         <nav style="width: 50%;">
-          <div style="width: 100%">
-            <label class="text ms-0" >Категория</label>
-            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="category">
-          </div>
+          <nav style="width: 100%;">
+            <label class="text ms-0">Категория</label>
+            <select class="form-select blockStyles textInput p-0" :disabled="!stateOfEditingCommonInfo" v-model="category" @click="inputEvent">
+              <option value="Бюджетный">Бюджетный</option>
+              <option value="Платный">Платный</option>
+            </select>
+          </nav>
         </nav>
       </div>
 
 
 
-      <div class="container-fluid justify-content-between d-flex">
+      <div class="container-fluid justify-content-between d-flex gap-3">
         <nav style="width: 50%">
           <div style="width: 100%">
             <label class="text ms-0">Срок обучения</label>
@@ -84,7 +98,7 @@
         <nav style="width: 50%" >
           <div style="width: 100%">
             <label class="text ms-0" >Дата начала обучения</label>
-            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="startDateStudying">
+            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" min="2000-01-01" @input="inputEvent" v-model="startDateStudying">
           </div>
         </nav>
       </div>
@@ -138,16 +152,21 @@
 import store from "@/store/index.js";
 import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 import axios from "axios";
+import confirmChangeEmail from "@/components/layout/models/studentModels/confirmChangeEmail.vue";
 
 export default {
   name: "studentsMainPage",
-  components : {changePasswordNotification},
+  components : {changePasswordNotification, confirmChangeEmail},
   "changePasswordNotification" : changePasswordNotification,
+
   data(){
     return {
       fullName: '',
       email: '',
-      group: '',
+      group: {
+        group_id : '',
+        name : '',
+      },
       speciality: '',
       studyingTime: '',
       startDateStudying: '',
@@ -157,7 +176,12 @@ export default {
       admissionOrder: '',
       fullNameCopy: "",
       emailCopy: '',
-      groupCopy: '',
+
+      groupCopy: {
+        group_id : '',
+        name : '',
+      },
+
       specialityCopy: '',
       studyingTimeCopy: '',
       startDateStudyingCopy: '',
@@ -177,6 +201,8 @@ export default {
       stateOfEditingDissertationInfo : false,
       stateOfWritingDissertationInfo : false,
       numberOfGroups : [],
+
+      showChangeEmailConfirmation : false,
     }
   },
 
@@ -194,9 +220,19 @@ export default {
       this.admissionOrderCopy = this.admissionOrder
     },
 
-    editDissertationInfo(){
+    async getListOfGroups(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
+        )
+        this.numberOfGroups = response.data
 
+
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
+
 
     inputEvent(){
       if (this.errorText !== '')
@@ -204,6 +240,7 @@ export default {
       if(!this.stateOfWritingCommonInfo){
         this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
       }
+
     },
     async changePassword(){
       if (this.currentPassword.length === 0 || this.newPassword.length === 0 || this.newPasswordAgain.length === 0){
@@ -242,20 +279,34 @@ export default {
       try {
         const response = await axios.get(this.IP +"/student/profile/" + localStorage.getItem("access_token"))
         this.data = response.data
-
+        console.log(this.data)
       }
       catch (e) {
         console.log(e)
       }
       this.fullName = this.data.full_name
       this.email = this.data.email
-      this.group = this.data.group_name
       this.speciality = this.data.specialization
       this.startDateStudying = this.data.start_date.slice(0,10)
       this.studyingTime = this.data.years
       this.phoneNumber = this.data.phone
       this.category = this.data.category
 
+      for (var group of this.numberOfGroups){
+        if (group.name === this.data.group_name){
+          this.group = group
+          return
+        }
+      }
+    },
+
+    confirmChangingEmail() {
+      this.showChangeEmailConfirmation = false
+    },
+
+    cancelChangingEmail(){
+      this.showChangeEmailConfirmation = false
+      this.email = this.emailCopy
     },
 
     cancelChange(){
@@ -274,10 +325,35 @@ export default {
         this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
 
     },
-    saveChange(){
+    async saveChange(){
       this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
-      if (this.stateOfWritingCommonInfo)
-        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
+
+
+      if (this.email !== this.emailCopy)
+        this.showChangeEmailConfirmation = true
+
+
+      var tempDate = new Date(this.startDateStudying)
+      this.startDateStudying = tempDate.toISOString()
+      
+      try {
+        const response = await axios.post(this.IP +"/students/profile/" + localStorage.getItem("access_token"),
+            {
+              "full_name": this.fullName,
+              "email": this.email,
+              "group_id" : parseInt(this.group.group_id),
+              "phone" : this.phoneNumber,
+              "category" : this.category,
+              "years" : this.studyingTime,
+              "date" : this.startDateStudying
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
     },
 
 
@@ -286,7 +362,9 @@ export default {
     if (store.getters.getType !== "student"){
       this.$router.push('/wrongAccess')
     }
+    await this.getListOfGroups()
     await this.getProfileData()
+
   }
 
 }
@@ -301,6 +379,11 @@ export default {
 * {
   margin:0;
   padding: 0;
+}
+
+select {
+  background-color: white !important;
+  padding-left: 0.5rem !important;
 }
 
 .roundBlock {
@@ -353,8 +436,7 @@ export default {
 
   header .head-top nav {
     margin-top: 2px;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
   header .head-top nav a {
@@ -397,8 +479,7 @@ export default {
   }
 
   div nav {
-    margin-left: 1.5rem !important;
-    margin-right: 1.5rem !important;;
+
     margin-bottom: 1%;
 
   }
@@ -481,8 +562,7 @@ export default {
 
   header .head-top nav {
     margin-top: 2px;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
   header .head-top nav a {
@@ -526,8 +606,7 @@ export default {
   }
 
   div nav {
-    margin-left: 1.5rem !important;
-    margin-right: 1.5rem !important;;
+
     margin-bottom: 0.3rem;
   }
 
@@ -617,8 +696,7 @@ export default {
 
   header .head-top nav {
     margin-top: 0 !important;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
 

@@ -10,6 +10,7 @@
       <div class="container">
         <p class="textMainPage my-1">Доступ к информационным системам</p>
         <p class="textMainPage">НИЯУ МИФИ</p>
+        <p class="textMainPage my-1">Система учета деятельности аспирантов</p>
       </div>
     </div>
 
@@ -28,9 +29,7 @@
           </form>
         </div>
 
-        <div>
-
-        </div>
+        
 
         <transition name="slide-fade">
           <div v-show="showWrongAnswerString" class = "wrongPassword">Неверный пароль</div>

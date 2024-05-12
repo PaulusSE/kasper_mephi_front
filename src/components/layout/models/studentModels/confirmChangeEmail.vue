@@ -3,70 +3,26 @@ import axios from "axios";
 import utf8 from "utf8";
 
 export default {
-  name: "conformSendingToCheck",
+  name: "confirmChangeEmail",
   data() {
     return {
       dissertationText : '',
       scientificWorkText: '',
       teachingLoadText: '',
-      render : false,
+
       explanationaryNoteFile : '',
     }
   },
-  props : ["show", "actualSemester"],
+  props : ["show", "currentEmail", "newEmail"],
   methods : {
-    cancel(){
-      this.$emit("closeWindow")
-    },
-    async send(){
-      this.$emit("closeWindow")
 
-
-      try {
-        const response = await axios.post(this.IP +"/students/review/" + localStorage.getItem("access_token"),
-            {
-              "commentary" : this.dissertationText
-            }
-        )
-
-      }
-      catch (e) {
-        console.log(e)
-      }
-
-      this.updateAllStudentsComponents()
-    },
     updateAllStudentsComponents() {
       this.$emit("updateAllStudentsComponents")
     },
-    async getFiles() {
-
-      try {
-        const response = await axios.put(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),
-            {
-              "semester" : this.actualSemester
-            },
-            {
-              responseType: 'blob',
-            }
-        )
-        console.log(response.data)
-        if (response.status === 200) {
-          this.explanationaryNoteFile = response.data
-        }
-
-      }
-      catch (e) {
-        console.log(e)
-      }
-    }
+    
   },
   async beforeMount() {
-    await this.getFiles()
-    this.render = true
-
-
-
+  
   }
 
 
@@ -77,53 +33,36 @@ export default {
 
 <template>
 
-  <div class="confirmBlock" v-if="this.show && render">
+  <div class="confirmBlock" v-if="this.show">
     <div class="confirmBlockContent">
       <slot>
 
         <div class="mainText d-flex m-2">
-          Подтверждение отправки всех разделов на проверку
+          Подтверждение изменения почты
         </div>
         <div class="roundBlock">
 
           <div class="roundBlock mt-3">
-            <p class="textMiniTable" style="word-break:break-word">
-              Вы уверены, что хотите отправить разделы:
+            <p  style="word-break:break-word">
+              Вы уверены, что хотите изменить адресс электронной почты?
             </p>
-            <p class="textMiniTable" style="word-break:break-word">
-              Диссертация, научная работа, педагогическая нагрузка на проверку?
+            <p  style="word-break:break-word">
+              Текущая почта: {{this.currentEmail}}
             </p>
-            <p class="textMiniTable" style="word-break:break-word">
-              В течение проверки разделы будут недоступны для редактирования
+            <p  style="word-break:break-word">
+              Новая почта: {{this.newEmail}}
             </p>
-
-
-<!--            <p class="wrongPassword" v-if="explanationaryNoteFile === ''">-->
-<!--              Пояснительная записка за текущий семестр не загружена !!!-->
-<!--            </p>-->
 
             <div class="d-flex justify-content-between mt-3 pt-2 pb-2 mb-2">
               <nav  class="text-center ms-2">
-                <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="send" >Подтвердить</button>
-<!--                <button type="button" class="loggining-disabled btn btn-primary btn-lg my-1 text-center" v-else @click="send" disabled>Подтвердить</button>-->
+                <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="this.$emit('confirmChangingEmail')" >Подтвердить</button>
               </nav>
               <nav  class="text-center me-2">
-                <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="cancel">Отмена</button>
+                <button type="button" class="loggining btn btn-primary btn-lg my-1 text-center" @click="this.$emit('cancelChangingEmail')">Отмена</button>
               </nav>
             </div>
 
           </div>
-
-          <div class="roundBlock">
-            <p class="textMiniTable text-start" style="word-break:break-word">
-              Комментарий к отчету
-            </p>
-            <textarea v-model="dissertationText" rows=12 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
-          </div>
-
-
-
-
         </div>
 
 

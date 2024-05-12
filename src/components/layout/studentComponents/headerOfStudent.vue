@@ -3,8 +3,8 @@
   <confirm-sending-to-check
 
   :show=showModalConfirmSending
-  @closeWindow = closeWindowStudent
   :actual-semester = this.actualSemester
+  @closeWindow = closeWindowStudent
   @updateAllStudentsComponents = "$emit('updateAllStudentsComponents')"
 
   >

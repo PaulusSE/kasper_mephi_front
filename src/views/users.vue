@@ -77,8 +77,6 @@ export default {
   async beforeMount() {
     await this.checkAuth()
 
-
-
     },
   async beforeCreate() {
 

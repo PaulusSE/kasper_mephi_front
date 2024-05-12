@@ -82,9 +82,25 @@ export default {
       <slot>
 
         <div class="mainText d-flex m-2">
-            Подтверждение изменения статуса аспиранта
+            Подтверждение изменения статуса отчета
         </div>
         <div class="roundBlock">
+
+
+<div class="d-flex gap-2 mt-3 mb-3">
+                <div>
+                  <p class="textMiniTable text-start">Статус</p>
+                </div>
+                <div>
+                  <select class="form-select mySelectedField" id="inputGroupSelect02" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
+                    <option  class="textResult">Выбрать статус</option>
+                    <option  class="textResult1" value="approved" >Принято</option>
+                    <option  class="textResult2" value="todo"  >На доработку</option>
+                    <option  class="textResult3" value="failed" >Не сдано</option>
+                  </select>
+                </div>
+              </div>
+
 
 
           <div class="roundBlock mt-2">
@@ -101,19 +117,7 @@ export default {
                 </div>
               </div>
 
-              <div class="d-flex gap-2">
-                <div>
-                  <p class="textMiniTable text-start">Статус</p>
-                </div>
-                <div>
-                  <select class="form-select mySelectedField" id="inputGroupSelect02" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
-                    <option  class="textResult">Выбрать статус</option>
-                    <option  class="textResult1" value="approved" >Принято</option>
-                    <option  class="textResult2" value="todo"  >На доработку</option>
-                    <option  class="textResult3" value="failed" >Не сдано</option>
-                  </select>
-                </div>
-              </div>
+              
 
               <div>
                 <label class="textMiniTable inputBox text-start" >
@@ -154,7 +158,7 @@ export default {
             </div>
 
             <div>
-              <p class="textMiniTable text-start">Комментарий к научной работе</p>
+              <p class="textMiniTable text-start">Комментарий к педагогической нагрузке</p>
               <textarea v-model="teachingLoadText"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none;"></textarea>
             </div>
           </div>

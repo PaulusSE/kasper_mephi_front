@@ -160,14 +160,7 @@ export default {
             <nav class="checkboxBlock">
               <p class="mainText mt-0">План работы на следующей семестр</p>
             </nav>
-            <!--      <div v-if="userType === 'student'">-->
-            <!--        <nav v-if="!editComment2">-->
-            <!--          <button class="editBtn" @click="comment2Clicked" >Редактировать</button>-->
-            <!--        </nav>-->
-            <!--        <nav v-else>-->
-            <!--          <button class="editBtn" @click="saveComment2" >Сохранить</button>-->
-            <!--        </nav>-->
-            <!--      </div>-->
+
 
           </div>
           <div>
@@ -281,12 +274,12 @@ export default {
               </div>
 
               <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
-                Экзамен
+                Экзамен*
               </div>
 
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
-                Оценка
+                Оценка*
 
               </div>
 

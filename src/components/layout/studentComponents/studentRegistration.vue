@@ -43,8 +43,8 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Номер телефона</label>
-        <input type="tel" class="blockStyles" v-model="phoneNumber" @input="inputEvent">
+        <label class="text m-0">Номер телефона +7 (xxx) xx-xx-xx</label>
+        <MaskInput v-model="phoneNumber" default="5"  class="blockStyles" @input="inputEvent"  mask="+7 (###) ###-##-##" />
       </nav>
     </div>
 
@@ -52,13 +52,13 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Дата начала обучения</label>
-        <input type="date" class="blockStyles" v-model="dateOfBeginning" @input="inputEvent" >
+        <input type="date" class="blockStyles" min="2000-01-01" v-model="dateOfBeginning" @input="inputEvent" >
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Длительность обучения (лет)</label>
+        <label class="text m-0">Длительность обучения (количество семестров)</label>
         <select class="form-select blockStyles" v-model="semesterID" @click="inputEvent">
           <option v-for="element in numberOfSemesters" :value="element.amount" >{{element.amount}}</option>
         </select>
@@ -178,7 +178,7 @@ export default {
       }
 
       if (this.dateOfBeginning === ''){
-        this.errorMessage = 'Поле дата о зачислении не должно быть пустым'
+        this.errorMessage = 'Поле дата начала обучения не должно быть пустым'
         return;
       }
 
@@ -255,7 +255,6 @@ export default {
         this.numberOfGroups = response.data
 
       }
-
       catch (e) {
         this.showWrongAnswerString = true;
       }

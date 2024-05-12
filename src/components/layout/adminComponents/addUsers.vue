@@ -18,7 +18,7 @@
     <div class="roundBlock pt-2">
 
       <div>
-        <p class="mainText text-start">Загрузить</p>
+        <p class="mainText text-start">Добавление пользователей</p>
       </div>
 
       <div class="roundBlock m-auto mt-4">
@@ -36,7 +36,7 @@
             <div class="d-flex justify-content-around">
               <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
               <p class="loadText">
-                Добавить аспирнтов
+                Добавить аспирантов
               </p>
             </div>
 
@@ -75,7 +75,7 @@
           Формат для загрузки пользователей в систему
         </p>
         <p>
-          Адресс электронной почты через точку с запятой : email1@mail.com; email2@gmail.com;
+          Адрес электронной почты через точку с запятой без пробела : email1@mail.com;email2@gmail.com;
         </p>
       </div>
 
@@ -129,6 +129,7 @@ export default {
         this.resultOfSending = false
       }
       this.callNotification()
+      this.newStudents = ''
 
     },
 
@@ -149,6 +150,7 @@ export default {
         this.resultOfSending = false
       }
       this.callNotification()
+      this.newTeachers = ''
 
     },
 
