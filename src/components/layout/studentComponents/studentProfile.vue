@@ -68,7 +68,7 @@
         <nav style="width: 50%">
           <div style="width: 100%">
             <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
-            <MaskInput v-model="phoneNumber" class="textInput"  @input="inputEvent"  mask="+7 (###) ###-##-##"/>
+            <input v-maska data-maska="+7 (###) ###-##-##" class="textInput" :disabled="!stateOfEditingCommonInfo" v-model="phoneNumber" @click="inputEvent">
           </div>
 
         </nav>
@@ -333,8 +333,8 @@ export default {
         this.showChangeEmailConfirmation = true
 
 
-      var tempDate = new Date(this.startDateStudying)
-      this.startDateStudying = tempDate.toISOString()
+      var tempDate = new Date(this.startDateStudying).toISOString()
+      
       
       try {
         const response = await axios.post(this.IP +"/students/profile/" + localStorage.getItem("access_token"),
@@ -345,7 +345,7 @@ export default {
               "phone" : this.phoneNumber,
               "category" : this.category,
               "years" : this.studyingTime,
-              "date" : this.startDateStudying
+              "date" : tempDate
             }
         )
 

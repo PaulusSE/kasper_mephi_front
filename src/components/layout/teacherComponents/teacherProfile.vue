@@ -82,7 +82,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
-        <MaskInput v-model="phoneNumber" class="textInput" :disabled="!stateOfEditing" @input="inputEvent"  mask="+7 (###) ###-##-##" />
+        <input v-maska data-maska="+7 (###) ###-##-##" class="textInput" :disabled="!stateOfEditing" v-model="phoneNumber" @click="inputEvent">
       </nav>
 
     </div>

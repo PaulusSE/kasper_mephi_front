@@ -44,7 +44,7 @@
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Номер телефона +7 (xxx) xx-xx-xx</label>
-        <MaskInput v-model="phoneNumber" default="5"  class="blockStyles" @input="inputEvent"  mask="+7 (###) ###-##-##" />
+        <input v-maska data-maska="+7 (###) ###-##-##" class="blockStyles" v-model="phoneNumber" @click="inputEvent">
       </nav>
     </div>
 
