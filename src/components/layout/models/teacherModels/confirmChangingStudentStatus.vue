@@ -13,6 +13,7 @@ export default {
       dissertationWorkChecked : false,
       scientificWorkChecked : false,
       teachingLoadChecked : false,
+      progress: '',
     }
     },
   props : ["show", "actualSemester", "currentMark"],
@@ -62,13 +63,46 @@ export default {
       this.$emit("closeWindow")
     },
 
+    checkLimitations(){
+
+if (this.mark > 100){
+  this.mark = 100
+  return
+}
+if (this.mark < 0){
+  this.mark = 0
+  return
+}
+
+},
+
     updateStatusAllTeachersComponents() {
       this.$emit("updateStatusAllTeachersComponents");
+    },
+
+    async getCurrentProgressOfDissertation() {
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID"),
+            }
+        )
+        this.data = response.data.progresses
+
+        this.data = this.data.sort((a, b) => a.semester < b.semester ? 1 : -1);
+        this.progress = this.data[0].progressiveness
+        
+      }
+      
+
+      catch (e) {
+        console.log(e)
+      }
     }
 
   },
-  beforeMount() {
+  async beforeMount() {
     this.mark = this.currentMark
+    await this.getCurrentProgressOfDissertation()
   }
 }
 
@@ -113,7 +147,7 @@ export default {
                   <p class="textMiniTable text-start">Оценка (макс 100)</p>
                 </div>
                 <div>
-                  <input type="number" v-model="mark" class="textInput" min="0" max="100">
+                  <input type="number" v-maska data-maska="###" v-model="mark" class="textInput" min="0" max="100" @input="checkLimitations">
                 </div>
               </div>
 
@@ -121,7 +155,7 @@ export default {
 
               <div>
                 <label class="textMiniTable inputBox text-start" >
-                  <input type="checkbox" class="me-1 myCheckBox" v-model="dissertationWorkChecked" />Диссертация просмотрена</label>
+                  <input type="checkbox" class="me-1 myCheckBox" v-model="dissertationWorkChecked" />С текстом диссертации ознакомлен(а), {{ this.progress }}% готовность рукописи подтверждаю</label>
               </div>
 
             </div>
@@ -138,7 +172,7 @@ export default {
 
             <div>
               <label class="textMiniTable inputBox text-start" >
-                <input type="checkbox" class="me-1 myCheckBox" v-model="scientificWorkChecked" />Научная работа просмотрена</label>
+                <input type="checkbox" class="me-1 myCheckBox" v-model="scientificWorkChecked" />Указанные сведения о научной работе проверены </label>
             </div>
 
             <div>
@@ -154,7 +188,7 @@ export default {
 
             <div>
               <label class="textMiniTable inputBox text-start" >
-                <input type="checkbox" class="me-1 myCheckBox"  v-model="teachingLoadChecked" />Педагогическая нагрузка просмотрена</label>
+                <input type="checkbox" class="me-1 myCheckBox"  v-model="teachingLoadChecked" />Указанные данные о педагогической нагрузке подтверждаю</label>
             </div>
 
             <div>

@@ -290,13 +290,18 @@ var mask3 = new IMask(element3, maskOptions3);
     async saveChange(){
       this.stateOfEditing = !this.stateOfEditing
 
+      if (this.email !== this.emailCopy)
+        this.showChangeEmailConfirmation = true
+      
+
       try {
         const response = await axios.post(this.IP +"/authorize/registration/supervisor/" + localStorage.getItem("access_token"), {
           "degree": this.academicDegree,
           "department": this.department,
           "faculty": this.faculty,
           "full_name": this.fullName,
-          "phone": this.phoneNumber
+          "phone": this.phoneNumber,
+          "email" : this.email
         })
 
         

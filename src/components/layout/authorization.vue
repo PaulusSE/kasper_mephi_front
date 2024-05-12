@@ -51,9 +51,9 @@
         <div>
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="authorizate()">Войти</button>
         </div>
-        <div style="text-align: center;">
+        <!-- <div style="text-align: center;">
           <router-link to="/passwordrecovery">Забыли пароль?</router-link>
-        </div>
+        </div> -->
 
       </div>
     </div>

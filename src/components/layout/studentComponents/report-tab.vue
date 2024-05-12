@@ -12,6 +12,7 @@ export default {
       presentationFile : '',
       presentationFilename : 'пока нет',
       windowOpened : false,
+      deleteExamIds: [],
 
       examTypeMap : {
         1: "Английский",
@@ -25,6 +26,19 @@ export default {
     buttonClicked(){
       this.windowOpened = !this.windowOpened
     },
+
+    checkLimitations(index){
+
+if (this.arrayOfExams[index].mark > 100){
+  this.arrayOfExams[index].mark = 100
+  return
+}
+if (this.arrayOfExams[index].mark < 0){
+  this.arrayOfExams[index].mark = 0
+  return
+}
+
+},
 
     async saveComments(){
       this.editComments = !this.editComments
@@ -50,9 +64,36 @@ export default {
       this.editExams = !this.editExams
     },
 
-    saveExams(){
+    async saveExams(){
       this.editExams = !this.editExams
+
+  
+      console.log(this.deleteExamIds)
+      if(this.deleteExamIds.length !== 0)
+      {
+        try {
+          const response = await axios.put(this.IP +'/students/marks/' + localStorage.getItem("access_token"),
+              {
+                "ids" : this.deleteExamIds,
+                "semester" : this.id
+              }
+          )
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+
+
       this.$emit('saveExams')
+      
+    },
+
+    deleteExam(index){
+      this.deleteExamIds.push(this.arrayOfExams[index].exam_id)
+      this.$emit('deleteExam', index)
+      
     },
 
     async downloadFile(){
@@ -89,6 +130,8 @@ export default {
   },
   async beforeMount() {
     // await this.getFiles()
+    
+    
 
   }
 }
@@ -279,7 +322,7 @@ export default {
 
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
-                Оценка*
+                Оценка* (макс 100)
 
               </div>
 
@@ -308,10 +351,9 @@ export default {
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
                 <div>
-                  <textarea class="textWithCarry inputBox" rows="3" v-model="exam.mark"></textarea>
+                  <input v-maska data-maska="###" type="number" max=100 class="inputBox" v-model="exam.mark" @input="checkLimitations(index)">
                 </div>
               </div>
-
 
               <div class="textMiniTable" style="width: 10%; text-align: center; padding-right: 0" >
                 <button class="btnAddDeleteFiles mt-2" @click="deleteExam(index)">
@@ -344,6 +386,12 @@ export default {
   box-sizing: border-box;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 
 
 .btnAddDeleteFiles {
@@ -372,6 +420,17 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:1.3rem;
+
+  }
+
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
 
 
   }
@@ -607,6 +666,18 @@ export default {
     padding-right: 0.1rem;
   }
 
+  .inputBox {
+    border: 0 !important;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0 !important;
+    color:#000000;
+    background-color: white;
+    outline: none !important;
+
+
+  }
+
   .textWithCarry{
     border: 0 !important;
     resize: none;
@@ -773,6 +844,8 @@ export default {
   .semestrImgActive{
     width: 30px;
   }
+
+  
 
   .semestrButtonActive {
     border:0 !important;

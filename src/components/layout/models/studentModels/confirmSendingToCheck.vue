@@ -50,7 +50,6 @@ export default {
               responseType: 'blob',
             }
         )
-        console.log(response.data)
         if (response.status === 200) {
           this.explanationaryNoteFile = response.data
         }

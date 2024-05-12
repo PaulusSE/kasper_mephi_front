@@ -613,26 +613,23 @@ this.showGraduatedAndExpelledStudents = !this.showGraduatedAndExpelledStudents
     },
     async buttonSaveTeachers(){
       this.editTeachers = false
-
-
+      
+      
       if (this.arrayOfTeachers === this.arrayOfTeachersCopy)
         return
 
-
       for (var teacher of this.arrayOfTeachers)
-        teacher.archived = teacher.archived === 'true'
-
-
+        teacher.archived = teacher.archived === 'true'  
 
       try {
-        const response = await axios.put(this.IP +"/administrator/pairs/" + localStorage.getItem("access_token"), {
+        const response = await axios.put(this.IP +"/administrator/supervisor/" + localStorage.getItem("access_token"), {
           "ids" : this.arrayOfTeachers
             }
         )
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
 
 

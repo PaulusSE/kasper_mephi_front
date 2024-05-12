@@ -279,7 +279,7 @@ export default {
       try {
         const response = await axios.get(this.IP +"/student/profile/" + localStorage.getItem("access_token"))
         this.data = response.data
-        console.log(this.data)
+  
       }
       catch (e) {
         console.log(e)

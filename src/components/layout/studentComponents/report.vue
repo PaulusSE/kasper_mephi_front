@@ -47,10 +47,11 @@ export default {
       }
       this.arrayOfExams[index] = this.arrayOfExams[index].concat(newExam)
     },
-    deleteExam(index){
+    deleteExam(index, n){
+     
+      var tempData = this.arrayOfExams[index]
+      tempData.splice(n,1)
 
-      // this.deleteExamsIds.push(this.arrayOfExams[index].exam_id)
-      this.arrayOfExams.splice(index,1)
     },
 
     callSaveTablesError(result) {
@@ -322,6 +323,7 @@ export default {
       :actual-semester = actualSemester
       @addExam=addExam(index)
       @saveExams=saveExams(number)
+      @deleteExam="(n) => deleteExam(index, n)"
       :can-edit = this.canEdit
 
   ></report-tab>

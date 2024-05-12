@@ -82,7 +82,7 @@
                   {{ element.mark }}
                 </div>
                 <div v-else class="me-3">
-                  <input type="text" class="inputBox ps-3" v-model="element.mark">
+                  <input  v-maska data-maska="###"  type="number" class="inputBox ps-3" v-model="element.mark" @input="checkLimitations(index)">
                 </div>
 
               </div>
@@ -103,6 +103,8 @@
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+
+
 export default {
   name: "report",
   props : ["stateOfAdminPage"],
@@ -121,6 +123,20 @@ export default {
       this.editMarks = !this.editMarks
       this.arrayOfStudentsCopy = this.arrayOfStudents.slice(0)
     },
+
+    checkLimitations(index){
+
+      if (this.arrayOfStudents[index].mark > 100){
+        this.arrayOfStudents[index].mark = 100
+        return
+      }
+      if (this.arrayOfStudents[index].mark < 0){
+        this.arrayOfStudents[index].mark = 0
+        return
+      }
+      
+    },
+
     async saveMarks(){
       this.editMarks = !this.editMarks
 
@@ -218,10 +234,19 @@ export default {
 
 <style scoped>
 
+
+
 * {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 .rightLine {
