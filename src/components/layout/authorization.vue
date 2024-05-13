@@ -21,26 +21,30 @@
         <div class="form-floating mb-4 col-6 authorization">
           <form>
             <div class="form-group mb-3">
-              <input type="email"  @keyup.enter="authorizate"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Логин" @click="inputEvent" v-model="login" style="font-size: 1rem">
+              <input type="email" @keyup.enter="authorizate" class="form-control" id="exampleInputEmail1"
+                     aria-describedby="emailHelp" placeholder="Логин" @click="inputEvent" v-model="login"
+                     style="font-size: 1rem">
             </div>
             <div class="form-group">
-              <input type="password" @keyup.enter="authorizate" class="form-control" id="exampleInputPassword1" placeholder="Пароль" @click="inputEvent" v-model="password" style="font-size: 1rem">
+              <input type="password" @keyup.enter="authorizate" class="form-control" id="exampleInputPassword1"
+                     placeholder="Пароль" @click="inputEvent" v-model="password" style="font-size: 1rem">
             </div>
           </form>
         </div>
 
-        
 
         <transition name="slide-fade">
-          <div v-show="showWrongAnswerString" class = "wrongPassword">Неверный пароль</div>
+          <div v-show="showWrongAnswerString" class="wrongPassword">Неверный пароль</div>
         </transition>
 
         <transition name="slide-fade">
-          <div v-show="showEmptyfieldError" class = "wrongPassword">Поля не должны быть пустыми</div>
+          <div v-show="showEmptyfieldError" class="wrongPassword">Поля не должны быть пустыми</div>
         </transition>
 
         <transition name="slide-fade">
-          <div v-show="showEmptyfieldErrorLanguage" class = "wrongPassword">Поля должны содержать символы латинского алфавита</div>
+          <div v-show="showEmptyfieldErrorLanguage" class="wrongPassword">Поля должны содержать символы латинского
+            алфавита
+          </div>
         </transition>
 
       </div>
@@ -71,8 +75,6 @@ const regularSymbolForPassword = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]
 
 import axios from "axios";
 
-
-
 export default {
 
   data() {
@@ -81,8 +83,8 @@ export default {
       password: '',
       status: false,
       showWrongAnswerString: false,
-      showEmptyfieldError : false,
-      showEmptyfieldErrorLanguage : false,
+      showEmptyfieldError: false,
+      showEmptyfieldErrorLanguage: false,
       currentLogin: '',
       currentPassword: '',
       type: '',
@@ -90,8 +92,8 @@ export default {
     }
   },
   methods: {
-    async authorizate(){
-      if (this.login.length === 0 || this.password.length === 0){
+    async authorizate() {
+      if (this.login.length === 0 || this.password.length === 0) {
         this.showEmptyfieldError = true
         return
       }
@@ -103,68 +105,64 @@ export default {
       // }
 
       try {
-        const response = await axios.post( this.IP + "/authorize",
+        const response = await axios.post(this.IP + "/authorize",
             {
-              "email" : this.login,
-              "password" : this.password
-                }
-
+              "email": this.login,
+              "password": this.password
+            },
         )
 
 
-        if (response.status === 200){
+        if (response.status === 200) {
           this.data = await response.data
           localStorage.setItem("access_token", this.data.token)
           localStorage.setItem("userType", this.data.user_type)
           localStorage.setItem("registered", this.data.registered === true)
           this.$store.dispatch("updateUserType", this.data.user_type)
 
-          if(!this.data.registered)
+          if (!this.data.registered)
             this.$router.push('/registration')
 
           this.$router.push('/')
         }
-      }
-      catch (e) {
+      } catch (e) {
         this.showWrongAnswerString = true;
       }
     },
 
-
-    inputEvent(){
-      if (this.showWrongAnswerString === true){
+    inputEvent() {
+      if (this.showWrongAnswerString === true) {
         this.showWrongAnswerString = false
       }
 
-      if (this.showEmptyfieldError === true){
+      if (this.showEmptyfieldError === true) {
         this.showEmptyfieldError = false
       }
 
-      if (this.showEmptyfieldErrorLanguage === true){
+      if (this.showEmptyfieldErrorLanguage === true) {
         this.showEmptyfieldErrorLanguage = false
       }
-
-
     },
-    isEmailValid(value) {
-      return EMAIL_REGEXP.test(value)},
 
-    checkPassword(pass)
-    {
+    isEmailValid(value) {
+      return EMAIL_REGEXP.test(value)
+    },
+
+    checkPassword(pass) {
       return regularSymbolForPassword.test(pass);
     },
   },
-    async beforeMount() {
-},
+
+  async beforeMount() {
+  },
+
   mounted() {
   }
 }
 </script>
 
 
-
 <style scoped>
-
 
 
 @import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
@@ -192,7 +190,7 @@ export default {
     --color_white2: F3F5F6;
   }
 
-  .imgSize{
+  .imgSize {
     width: 200px !important;
   }
 
@@ -213,7 +211,6 @@ export default {
   }
 
 
-
   .loggining {
     font-size: 1.7rem !important;
     height: 3.5rem !important;
@@ -224,7 +221,6 @@ export default {
     padding: 0 !important;
     margin: 0 !important;
   }
-
 
 
   .mainPage {
@@ -248,10 +244,9 @@ export default {
   }
 
 
-
   .btnBlock {
-    padding:3em !important;
-    padding-bottom:2.5em !important;
+    padding: 3em !important;
+    padding-bottom: 2.5em !important;
   }
 
 
@@ -261,8 +256,8 @@ export default {
   }
 
   .authorization {
-    margin:auto !important;
-    width:85% !important;
+    margin: auto !important;
+    width: 85% !important;
   }
 
   .wrongPassword {
@@ -283,7 +278,7 @@ export default {
     --color_white2: F3F5F6;
   }
 
-  .imgSize{
+  .imgSize {
     width: 200px !important;
   }
 
@@ -304,7 +299,6 @@ export default {
   }
 
 
-
   .loggining {
     font-size: 1.7rem !important;
     height: 3.5rem !important;
@@ -315,7 +309,6 @@ export default {
     padding: 0 !important;
     margin: 0 !important;
   }
-
 
 
   .mainPage {
@@ -339,10 +332,9 @@ export default {
   }
 
 
-
   .btnBlock {
-    padding:3em !important;
-    padding-bottom:2.5em !important;
+    padding: 3em !important;
+    padding-bottom: 2.5em !important;
   }
 
 
@@ -352,8 +344,8 @@ export default {
   }
 
   .authorization {
-    margin:auto !important;
-    width:85% !important;
+    margin: auto !important;
+    width: 85% !important;
   }
 
   .wrongPassword {
@@ -374,7 +366,7 @@ export default {
     --color_white2: F3F5F6;
   }
 
-  .imgSize{
+  .imgSize {
     width: 100px !important;
   }
 
@@ -395,7 +387,6 @@ export default {
   }
 
 
-
   .loggining {
     font-size: 1rem !important;
     background-color: #0055bb !important;
@@ -406,7 +397,6 @@ export default {
     width: 5rem !important;
     height: 4rem !important;
   }
-
 
 
   .mainPage {
@@ -430,7 +420,6 @@ export default {
   }
 
 
-
   .btnBlock {
   }
 
@@ -441,8 +430,8 @@ export default {
   }
 
   .authorization {
-    margin:auto !important;
-    width:85% !important;
+    margin: auto !important;
+    width: 85% !important;
   }
 
   .wrongPassword {
@@ -454,7 +443,6 @@ export default {
     padding-top: 2%;
   }
 }
-
 
 
 </style>

@@ -1,9 +1,9 @@
-version: "3.7"
+version: '3'
 services:
-  server:
-    image: "jackblack178/kasper-front:0.1.4"
+  app:
+    image: hbashift/kasper-front:v0.1.5
+    container_name: vue-app
     ports:
-      - "80:5173"
-    restart: always
+      - "3000:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
