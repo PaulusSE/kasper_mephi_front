@@ -56,12 +56,39 @@
       <nav style="width: 100%;">
         <label class="text m-0">Ученая степень</label>
         <select class="form-select blockStyles" v-model="academicDegree" @click="inputEvent">
-          <option value="Кандидат наук">Кандидат наук</option>
-          <option value="Доктор наук">Доктор наук</option>
+          <option value="д.т.н.">д.т.н.</option>
+          <option value="д.ф.м.н.">д.ф.м.н.</option>
+          <option value="Ph.D">Ph.D</option>
+          <option value="к.т.н.">к.т.н.</option>
+          <option value="к.ф.-м.н."> к.ф.-м.н.</option>
         </select>
       </nav>
     </div>
 
+    <div class="container-fluid justify-content-between d-flex" v-if="!stateOfEditing">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input  disabled type="text" class="textInput"  @input="inputEvent" v-model="rank">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex" v-else>
+      <nav style="width: 100%;">
+        <label class="text m-0">Звание</label>
+        <select class="form-select blockStyles" v-model="rank" @click="inputEvent">
+          <option value="Доцент">Доцент</option>
+          <option value="Профессор">Профессор</option>
+        </select>
+      </nav>
+    </div>
+    
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Должность</label>
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="position">
+      </nav>
+    </div>
 
 
     <div class="container-fluid justify-content-between d-flex">
@@ -87,12 +114,8 @@
 
     </div>
 
-<!--    <div class="container-fluid justify-content-between d-flex">-->
-<!--      <nav style="width: 100%;">-->
-<!--        <label class="text ms-0">Звание</label>-->
-<!--        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">-->
-<!--      </nav>-->
-<!--    </div>-->
+
+    
 
 
   </div>
@@ -174,6 +197,12 @@ export default {
 
       showEmailField: true,
       showChangeEmailConfirmation : false,
+
+      rank: '',
+      position: '',
+
+      rankCopy:'',
+      positionCopy: '',
     }
   },
   methods : {
@@ -186,6 +215,8 @@ export default {
       this.facultyCopy = this.faculty
       this.academicDegreeCopy = this.academicDegree
       this.phoneNumberCopy = this.phoneNumber
+      this.rankCopy = this.rank
+      this.positionCopy = this.position
     },
 
 checkPhoneNumber() {
@@ -301,7 +332,9 @@ var mask3 = new IMask(element3, maskOptions3);
           "faculty": this.faculty,
           "full_name": this.fullName,
           "phone": this.phoneNumber,
-          "email" : this.email
+          "email" : this.email,
+          "rank" : this.rank,
+          "position":this.position
         })
 
         
@@ -331,6 +364,8 @@ var mask3 = new IMask(element3, maskOptions3);
       this.faculty = this.data.faculty
       this.email = this.data.email
       this.phoneNumber = this.data.phone
+      this.rank = this.data.rank
+      this.position = this.data.position
     }
   },
   beforeMount() {

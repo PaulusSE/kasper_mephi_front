@@ -11,10 +11,8 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <div class="d-flex gap-1">
-        <p class="headingSemester">{{id}} семестр</p>
-        <p v-if="actualSemester===id" class="headingSemester">(текущий)</p>
-      </div>
+      <p class="headingSemester highLightActualSemester" v-if="this.actualSemester === this.id">{{id}} семестр (текущий)</p>
+      <p class="headingSemester" v-else>{{id}} семестр</p>
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -31,7 +29,48 @@
     <div v-if="buttonIsOpened">
       <div class="d-flex justify-content-between">
 
+        <nav class="checkboxBlock">
+          <div class="d-flex gap-2">
+            <p class="statusLine">Статус:</p>
+            <p class="statusLine" :class="{textResult1:jobStatus === 'Сдано', textResult2:jobStatus === 'На доработку', textResult3 : jobStatus === 'Не сдано'}">{{jobStatus}}</p>
+          </div>
+        </nav>
+
       </div>
+
+
+
+<!--      <div class="roundBlock m-auto mt-0">-->
+
+<!--        <div class="ms-3 mt-2">-->
+<!--          <p class="loadText">Титульный лист:</p>-->
+<!--        </div>-->
+
+<!--        <div v-if="this.tittlePageID === '' " class="ms-5 mt-2">-->
+<!--          <p class="loadTextState">Файл не выбран</p>-->
+<!--        </div>-->
+
+<!--        <div v-else class="ms-5 mt-2">-->
+<!--          <p class="loadTextState">Файл {{ this.tittlePageID}} загружен</p>-->
+<!--        </div>-->
+
+<!--        <div class="justify-content-end d-flex gap-1 image-upload">-->
+<!--          <div class="image-upload">-->
+<!--            <button class="btnAddDeleteFiles" :disabled = "this.id + 1 !== this.actualSemester" @click="deleteTitlePage">-->
+<!--              <img v-if="(this.tittlePageID === '' || this.id + 1 !== this.actualSemester) && !(this.tittlePageFile.length !== 0)" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>-->
+<!--              <img v-else src="../../../../static/figures/trashActive.png" alt="trashFilesLogo">-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--          <div class="image-upload">-->
+<!--            <label for="file-input1">-->
+<!--              <img src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>-->
+<!--            </label>-->
+<!--            <input id="file-input1" accept="application/pdf" type="file" :disabled = "this.id + 1 !== this.actualSemester" @input="inputTitlePage($event)"/>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
 
 
       <div class="roundBlock m-auto mt-4">
@@ -55,24 +94,25 @@
         <div class="justify-content-end d-flex gap-1 image-upload">
 
 
-          <div class="image-upload" v-if="this.id === this.actualSemester || canEdit">
+          <div class="image-upload">
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf"  @input="inputExplanatoryFile" :disabled="waitForCheck" :class="{disabledText : waitForCheck}"/>
+            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
-      <div class="text-end" v-if="this.id === this.actualSemester || canEdit">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="waitForCheck"  >
+      <div class="text-end">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id !== this.actualSemester">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
-              Загрузить
+              Отправить
             </p>
           </div>
         </button>
+
       </div>
 
     </div>
@@ -84,13 +124,9 @@
 <script>
 import axios from "axios";
 import utf8 from "utf8"
-import notificationError from "@/components/layout/notifications/studentNotifications/notificationError.vue";
 
 export default {
   name: "dissertationTab",
-  components : {
-    notificationError,
-  },
   data()  {
     return {
       buttonIsOpened : false,
@@ -98,19 +134,9 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
-
-      showNotificationError : false,
-      errorMessage : '',
-
-      statusOfJob : {
-        'todo': 'На доработку',
-        'failed' : 'Не сдано',
-        'passed' : 'Принято',
-        'empty': ''
-      },
     }
   },
-  props : ['id','status', 'feedback', 'stateOfSending', 'actualSemester', 'waitForCheck', 'canEdit'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)
@@ -123,6 +149,7 @@ export default {
       this.explanationaryNoteFilename = ''
 
 
+      //todo
     },
     downloadFile(){
 
@@ -132,6 +159,9 @@ export default {
       link.href = window.URL.createObjectURL(blob);
       link.download = this.explanationaryNoteFilename;
       link.click()
+
+
+
     },
 
     deleteTitlePage(){
@@ -145,13 +175,6 @@ export default {
       }
     },
     inputExplanatoryFile(){
-
-
-      if (this.waitForCheck){
-        this.$emit("makeEditErrorNotification")
-        return
-      }
-
       this.explanationaryNoteFilename = event.target.files[0].name
       if ( event.target.files[0].type === 'application/pdf' ) {
         this.explanationaryNoteFile = event.target.files[0]
@@ -160,32 +183,16 @@ export default {
 
     async sendFiles(){
 
-      if (this.waitForCheck){
-        this.$emit("makeEditErrorNotification")
-        return
-      }
-
+      // if (this.tittlePageFile.length === 0 && this.explanationaryNoteFile.length === 0)
+      //   return
 
       if (this.explanationaryNoteFile.length === 0)
         return
 
-
-    if (this.explanationaryNoteFile.size / (1024 * 1024) > this.fileMaxSizeMB){
-      this.errorMessage = 'Файл слишком большой' + '\n' + 'Максимальный размер файла: ' + this.fileMaxSizeMB + "Мб"
-      this.showNotificationError = true
-      setTimeout(() => {
-        this.showNotificationError = false
-      }, 5000);
-
-      return
-    }
-
-
-
       const obj = {
         'semester': this.id
       };
-      const json = JSON.stringify(obj);
+    
       let formData = new FormData();
       formData.append('upload', this.explanationaryNoteFile);
       formData.append('semester', this.id);
@@ -203,7 +210,7 @@ export default {
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
 
 
@@ -222,7 +229,10 @@ export default {
               responseType: 'blob',
             }
         )
+
         if (response.status === 200) {
+
+
           this.explanationaryNoteFilename = utf8.decode(response.headers["content-disposition"])
           this.explanationaryNoteFile = response.data
         }
@@ -232,16 +242,14 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
+
+
     }
   },
   beforeMount() {
     this.getFiles()
 
-
-  },
-  mounted() {
   }
-
 }
 </script>
 
@@ -258,10 +266,11 @@ export default {
   box-sizing: border-box;
 }
 
-.disabledText {
-  color: grey !important;
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 700! important;
+  font-size:1.3rem !important
 }
-
 
 @media (min-width: 800px){
   .headingSemester {
@@ -281,27 +290,8 @@ export default {
     margin-right: 3rem;
   }
 
-  .noFeedBack{
-    text-align: left;
-    margin-left: 5%;
-    font-size: 1rem
-  }
 
-  .feedback {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    font-size: 1rem !important;
-    resize: none !important;
-    background-color: white !important;
-    font-weight: 350;
-  }
 
-  .mainText{
-    color:#7C7F86;
-    font-weight: 400;
-    font-size: 1.1rem;
-    text-align: center;
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -426,20 +416,7 @@ export default {
     margin-right: 3rem;
   }
 
-  .noFeedBack{
-    text-align: left;
-    margin-left: 5%;
-    font-size: 0.8rem
-  }
 
-  .feedback {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    font-size: 0.8rem !important;
-    resize: none !important;
-    background-color: white !important;
-    font-weight: 350;
-  }
 
 
   .roundBlock {
@@ -448,7 +425,9 @@ export default {
     width: 95% !important;
     margin:auto;
     margin-bottom: 2% !important;
-    padding: 0 1% 1%;;
+    padding: 0 1% 1%;
+  ;
+
   }
 
   .btnAddDeleteFiles {
@@ -607,20 +586,6 @@ export default {
   }
 
 
-  .noFeedBack{
-    text-align: left;
-    margin-left: 5%;
-    font-size: 0.6rem
-  }
-
-  .feedback {
-    border: solid 0.12em #DEDEDE;
-    border-radius: 20px;
-    font-size: 0.6rem !important;
-    resize: none !important;
-    background-color: white !important;
-    font-weight: 350;
-  }
 
 
 

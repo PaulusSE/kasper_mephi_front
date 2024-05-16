@@ -39,33 +39,10 @@ export default {
     updateAllStudentsComponents() {
       this.$emit("updateAllStudentsComponents")
     },
-    async getFiles() {
-
-      try {
-        const response = await axios.put(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),
-            {
-              "semester" : this.actualSemester
-            },
-            {
-              responseType: 'blob',
-            }
-        )
-        if (response.status === 200) {
-          this.explanationaryNoteFile = response.data
-        }
-
-      }
-      catch (e) {
-        console.log(e)
-      }
-    }
+    
   },
   async beforeMount() {
-    await this.getFiles()
-    this.render = true
-
-
-
+  
   }
 
 
@@ -76,7 +53,7 @@ export default {
 
 <template>
 
-  <div class="confirmBlock" v-if="this.show && render">
+  <div class="confirmBlock" v-if="this.show">
     <div class="confirmBlockContent">
       <slot>
 
@@ -181,6 +158,8 @@ export default {
     min-height: 50px;
     padding: 0.5rem;
     width: 70%;
+    overflow-y: scroll !important;
+    height: 50% !important;
   }
 
 
@@ -243,6 +222,8 @@ export default {
     min-height: 50px;
     padding: 0.5rem;
     width: 80%;
+    overflow-y: scroll !important;
+    height: 50% !important;
   }
 
   .textMiniTable{
@@ -357,6 +338,8 @@ export default {
     min-height: 50px;
     padding: 0.5rem;
     width: 90%;
+    overflow-y: scroll !important;
+    height: 50% !important;
   }
 
   .headerText{

@@ -177,29 +177,29 @@
         <div class="col-4 textTable rightLine" style="word-break: break-all">
           {{this.topicMap[element.progress_type]}}
         </div>
-        <div class="col-1 mainText myInput rightLine">
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 1 && this.actualSemester > 1 && !this.canEdit}" v-model=element.first :disabled="!editingCheckbox || (this.actualSemester !== 1) && !this.canEdit">
+        <div class="col-1 mainText myInput rightLine defaultCheckBoxBackground">
+          <input type="checkbox" class="form-check-input myCheckBox" :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 1) && !this.canEdit}"   v-model=element.first :disabled="!editingCheckbox || (this.actualSemester !== 1) && !this.canEdit">
+        </div>
+        <div class="col-1 mainText myInput rightLine defaultCheckBoxBackground">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 1) && !this.canEdit}" v-model=element.second :disabled="!editingCheckbox || (this.actualSemester !== 2) && !this.canEdit">
+        </div>
+        <div class="col-1 mainText myInput rightLine defaultCheckBoxBackground" >
+          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 3) && !this.canEdit}" v-model=element.third :disabled="!editingCheckbox || (this.actualSemester !== 3) && !this.canEdit" >
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 2 && this.actualSemester > 2 && !this.canEdit}" v-model=element.second :disabled="!editingCheckbox || (this.actualSemester !== 2) && !this.canEdit">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 4) && !this.canEdit}" v-model=element.forth :disabled="!editingCheckbox || (this.actualSemester !== 4) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 3 && this.actualSemester > 3 && !this.canEdit }" v-model=element.third :disabled="!editingCheckbox || (this.actualSemester !== 3) && !this.canEdit">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 5) && !this.canEdit}" v-model=element.fifth :disabled="!editingCheckbox || (this.actualSemester !== 5) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 4 && this.actualSemester > 4 && !this.canEdit}" v-model=element.forth :disabled="!editingCheckbox || (this.actualSemester !== 4) && !this.canEdit">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 6) && !this.canEdit}" v-model=element.sixth :disabled="!editingCheckbox || (this.actualSemester !== 6) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 5 && this.actualSemester > 5 && !this.canEdit}" v-model=element.fifth :disabled="!editingCheckbox || (this.actualSemester !== 5) && !this.canEdit">
-        </div>
-        <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 6 && this.actualSemester > 6 && !this.canEdit}" v-model=element.sixth :disabled="!editingCheckbox || (this.actualSemester !== 6) && !this.canEdit">
-        </div>
-        <div class="col-1 mainText myInput rightLine" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 7 && this.actualSemester > 7 && !this.canEdit}" v-model=element.seventh :disabled="!editingCheckbox || (this.actualSemester !== 7) && !this.canEdit">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 7) && !this.canEdit}" v-model=element.seventh :disabled="!editingCheckbox || (this.actualSemester !== 7) && !this.canEdit">
         </div>
         <div class="col-1 mainText myInput" >
-          <input type="checkbox" class="form-check-input myCheckBox"  :class="{myCheckBoxInActive : actualSemester !== 8 && this.actualSemester > 8 && !this.canEdit}" v-model=element.eighth :disabled="!editingCheckbox || (this.actualSemester !== 8) && !this.canEdit">
+          <input type="checkbox" class="form-check-input myCheckBox"   :class="{myCheckBoxActive : editingCheckbox && !(this.actualSemester !== 8) && !this.canEdit}" v-model=element.eighth :disabled="!editingCheckbox || (this.actualSemester !== 8) && !this.canEdit">
         </div>
 
       </div>
@@ -439,7 +439,6 @@ export default {
       catch (e) {
 
         console.log(e)
-
       }
       this.editingInfo = !this.editingInfo
     },
@@ -473,9 +472,6 @@ export default {
       this.editingCheckbox = !this.editingCheckbox;
       this.progressOfDissertationCopy = this.progressOfDissertation
     },
-
-
-
 
 
     async saveTables() {
@@ -513,13 +509,6 @@ export default {
       catch (e) {
         this.showWrongAnswerString = true;
       }
-
-      
-
-
-
-
-
     },
 
 
@@ -788,11 +777,7 @@ export default {
   color: grey !important;
 }
 
-.hightlightActualSemesterColumn {
-  background-color: mediumseagreen;
-  color:black !important;
-  font-weight: 400 !important;
-}
+
 
 
 @media (min-width: 800px) {
@@ -817,23 +802,17 @@ export default {
 
   .myCheckBox{
     zoom: 0.5;
-    accent-color: white;
-    width: 60% !important;
+    width: 40% !important;
     margin:auto;
     border: 0 !important;
     margin-top:10px;
     margin-bottom:10px;
-    ;
+    background-color: grey;
+    
+    
   }
 
-  .myCheckBoxInActive{
-    zoom: 0.5;
-    accent-color: white;
-    width: 60% !important;
-    margin:auto;
-    border: 0 !important;
-    background-color:grey !important;
-  }
+ 
 
   .myInput{
 
@@ -984,16 +963,10 @@ export default {
     border: 0 !important;
     margin-top:10px;
     margin-bottom:10px;
+    background-color: gray !important;
   }
 
-  .myCheckBoxInActive{
-    zoom: 0.5;
-    accent-color: white;
-    width: 60% !important;
-    margin:auto;
-    border: 0 !important;
-    background-color:grey !important;
-  }
+  
 
   .myInput{
 
@@ -1158,16 +1131,10 @@ export default {
     border: 0 !important;
     margin-top:5px;
     margin-bottom:5px;
+    background-color: gray !important;
   }
 
-  .myCheckBoxInActive{
-    zoom: 0.5;
-    accent-color: white;
-    width: 60% !important;
-    margin:auto;
-    border: 0 !important;
-    background-color:grey !important;
-  }
+ 
 
   .myInput{
 

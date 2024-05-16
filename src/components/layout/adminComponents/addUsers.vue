@@ -81,6 +81,119 @@
 
     </div>
 
+    <div class="roundBlock pt-2">
+
+<div>
+  <p class="mainText text-start">Пользователи не прошедшие регистрацию</p>
+</div>
+
+
+
+<div class="roundBlock mt-2">
+
+
+<div class="d-flex justify-content-between" style="margin-left: 2.5%">
+  <nav class="mt-3" >
+    <p class="headingSemester"></p>
+  </nav>
+  <nav class="text-end" style="margin-right: 2.5%">
+    <button v-if="!editTableWithUsers" @click="buttonEditUsers" class="editBtn mt-3">Редактировать</button>
+    <div v-else class="d-flex gap-1">
+      <button class="editBtn mt-3 " @click="buttonCancelUsers">Отменить</button>
+      <button class="editBtn mt-3 " @click="buttonSaveUsers">Сохранить</button>
+    </div>
+  </nav>
+</div>
+
+
+<div v-if="!editTableWithUsers">
+<div class="roundBlock p-0 mt-2">
+  <div>
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfUsers.length !== 0}">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        №
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Почта
+      </div>
+
+      <div class=" textMiniTable" style="width: 40%; text-align: center">
+        Тип
+      </div>
+
+
+
+    </div>
+
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfUsers.length}" v-for="(element,index) in arrayOfUsers">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        {{index + 1}}
+      </div>
+
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <p >{{element.email}}</p>
+      </div>
+
+      <div class="textMiniTable"  style="width: 40%; text-align: center">
+        <p >{{this.userTypeMap[element.user_type]}}</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+<div v-else>
+<div class="roundBlock p-0 mt-2">
+  <div>
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfUsers.length !== 0}">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        №
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Группа
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Тип
+      </div>
+
+      <div class=" textMiniTable" style="width: 10%; text-align: center">
+
+      </div>
+    </div>
+
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfUsers.length}" v-for="(element,index) in arrayOfUsers">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        {{index + 1}}
+      </div>
+
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <input type="text" class="inputBox" v-model="element.email" disabled>
+      </div>
+      
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <p >{{this.userTypeMap[element.user_type]}}</p>
+      </div>
+
+      <div class="textMiniTable " style="width: 10%; text-align: center">
+        <button class="btnAddDeleteFiles mt-2" @click="deleteUser(index)">
+          <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
   </div>
 </template>
 
@@ -107,6 +220,16 @@ export default {
       newTeachers : [],
       stateOfSending : false,
       resultOfSending: false,
+      editTableWithUsers : false,
+      arrayOfUsers: [],
+      arrayOfUsersCopy: [],
+      arrayOfIdsToDelete: [],
+
+      userTypeMap: {
+        "student" : "Аспирант",
+        "supervisor" : "Научный руководитель"
+      }
+
 
     }
   },
@@ -131,7 +254,62 @@ export default {
       this.callNotification()
       this.newStudents = ''
 
+      await this.getUsers()
+
     },
+
+    deleteUser(index){
+      this.arrayOfIdsToDelete.push(this.arrayOfUsers[index].user_id)
+      this.arrayOfUsers.splice(index, 1)
+    },
+
+
+    buttonEditUsers(){
+        this.editTableWithUsers = true
+        this.arrayOfUsersCopy = JSON.parse(JSON.stringify(this.arrayOfUsers));
+    },
+
+    buttonCancelUsers(){
+      this.editTableWithUsers = false
+      this.arrayOfUsers = JSON.parse(JSON.stringify(this.arrayOfUsersCopy));
+      this.arrayOfIdsToDelete.length = 0
+    },
+
+    async buttonSaveUsers(){
+      this.editTableWithUsers = !this.editTableWithUsers
+
+
+      if (this.arrayOfIdsToDelete.length === 0)
+        return
+      console.log(this.arrayOfIdsToDelete)
+      try {
+        const response = await axios.put(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"),{
+            "ids" : this.arrayOfIdsToDelete
+        })
+        this.data = response.data
+        this.arrayOfUsers = this.data
+
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+    },
+
+    async getUsers(){
+      try {
+        const response = await axios.get(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"))
+        this.data = response.data
+        this.arrayOfUsers = this.data
+
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+    },
+
+    
 
     async addTeachers(){
       try {
@@ -152,6 +330,8 @@ export default {
       this.callNotification()
       this.newTeachers = ''
 
+      await this.getUsers()
+
     },
 
 
@@ -162,8 +342,8 @@ export default {
       }, 5000);
     }
   },
-  beforeMount() {
-
+  async beforeMount() {
+  await this.getUsers()
   }
 }
 </script>
@@ -180,6 +360,21 @@ export default {
   box-sizing: border-box;
 }
 
+.rightLine {
+  border-right:  solid 0.12em #DEDEDE !important;
+}
+
+.inputBox {
+  border: 0 !important;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 0 !important;
+  color:#000000;
+  background-color: white;
+  outline: none !important;
+  width: 100%;
+}
+
 @media (min-width: 800px) {
   .mainText {
     margin-left: 2.5% ;
@@ -188,7 +383,38 @@ export default {
     color:#7C7F86;
     font-weight: 400;
     font-size: 1.3rem;
+  }
 
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+  }
+
+  .trashLogo{
+    width:32px !important;
+    height: 32px !important;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:18px;
+    text-align: center;
+    word-break: break-all;
   }
 
   .mainPage {
@@ -253,6 +479,11 @@ export default {
   .loadTextState {
     font-size: 1.1rem;
   }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
 }
 
 @media (max-width: 800px) {
@@ -264,6 +495,41 @@ export default {
     font-weight: 300;
     font-size: 1.2rem;
 
+  }
+
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.9rem;
+  }
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.9rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
   }
 
   .mainPage {
@@ -361,6 +627,33 @@ export default {
   }
 
 
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+    font-size: 0.8rem;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.7rem !important;
+  }
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  
+
   .roundBlock {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
@@ -368,6 +661,20 @@ export default {
     margin:auto;
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
   }
 
   .loadText {

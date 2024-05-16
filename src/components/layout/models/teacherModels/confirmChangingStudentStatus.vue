@@ -14,6 +14,7 @@ export default {
       scientificWorkChecked : false,
       teachingLoadChecked : false,
       progress: '',
+
     }
     },
   props : ["show", "actualSemester", "currentMark"],
@@ -221,6 +222,10 @@ if (this.mark < 0){
   box-sizing: border-box;
 }
 
+.scroll {
+  height: 200px; /* Высота блока */
+  overflow-y: scroll; /* Включаем вертикальную прокрутку */
+}
 
 .confirmBlock {
   top : 0;
@@ -229,6 +234,7 @@ if (this.mark < 0){
   left: 0;
   background: rgb(0,0,0, 0.5);
   position: fixed;
+  
   display: flex;
   padding-top: 0;
   z-index: 2 !important;
@@ -291,6 +297,8 @@ if (this.mark < 0){
     min-height: 50px;
     padding: 0.5rem;
     width: 70%;
+    overflow-y: scroll !important;
+    height: 100% !important;
   }
 
 
@@ -354,6 +362,8 @@ if (this.mark < 0){
     min-height: 50px;
     padding: 0.5rem;
     width: 80%;
+    overflow-y: scroll !important;
+    height: 100% !important;
   }
 
   .mainPage {
@@ -417,6 +427,8 @@ if (this.mark < 0){
     min-height: 50px;
     padding: 0.5rem;
     width: 90%;
+    overflow-y: scroll !important;
+    height: 100% !important;
   }
 
   .textMiniTable{

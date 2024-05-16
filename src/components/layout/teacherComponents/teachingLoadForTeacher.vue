@@ -23,6 +23,7 @@
                                  :classroom-work="array_classroom_load[index]"
                                  :individual-work="array_individual_students_load[index]"
                                  :other-work="array_additional_load[index]"
+                                 :actualSemester = this.actualSemester
 ></teaching-load-table-for-teacher>
 
 <!--    <div class="roundBlock">-->

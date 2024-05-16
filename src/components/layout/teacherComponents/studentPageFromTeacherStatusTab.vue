@@ -3,9 +3,13 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <div class="d-flex gap-1">
+      <div class="d-flex gap-1" v-if="actualSemester !==id + 1">
         <p class="headingSemester">{{id + 1}} семестр</p>
-        <p v-if="actualSemester===id + 1" class="headingSemester">(текущий)</p>
+      </div>
+
+      <div class="d-flex gap-1" v-else>
+        <p class="headingSemester highLightActualSemester">{{id + 1}} семестр</p>
+        <p class="headingSemester highLightActualSemester">(текущий)</p>
       </div>
 
       <div v-if="buttonIsOpened" class="semestrButtonActive">
@@ -165,6 +169,13 @@ export default {
   margin-right: 1.5rem !important;
   background-color: white;
 }
+
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 800! important;
+  font-size:1.3rem !important
+}
+
 
 @media (min-width: 800px) {
   .semestrButtonActive {

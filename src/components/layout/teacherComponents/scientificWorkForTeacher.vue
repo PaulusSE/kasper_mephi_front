@@ -22,6 +22,7 @@
                      :reports = this.arrayOfReports[index]
                      :projects = this.arrayOfProjects[index]
                      :patents = this.arrayOfPatents[index]
+                     :actualSemester = this.actualSemester
     ></tab-of-articles-for-teacher>
 
 <!--    <div class="roundBlock">-->

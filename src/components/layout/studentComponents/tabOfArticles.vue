@@ -7,7 +7,8 @@
 
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester highLightActualSemester" v-if="this.actualSemester === id+1">{{id + 1}} семестр (текущий)</p>
+      <p class="headingSemester" v-else>{{id + 1}} семестр</p>
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -1024,6 +1025,12 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 700! important;
+  font-size:1.3rem !important
 }
 
 .disabledText {

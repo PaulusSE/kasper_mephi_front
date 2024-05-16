@@ -4,8 +4,10 @@
 
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester highLightActualSemester" v-if="this.actualSemester === id+1">{{id + 1}} семестр (текущий)</p>
+      <p class="headingSemester" v-else>{{id + 1}} семестр</p>
 
+      
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">
@@ -384,7 +386,7 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles","reports","projects" , "id", "patents"],
+  props: ["articles","reports","projects" , "id", "patents", "actualSemester"],
   data() {
     return {
       buttonIsOpened : false,
@@ -430,6 +432,12 @@ export default {
   box-sizing: border-box;
 }
 
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 800! important;
+  font-size:1.3rem !important
+}
+
 .textCheckBox {
   border: 0 !important;
   resize: none;
@@ -454,6 +462,8 @@ export default {
   .checkboxFont {
     font-size:15px !important;
   }
+
+  
 
   .semestrButtonActive {
     border:0 !important;

@@ -34,7 +34,20 @@
         <label class="text ms-0">Ученая степень</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="rank">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Должность</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="position">
+      </nav>
     </div>
 
 
@@ -126,6 +139,8 @@ export default {
       arrayOfStudents : [],
       phoneNumber : '',
       status : '',
+      rank: '',
+      position:'',
 
       teacherStatusMap : {
         "false" : "Работает",
@@ -219,6 +234,8 @@ export default {
       this.email = this.data.email
       this.status = this.data.archived
       this.phoneNumber = this.data.phone
+      this.rank = this.data.rank
+      this.position = this.data.position
     }
   },
   async beforeMount() {

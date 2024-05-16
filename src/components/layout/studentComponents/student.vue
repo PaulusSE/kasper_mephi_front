@@ -52,7 +52,6 @@
                   :actual-semester = actualSemester
                   :wait-for-check = waitForCheck
                   :can-edit = canEdit
-
   ></report>
 
 </template>

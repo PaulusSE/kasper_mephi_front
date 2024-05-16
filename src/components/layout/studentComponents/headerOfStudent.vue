@@ -1,7 +1,8 @@
 <template>
 
   <confirm-sending-to-check
-
+  
+  v-if="renderStudentModals"
   :show=showModalConfirmSending
   :actual-semester = this.actualSemester
   @closeWindow = closeWindowStudent
@@ -11,7 +12,7 @@
   </confirm-sending-to-check>
 
   <confirm-changing-student-status
-
+      v-if="renderTeacherModals"
       :show = showModalChangingStudentStatus
       @closeWindow = closeWindowTeacher
       @callChangeError = callChangeError
@@ -168,6 +169,9 @@ export default {
         'on review': "Ожидает проверки"
       },
 
+      renderStudentModals : false,
+      renderTeacherModals : false,
+
     }
   },
   components : {
@@ -179,6 +183,8 @@ export default {
   methods: {
     sendEverythingToCheck(){
       this.showModalConfirmSending = true
+      
+      
     },
 
     estimateStudentPage(){
@@ -201,8 +207,16 @@ export default {
 
   },
   async beforeMount() {
-    this.userType = localStorage.getItem("userType")
 
+    
+    
+    this.userType = localStorage.getItem("userType")
+    
+    if (this.userType === 'student')
+      this.renderStudentModals = true
+    if (this.userType === 'supervisor' || this.userType === 'admin')
+      this.renderTeacherModals = true
+    
 
   },
   async beforeCreate() {

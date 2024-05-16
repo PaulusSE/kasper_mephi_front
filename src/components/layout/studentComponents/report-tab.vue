@@ -142,8 +142,12 @@ if (this.arrayOfExams[index].mark < 0){
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <div class="d-flex gap-1 m-1">
-        <p class="headingSemester" >{{id}} семестр</p>
+      <div class="d-flex gap-1 m-1" v-if="this.actualSemester === id">
+        <p class="headingSemester highLightActualSemester"  >{{id}} семестр (текущий)</p>
+      </div>
+
+      <div class="d-flex gap-1 m-1" v-else>
+        <p class="headingSemester"  >{{id}} семестр</p>
       </div>
 
       <div v-if="windowOpened">
@@ -391,6 +395,12 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 700! important;
+  font-size:1.3rem !important
 }
 
 

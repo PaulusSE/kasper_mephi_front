@@ -4,9 +4,13 @@
   <header>
     <div class="container-fluid head-top d-flex ms-0">
       <div class="myHeader d-flex justify-content-between">
-        <nav>
+        <nav class="d-flex">
           <router-link to="/" @click="redirectToMainPage" >
             <img src="../../../static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center imageButtons imageMephi">
+          </router-link>
+
+          <router-link to="/" @click="redirectToMainPage" style="text-decoration: none;" class="ms-3" >
+            <div class="buttonProfileText">Главная страница</div>
           </router-link>
 
         </nav>
@@ -174,9 +178,9 @@ export default {
   }
 
   .buttonProfileText{
-    margin-top:12px;
+    margin-top:14px;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color:rgb(206,224,229)
   }
 }
