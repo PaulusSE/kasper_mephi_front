@@ -159,7 +159,7 @@ export default {
     padding: 0.5rem;
     width: 70%;
     overflow-y: scroll !important;
-    height: 50% !important;
+    height: 70% !important;
   }
 
 
@@ -223,7 +223,7 @@ export default {
     padding: 0.5rem;
     width: 80%;
     overflow-y: scroll !important;
-    height: 50% !important;
+    height: 70% !important;
   }
 
   .textMiniTable{
@@ -339,7 +339,7 @@ export default {
     padding: 0.5rem;
     width: 90%;
     overflow-y: scroll !important;
-    height: 50% !important;
+    height: 70% !important;
   }
 
   .headerText{

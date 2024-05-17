@@ -1194,7 +1194,6 @@ this.showGraduatedAndExpelledStudents = !this.showGraduatedAndExpelledStudents
     font-size:18px;
     text-align: center;
     word-break: break-all;
-
   }
 
   .mainPage {
