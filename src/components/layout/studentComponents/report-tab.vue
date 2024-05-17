@@ -28,16 +28,13 @@ export default {
     },
 
     checkLimitations(index){
-
-if (this.arrayOfExams[index].mark > 100){
-  this.arrayOfExams[index].mark = 100
-  return
-}
-if (this.arrayOfExams[index].mark < 0){
-  this.arrayOfExams[index].mark = 0
-  return
-}
-
+      if (this.arrayOfExams[index].mark > 5) {
+        this.arrayOfExams[index].mark = 5
+        return
+      }
+      if (this.arrayOfExams[index].mark < 0) {
+        this.arrayOfExams[index].mark = 0
+      }
 },
 
     async saveComments(){
@@ -326,7 +323,7 @@ if (this.arrayOfExams[index].mark < 0){
 
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
-                Оценка* (макс 100)
+                Оценка* (макс 5)
 
               </div>
 
@@ -355,7 +352,7 @@ if (this.arrayOfExams[index].mark < 0){
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
                 <div>
-                  <input v-maska data-maska="###" type="number" max=100 class="inputBox" v-model="exam.mark" @input="checkLimitations(index)">
+                  <input v-maska data-maska="###" type="number" max=5 class="inputBox" v-model="exam.mark" @input="checkLimitations(index)">
                 </div>
               </div>
 

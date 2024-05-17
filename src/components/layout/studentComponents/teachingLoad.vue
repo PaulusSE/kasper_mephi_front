@@ -1,19 +1,19 @@
-<template >
+<template>
 
   <work-send-to-check-notification
-      :show = "showEditError"
+      :show="showEditError"
   >
   </work-send-to-check-notification>
 
   <save-tables-notification
-  :result-of-sending = this.resultOfSavingTables
-  :show = this.showSavingTablesNotification
+      :result-of-sending=this.resultOfSavingTables
+      :show=this.showSavingTablesNotification
   >
   </save-tables-notification>
 
   <warning
-  :show=showWarningNotification
-  :message = warningMessage
+      :show=showWarningNotification
+      :message=warningMessage
   ></warning>
 
   <div class="mainPage">
@@ -23,24 +23,24 @@
         @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
         @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
         @btnReportingClicked="$emit('btnReportingClicked')"
-        @updateAllStudentsComponents = "$emit('updateAllStudentsComponents')"
-        :work-status = workStatus
-        :state-of-student-page = stateOfStudentPage
-        :actual-semester = this.actualSemester
-        :supervisor-mark = this.supervisorMark
+        @updateAllStudentsComponents="$emit('updateAllStudentsComponents')"
+        :work-status=workStatus
+        :state-of-student-page=stateOfStudentPage
+        :actual-semester=this.actualSemester
+        :supervisor-mark=this.supervisorMark
 
     ></header-of-student>
 
 
     <teaching-load-table v-for="(n, index) in this.actualSemester "
-                         :id = index
+                         :id=index
                          v-if="isDataFetched"
                          :classroom-work="array_classroom_load[index]"
                          :individual-work="array_individual_students_load[index]"
                          :other-work="array_additional_load[index]"
-                         :actualSemester = this.actualSemester
+                         :actualSemester=this.actualSemester
                          @updatePage="(n) => cancelChange(n)"
-                         :waitForCheck = this.waitForCheck
+                         :waitForCheck=this.waitForCheck
 
                          @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
                          @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
@@ -50,31 +50,29 @@
                          @deleteIndividualWork="(n) => deleteIndividualWork(index, n)"
                          @deleteAdditionalWork="(n) => deleteAdditionalWork(index, n)"
 
-                         @saveClassroomWork = saveClassroomWork(index)
-                         @saveIndividualWork = saveIndividualWork(index)
-                         @saveAdditionalWork = saveAdditionalWork(index)
+                         @saveClassroomWork=saveClassroomWork(index)
+                         @saveIndividualWork=saveIndividualWork(index)
+                         @saveAdditionalWork=saveAdditionalWork(index)
 
                          @makeCopy="(n) => makeCopy(n)"
-                         @makeEditErrorNotification = callEditError
+                         @makeEditErrorNotification=callEditError
                          :canEdit=this.canEdit
 
     ></teaching-load-table>
 
-<!--    <div class="roundBlock">-->
-<!--      <div class="d-flex justify-content-between">-->
-<!--        <nav class="checkboxBlock">-->
-<!--          <p class="mainText">Комментарий к педагогической нагрузке</p>-->
-<!--        </nav>-->
-<!--      </div>-->
+    <!--    <div class="roundBlock">-->
+    <!--      <div class="d-flex justify-content-between">-->
+    <!--        <nav class="checkboxBlock">-->
+    <!--          <p class="mainText">Комментарий к педагогической нагрузке</p>-->
+    <!--        </nav>-->
+    <!--      </div>-->
 
-<!--      <div>-->
-<!--        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--      <div>-->
+    <!--        <textarea v-model="dissertationText"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
   </div>
-
-
 
 
 </template>
@@ -82,7 +80,6 @@
 <script>
 import headerOfStudent from "@/components/layout/studentComponents/headerOfStudent.vue";
 import teachingLoadTable from "@/components/layout/studentComponents/teachingLoadTable.vue";
-import store from "@/store/index.js";
 import axios from "axios";
 import workSendToCheckNotification
   from "@/components/layout/notifications/studentNotifications/workSendToCheckNotification.vue";
@@ -99,36 +96,36 @@ export default {
     tabOfArticles,
     teachingLoadTableForTeacher,
     workSendToCheckNotification,
-    "headerOfStudent":headerOfStudent,
-    "teachingLoadTable":teachingLoadTable,
-    "saveTablesNotification" : saveTablesNotifitcation,
-    "warning" : notificationWarning
+    "headerOfStudent": headerOfStudent,
+    "teachingLoadTable": teachingLoadTable,
+    "saveTablesNotification": saveTablesNotifitcation,
+    "warning": notificationWarning
   },
   props: ["stateOfStudentPage", 'educationTime', "actualSemester", "canEdit", "waitForCheck", "workStatus", "supervisorMark"],
   data() {
     return {
-      array_classroom_load:[],
-      array_classroom_loadCopy:[],
+      array_classroom_load: [],
+      array_classroom_loadCopy: [],
       array_individual_students_load: [],
       array_individual_students_loadCopy: [],
       array_additional_load: [],
       array_additional_loadCopy: [],
       showEditError: false,
 
-      resultOfSavingTables : false,
-      showSavingTablesNotification : false,
-      loads_ids : new Map(),
-      workStatusMap : {
-        "todo" : "Отправлено на доработку",
-        "approved" : "Принято",
-        "on review" : "Ожидает проверки",
-        "in progress" : "В процессе выполнения",
-        "empty" : "Пусто",
-        "failed" : "Не сдано",
+      resultOfSavingTables: false,
+      showSavingTablesNotification: false,
+      loads_ids: new Map(),
+      workStatusMap: {
+        "todo": "Отправлено на доработку",
+        "approved": "Принято",
+        "on review": "Ожидает проверки",
+        "in progress": "В процессе выполнения",
+        "empty": "Пусто",
+        "failed": "Не сдано",
       },
-      isDataFetched : false,
+      isDataFetched: false,
 
-      showWarningNotification : false,
+      showWarningNotification: false,
       warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные нагрузки',
 
     }
@@ -137,7 +134,7 @@ export default {
 
   methods: {
 
-    buttonSmallTableAdd1(n){
+    buttonSmallTableAdd1(n) {
       let newLoad = {
         subject_name: '',
         main_teacher: '',
@@ -148,7 +145,7 @@ export default {
       this.array_classroom_load[n] = this.array_classroom_load[n].concat(newLoad)
     },
 
-    buttonSmallTableAdd2(n){
+    buttonSmallTableAdd2(n) {
       let newLoad = {
         students_amount: '',
         load_type: '',
@@ -158,7 +155,7 @@ export default {
       this.array_individual_students_load[n] = this.array_individual_students_load[n].concat(newLoad)
     },
 
-    buttonSmallTableAdd3(n){
+    buttonSmallTableAdd3(n) {
       let newLoad = {
         name: '',
         volume: '',
@@ -167,19 +164,19 @@ export default {
       this.array_additional_load[n] = this.array_additional_load[n].concat(newLoad)
     },
 
-    cancelChange(n){
+    cancelChange(n) {
 
-      if (n === 1){
+      if (n === 1) {
         this.array_classroom_load.length = 0
         for (var i = 0; i < this.array_classroom_loadCopy.length; i++)
           this.array_classroom_load[i] = this.array_classroom_loadCopy[i].slice();
       }
-      if (n === 2){
+      if (n === 2) {
         this.array_individual_students_load.length = 0
         for (var i = 0; i < this.array_individual_students_loadCopy.length; i++)
           this.array_individual_students_load[i] = this.array_individual_students_loadCopy[i].slice();
       }
-      if (n === 3){
+      if (n === 3) {
         this.array_additional_load.length = 0
         for (var i = 0; i < this.array_additional_loadCopy.length; i++)
           this.array_additional_load[i] = this.array_additional_loadCopy[i].slice();
@@ -213,14 +210,13 @@ export default {
       this.workStatus = 'on review'
 
       try {
-        const response = await axios.post(this.IP +'/students/works/review/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP + '/students/works/review/' + localStorage.getItem("access_token"),
             {
-              "semester" : this.actualSemester
+              "semester": this.actualSemester
             }
         )
         this.waitForCheck = true
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
       }
     },
@@ -229,40 +225,39 @@ export default {
       this.waitForCheck = !this.waitForCheck
     },
 
-    makeCopy(n){
-      if (n === 1){
+    makeCopy(n) {
+      if (n === 1) {
         this.array_classroom_loadCopy.length = 0
         this.array_classroom_loadCopy = JSON.parse(JSON.stringify(this.array_classroom_load));
       }
-      if (n === 2){
+      if (n === 2) {
         this.array_individual_students_loadCopy.length = 0
         this.array_individual_students_loadCopy = JSON.parse(JSON.stringify(this.array_individual_students_load));
       }
-      if (n === 3){
+      if (n === 3) {
         this.array_additional_loadCopy.length = 0
         this.array_additional_loadCopy = JSON.parse(JSON.stringify(this.array_additional_load));
       }
 
 
-
     },
 
-    deleteClassroomWork(index, n){
+    deleteClassroomWork(index, n) {
       var tempData = this.array_classroom_load[index]
-      tempData.splice(n,1)
+      tempData.splice(n, 1)
     },
 
-    deleteIndividualWork(index, n){
+    deleteIndividualWork(index, n) {
       var tempData = this.array_individual_students_load[index]
-      tempData.splice(n,1)
+      tempData.splice(n, 1)
     },
 
-    deleteAdditionalWork(index, n){
+    deleteAdditionalWork(index, n) {
       var tempData = this.array_additional_load[index]
-      tempData.splice(n,1)
+      tempData.splice(n, 1)
     },
 
-    async saveClassroomWork(index){
+    async saveClassroomWork(index) {
       if (JSON.stringify(this.array_classroom_load) === JSON.stringify(this.array_classroom_loadCopy)) {
         return
       }
@@ -276,23 +271,22 @@ export default {
       if (currentLength !== this.array_classroom_load[index].length)
         this.callWarningNotification()
 
-      for (var j = 0; j < this.array_classroom_load[index].length; j++){
+      for (var j = 0; j < this.array_classroom_load[index].length; j++) {
         this.array_classroom_load[index][j].hours = parseInt(this.array_classroom_load[index][j].hours)
         this.array_classroom_load[index][j].t_load_id = this.loads_ids.get(index + 1)
       }
 
 
       try {
-        const response = await axios.post(this.IP +'/students/load/classroom/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP + '/students/load/classroom/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_classroom_load[index],
+              "loads": this.array_classroom_load[index],
               "semester": index + 1,
             }
         )
         if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
         this.callSaveTablesError(false)
       }
@@ -300,7 +294,7 @@ export default {
       await this.loadTeachingLoad()
     },
 
-    async saveIndividualWork(index){
+    async saveIndividualWork(index) {
       if (JSON.stringify(this.array_individual_students_load) === JSON.stringify(this.array_individual_students_loadCopy)) {
         return
       }
@@ -314,9 +308,7 @@ export default {
         this.callWarningNotification()
 
 
-
-
-      for (var j = 0; j < this.array_individual_students_load[index].length; j++){
+      for (var j = 0; j < this.array_individual_students_load[index].length; j++) {
         this.array_individual_students_load[index][j].students_amount = parseInt(this.array_individual_students_load[index][j].students_amount)
         this.array_individual_students_load[index][j].t_load_id = this.loads_ids.get(index + 1)
       }
@@ -324,16 +316,15 @@ export default {
       console.log(this.array_individual_students_load[index])
 
       try {
-        const response = await axios.post(this.IP +'/students/load/individual/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP + '/students/load/individual/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_individual_students_load[index],
+              "loads": this.array_individual_students_load[index],
               "semester": index + 1,
             }
         )
         if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
         this.callSaveTablesError(false)
       }
@@ -341,7 +332,7 @@ export default {
       await this.loadTeachingLoad()
     },
 
-    async saveAdditionalWork(index){
+    async saveAdditionalWork(index) {
       if (JSON.stringify(this.array_additional_load) === JSON.stringify(this.array_additional_loadCopy)) {
         return
       }
@@ -356,25 +347,21 @@ export default {
         this.callWarningNotification()
 
 
-
-
-      for (var j = 0; j < this.array_additional_load[index].length; j++){
+      for (var j = 0; j < this.array_additional_load[index].length; j++) {
         this.array_additional_load[index][j].t_load_id = this.loads_ids.get(index + 1)
       }
 
 
-
       try {
-        const response = await axios.post(this.IP +'/students/load/additional/' + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP + '/students/load/additional/' + localStorage.getItem("access_token"),
             {
-              "loads" : this.array_additional_load[index],
+              "loads": this.array_additional_load[index],
               "semester": index + 1,
             }
         )
         if (response.status === 200 || response.status === 202)
           this.callSaveTablesError(true)
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
         this.callSaveTablesError(false)
       }
@@ -382,47 +369,44 @@ export default {
       await this.loadTeachingLoad()
     },
 
-    async fillDataForTables(data){
+    async fillDataForTables(data) {
 
       this.array_classroom_load = new Array(this.actualSemester)
       this.array_individual_students_load = new Array(this.actualSemester)
       this.array_additional_load = new Array(this.actualSemester)
 
-      for (var i = 0; i < this.actualSemester; i++){
+      for (var i = 0; i < this.actualSemester; i++) {
         this.array_classroom_load[i] = new Array()
         this.array_individual_students_load[i] = new Array()
         this.array_additional_load[i] = new Array()
       }
-      for (var i = 0; i<data.length; i++){
+      for (var i = 0; i < data.length; i++) {
         var semester = data[i].semester
 
         try {
-          for (var j = 0; j < data[i].classroom_loads.length; j++){
+          for (var j = 0; j < data[i].classroom_loads.length; j++) {
             var class_load = data[i].classroom_loads[j]
             this.array_classroom_load[semester - 1].push(class_load)
           }
-        }
-        catch (e) {
+        } catch (e) {
           console.log(e)
         }
 
         try {
-          for (var j = 0; j < data[i].individual_students_loads.length; j++){
+          for (var j = 0; j < data[i].individual_students_loads.length; j++) {
             var individual_load = data[i].individual_students_loads[j]
-            this.array_individual_students_load[semester-1].push(individual_load)
+            this.array_individual_students_load[semester - 1].push(individual_load)
           }
-        }
-        catch (e) {
+        } catch (e) {
           console.log(e)
         }
 
         try {
-          for (var j = 0; j < data[i].additional_loads.length; j++){
+          for (var j = 0; j < data[i].additional_loads.length; j++) {
             var add_load = data[i].additional_loads[j]
-            this.array_additional_load[semester-1].push(add_load)
+            this.array_additional_load[semester - 1].push(add_load)
           }
-        }
-        catch (e) {
+        } catch (e) {
           console.log(e)
         }
 
@@ -432,11 +416,10 @@ export default {
 
     async loadTeachingLoad() {
       try {
-        const response = await axios.get(this.IP +'/students/load/' + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP + '/students/load/' + localStorage.getItem("access_token"))
         this.data = await response.data;
 
-      }
-      catch (e) {
+      } catch (e) {
         console.log(e)
       }
 
@@ -444,16 +427,10 @@ export default {
     },
 
 
-
   },
   async beforeMount() {
     await this.loadTeachingLoad()
     this.isDataFetched = true
-
-
-
-
-
 
 
   },
@@ -463,8 +440,8 @@ export default {
 <style scoped>
 
 * {
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -475,11 +452,11 @@ export default {
 
 
 @media (min-width: 800px) {
-  .textTableUp{
+  .textTableUp {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:20px;
+    font-size: 20px;
     text-align: center;
 
   }
@@ -491,13 +468,11 @@ export default {
     border-radius: 0.7em !important;
     padding: 0.3rem;
     margin: 0 !important;
-    color:white !important;
+    color: white !important;
   }
 
 
-
-
-  .checkboxBlock{
+  .checkboxBlock {
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
@@ -516,7 +491,7 @@ export default {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
     width: 95%;
-    margin:auto;
+    margin: auto;
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
 
@@ -529,35 +504,33 @@ export default {
   }
 
   .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
+    border-right: solid 0.12em #DEDEDE !important;
   }
 
 
-
-  .mainText{
-    color:#7C7F86;
+  .mainText {
+    color: #7C7F86;
     font-weight: 300;
-    font-size:1.5rem;
+    font-size: 1.5rem;
     text-align: center;
 
 
   }
 
   .editBtn2 {
-    color:#0055BB;
+    color: #0055BB;
     border: 0;
     background-color: white;
   }
 
-  ul p{
+  ul p {
     color: #000000;
     font-family: "Raleway", sans-serif;
     font-weight: 900;
-    font-size:22px;
+    font-size: 22px;
     margin-left: 2%;
 
   }
-
 
 
   .mainPage {
@@ -576,11 +549,11 @@ export default {
 }
 
 @media (max-width: 800px) {
-  .textTableUp{
+  .textTableUp {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:20px;
+    font-size: 20px;
     text-align: center;
 
   }
@@ -592,12 +565,11 @@ export default {
     font-weight: 300 !important;
     border-radius: 0.7em !important;
     margin: 0 !important;
-    color:white !important;
+    color: white !important;
   }
 
 
-
-  .checkboxBlock{
+  .checkboxBlock {
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
@@ -616,7 +588,7 @@ export default {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
     width: 95%;
-    margin:auto;
+    margin: auto;
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
 
@@ -629,35 +601,33 @@ export default {
   }
 
   .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
+    border-right: solid 0.12em #DEDEDE !important;
   }
 
 
-
-  .mainText{
-    color:#7C7F86;
+  .mainText {
+    color: #7C7F86;
     font-weight: 300;
-    font-size:1.3rem;
+    font-size: 1.3rem;
     text-align: center;
 
 
   }
 
   .editBtn2 {
-    color:#0055BB;
+    color: #0055BB;
     border: 0;
     background-color: white;
   }
 
-  ul p{
+  ul p {
     color: #000000;
     font-family: "Raleway", sans-serif;
     font-weight: 900;
-    font-size:22px;
+    font-size: 22px;
     margin-left: 2%;
 
   }
-
 
 
   .mainPage {
@@ -676,11 +646,11 @@ export default {
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
-  .textTableUp{
+  .textTableUp {
     color: #7C7F86;
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size:20px;
+    font-size: 20px;
     text-align: center;
 
   }
@@ -692,12 +662,11 @@ export default {
     font-weight: 300 !important;
     border-radius: 0.7em !important;
     margin: 0 !important;
-    color:white !important;
+    color: white !important;
   }
 
 
-
-  .checkboxBlock{
+  .checkboxBlock {
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
@@ -716,7 +685,7 @@ export default {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
     width: 95%;
-    margin:auto;
+    margin: auto;
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
 
@@ -729,35 +698,33 @@ export default {
   }
 
   .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
+    border-right: solid 0.12em #DEDEDE !important;
   }
 
 
-
-  .mainText{
-    color:#7C7F86;
+  .mainText {
+    color: #7C7F86;
     font-weight: 300;
-    font-size:1.2rem;
+    font-size: 1.2rem;
     text-align: center;
 
 
   }
 
   .editBtn2 {
-    color:#0055BB;
+    color: #0055BB;
     border: 0;
     background-color: white;
   }
 
-  ul p{
+  ul p {
     color: #000000;
     font-family: "Raleway", sans-serif;
     font-weight: 900;
-    font-size:22px;
+    font-size: 22px;
     margin-left: 2%;
 
   }
-
 
 
   .mainPage {

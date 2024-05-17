@@ -98,13 +98,13 @@
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester && !this.canEdit" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
       <div class="text-end">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id !== this.actualSemester">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="(this.id !== this.actualSemester && !this.canEdit) || !this.isFileInputed">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
@@ -134,9 +134,10 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+      isFileInputed: false,
     }
   },
-  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'canEdit'],
   methods : {
     buttonClicked() {
       if (this.buttonIsOpened === true)
@@ -179,6 +180,8 @@ export default {
       if ( event.target.files[0].type === 'application/pdf' ) {
         this.explanationaryNoteFile = event.target.files[0]
       }
+
+      this.isFileInputed = true
     },
 
     async sendFiles(){
