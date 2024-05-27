@@ -26,6 +26,8 @@ export default {
       showWarningNotification : false,
       warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные экзамены',
 
+      buttonTabArrayState: [],
+
     }
   },
   components: {headerOfStudent,
@@ -267,7 +269,14 @@ export default {
 
       data.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.arrayOfComment2 = data
-    }
+    },
+    changeTabState(id){
+
+      var currentState = this.buttonTabArrayState[id]
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+      this.buttonTabArrayState[id] = !currentState
+},
 
 
   },
@@ -275,6 +284,8 @@ export default {
     this.userType = localStorage.getItem("userType");
     await this.getComments()
     await this.getMarks()
+
+    this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
 
 
 
@@ -325,6 +336,8 @@ export default {
       @saveExams=saveExams(number)
       @deleteExam="(n) => deleteExam(index, n)"
       :can-edit = this.canEdit
+      :windowOpened = this.buttonTabArrayState[index]
+      @changeTabState = changeTabState(index)
 
   ></report-tab>
 

@@ -11,6 +11,13 @@
         :state-of-admin-page = stateOfAdminPage
     ></header-of-admin>
 
+    <confirm-attestation
+    :show = showConfirmAttestationWindow
+    @waitDecision="(value) => attestate(value)"
+    >
+
+    </confirm-attestation>
+
     <div class="roundBlock">
 
 
@@ -82,16 +89,69 @@
                   {{ element.mark }}
                 </div>
                 <div v-else class="me-3">
-                  <input  v-maska data-maska="###"  type="number" class="inputBox ps-3" v-model="element.mark" @input="checkLimitations(index)">
+                  <input  v-maska data-maska="#"  type="number" class="inputBox ps-3" v-model="element.mark" @input="checkLimitations(index)">
                 </div>
 
               </div>
 
           </div>
         </div>
-
       </div>
+      <div class="myBtn mt-2" >
+          <button class="sendFilesBtn p-2" @click="showConfirmModal">
+            <div class="d-flex justify-content-around">
+              <p class="loadText">
+                Провести аттестацию
+              </p>
+            </div>
+
+          </button>
+        </div>
     </div>
+
+    <div class="roundBlock">
+
+
+<div class="justify-content-between">
+  <nav class="mt-3 mb-2" >
+    <p class="headingSemester">Отчеты</p>
+  </nav>
+
+  <div>
+    <div class="d-flex roundBlock gap-2 pb-1 pt-1">
+      <nav class="">
+      Генерация и скачивания отчета 1:
+    </nav>
+    <nav>
+      <p class="loadTextState">
+<button class="downloadFile" @click="downLoadReport1"><p style="word-break: break-word">Отчет 1</p></button>
+</p>
+    </nav>
+    </div>
+
+    <div class="d-flex roundBlock gap-2 pb-1 pt-1">
+      <nav class="">
+      Генерация и скачивания отчета 2:
+    </nav>
+    <nav>
+      <p class="loadTextState">
+<button class="downloadFile" @click="downLoadReport2"><p style="word-break: break-word">Отчет 2</p></button>
+</p>
+    </nav>
+    </div>
+
+    
+
+    
+
+    
+  </div>
+
+</div>
+
+
+
+</div>
 
 
 
@@ -103,6 +163,8 @@
 import headerOfAdmin from "@/components/layout/adminComponents/headerOfAdmin.vue";
 import store from "@/store/index.js";
 import axios from "axios";
+import utf8 from "utf8"
+import confirmAttestation from "../models/adminModels/confirmAttestation.vue";
 
 
 export default {
@@ -110,12 +172,19 @@ export default {
   props : ["stateOfAdminPage"],
   components : {
     "headerOfAdmin": headerOfAdmin,
+    "confirmAttestation" : confirmAttestation
   },
   data(){
     return {
       arrayOfStudents: [],
       arrayOfStudentsCopy : [],
       editMarks : false,
+
+      reportFile1: '',
+      reportFile2: '',
+
+      showConfirmAttestationWindow : false,
+      
     }
   },
   methods : {
@@ -124,10 +193,82 @@ export default {
       this.arrayOfStudentsCopy = this.arrayOfStudents.slice(0)
     },
 
+    showConfirmModal(){
+      this.showConfirmAttestationWindow = true
+    },
+
+    async attestate(value){
+      if (!value){
+        this.showConfirmAttestationWindow = false
+        return
+      }
+
+      this.showConfirmAttestationWindow = true
+
+      try {
+        const response = await axios.post(this.IP +"/administrator/student/new-semester/" + localStorage.getItem("access_token"),
+      {
+        "students" : this.arrayOfStudents
+      })
+        
+      }
+      catch (e) {
+        console.log(e)
+      }
+      
+    },
+
+    
+    async downLoadReport1(){
+
+    
+      try {
+        const response = await axios.get(this.IP +"/administrator/generate/report-one/" + localStorage.getItem("access_token"))
+        const response2 = await axios.get(this.IP +"/administrator/download/report-one/" + localStorage.getItem("access_token"), {
+              responseType: 'blob',
+            })
+       
+        if (response2.status === 200) {
+          const blob = new Blob([response2.data]);
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Отчет1.xlsx";
+          link.click()
+        }
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+    },
+
+    async downLoadReport2(){
+
+try {
+  const response = await axios.get(this.IP +"/administrator/generate/report-two/" + localStorage.getItem("access_token"))
+  const response2 = await axios.get(this.IP +"/administrator/download/report-two/" + localStorage.getItem("access_token"), {
+        responseType: 'blob',
+      })
+ 
+      if (response2.status === 200) {
+          const blob = new Blob([response2.data]);
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "Отчет2.xlsx";
+          link.click()
+        }
+}
+catch (e) {
+
+  console.log(e)
+}
+},
+
+
     checkLimitations(index){
 
-      if (this.arrayOfStudents[index].mark > 100){
-        this.arrayOfStudents[index].mark = 100
+      if (this.arrayOfStudents[index].mark > 5){
+        this.arrayOfStudents[index].mark = 5
         return
       }
       if (this.arrayOfStudents[index].mark < 0){
@@ -228,6 +369,7 @@ export default {
   async beforeMount() {
       await this.getStudents()
 
+
   }
 }
 </script>
@@ -253,6 +395,10 @@ input::-webkit-inner-spin-button {
   border-right:  solid 0.12em #DEDEDE !important;
 }
 
+.myBtn {
+    margin-right: 2.5%;
+    text-align: right;
+  }
 
 .inputBox {
   border: 0 !important;
@@ -265,11 +411,30 @@ input::-webkit-inner-spin-button {
   width: 100%;
 }
 
+.loadTextState{
+    font-size: 0.8rem;
+  }
+
+.downloadFile{
+    border: none;
+    background-color: white;
+    color: #0b5ed7;
+  }
+
 @media (min-width: 800px) {
   .editBtnStudents{
     width: 95%;
     margin:auto;
     text-align:right;
+  }
+
+  .loadTextState{
+    font-size: 1rem !important;
+  }
+
+  .imgUploadFile {
+    width: 30px;
+    height: 30px;
   }
 
   .editBtn {
@@ -291,7 +456,17 @@ input::-webkit-inner-spin-button {
     font-size:18px;
     text-align: center;
     word-break: break-all;
+  }
 
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+
+    padding: 0.5rem !important;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
   }
 
   .mainPage {
@@ -365,6 +540,11 @@ input::-webkit-inner-spin-button {
     font-size: 0.9rem;
   }
 
+  .imgUploadFile {
+    width: 30px;
+    height: 30px;
+  }
+
 
   .textMiniTable{
     color: #7C7F86;
@@ -434,6 +614,17 @@ input::-webkit-inner-spin-button {
     text-decoration: none;
     color:#0055BB;
   }
+
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:22px;
+    padding: 5px;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
+  }
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
@@ -462,10 +653,26 @@ input::-webkit-inner-spin-button {
     padding-right: 0.1rem;
   }
 
+  .imgUploadFile {
+    width: 20px;
+    height: 20px;
+  }
+
   .trashLogo{
     width:15px !important;
     height: 15px !important;
 
+  }
+
+  .sendFilesBtn{
+    background-color: #0055BB;
+    font-family: "Raleway", sans-serif;
+    font-size:0.6rem;
+    padding: 5px;
+    border-radius: 10px;
+    color:white;
+    font-weight: 400;
+    border: 0;
   }
 
 

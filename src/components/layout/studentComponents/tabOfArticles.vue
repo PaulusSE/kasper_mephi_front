@@ -798,10 +798,9 @@ import axios from "axios";
 
 export default {
   name: "tabOfArticles",
-  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester", "canEdit", "patents"],
+  props: ["articles", "reports", "projects", "id", "waitForCheck", "actualSemester", "canEdit", "patents", "buttonIsOpened"],
   data() {
     return {
-      buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
@@ -817,7 +816,7 @@ export default {
       },
       conferenceMap: {
         "registered" : "Зарегистрировался",
-        "performed " : "Выступил",
+        "performed" : "Выступил",
       },
       patentsMap: {
         "software" : "Свидетельство о регистрации программ ЭВМ",
@@ -827,11 +826,9 @@ export default {
   },
   methods : {
     buttonClicked(){
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
     },
+
     buttonSmallTableClicked1(){
 
       if (this.waitForCheck){
@@ -1007,7 +1004,7 @@ export default {
   },
 
   beforeMount() {
-
+console.log()
   }
 }
 </script>

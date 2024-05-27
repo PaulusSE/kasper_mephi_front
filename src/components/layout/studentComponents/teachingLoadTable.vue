@@ -140,7 +140,7 @@
             <div class="rightLine textMiniTable ps-3" style="width: 31.0%; text-align: center">
 
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto" v-model="element.subject_name"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" style="overflow-y:auto;" v-model="element.subject_name"></textarea>
               </div>
             </div>
 
@@ -151,17 +151,17 @@
             </div>
 
 
-            <div class="rightLine textMiniTable" style="width: 20.7%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 20.7%; text-align: center; ">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="element.main_teacher"></textarea>
+                <textarea class="textWithCarry inputBox " style="height: 100%; " rows="4" v-model="element.main_teacher"></textarea>
               </div>
 
             </div>
 
             <div class="rightLine textMiniTable" style="width: 16.4%; text-align: center">
 
-              <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%)" :value="this.loadTypeMap[element.load_type]" v-model="element.load_type">
+              <div style="height: 100%;" >
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all;height: calc(100%); padding-bottom: 85%;" :value="this.loadTypeMap[element.load_type]" v-model="element.load_type">
                   <option style="word-break: break-all" value="laboratory">лабораторная</option>
                   <option style="word-break: break-all" value="lectures">лекция</option>
                   <option style="word-break: break-all" value="practice">семинар</option>
@@ -448,10 +448,9 @@ import axios from "axios";
 
 export default {
   name: "tabOfArticles",
-  props: ["classroomWork", "individualWork", "otherWork", "actualSemester", "id", "waitForCheck", "canEdit"],
+  props: ["classroomWork", "individualWork", "otherWork", "actualSemester", "id", "waitForCheck", "canEdit", "buttonIsOpened"],
   data() {
     return {
-      buttonIsOpened : false,
       smallTableEditing1 : false,
       smallTableEditing2 : false,
       smallTableEditing3 : false,
@@ -476,10 +475,7 @@ export default {
   },
   methods : {
     buttonClicked(){
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
     },
 
 

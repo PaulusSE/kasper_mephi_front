@@ -42,7 +42,8 @@
                      :projects=this.arrayOfProjects[index]
                      :patents=this.arrayOfPatents[index]
                      :actual-semester=this.actualSemester
-
+                     :buttonIsOpened = this.buttonTabArrayState[index]
+                     @changeTabState = changeTabState(index)
 
                      :waitForCheck=this.waitForCheck
                      @updatePage="(n) => cancelChange(n)"
@@ -139,6 +140,8 @@ export default {
       showWarningNotification: false,
       warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные работы',
 
+      buttonTabArrayState: [],
+
     }
 
   },
@@ -209,8 +212,19 @@ export default {
         this.works_ids.set(semester, data[i].works_id)
       }
 
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+      
 
     },
+
+
+    changeTabState(id){
+
+      var currentState = this.buttonTabArrayState[id]
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+      this.buttonTabArrayState[id] = !currentState
+},
 
     buttonSmallTableAdd1(n) {
       let newArticle = {

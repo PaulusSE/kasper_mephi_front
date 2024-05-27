@@ -80,7 +80,7 @@
 
             </div>
             <div class="rightLine textMiniTable" style="width: 10.15%;">
-              <div class="textWithCarry inputBox ">{{article.status}}</div>
+              <div class="textWithCarry inputBox ">{{this.articlesMap[article.status]}}</div>
             </div>
 
             <div class="rightLine textMiniTable" style="width: 10.15%;">
@@ -192,7 +192,7 @@
             </div>
             <div class="rightLine textMiniTable" style="width: 11.15%;">
               <div>
-                <div class="textWithCarry inputBox ">{{report.status}}</div>
+                <div class="textWithCarry inputBox ">{{this.conferenceMap[report.status]}}</div>
               </div>
             </div>
 
@@ -386,22 +386,28 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles","reports","projects" , "id", "patents", "actualSemester"],
+  props: ["articles","reports","projects" , "id", "patents", "actualSemester", "buttonIsOpened"],
   data() {
     return {
-      buttonIsOpened : false,
+
       patentsMap: {
         "software" : "Свидетельство о регистрации программ ЭВМ",
         "database" : "Свидетельство о регистрации базы данных",
-      }
+      },
+      articlesMap: {
+        "to print" : "Принято в печать",
+        "published" : "Опубликовано",
+        "in progress" : "В процессе",
+      },
+      conferenceMap: {
+        "registered" : "Зарегистрировался",
+        "performed" : "Выступил",
+      },
     }
   },
   methods : {
     buttonClicked(){
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
     },
     formatDate(date){
       return  date.slice(8,10) + '/' + date.slice(5,7) + '/' + date.slice(2,4)
@@ -410,7 +416,7 @@ export default {
   },
 
   beforeMount() {
-
+    
 
   }
 }

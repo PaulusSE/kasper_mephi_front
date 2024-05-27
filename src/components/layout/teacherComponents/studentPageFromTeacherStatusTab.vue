@@ -61,10 +61,10 @@ import utf8 from "utf8"
 
 export default {
   name: "studentPageFromTeacherStatusTab",
-  props : ["id", "actualSemester", "feedback", "status"],
+  props : ["id", "actualSemester", "feedback", "status", "buttonIsOpened"],
   data()  {
     return {
-      buttonIsOpened : false,
+
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
@@ -79,7 +79,7 @@ export default {
   },
   methods : {
     buttonClicked() {
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
     },
     async saveReview(){
       this.editingReview = !this.editingReview

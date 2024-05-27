@@ -229,10 +229,9 @@ import store from "@/store/index.js";
 
 export default {
   name: "tabOfArticles",
-  props: ["classroomWork", "individualWork", "otherWork", "id", "actualSemester"],
+  props: ["classroomWork", "individualWork", "otherWork", "id", "actualSemester", "buttonIsOpened"],
   data() {
     return {
-      buttonIsOpened : false,
       smallTableEditing: false,
       deleteState: false,
       loadTypeIndividualMap : {
@@ -250,10 +249,7 @@ export default {
   },
   methods : {
     buttonClicked(){
-
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
     },
 
   },

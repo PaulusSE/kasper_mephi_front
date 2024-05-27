@@ -248,6 +248,8 @@
                                           :actual-semester = this.actualSemester
                                           :feedback = this.feedbacks[index]
                                           :status = this.states[index]
+                                          :buttonIsOpened = this.buttonTabArrayState[index]
+                                          @changeTabState = changeTabState(number)
                                           v-if="renderChildComponents"
     ></student-page-from-teacher-status-tab>
 
@@ -360,6 +362,8 @@ export default {
       teacherFeedBackDate: '',
       studentFeedBack : '',
       studentFeedBackDate: '',
+
+      buttonTabArrayState: [],
     }
 
   },
@@ -369,6 +373,14 @@ export default {
       await this.getComments()
       this.$emit('updateStatusAllTeachersComponents')
     },
+
+    changeTabState(id){
+
+var currentState = this.buttonTabArrayState[id - 1]
+this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+this.buttonTabArrayState[id - 1] = !currentState
+},
 
 
     async getComments(){
@@ -649,6 +661,7 @@ export default {
       catch (e){
         console.log(e)
       }
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
       this.renderChildComponents = true
 
 

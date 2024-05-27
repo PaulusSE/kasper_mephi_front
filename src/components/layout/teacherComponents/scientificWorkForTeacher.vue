@@ -23,6 +23,8 @@
                      :projects = this.arrayOfProjects[index]
                      :patents = this.arrayOfPatents[index]
                      :actualSemester = this.actualSemester
+                     :buttonIsOpened = this.buttonTabArrayState[index]
+                      @changeTabState = changeTabState(index)
     ></tab-of-articles-for-teacher>
 
 <!--    <div class="roundBlock">-->
@@ -68,6 +70,8 @@ export default {
       arrayOfProjects:[],
       arrayOfPatents: [],
 
+      buttonTabArrayState: [],
+
 
     }
   },
@@ -96,6 +100,14 @@ export default {
 
       await this.fillDataForTables(this.data)
     },
+
+    changeTabState(id){
+    
+    var currentState = this.buttonTabArrayState[id]
+    this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+    this.buttonTabArrayState[id] = !currentState
+},
 
 
 
@@ -165,14 +177,13 @@ export default {
           console.log(e)
         }
       }
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
     },
   },
 
 
   async beforeMount() {
     await this.loadScientificWorks()
-
-
   }
 
 }

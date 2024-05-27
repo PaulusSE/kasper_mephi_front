@@ -80,7 +80,7 @@
         </div>
 
         <div v-if="this.explanationaryNoteFile === '' " class="mt-2 ms-3">
-          <p class="loadTextState">Файл не выбран</p>
+          <p class="loadTextState">Файл не выбран (формат pdf)</p>
         </div>
 
         <div v-else class="ms-3 mt-2">
@@ -137,13 +137,10 @@ export default {
       isFileInputed: false,
     }
   },
-  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'canEdit'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'canEdit', 'buttonIsOpened'],
   methods : {
     buttonClicked() {
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+        this.$emit('changeTabState')
     },
     deleteExplanatoryNote() {
       this.explanationaryNoteFile = ''
@@ -199,7 +196,8 @@ export default {
       let formData = new FormData();
       formData.append('upload', this.explanationaryNoteFile);
       formData.append('semester', this.id);
-
+      console.log("Файл загружен за семестр ")
+      console.log(this.id)
       var resultStatus = ''
       try {
         const response = await axios.post(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),formData,
@@ -251,6 +249,7 @@ export default {
   },
   beforeMount() {
     this.getFiles()
+    
 
   }
 }

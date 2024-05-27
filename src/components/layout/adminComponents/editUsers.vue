@@ -1003,8 +1003,6 @@ this.showGraduatedAndExpelledStudents = !this.showGraduatedAndExpelledStudents
 
         this.data = response.data
         this.arrayOfSpecialization = this.data
-
-
       }
       catch (e) {
         this.showWrongAnswerString = true;
@@ -1021,7 +1019,7 @@ this.showGraduatedAndExpelledStudents = !this.showGraduatedAndExpelledStudents
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
     },
     async getTeachers(){

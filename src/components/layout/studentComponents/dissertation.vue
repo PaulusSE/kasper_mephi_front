@@ -256,7 +256,10 @@
                         @makeNotification="(resultStatus) => makeNotification(resultStatus)"
                         :actual-semester = this.actualSemester
                         :waitForCheck = waitForCheck
+                        :buttonIsOpened = this.buttonTabArrayState[index]
+                        @changeTabState = changeTabState(number)
                         @makeEditErrorNotification = callEditError
+                        
                         v-if="renderChildComponents"
                         :can-edit = this.canEdit
       ></dissertation-tab>
@@ -400,6 +403,8 @@ export default {
       studentFeedBack : '',
       studentFeedBackDate: '',
 
+      buttonTabArrayState: [],
+
     }
 
   }
@@ -492,7 +497,7 @@ export default {
         )
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+
       }
 
       if (this.progressOfDissertation === this.progressOfDissertationCopy)
@@ -507,7 +512,7 @@ export default {
         )
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+
       }
     },
 
@@ -555,74 +560,6 @@ export default {
     },
 
 
-    // async fillFeedBackArray(feedbacks){
-    //
-    //   var semesterObjectArray = new Array()
-    //   for (var i = 0; i < this.actualSemester; i++){
-    //     semesterObjectArray.push({
-    //       semester: i + 1
-    //     })
-    //   }
-    //
-    //   if (feedbacks === undefined)
-    //     feedbacks = new Array()
-    //
-    //   for (var i = 0; i < feedbacks.length; i++){
-    //     if (feedbacks[i] === undefined)
-    //       return
-    //     var semester = feedbacks[i].semester
-    //     semesterObjectArray = semesterObjectArray.filter(function(obj) {
-    //       return obj.semester !== semester
-    //     })
-    //   }
-    //
-    //   for (var i = 0; i < semesterObjectArray.length; i++){
-    //     feedbacks.push({
-    //       semester:semesterObjectArray[i].semester,
-    //       feedback:''
-    //     })
-    //   }
-    //
-    //
-    //   feedbacks.sort((a, b) => a.semester > b.semester ? 1 : -1);
-    //   this.feedbacks = feedbacks
-    //
-    // },
-
-    // async fillStatusArray(statuses){
-    //
-    //   var semesterObjectArray = new Array()
-    //   for (var i = 0; i < this.actualSemester; i++){
-    //     semesterObjectArray.push({
-    //       semester: i + 1
-    //     })
-    //   }
-    //
-    //   if (statuses === undefined)
-    //     statuses = new Array()
-    //
-    //   for (var i = 0; i < statuses.length; i++){
-    //     if (statuses[i] === undefined)
-    //       return
-    //     var semester = statuses[i].semester
-    //     semesterObjectArray = semesterObjectArray.filter(function(obj) {
-    //       return obj.semester !== semester
-    //     })
-    //   }
-    //
-    //   for (var i = 0; i < semesterObjectArray.length; i++){
-    //     statuses.push({
-    //       semester:semesterObjectArray[i].semester,
-    //       status:'empty'
-    //     })
-    //   }
-    //
-    //
-    //   statuses.sort((a, b) => a.semester > b.semester ? 1 : -1);
-    //   this.states = statuses
-    //
-    // },
-
     async fillThemeHistory(tittles){
       tittles.sort((a, b) => a.semester > b.semester ? 1 : -1);
       this.arrayOfTopics = tittles
@@ -651,6 +588,14 @@ export default {
       this.progressOfDissertation = this.arrayOfProgress[this.arrayOfProgress.length - 1].progressiveness
     },
 
+    changeTabState(id){
+
+      var currentState = this.buttonTabArrayState[id - 1]
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+      
+      this.buttonTabArrayState[id - 1] = !currentState
+    },
+
 
 
     async getCommonInfo() {
@@ -660,10 +605,8 @@ export default {
         this.data = response.data
       }
       catch (e) {
-        this.showWrongAnswerString = true;
         console.log(e)
       }
-
 
       try {
         await this.fillTeacherHistory(this.data.supervisors)
@@ -699,6 +642,9 @@ export default {
       catch(e) {
         console.log(e)
       }
+
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+      
 
 
       // await this.fillStatusArray(this.data.dissertations_statuses)

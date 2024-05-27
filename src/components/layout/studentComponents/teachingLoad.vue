@@ -41,6 +41,9 @@
                          :actualSemester=this.actualSemester
                          @updatePage="(n) => cancelChange(n)"
                          :waitForCheck=this.waitForCheck
+                         :buttonIsOpened = this.buttonTabArrayState[index]
+                          @changeTabState = changeTabState(index)
+
 
                          @buttonSmallTableAdd1=buttonSmallTableAdd1(index)
                          @buttonSmallTableAdd2=buttonSmallTableAdd2(index)
@@ -128,6 +131,7 @@ export default {
       showWarningNotification: false,
       warningMessage: 'Поля * должны быть обязательно заполнены! Сохранены только полностью заполненные нагрузки',
 
+      buttonTabArrayState: [],
     }
   },
 
@@ -412,7 +416,17 @@ export default {
 
         this.loads_ids.set(semester, data[i].t_load_id)
       }
+
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
     },
+
+    changeTabState(id){
+
+var currentState = this.buttonTabArrayState[id]
+this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+this.buttonTabArrayState[id] = !currentState
+},
 
     async loadTeachingLoad() {
       try {

@@ -21,10 +21,10 @@ export default {
       }
     }
   },
-  props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType", "waitForCheck", "actualSemester", "canEdit"],
+  props: ["arrayOfExams", "attestationMarks", "supervisorMarks", "id", "comment1", "comment2", "userType", "waitForCheck", "actualSemester", "canEdit", "windowOpened"],
   methods : {
     buttonClicked(){
-      this.windowOpened = !this.windowOpened
+      this.$emit('changeTabState')
     },
 
     checkLimitations(index){
@@ -352,7 +352,7 @@ export default {
 
               <div class="rightLine textMiniTable" style="width: 30%; text-align: center">
                 <div>
-                  <input v-maska data-maska="###" type="number" max=5 class="inputBox" v-model="exam.mark" @input="checkLimitations(index)">
+                  <input v-maska data-maska="#" type="number" max=5 class="inputBox" v-model="exam.mark" @input="checkLimitations(index)">
                 </div>
               </div>
 

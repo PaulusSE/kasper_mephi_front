@@ -24,6 +24,8 @@
                                  :individual-work="array_individual_students_load[index]"
                                  :other-work="array_additional_load[index]"
                                  :actualSemester = this.actualSemester
+                                 :buttonIsOpened = this.buttonTabArrayState[index]
+                                  @changeTabState = changeTabState(index)
 ></teaching-load-table-for-teacher>
 
 <!--    <div class="roundBlock">-->
@@ -73,6 +75,8 @@ export default {
       array_classroom_load:[],
       array_individual_students_load: [],
       array_additional_load: [],
+
+      buttonTabArrayState: [],
 
     }
   },
@@ -126,7 +130,16 @@ export default {
           console.log(e)
         }
       }
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
     },
+
+    changeTabState(id){
+    
+    var currentState = this.buttonTabArrayState[id]
+    this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+    this.buttonTabArrayState[id] = !currentState
+},
 
 
     async loadTeachingLoad() {
