@@ -305,7 +305,7 @@ export default {
     font-weight: 500;
     font-size:18px;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word !important;
 
   }
 

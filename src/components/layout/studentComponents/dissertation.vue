@@ -280,11 +280,12 @@
       </div>
 
       <div>
-        <textarea v-model="studentFeedBack"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-if="studentFeedBack.length !==0" v-model="studentFeedBack"  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
+        <textarea v-else disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white">Вы можете оставить комментарий к работе после нажатия на кнопку "Отправить на проверку"</textarea>
       </div>
     </div>
 
-    <div class="roundBlock">
+    <div class="roundBlock" v-if="teacherFeedback.length !==0">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
           <p class="mainText">Комментарий научного руководителя к отчету</p>
@@ -534,7 +535,7 @@ export default {
         const response = await axios.get(this.IP +"/students/dissertation/" + localStorage.getItem("access_token"))
 
         this.data = response.data
-
+        
       }
       catch (e) {
         console.log(e)
@@ -548,6 +549,7 @@ export default {
       catch (e){
         console.log(e)
       }
+      
 
       try {
         this.data.students_comments.sort((a, b) => a.semester > b.semester ? 1 : -1);

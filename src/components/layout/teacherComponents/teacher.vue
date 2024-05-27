@@ -15,16 +15,20 @@
               №
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 40%; text-align: center">
               ФИО
             </div>
 
-
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              Статус отчета
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
               Семестр
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
               Длительность обучения (cеместров)
             </div>
 
@@ -41,17 +45,19 @@
               {{index + 1}}
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 50%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 40%; text-align: center">
               <router-link style="text-decoration: none" to="/user" @click="pushUserIdToStore(index)" >{{element["full_name"]}}</router-link>
-
             </div>
 
-
             <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+              {{this.statusMap[element.status]}}
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
               {{element.actual_semester}}
             </div>
 
-            <div class="rightLine textMiniTable" style="width: 20%; text-align: center">
+            <div class="rightLine textMiniTable" style="width: 15%; text-align: center">
               {{element.years}}
             </div>
 
@@ -92,6 +98,16 @@ export default {
     return {
       arrayOfStudents : [{}],
       fullName :"",
+      statusMap: {
+        "todo" : "На доработке",
+        "failed" : "Не сдано",
+        "approved": "Принято",
+        "on review" : "Ожидает проверки",
+        "in progress" : "В процессе",
+        "empty" : "Не заполнено"
+
+
+      }
     }
   },
   methods: {
@@ -126,6 +142,7 @@ export default {
       this.$router.push('/profile')
 
     await this.getStudents()
+    
   }
 }
 </script>
@@ -184,7 +201,7 @@ export default {
   }
 
   .mainPage {
-    width: 70%;
+    width: 70% !important;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

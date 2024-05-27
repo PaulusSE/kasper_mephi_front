@@ -118,7 +118,7 @@
 
         <div class="container-fluid justify-content-between d-flex mb-3">
           <nav class="inputWidth">
-            <label class="text">Год обучения (курс)</label>
+            <label class="text">Длительность обучения (семестров)</label>
             <input type="text" class="textInput" disabled  v-model="yearOfStudy">
           </nav>
         </div>
@@ -253,7 +253,7 @@
                                           v-if="renderChildComponents"
     ></student-page-from-teacher-status-tab>
 
-    <div class="roundBlock">
+    <div class="roundBlock" v-if="studentFeedBack.length !== 0">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
           <p class="mainText">Комментарий аспиранта к отчету</p>
@@ -270,7 +270,7 @@
       </div>
     </div>
 
-    <div class="roundBlock">
+    <div class="roundBlock" v-if="teacherFeedback.length !== 0">
       <div class="d-flex justify-content-between">
         <nav class="checkboxBlock">
           <p class="mainText">Комментарий научного руководителя к отчету</p>
@@ -403,6 +403,7 @@ this.buttonTabArrayState[id - 1] = !currentState
       }
       catch (e){
         console.log(e)
+        
       }
 
       try {

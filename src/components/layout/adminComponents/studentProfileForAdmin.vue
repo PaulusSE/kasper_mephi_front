@@ -83,7 +83,7 @@
           <div class="container-fluid justify-content-between d-flex">
             <nav style="width: 50%">
               <div style="width: 100%">
-                <label class="text ms-0">Срок обучения</label>
+                <label class="text ms-0">Срок обучения (семестров)</label>
                 <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
               </div>
             </nav>

@@ -198,7 +198,7 @@
 
             <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
               <div style="height: 100%; width: 100%">
-                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);" v-model="article.status">
+                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-word ;-webkit-appearance: none;height: calc(100%);" v-model="article.status">
                   <option value="to print">Принято в печать</option>
                   <option value="published">Опубликовано</option>
                   <option value="in progress">В процессе написания</option>
@@ -421,7 +421,7 @@
 
             <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
               <div style="height: 100%">
-                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-all; height: calc(100%)" v-model="report.status">
+                <select class="textWithCarry inputBox" style="-webkit-appearance: none;word-break: break-word; height: calc(100%)" v-model="report.status">
                   <option value="registered">Зарегистрировался</option>
                   <option value="performed ">Выступил</option>
                 </select>
@@ -458,7 +458,7 @@
 
             <div class="rightLine textMiniTable" style="width: 11%; text-align: center">
               <div>
-                <textarea class="textWithCarry inputBox " rows="4" v-model="report.location" style="word-break: break-all"></textarea>
+                <textarea class="textWithCarry inputBox " rows="4" v-model="report.location" style="word-break: break-word"></textarea>
               </div>
             </div>
 
@@ -758,7 +758,7 @@
             <div class="rightLine textMiniTable" style="width: 32%; text-align: center">
 
               <div style="height: 100%; width: 100%">
-                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-all ;-webkit-appearance: none;height: calc(100%);"  v-model="patent.patent_type">
+                <select class="textWithCarry inputBox" style="overflow: auto;width: 100%; word-break: break-word ;-webkit-appearance: none;height: calc(100%);"  v-model="patent.patent_type">
                   <option value="software">Свидетельство о регистрации программ ЭВМ</option>
                   <option value="database">Свидетельство о регистрации базы данных</option>
                 </select>
@@ -1299,7 +1299,7 @@ console.log()
     font-weight: 500;
     font-size:0.5rem;
     text-align: center;
-    word-break: break-word;
+    word-break: keep-all  !important;
     padding-left:0.1rem;
     padding-top: 0.2rem;
     padding-right: 0.1rem;
