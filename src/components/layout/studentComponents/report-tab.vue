@@ -10,7 +10,7 @@ export default {
       editExams : false,
 
       presentationFile : '',
-      presentationFilename : 'пока нет',
+      presentationFilename : 'report.pptx', // Заменено 'пока нет' на 'report.pptx'
       windowOpened : false,
       deleteExamIds: [],
 
@@ -93,35 +93,44 @@ export default {
       
     },
 
-    async downloadFile(){
-      await this.getFiles()
-      const blob = new Blob([this.presentationFile]);
+    async downloadFile() {
+      await this.getFiles();
+      const blob = new Blob([this.presentationFile], {
+        type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+      });
       const link = document.createElement('a');
       link.href = window.URL.createObjectURL(blob);
       link.download = this.presentationFilename;
-      link.click()
+      link.click();
     },
 
     async getFiles() {
-
       try {
-        const response = await axios.put(this.IP +"" + localStorage.getItem("access_token"),
-            {
-              "semester" : this.id
-            },
-            {
-              responseType: 'blob',
-            }
-        )
+        const response = await axios.post(
+          `${this.IP}/students/report/download/${localStorage.getItem("access_token")}`,
+          {
+            "semester": this.id
+          },
+          {
+            responseType: 'blob',
+          }
+        );
         if (response.status === 200) {
-          this.presentationFilename = utf8.decode(response.headers["content-disposition"])
-          this.presentationFile = response.data
+          // Извлекаем имя файла из заголовка Content-Disposition
+          const contentDisposition = response.headers['content-disposition'];
+          let filename = 'report.pptx';
+          if (contentDisposition) {
+            const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
+            if (fileNameMatch.length > 1) {
+              filename = fileNameMatch[1];
+            }
+          }
+          this.presentationFilename = utf8.decode(filename);
+          this.presentationFile = response.data;
         }
-
-
-      }
-      catch (e) {
+      } catch (e) {
         this.showWrongAnswerString = true;
+        console.log(e);
       }
     },
   },
