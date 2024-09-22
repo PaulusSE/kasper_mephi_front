@@ -10,7 +10,7 @@ export default {
       editExams : false,
 
       presentationFile : '',
-      presentationFilename : 'report.pptx',
+      presentationFilename : "report.pptx",
       windowOpened : false,
       deleteExamIds: [],
 
