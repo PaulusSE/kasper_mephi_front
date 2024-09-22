@@ -94,6 +94,7 @@ export default {
     },
 
     async downloadFile() {
+      console.log(this.IP + "/students/report/download/" + localStorage.getItem("access_token"));
       await this.getFiles();
       const blob = new Blob([this.presentationFile], {
         type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
