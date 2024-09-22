@@ -107,7 +107,7 @@ export default {
     async getFiles() {
       try {
         const response = await axios.post(
-          `${this.IP}/administrator/students/report/download/${localStorage.getItem("access_token")}`,
+          `${this.$IP}/students/report/download/${localStorage.getItem("access_token")}`,
           {
             "semester": this.id
           },
