@@ -35,10 +35,10 @@ export default {
       if (this.arrayOfExams[index].mark < 0) {
         this.arrayOfExams[index].mark = 0
       }
-},
+    },
 
     async saveComments(){
-      this.editComments = !this.editComments
+      this.editComments = !this.editComments;
 
       try {
         const response = await axios.post(this.IP +"/students/report/comments/" + localStorage.getItem("access_token"),
@@ -47,50 +47,44 @@ export default {
               "dissertation_plan" : this.comment2,
               "semester" : this.id
             },
-        )
-        this.data = response.data
-      }
-      catch (e) {
-        console.log(e)
+        );
+        this.data = response.data;
+      } catch (e) {
+        console.log(e);
       }
     },
+    
     commentClicked(){
-      this.editComments = !this.editComments
+      this.editComments = !this.editComments;
     },
+
     editExamsClicked(){
-      this.editExams = !this.editExams
+      this.editExams = !this.editExams;
     },
 
     async saveExams(){
-      this.editExams = !this.editExams
+      this.editExams = !this.editExams;
 
-  
-      console.log(this.deleteExamIds)
-      if(this.deleteExamIds.length !== 0)
-      {
+      console.log(this.deleteExamIds);
+      if(this.deleteExamIds.length !== 0) {
         try {
           const response = await axios.put(this.IP +'/students/marks/' + localStorage.getItem("access_token"),
               {
                 "ids" : this.deleteExamIds,
                 "semester" : this.id
               }
-          )
-        }
-        catch (e) {
-          console.log(e)
+          );
+        } catch (e) {
+          console.log(e);
         }
       }
 
-
-
-      this.$emit('saveExams')
-      
+      this.$emit('saveExams');
     },
 
     deleteExam(index){
-      this.deleteExamIds.push(this.arrayOfExams[index].exam_id)
-      this.$emit('deleteExam', index)
-      
+      this.deleteExamIds.push(this.arrayOfExams[index].exam_id);
+      this.$emit('deleteExam', index);
     },
 
     async downloadFile() {
@@ -107,6 +101,7 @@ export default {
 
     async getFiles() {
       try {
+        console.log("Fetching file...");
         const response = await axios.post(
           this.IP + "/students/report/download/" + localStorage.getItem("access_token"),
           {
@@ -117,6 +112,7 @@ export default {
           }
         );
         if (response.status === 200) {
+          console.log("File fetched successfully");
           const contentDisposition = response.headers['content-disposition'];
           let filename = 'report.pptx';
           if (contentDisposition) {
@@ -130,15 +126,12 @@ export default {
         }
       } catch (e) {
         this.showWrongAnswerString = true;
-        console.log(e);
+        console.log("Error fetching file:", e);
       }
     },
   },
   async beforeMount() {
-    // await this.getFiles()
-    
-    
-
+    await this.getFiles();
   }
 }
 </script>
