@@ -10,7 +10,7 @@ export default {
       editExams : false,
 
       presentationFile : '',
-      presentationFilename : 'report.pptx', // Заменено 'пока нет' на 'report.pptx'
+      presentationFilename : 'report.pptx',
       windowOpened : false,
       deleteExamIds: [],
 
@@ -116,12 +116,11 @@ export default {
           }
         );
         if (response.status === 200) {
-          // Извлекаем имя файла из заголовка Content-Disposition
           const contentDisposition = response.headers['content-disposition'];
           let filename = 'report.pptx';
           if (contentDisposition) {
             const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
-            if (fileNameMatch.length > 1) {
+            if (fileNameMatch && fileNameMatch.length > 1) {
               filename = fileNameMatch[1];
             }
           }
