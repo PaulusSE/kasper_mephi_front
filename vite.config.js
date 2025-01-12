@@ -11,7 +11,7 @@ export default defineConfig(({ command, mode }) => ({
       },
       host: true,
       strictPort: true,
-      port: 80, // Используйте стандартный порт разработки
+      port: 5173, // Используйте стандартный порт разработки
     },
   }),
   resolve: {
