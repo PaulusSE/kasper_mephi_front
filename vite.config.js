@@ -1,3 +1,7 @@
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+
 export default defineConfig(({ command, mode }) => ({
   plugins: [vue()],
   ...(command === 'serve' && {
@@ -5,9 +9,14 @@ export default defineConfig(({ command, mode }) => ({
       watch: {
         usePolling: true,
       },
-      host: true, // то же, что "0.0.0.0"
+      host: true,
       strictPort: true,
-      port: 80,
+      port: 80, // Используйте стандартный порт разработки
     },
   }),
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 }))
