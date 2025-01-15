@@ -14,8 +14,6 @@
       :supervisor-mark = this.supervisorMark
   ></header-of-student>
 
-
-
     <tab-of-articles-for-teacher v-for="(n, index) in this.actualSemester"
                      :id = index
                      :articles = this.arrayOfArticles[index]
@@ -26,6 +24,18 @@
                      :buttonIsOpened = this.buttonTabArrayState[index]
                       @changeTabState = changeTabState(index)
     ></tab-of-articles-for-teacher>
+
+    <div class="recommended-articles">
+      <h3>Рекомендованные статьи</h3>
+      <ul v-if="recommendedArticles.length > 0">
+        <li v-for="(article, index) in recommendedArticles" :key="index">
+          <a :href="article.url" target="_blank">{{ article.title }}</a>
+        </li>
+      </ul>
+      <p v-else-if="loadingRecommendations">Загрузка рекомендаций...</p>
+      <p v-else>Рекомендации недоступны.</p>
+    </div>
+
 
 <!--    <div class="roundBlock">-->
 <!--      <div class="d-flex justify-content-between">-->
@@ -71,7 +81,9 @@ export default {
       arrayOfPatents: [],
 
       buttonTabArrayState: [],
-
+      recommendedArticles: [], // Рекомендованные статьи
+      loadingRecommendations: true, // Флаг загрузки
+      recommendationsError: false,  // Флаг ошибки
 
     }
   },
@@ -100,7 +112,20 @@ export default {
 
       await this.fillDataForTables(this.data)
     },
+    async loadRecommendedArticles() {
+      this.loadingRecommendations = true; // Установить флаг загрузки
+      this.recommendationsError = false; // Сбросить ошибку
 
+      try {
+        const response = await axios.get(this.IP + '/supervisors/recommended-articles/' + localStorage.getItem("access_token"));
+        this.recommendedArticles = response.data; // Загрузка данных
+      } catch (e) {
+        console.error('Ошибка загрузки рекомендаций:', e);
+        this.recommendationsError = true; // Установить флаг ошибки
+      } finally {
+        this.loadingRecommendations = false; // Завершить загрузку
+      }
+    },
     changeTabState(id){
     
     var currentState = this.buttonTabArrayState[id]
@@ -184,6 +209,7 @@ export default {
 
   async beforeMount() {
     await this.loadScientificWorks()
+    await this.loadRecommendedArticles()
   }
 
 }
@@ -199,6 +225,40 @@ export default {
   padding:0;
   box-sizing: border-box;
 }
+
+.recommended-articles {
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.recommended-articles h3 {
+  font-size: 1.5rem;
+  color: #0055bb;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.recommended-articles ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recommended-articles li {
+  margin: 5px 0;
+}
+
+.recommended-articles a {
+  color: #0055bb;
+  text-decoration: none;
+}
+
+.recommended-articles a:hover {
+  text-decoration: underline;
+}
+
 
 .textResult1 {
   font-family: "Raleway", sans-serif;

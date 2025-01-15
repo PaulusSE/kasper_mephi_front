@@ -33,7 +33,6 @@
         :supervisor-mark=this.supervisorMark
     ></header-of-student>
 
-
     <tab-of-articles v-for="(n, index) in this.actualSemester"
                      v-if="isDataFetched"
                      :id=index
@@ -68,6 +67,15 @@
 
     ></tab-of-articles>
 
+
+    <div class="recommended-articles" v-if="recommendedArticles.length > 0">
+      <h3>Рекомендованные статьи</h3>
+      <ul>
+        <li v-for="(article, index) in recommendedArticles" :key="index">
+          <a :href="article.url" target="_blank">{{ article.title }}</a>
+        </li>
+      </ul>
+    </div>
 
     <!--    <div class="roundBlock">-->
     <!--      <div class="d-flex justify-content-between">-->
@@ -123,6 +131,7 @@ export default {
       arrayOfPatents: [],
       arrayOfPatentsCopy: [],
       showEditError: false,
+      recommendedArticles: [], // Массив для рекомендаций
 
       isDataFetched: false,
       resultOfSavingTables: false,
@@ -216,7 +225,14 @@ export default {
       
 
     },
-
+    async loadRecommendedArticles() {
+    try {
+      const response = await axios.get(this.IP + '/students/recommended-articles/' + localStorage.getItem("access_token"));
+      this.recommendedArticles = response.data; // Предполагается, что бэкенд возвращает массив объектов с `title` и `link`
+    } catch (e) {
+      console.log('Ошибка загрузки рекомендаций:', e);
+    }
+  },
 
     changeTabState(id){
 
@@ -581,9 +597,8 @@ export default {
   },
   async beforeMount() {
     await this.loadScientificWorks()
+    await this.loadRecommendedArticles()
     this.isDataFetched = true
-
-
   }
 }
 
@@ -599,6 +614,39 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.recommended-articles {
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.recommended-articles h3 {
+  font-size: 1.5rem;
+  color: #0055bb;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.recommended-articles ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recommended-articles li {
+  margin: 5px 0;
+}
+
+.recommended-articles a {
+  color: #0055bb;
+  text-decoration: none;
+}
+
+.recommended-articles a:hover {
+  text-decoration: underline;
 }
 
 .disabledText {
