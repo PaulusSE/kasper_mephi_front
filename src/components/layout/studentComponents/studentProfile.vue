@@ -4,100 +4,106 @@
       :result-of-sending = resultOfSending
   ></change-password-notification>
 
+  <confirm-change-email
+  :show="showChangeEmailConfirmation"
+  :current-email = this.emailCopy
+  :new-email = this.email
+  @confirmChangingEmail = confirmChangingEmail
+  @cancelChangingEmail = cancelChangingEmail
+  >
+  </confirm-change-email>
+
   <page-header></page-header>
 
-  <div class="mainPage">
-    <div class="container-fluid justify-content-between d-flex">
-      <nav>
-        <p class="mainText">Основная информация</p>
-      </nav>
+  <div class="mainPage pt-4">
+    <div class="roundBlock">
 
-<!--      <nav>-->
-<!--        &lt;!&ndash;todo решить с возможностью редактирования&ndash;&gt;-->
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditing">-->
-<!--          <p>Редактировать</p>-->
-<!--        </button>-->
+      <div class="container-fluid justify-content-between d-flex">
+        <nav>
+          <p class="mainText">Основная информация</p>
+        </nav>
 
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditing">-->
-<!--          <p>Отменить</p>-->
-<!--        </button>-->
+        <nav>
+          <button type="button" class="btn btn-primar btnedit"  @click="editProfile()" v-if="!stateOfEditingCommonInfo">
+            <p>Редактировать</p>
+          </button>
 
-<!--        <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditing && stateOfWriting">-->
-<!--          <p>Сохранить</p>-->
-<!--        </button>-->
-<!--      </nav>-->
+          <button type="button" class="btn btn-primar btnedit"  @click="cancelChange()" v-if="stateOfEditingCommonInfo">
+            <p>Отменить</p>
+          </button>
+
+          <button type="button" class="btn btn-primar btnedit"  @click="saveChange()" v-if="stateOfEditingCommonInfo && stateOfWritingCommonInfo">
+            <p>Сохранить</p>
+          </button>
+        </nav>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex">
+        <nav style="width: 100%;">
+          <label class="text ms-0">ФИО</label>
+          <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="fullName">
+        </nav>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex gap-3">
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Почта</label>
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="email">
+          </div>
+
+        </nav>
+        <nav style="width: 50%;">
+          <nav style="width: 100%;" >
+            <label class="text ms-0">Группа</label>
+            <select class="form-select blockStyles textInput p-0" :disabled="!stateOfEditingCommonInfo"   v-model="group" @click="inputEvent">
+              <option :value="group" v-for="group in numberOfGroups" >{{group.name}}</option>
+            </select>
+          </nav>
+
+        </nav>
+      </div>
+
+      <div class="container-fluid justify-content-between d-flex gap-3">
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
+            <input v-maska data-maska="+7 (###) ###-##-##" class="textInput" :disabled="!stateOfEditingCommonInfo" v-model="phoneNumber" @click="inputEvent">
+          </div>
+
+        </nav>
 
 
+        <nav style="width: 50%;">
+          <nav style="width: 100%;">
+            <label class="text ms-0">Категория</label>
+            <select class="form-select blockStyles textInput p-0" :disabled="!stateOfEditingCommonInfo" v-model="category" @click="inputEvent">
+              <option value="Бюджетный">Бюджетный</option>
+              <option value="Платный">Платный</option>
+            </select>
+          </nav>
+        </nav>
+      </div>
+
+
+
+      <div class="container-fluid justify-content-between d-flex gap-3">
+        <nav style="width: 50%">
+          <div style="width: 100%">
+            <label class="text ms-0">Срок обучения</label>
+            <input type="text" class="textInput" :disabled="!stateOfEditingCommonInfo" @input="inputEvent" v-model="studyingTime">
+          </div>
+        </nav>
+
+        <nav style="width: 50%" >
+          <div style="width: 100%">
+            <label class="text ms-0" >Дата начала обучения</label>
+            <input type="date" class="textInput" :disabled="!stateOfEditingCommonInfo" min="2000-01-01" @input="inputEvent" v-model="startDateStudying">
+          </div>
+        </nav>
+      </div>
     </div>
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
-      </nav>
-    </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 60%">
-        <div style="width: 100%">
-          <label class="text ms-0">Почта</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
-        </div>
-
-      </nav>
-      <nav style="width: 30%;">
-        <div style="width: 100%">
-          <label class="text ms-0" >Группа</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="group">
-        </div>
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Научная специальность</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="speciality">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between">
-      <nav style="width: 50%">
-        <div style="width: 100%">
-          <label class="text ms-0">Срок обучения</label>
-          <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="studyingTime">
-        </div>
-
-      </nav>
-      <nav style="width: 50%" >
-        <div style="width: 100%">
-          <label class="text ms-0" >Дата начала обучения</label>
-          <input type="text"  :disabled="!stateOfEditing" @input="inputEvent" v-model="startDateStudying">
-        </div>
-      </nav>
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
-      </nav>
-
-    </div>
-
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text ms-0">Приказ о зачислении</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="admissionOrder">
-      </nav>
-    </div>
 
   </div>
 
@@ -112,18 +118,18 @@
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <label class="text ms-0">Старый пароль</label>
-        <input type="password" @input="inputEvent" v-model="currentPassword">
+        <input type="password" class=textInput @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
         <label class="text ms-0">Новый пароль</label>
-        <input type="password" @input="inputEvent" v-model="newPassword">
+        <input type="password" class=textInput @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%" class="mb-1">
         <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
-          <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
+          <input type="password" class=textInput @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
@@ -146,25 +152,36 @@
 import store from "@/store/index.js";
 import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 import axios from "axios";
+import confirmChangeEmail from "@/components/layout/models/studentModels/confirmChangeEmail.vue";
 
 export default {
   name: "studentsMainPage",
-  components : {changePasswordNotification},
+  components : {changePasswordNotification, confirmChangeEmail},
   "changePasswordNotification" : changePasswordNotification,
+
   data(){
     return {
-      fullName: '1',
-      email: '2',
-      group: '3',
-      speciality: '4',
-      studyingTime: '5',
-      startDateStudying: '6',
-      department: '7',
-      faculty: '8',
-      admissionOrder: '9',
+      fullName: '',
+      email: '',
+      group: {
+        group_id : '',
+        name : '',
+      },
+      speciality: '',
+      studyingTime: '',
+      startDateStudying: '',
+      department: '',
+      faculty: '',
+      phoneNumber: '',
+      admissionOrder: '',
       fullNameCopy: "",
       emailCopy: '',
-      groupCopy: '',
+
+      groupCopy: {
+        group_id : '',
+        name : '',
+      },
+
       specialityCopy: '',
       studyingTimeCopy: '',
       startDateStudyingCopy: '',
@@ -175,16 +192,23 @@ export default {
       newPassword: '',
       newPasswordAgain: '',
       stateOfSending:false,
+      category: '',
+
       resultOfSending: '',
       errorText : '',
-      stateOfEditing: false,
-      stateOfWriting: false,
+      stateOfEditingCommonInfo: false,
+      stateOfWritingCommonInfo: false,
+      stateOfEditingDissertationInfo : false,
+      stateOfWritingDissertationInfo : false,
+      numberOfGroups : [],
+
+      showChangeEmailConfirmation : false,
     }
   },
 
   methods:{
     editProfile(){
-      this.stateOfEditing = !this.stateOfEditing
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
       this.fullNameCopy = this.fullName
       this.emailCopy = this.email
       this.groupCopy = this.group
@@ -194,14 +218,29 @@ export default {
       this.departmentCopy = this.department
       this.facultyCopy = this.faculty
       this.admissionOrderCopy = this.admissionOrder
-
     },
+
+    async getListOfGroups(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
+        )
+        this.numberOfGroups = response.data
+
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+
+
     inputEvent(){
       if (this.errorText !== '')
         this.errorText = ''
-      if(!this.stateOfWriting){
-        this.stateOfWriting = !this.stateOfWriting
+      if(!this.stateOfWritingCommonInfo){
+        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
       }
+
     },
     async changePassword(){
       if (this.currentPassword.length === 0 || this.newPassword.length === 0 || this.newPasswordAgain.length === 0){
@@ -216,7 +255,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorize/password/change/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,
@@ -236,9 +275,42 @@ export default {
       }, 5000);
     },
 
+    async getProfileData(){
+      try {
+        const response = await axios.get(this.IP +"/student/profile/" + localStorage.getItem("access_token"))
+        this.data = response.data
+  
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.email = this.data.email
+      this.speciality = this.data.specialization
+      this.startDateStudying = this.data.start_date.slice(0,10)
+      this.studyingTime = this.data.years
+      this.phoneNumber = this.data.phone
+      this.category = this.data.category
+
+      for (var group of this.numberOfGroups){
+        if (group.name === this.data.group_name){
+          this.group = group
+          return
+        }
+      }
+    },
+
+    confirmChangingEmail() {
+      this.showChangeEmailConfirmation = false
+    },
+
+    cancelChangingEmail(){
+      this.showChangeEmailConfirmation = false
+      this.email = this.emailCopy
+    },
 
     cancelChange(){
-      this.stateOfEditing = !this.stateOfEditing
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
       this.fullName = this.fullNameCopy
       this.email = this.emailCopy
       this.group = this.groupCopy
@@ -249,20 +321,50 @@ export default {
       this.faculty = this.facultyCopy
       this.admissionOrder = this.admissionOrderCopy
 
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+      if (this.stateOfWritingCommonInfo)
+        this.stateOfWritingCommonInfo = !this.stateOfWritingCommonInfo
 
     },
-    saveChange(){
-      this.stateOfEditing = !this.stateOfEditing
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
-    },
-    beforeMount() {
-      if (store.getters.getType !== "student"){
-        this.$router.push('/wrongAccess')
+    async saveChange(){
+      this.stateOfEditingCommonInfo = !this.stateOfEditingCommonInfo
+
+
+      if (this.email !== this.emailCopy)
+        this.showChangeEmailConfirmation = true
+
+
+      var tempDate = new Date(this.startDateStudying).toISOString()
+      
+      
+      try {
+        const response = await axios.post(this.IP +"/students/profile/" + localStorage.getItem("access_token"),
+            {
+              "full_name": this.fullName,
+              "email": this.email,
+              "group_id" : parseInt(this.group.group_id),
+              "phone" : this.phoneNumber,
+              "category" : this.category,
+              "years" : this.studyingTime,
+              "date" : tempDate
+            }
+        )
+
       }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
+
+
+  },
+  async beforeMount() {
+    if (store.getters.getType !== "student"){
+      this.$router.push('/wrongAccess')
     }
+    await this.getListOfGroups()
+    await this.getProfileData()
+
   }
 
 }
@@ -279,16 +381,48 @@ export default {
   padding: 0;
 }
 
+select {
+  background-color: white !important;
+  padding-left: 0.5rem !important;
+}
+
+.roundBlock {
+  border: solid 0.12em #DEDEDE;
+  border-radius: 20px;
+  width: 95% !important;
+  margin:auto;
+  margin-bottom: 2% !important;
+  padding: 0 1% 1%;;
+}
+
+.checkboxBlock{
+  padding-top: 0.8%;
+  padding-left: 0.8%;
+  padding-bottom: 2%;
+}
+
+.inputWidth {
+  width: 100%;
+}
+
+.blockStyles {
+  height: 2rem;
+  border-radius: 10px;
+  border-color: #7C7F86;
+  border-width: 2px 2px 2px 2px !important;
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  font-size: 0.8rem;
+}
 
 
 
 @media (min-width: 800px) {
   .loggining {
-    font-size: 1.2rem !important;
+    font-size: 1rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.5rem;
+    padding: 0.3rem;
     margin: 0 !important;
     color:white !important;
   }
@@ -297,13 +431,12 @@ export default {
     margin-top: 1rem;
     color:#7C7F86;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   header .head-top nav {
     margin-top: 2px;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
   header .head-top nav a {
@@ -332,7 +465,7 @@ export default {
   }
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -346,10 +479,9 @@ export default {
   }
 
   div nav {
-    margin-left: 1.5rem !important;
-    margin-right: 1.5rem !important;;
+
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
   div nav button {
@@ -373,13 +505,25 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
     font-size: medium;
   }
 
   div nav label {
     display: block;
     margin-left: 5%;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
   }
 
 
@@ -400,7 +544,7 @@ export default {
 
 @media (max-width: 800px) {
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.9rem !important;
     padding: 0.3rem;
     background-color: #0055bb !important;
     font-weight: 300 !important;
@@ -418,8 +562,7 @@ export default {
 
   header .head-top nav {
     margin-top: 2px;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
   header .head-top nav a {
@@ -463,8 +606,7 @@ export default {
   }
 
   div nav {
-    margin-left: 1.5rem !important;
-    margin-right: 1.5rem !important;;
+
     margin-bottom: 0.3rem;
   }
 
@@ -490,7 +632,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
+
     font-size: medium;
   }
 
@@ -518,11 +660,25 @@ export default {
     text-align: center;
     padding-top: 2%;
   }
+
+  .textInput {
+    font-size: 0.8rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.8rem !important;
     padding: 0.3rem;
     background-color: #0055bb !important;
     font-weight: 300 !important;
@@ -540,8 +696,7 @@ export default {
 
   header .head-top nav {
     margin-top: 0 !important;
-    margin-left: 20%;
-    margin-right: 20%;
+
   }
 
 
@@ -580,6 +735,19 @@ export default {
     padding-bottom: 1.5%;
   }
 
+  .textInput {
+    font-size: 0.6rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
 
   div nav button {
     background-color: white !important;
@@ -603,7 +771,6 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
     font-size: 0.8rem !important;
   }
 

@@ -1,9 +1,18 @@
 <template>
 
+  <notification-error
+  :show = showNotificationError
+  :message = this.errorMessage
+  >
+
+  </notification-error>
+
+
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id}} семестр</p>
+      <p class="headingSemester highLightActualSemester" v-if="this.actualSemester === this.id">{{id}} семестр (текущий)</p>
+      <p class="headingSemester" v-else>{{id}} семестр</p>
 
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -71,7 +80,7 @@
         </div>
 
         <div v-if="this.explanationaryNoteFile === '' " class="mt-2 ms-3">
-          <p class="loadTextState">Файл не выбран</p>
+          <p class="loadTextState">Файл не выбран (формат pdf)</p>
         </div>
 
         <div v-else class="ms-3 mt-2">
@@ -89,13 +98,13 @@
             <label for="file-input2">
               <img class='imgSize2' src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
             </label>
-            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester" @input="inputExplanatoryFile"/>
+            <input id="file-input2" type="file" accept="application/pdf" :disabled = "this.id !== this.actualSemester && !this.canEdit" @input="inputExplanatoryFile"/>
           </div>
         </div>
       </div>
 
       <div class="text-end">
-        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="this.id !== this.actualSemester">
+        <button class="sendFilesBtn" @click="sendFiles($event)" :disabled="(this.id !== this.actualSemester && !this.canEdit) || !this.isFileInputed">
           <div class="d-flex justify-content-around">
             <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
             <p class="loadText">
@@ -125,15 +134,13 @@ export default {
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+      isFileInputed: false,
     }
   },
-  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester'],
+  props : ['id','jobStatus', 'ids', 'stateOfSending', 'actualSemester', 'canEdit', 'buttonIsOpened'],
   methods : {
     buttonClicked() {
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+        this.$emit('changeTabState')
     },
     deleteExplanatoryNote() {
       this.explanationaryNoteFile = ''
@@ -170,6 +177,8 @@ export default {
       if ( event.target.files[0].type === 'application/pdf' ) {
         this.explanationaryNoteFile = event.target.files[0]
       }
+
+      this.isFileInputed = true
     },
 
     async sendFiles(){
@@ -183,12 +192,12 @@ export default {
       const obj = {
         'semester': this.id
       };
-      const json = JSON.stringify(obj);
-
+    
       let formData = new FormData();
       formData.append('upload', this.explanationaryNoteFile);
-      formData.append('semester', json);
-
+      formData.append('semester', this.id);
+      console.log("Файл загружен за семестр ")
+      console.log(this.id)
       var resultStatus = ''
       try {
         const response = await axios.post(this.IP +"/students/dissertation/file/" + localStorage.getItem("access_token"),formData,
@@ -202,7 +211,7 @@ export default {
 
       }
       catch (e) {
-        this.showWrongAnswerString = true;
+        console.log(e)
       }
 
 
@@ -240,6 +249,7 @@ export default {
   },
   beforeMount() {
     this.getFiles()
+    
 
   }
 }
@@ -256,6 +266,12 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 700! important;
+  font-size:1.3rem !important
 }
 
 @media (min-width: 800px){

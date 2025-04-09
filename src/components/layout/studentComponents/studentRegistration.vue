@@ -8,69 +8,79 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">ФИО</label>
+        <label class="text m-0">ФИО (полностью)</label>
         <input type="text" class="blockStyles" v-model="fullName" @input="inputEvent">
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
-      <nav style="width: 100%;">
-        <label class="text m-0">Почта</label>
-        <input type="text" class="blockStyles" v-model="email" @input="inputEvent">
-      </nav>
-    </div>
-
-
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Номер группы</label>
-        <input type="text" class="blockStyles" v-model="numberOfGroup" @input="inputEvent">
+        <label class="text m-0">Группа</label>
+        <select class="form-select blockStyles" v-model="groupID" @change ="inputEvent">
+          <option v-for="group in numberOfGroups" :value="group.group_id">{{group.name}}</option>
+        </select>
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Актуальный семестр</label>
-        <input type="text" class="blockStyles" v-model="actualSemester" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="actualSemester" @input="inputEvent">
+          <option v-for="number in this.maxSemester" >{{number}}</option>
+        </select>
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Специализация</label>
-        <input type="text" class="blockStyles" v-model="specialization" @input="inputEvent">
+        <select class="form-select blockStyles" v-model="specializationID" @input="inputEvent">
+          <option v-for="spec in this.arrayOfSpecialization" :value="spec.specialization_id">{{spec.name}}</option>
+        </select>
       </nav>
     </div>
-
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Приказ о зачислении</label>
-        <input type="text" class="blockStyles" v-model="enrollmentOrder" @input="inputEvent">
+        <label class="text m-0">Номер телефона +7 (xxx) xx-xx-xx</label>
+        <input v-maska data-maska="+7 (###) ###-##-##" class="blockStyles" v-model="phoneNumber" @click="inputEvent">
       </nav>
     </div>
+
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Дата начала обучения</label>
-        <input type="date" class="blockStyles" v-model="dateOfBeginning" @input="inputEvent" >
+        <input type="date" class="blockStyles" min="2000-01-01" v-model="dateOfBeginning" @input="inputEvent" >
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Длительность обучения (лет)</label>
-        <input type="text" class="blockStyles" v-model="numberOfYears" @input="inputEvent">
+        <label class="text m-0">Длительность обучения (количество семестров)</label>
+        <select class="form-select blockStyles" v-model="semesterID" @click="inputEvent">
+          <option v-for="element in numberOfSemesters" :value="element.amount" >{{element.amount}}</option>
+        </select>
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text m-0">Категория</label>
+        <select class="form-select blockStyles" v-model="category" @click="inputEvent">
+          <option value="Бюджетный">Бюджетный</option>
+          <option value="Платный">Платный</option>
+        </select>
       </nav>
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">Научный руководитель</label>
-        <select class="form-select blockStyles" v-model="teacher" @input="inputEvent">
-        <option v-for="teacher in arrayOfTeachers" >{{teacher.name}}</option>
-        <option >Нет в списке</option>
+        <select class="form-select blockStyles" v-model="teacherID" @input="inputEvent">
+        <option v-for="teacher in arrayOfTeachers" :value="teacher.supervisor_id">{{teacher.full_name}}</option>
+
         </select>
       </nav>
     </div>
@@ -110,16 +120,22 @@ export default {
     return {
       fullName: '',
       email: '',
-      teacher: '',
+      teacherID: '',
       errorMessage: '',
+      phoneNumber: '',
       department: '',
-      enrollmentOrder: '',
-      specialization: '',
+      specializationID: '',
       dateOfBeginning:'',
       actualSemester:'',
-      numberOfGroup: '',
-      numberOfYears: '',
-      arrayOfTeachers: []
+      groupID: '',
+      category: '',
+
+      maxSemester: '',
+      semesterID: '',
+      arrayOfTeachers: [],
+      arrayOfSpecialization : [],
+      numberOfGroups : [],
+      numberOfSemesters: [],
     }
   },
   methods: {
@@ -140,11 +156,6 @@ export default {
       }
 
 
-      if (!this.isEmailValid(this.email)){
-        this.errorMessage = "Некорректная почта"
-        return
-      }
-
 
       if (this.numberOfGroup === ''){
         this.errorMessage = 'Поле номер группы не должно быть пустым'
@@ -156,60 +167,59 @@ export default {
         return;
       }
 
-      if (this.specialization === ''){
+      if (this.specializationID === ''){
         this.errorMessage = "Поле специализация не должо быть пустым"
         return
       }
 
-      if (this.enrollmentOrder === ''){
-        this.errorMessage = 'Поле приказ о зачислении не должно быть пустым'
+      if (this.phoneNumber === ''){
+        this.errorMessage = 'Поле номер телефона не должно быть пустым'
         return;
       }
 
       if (this.dateOfBeginning === ''){
-        this.errorMessage = 'Поле дата о зачислении не должно быть пустым'
+        this.errorMessage = 'Поле дата начала обучения не должно быть пустым'
         return;
       }
 
-      if (this.numberOfYears === ''){
+      if (this.category === ''){
+        this.errorMessage = 'Поле категория  не должно быть пустым'
+        return;
+      }
+
+      if (this.semesterID === ''){
         this.errorMessage = 'Поле длительность обучения не должно быть пустым'
         return;
       }
 
-      if (this.teacher === ''){
+      if (this.teacherID === ''){
         this.errorMessage = 'Поле научный руководитель не должно быть пустым'
         return;
       }
-      if (await this.requestToRegister() === 200)
+      if (await this.requestToRegister() === 200){
         localStorage.setItem('registered', 'true')
         this.redirectToMain()
+      }
+
       this.errorMessage = 'Попробуйте еще раз'
     },
     async requestToRegister() {
-
-      var supervisorID = ''
-      for (var i = 0; i < this.arrayOfTeachers.length; i++) {
-        if (this.arrayOfTeachers[i].name === this.teacher){
-          supervisorID = this.arrayOfTeachers[i].supervisorID
-          break
-        }
-        }
-
       try {
-        const response = await axios.post(this.IP +"/students/registration/" + localStorage.getItem('access_token'),
+        const response = await axios.post(this.IP +"/authorize/registration/student/" + localStorage.getItem('access_token'),
             {
-              "fullName" : this.fullName,
-              "numberOfGroup" : this.numberOfGroup,
-              "email" : this.email,
-              "actualSemester" : parseInt(this.actualSemester),
-              "enrollmentOrder" : this.enrollmentOrder,
-              "startDate" : this.dateOfBeginning,
-              "specialization" : this.specialization,
-              "numberOfYears" : parseInt(this.numberOfYears),
-              "supervisorID" : supervisorID,
+              "full_name" : this.fullName,
+              "group_number" : this.groupID,
+              "specialization_id" : this.specializationID,
+              "actual_semester" : parseInt(this.actualSemester),
+              "start_date" : this.dateOfBeginning,
+              "phone" : this.phoneNumber,
+              "number_of_years" : this.semesterID,
+              "supervisor_id" : this.teacherID,
+              "phone_number" : this.phoneNumber,
+              "category" : this.category
             }
         )
-        console.log(response)
+
         return response.status
       }
 
@@ -220,23 +230,67 @@ export default {
     },
     inputEvent() {
       this.errorMessage = ''
+
     },
 
     redirectToMain() {
       this.$router.push('/')
     },
-    async getListOfTeachers() {
+    async getListOfTeachers() { //todo
       try {
-        const response = await axios.get(this.IP +"/students/supervisors/" + localStorage.getItem('access_token'),
+        const response = await axios.get(this.IP +"/student/supervisors/list/" + localStorage.getItem('access_token'),
         )
-        this.arrayOfTeachers = response.data.supervisors
-
+        this.arrayOfTeachers = response.data
         }
 
       catch (e) {
         this.showWrongAnswerString = true;
       }
     },
+
+    async getListOfGroups(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
+        )
+        this.numberOfGroups = response.data
+
+      }
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+    async getListOfSpecializations(){
+      try {
+        const response = await axios.get(this.IP +"/student/enum/specializations/" + localStorage.getItem('access_token'),
+        )
+        this.data = response.data
+        this.arrayOfSpecialization = this.data
+
+
+      }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+    },
+
+    async getListOfSemesters(){
+      try {
+        const response = await axios.get(this.IP +"/students/enum/amounts/" + localStorage.getItem('access_token'),
+        )
+        this.data = response.data
+        this.numberOfSemesters = this.data
+      }
+
+      catch (e) {
+        this.showWrongAnswerString = true;
+      }
+
+      this.numberOfSemesters.sort((a, b) => a.amount > b.amount ? 1 : -1);
+      this.maxSemester = this.numberOfSemesters[this.numberOfSemesters.length - 1].amount;
+
+    },
+
     async checkAuth() {
       try {
         const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
@@ -256,10 +310,10 @@ export default {
     },
   },
   async beforeMount() {
-    this.checkAuth()
-    if (localStorage.getItem('registered') !== 'false')
-      this.$router.push('/')
     await this.getListOfTeachers()
+    await this.getListOfGroups()
+    await this.getListOfSpecializations()
+    await this.getListOfSemesters()
 
   }
 }
@@ -269,7 +323,7 @@ export default {
 
 @media (min-width: 800px) {
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;

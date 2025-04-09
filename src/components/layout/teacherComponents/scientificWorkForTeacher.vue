@@ -6,14 +6,63 @@
       @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
       @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
       @btnProfileClicked="$emit('btnProfileClicked')"
+      @btnReportingClicked="$emit('btnReportingClicked')"
+      @updateStatusAllTeachersComponents = "$emit('updateStatusAllTeachersComponents')"
       :state-of-student-page = this.stateOfPage
+      :work-status = this.workStatus
+      :actual-semester = this.actualSemester
+      :supervisor-mark = this.supervisorMark
   ></header-of-student>
 
-    <tab-of-articles-for-teacher v-for="(articles,index) in arrayOfArticles"
+    <tab-of-articles-for-teacher v-for="(n, index) in this.actualSemester"
                      :id = index
                      :articles = this.arrayOfArticles[index]
+                     :reports = this.arrayOfReports[index]
+                     :projects = this.arrayOfProjects[index]
+                     :patents = this.arrayOfPatents[index]
+                     :actualSemester = this.actualSemester
+                     :buttonIsOpened = this.buttonTabArrayState[index]
+                      @changeTabState = changeTabState(index)
     ></tab-of-articles-for-teacher>
+
+    <div class="recommended-articles">
+      <h3>Рекомендованные статьи</h3>
+      <ul v-if="recommendedArticles.length > 0">
+        <li v-for="(article, index) in recommendedArticles" :key="index">
+          <a :href="article.url" target="_blank">{{ article.title }}</a>
+        </li>
+      </ul>
+      <p v-else-if="loadingRecommendations">Загрузка рекомендаций...</p>
+      <p v-else>Рекомендации недоступны.</p>
+    </div>
+
+
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Комментарий аспиранта к научной работе</p>-->
+<!--        </nav>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Предыдущий комментарий научного руководителя</p>-->
+<!--        </nav>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
+
   </div>
+
 
 </template>
 
@@ -26,80 +75,141 @@ export default {
   name: "scientificWorkForTeacher",
   data() {
     return {
-      arrayOfArticles: [
+      arrayOfArticles: [],
+      arrayOfReports : [],
+      arrayOfProjects:[],
+      arrayOfPatents: [],
 
-      ],
+      buttonTabArrayState: [],
+      recommendedArticles: [], // Рекомендованные статьи
+      loadingRecommendations: true, // Флаг загрузки
+      recommendationsError: false,  // Флаг ошибки
+
     }
   },
-  props : ['stateOfPage'],
+  props : ['stateOfPage', "actualSemester", "workStatus", "supervisorMark"],
   components : {
     "headerOfStudent" : headerOfStudent,
     "tabOfArticlesForTeacher" : tabOfArticlesForTeacher,
   },
   methods : {
     async loadScientificWorks() {
+
       try {
-        const response = await axios.put(this.IP +'/supervisor/students/scientific_works/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/supervisors/student/works/' + localStorage.getItem("access_token"),
             {
-              "studentID" : localStorage.getItem("studentID")
+              "student_id" : localStorage.getItem("studentID")
             }
         )
         this.data = await response.data;
-        this.fillArrayOfArticles(this.data.works, this.data.years * 2)
-        this.numberOfSemesters = this.data.years * 2
+
+
 
       }
       catch (e) {
         console.log(e)
       }
+
+      await this.fillDataForTables(this.data)
     },
+    async loadRecommendedArticles() {
+      this.loadingRecommendations = true; // Установить флаг загрузки
+      this.recommendationsError = false; // Сбросить ошибку
 
-    fillArrayOfArticles(data, numberOfSemesters){
+      try {
+        const response = await axios.get(this.IP + '/supervisors/recommended-articles/' + localStorage.getItem("access_token"));
+        this.recommendedArticles = response.data; // Загрузка данных
+      } catch (e) {
+        console.error('Ошибка загрузки рекомендаций:', e);
+        this.recommendationsError = true; // Установить флаг ошибки
+      } finally {
+        this.loadingRecommendations = false; // Завершить загрузку
+      }
+    },
+    changeTabState(id){
+    
+    var currentState = this.buttonTabArrayState[id]
+    this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
 
-      this.arrayOfArticles = Array(parseInt(numberOfSemesters))
-      for (var i = 0; i < this.arrayOfArticles.length; i++){
+    this.buttonTabArrayState[id] = !currentState
+},
+
+
+
+    async fillDataForTables(data){
+
+      this.arrayOfArticles = new Array(this.actualSemester)
+      this.arrayOfReports = new Array(this.actualSemester)
+      this.arrayOfProjects = new Array(this.actualSemester)
+      this.arrayOfPatents = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
         this.arrayOfArticles[i] = new Array()
+        this.arrayOfReports[i] = new Array()
+        this.arrayOfProjects[i] = new Array()
+        this.arrayOfPatents[i] = new Array()
       }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfArticles[0].push(data[i])
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+
+        try {
+          for (var j = 0; j<data[i].publications.length; j++){
+            if (data[i].publications[j].publication_id !== undefined){
+              var article = data[i].publications[j]
+              this.arrayOfArticles[semester - 1].push(article)
+            }
+          }
         }
-        if (data[i].semester === 2) {
-          this.arrayOfArticles[1].push(data[i])
-        }
-        if (data[i].semester === 3) {
-          this.arrayOfArticles[2].push(data[i])
-        }
-        if (data[i].semester === 4) {
-          this.arrayOfArticles[3].push(data[i])
-        }
-        if (data[i].semester === 5) {
-          this.arrayOfArticles[4].push(data[i])
-        }
-        if (data[i].semester === 6) {
-          this.arrayOfArticles[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfArticles[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfArticles[7].push(data[i])
+        catch (e){
+          console.log(e)
         }
 
+        try{
+          for (var j = 0; j<data[i].conferences.length; j++){
+            if (data[i].conferences[j].conference_id !== undefined){
+              var conf = data[i].conferences[j]
+              this.arrayOfReports[semester - 1].push(conf)
+            }
+          }
+        }
+        catch (e) {
+          console.log(e)
+        }
+
+        try {
+          for (var j = 0; j<data[i].patents.length; j++){
+            if (data[i].patents[j].patent_id !== undefined){
+              var patent = data[i].patents[j]
+              this.arrayOfPatents[semester - 1].push(patent)
+            }
+          }
+        }
+        catch (e) {
+          console.log(e)
+        }
+
+        try {
+          for (var j = 0; j<data[i].research_projects.length; j++){
+            if (data[i].research_projects[j].project_id !== undefined){
+              var project = data[i].research_projects[j]
+              this.arrayOfProjects[semester - 1].push(project)
+
+            }
+          }
+        }
+        catch (e) {
+          console.log(e)
+        }
       }
-      console.log(this.arrayOfArticles)
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
     },
-
-
   },
 
 
   async beforeMount() {
-    if (store.getters.getType === "student"){
-      this.$router.push('/wrongAccess')
-    }
     await this.loadScientificWorks()
+    await this.loadRecommendedArticles()
   }
 
 }
@@ -116,47 +226,66 @@ export default {
   box-sizing: border-box;
 }
 
+.recommended-articles {
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.recommended-articles h3 {
+  font-size: 1.5rem;
+  color: #0055bb;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.recommended-articles ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recommended-articles li {
+  margin: 5px 0;
+}
+
+.recommended-articles a {
+  color: #0055bb;
+  text-decoration: none;
+}
+
+.recommended-articles a:hover {
+  text-decoration: underline;
+}
+
+
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#6BDB6B !important;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #FF8000 !important
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
+.textResult4 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #0000CC !important;
+}
+
+
 @media (min-width: 800px) {
-  .bigBox{
-    width: 22%;
-  }
-
-  .smallBox{
-    width: 10.85%;
-
-  }
-
-
-
-
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 500;
-    font-size:17px;
-    text-align: center;
-
-  }
-
-
-
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 400;
-    text-align: center;
-    border-radius: 0 !important;
-    color:#000000;
-    background-color: white;
-    outline: none !important;
-
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -167,24 +296,19 @@ export default {
     padding: 0 1% 1%;
 
   }
-
-
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
+  .checkboxBlock{
+    padding-top: 0.8%;
+    padding-left: 0.8%;
+    padding-bottom: 2%;
   }
 
 
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-size:1.3rem;
     text-align: center;
+    font-weight: 400;
 
 
 
@@ -192,11 +316,7 @@ export default {
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
+
 
   ul p{
     color: #000000;
@@ -209,7 +329,7 @@ export default {
 
 
   .mainPage {
-    width: 50% !important;
+    width: 70% !important;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -224,46 +344,6 @@ export default {
 }
 
 @media (max-width: 800px) {
-  .bigBox{
-    width: 22%;
-  }
-
-  .smallBox{
-    width: 10.85%;
-
-  }
-
-
-
-
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 500;
-    font-size:17px;
-    text-align: center;
-
-  }
-
-
-
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 400;
-    text-align: center;
-    border-radius: 0 !important;
-    color:#000000;
-    background-color: white;
-    outline: none !important;
-
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -276,34 +356,13 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
-
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-size:1.1rem;
     text-align: center;
-
-
-
-
-
+    font-weight: 400;
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
 
   ul p{
     color: #000000;
@@ -331,46 +390,7 @@ export default {
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
-  .bigBox{
-    width: 22%;
-  }
 
-  .smallBox{
-    width: 10.85%;
-
-  }
-
-
-
-
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 500;
-    font-size:17px;
-    text-align: center;
-
-  }
-
-
-
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 400;
-    text-align: center;
-    border-radius: 0 !important;
-    color:#000000;
-    background-color: white;
-    outline: none !important;
-
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -383,28 +403,14 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-size:0.8rem;
     text-align: center;
-
-
-
-
-
+    font-weight: 400;
   }
+
 
   .editBtn2 {
     color:#0055BB;

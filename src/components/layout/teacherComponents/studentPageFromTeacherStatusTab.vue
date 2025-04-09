@@ -3,7 +3,14 @@
   <div class="roundBlock">
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id}} семестр</p>
+      <div class="d-flex gap-1" v-if="actualSemester !==id + 1">
+        <p class="headingSemester">{{id + 1}} семестр</p>
+      </div>
+
+      <div class="d-flex gap-1" v-else>
+        <p class="headingSemester highLightActualSemester">{{id + 1}} семестр</p>
+        <p class="headingSemester highLightActualSemester">(текущий)</p>
+      </div>
 
       <div v-if="buttonIsOpened" class="semestrButtonActive">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
@@ -19,34 +26,7 @@
     </div>
     <div v-if="buttonIsOpened">
 
-      <div class="roundBlock ">
-        <div class="d-flex justify-content-between mt-3">
-          <nav class="checkboxBlock justify-content-start col-3 ms-0">
-            <div class="mySelectedField2 gap-3 d-flex">
-              <p class="mainText">Статус</p>
-              <select class="form-select mySelectedField" id="inputGroupSelect02" @input="updateState" v-model="status" :class="{textResult1: status === 'Принято', textResult2: status === 'На доработку', textResult3: status === 'Не сдано'}">
-                <option  class="textResult">Выбрать статус</option>
-                <option  class="textResult1">Принято</option>
-                <option  class="textResult2">На доработку</option>
-                <option  class="textResult3">Не сдано</option>
-              </select>
-            </div>
-          </nav>
 
-
-        </div>
-
-<!--        <div class="roundBlock" style="height: 5em">-->
-<!--          <ul class="pt-1">-->
-<!--            <p style="font-family: 'Raleway', 'sans-serif';" class="loadText">Титульный лист</p>-->
-<!--          </ul>-->
-<!--          <ul class="selectedFileMessage" v-if="true">-->
-<!--            Файлы отсутствуют-->
-<!--          </ul>-->
-<!--          <ul class="selectedFileMessage" v-else>-->
-<!--            {{}}-->
-<!--          </ul>-->
-<!--        </div>-->
 
         <div class="roundBlock">
           <ul>
@@ -60,9 +40,13 @@
           </ul>
         </div>
 
-      </div>
+
+
+
 
     </div>
+
+
 
 
   </div>
@@ -77,28 +61,50 @@ import utf8 from "utf8"
 
 export default {
   name: "studentPageFromTeacherStatusTab",
-  props : ["id", "jobStatus"],
+  props : ["id", "actualSemester", "feedback", "status", "buttonIsOpened"],
   data()  {
     return {
-      buttonIsOpened : false,
-      status : '',
+
       explanationaryNoteFile : '',
       tittlePageID : '',
       explanationaryNoteFilename : '',
+      editingReview : false,
+      statusOfJob : {
+        'todo': 'На доработку',
+        'failed' : 'Не сдано',
+        'passed' : 'Принято',
+        'empty': ''
+      },
     }
   },
   methods : {
     buttonClicked() {
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
+    },
+    async saveReview(){
+      this.editingReview = !this.editingReview
+
+      try {
+        const response = await axios.post(this.IP +"/supervisor/students/feedback/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID"),
+              "feedback" : this.feedback.feedback
+            }
+        )
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
     },
     async getFiles() {
 
-      console.log(localStorage.getItem("studentId"))
+
       try {
-        const response = await axios.put(this.IP +"/supervisor/students/dissertation/" + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +"/supervisors/student/dissertation/file/" + localStorage.getItem("access_token"),
             {
-              "semester" : this.id,
-              "studentID" : localStorage.getItem("studentID")
+              "semester" : this.id + 1,
+              "student_id" : localStorage.getItem("studentID")
             },
             {
               responseType: 'blob',
@@ -141,16 +147,35 @@ export default {
       }, 100);
 
 
-    }
+    },
+    buttonEditReview() {
+      this.editingReview = !this.editingReview
+    },
   },
   beforeMount() {
+
     this.getFiles()
-    this.status = this.jobStatus
+
   }
 }
 </script>
 
 <style scoped>
+
+.editBtn {
+  color:#0055BB !important;
+  border: 0 !important;
+  margin-top: 15% !important;
+  margin-right: 1.5rem !important;
+  background-color: white;
+}
+
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 800! important;
+  font-size:1.3rem !important
+}
+
 
 @media (min-width: 800px) {
   .semestrButtonActive {

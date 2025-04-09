@@ -7,58 +7,115 @@
       :result-of-sending = resultOfSending
   ></change-password-notification>
 
+  <confirm-change-email
+  :show="showChangeEmailConfirmation"
+  :current-email = this.emailCopy
+  :new-email = this.email
+  @confirmChangingEmail = confirmChangingEmail
+  @cancelChangingEmail = cancelChangingEmail
+  >
+  </confirm-change-email>
+
+
+
   <div class="mainPage">
     <div class="container-fluid justify-content-between d-flex">
       <nav>
         <p class="mainText">Основная информация</p>
       </nav>
 
-<!--      <nav>-->
-<!--        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>-->
-<!--        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>-->
-<!--        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>-->
-<!--      </nav>-->
+      <nav>
+        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>
+        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>
+        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>
+      </nav>
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">ФИО</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="fullName">
       </nav>
     </div>
 
-    <div class="container-fluid justify-content-between d-flex">
+    <div class="container-fluid justify-content-between d-flex" v-if="this.showEmailField">
       <nav style="width: 100%;">
         <label class="text ms-0">Почта</label>
-        <input type="text" class="col-12" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="email">
       </nav>
 
     </div>
+
+    <div class="container-fluid justify-content-between d-flex" v-if="!stateOfEditing">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Ученая степень</label>
+        <input  disabled type="text" class="textInput"  @input="inputEvent" v-model="academicDegree">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex" v-else>
+      <nav style="width: 100%;">
+        <label class="text m-0">Ученая степень</label>
+        <select class="form-select blockStyles" v-model="academicDegree" @click="inputEvent">
+          <option value="д.т.н.">д.т.н.</option>
+          <option value="д.ф.м.н.">д.ф.м.н.</option>
+          <option value="Ph.D">Ph.D</option>
+          <option value="к.т.н.">к.т.н.</option>
+          <option value="к.ф.-м.н."> к.ф.-м.н.</option>
+        </select>
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex" v-if="!stateOfEditing">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input  disabled type="text" class="textInput"  @input="inputEvent" v-model="rank">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex" v-else>
+      <nav style="width: 100%;">
+        <label class="text m-0">Звание</label>
+        <select class="form-select blockStyles" v-model="rank" @click="inputEvent">
+          <option value="Доцент">Доцент</option>
+          <option value="Профессор">Профессор</option>
+        </select>
+      </nav>
+    </div>
+    
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Ученая степень</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
+        <label class="text ms-0">Должность</label>
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="position">
       </nav>
-
     </div>
-
 
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text ms-0">Кафедра</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="department">
       </nav>
 
     </div>
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
-        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
+        <label class="text ms-0">Факультет (институт)</label>
+        <input type="text" class="textInput" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
+        <input v-maska data-maska="+7 (###) ###-##-##" class="textInput" :disabled="!stateOfEditing" v-model="phoneNumber" @click="inputEvent">
       </nav>
 
     </div>
+
+
+    
 
 
   </div>
@@ -74,18 +131,18 @@
     <div class="container-fluid justify-content-between">
       <nav style="width: 50%">
         <label class="text ms-0">Старый пароль</label>
-        <input type="password" @input="inputEvent" v-model="currentPassword">
+        <input type="password" class="textInput" @input="inputEvent" v-model="currentPassword">
       </nav>
 
       <nav style="width: 50%">
         <label class="text ms-0">Новый пароль</label>
-        <input type="password" @input="inputEvent" v-model="newPassword">
+        <input type="password" class="textInput" @input="inputEvent" v-model="newPassword">
       </nav>
 
       <nav style="width: 100%">
         <label class="text ms-0">Подтверждение нового пароля</label>
         <div class="d-flex m-0 justify-content gap-4">
-          <input type="password" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
+          <input type="password" class="textInput" @input="inputEvent" v-model="newPasswordAgain" style="width: 50%">
           <button type="button" class="loggining btn btn-primary btn-lg my-1" @click="changePassword()">Сменить</button>
         </div>
       </nav>
@@ -107,9 +164,13 @@
 import store from "@/store/index.js";
 import changePasswordNotification from "@/components/layout/notifications/changePasswordNotification.vue";
 import axios from "axios";
+import confirmChangeEmail from "@/components/layout/models/studentModels/confirmChangeEmail.vue";
+
+
+
 export default {
   name: "teacherProfile",
-  components : {changePasswordNotification},
+  components : {changePasswordNotification, confirmChangeEmail},
   "changePasswordNotification" : changePasswordNotification,
   data() {
     return {
@@ -124,13 +185,24 @@ export default {
       departmentCopy: '',
       facultyCopy: '',
       stateOfEditing: false,
-      stateOfWriting: false,
+
       currentPassword: '',
       newPassword: '',
       newPasswordAgain: '',
       stateOfSending:false,
       resultOfSending: '',
       errorText : '',
+      phoneNumber : '',
+      phoneNumberCopy : '',
+
+      showEmailField: true,
+      showChangeEmailConfirmation : false,
+
+      rank: '',
+      position: '',
+
+      rankCopy:'',
+      positionCopy: '',
     }
   },
   methods : {
@@ -142,14 +214,64 @@ export default {
       this.departmentCopy = this.department
       this.facultyCopy = this.faculty
       this.academicDegreeCopy = this.academicDegree
+      this.phoneNumberCopy = this.phoneNumber
+      this.rankCopy = this.rank
+      this.positionCopy = this.position
     },
+
+checkPhoneNumber() {
+  var element = document.getElementById('phone');
+var maskOptions = {
+    mask: '+7(000)000-00-00',
+    lazy: false
+} 
+var mask = new IMask(element, maskOptions);
+
+var element2 = document.getElementById('email');
+var maskOptions2 = {    
+    mask:function (value) {
+                if(/^[a-z0-9_\.-]+$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}\.$/.test(value))
+                    return true;
+                if(/^[a-z0-9_\.-]+@[a-z0-9-]+\.[a-z]{1,4}\.[a-z]{1,4}$/.test(value))
+                    return true;
+                return false;
+                    },
+    lazy: false
+} 
+var mask2 = new IMask(element2, maskOptions2);
+
+var element3 = document.getElementById('card');
+var maskOptions3 = {
+    mask: '0000 0000 0000 0000',
+    lazy: false
+} 
+var mask3 = new IMask(element3, maskOptions3);
+},
+
     inputEvent(){
       if (this.errorText !== '')
         this.errorText = ''
-      if(!this.stateOfWriting){
-        this.stateOfWriting = !this.stateOfWriting
-      }
     },
+
+    confirmChangingEmail() {
+      this.showChangeEmailConfirmation = false
+    },
+
+    cancelChangingEmail(){
+      this.showChangeEmailConfirmation = false
+      this.email = this.emailCopy
+    },
+
 
     async changePassword(){
       if (this.currentPassword.length === 0 || this.newPassword.length === 0 || this.newPasswordAgain.length === 0){
@@ -164,7 +286,7 @@ export default {
 
       var resultState = ''
       try {
-        const response = await axios.post(this.IP +"/authorization/change_password/" + localStorage.getItem("access_token"),
+        const response = await axios.post(this.IP +"/authorize/password/change/" + localStorage.getItem("access_token"),
             {
               "oldPassword": this.currentPassword,
               "newPassword": this.newPassword,
@@ -191,21 +313,67 @@ export default {
       this.department = this.departmentCopy
       this.faculty = this.facultyCopy
       this.academicDegree = this.academicDegreeCopy
+      this.phoneNumber = this.phoneNumberCopy
 
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+
 
     },
-    saveChange(){
+    async saveChange(){
       this.stateOfEditing = !this.stateOfEditing
-      if (this.stateOfWriting)
-        this.stateOfWriting = !this.stateOfWriting
+
+      if (this.email !== this.emailCopy)
+        this.showChangeEmailConfirmation = true
+      
+
+      try {
+        const response = await axios.post(this.IP +"/authorize/registration/supervisor/" + localStorage.getItem("access_token"), {
+          "degree": this.academicDegree,
+          "department": this.department,
+          "faculty": this.faculty,
+          "full_name": this.fullName,
+          "phone": this.phoneNumber,
+          "email" : this.email,
+          "rank" : this.rank,
+          "position":this.position
+        })
+
+        
+        if (response.status === 200){
+          if (localStorage.getItem('registered') === 'false')
+          localStorage.setItem('registered', true)
+        }
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+    },
+
+    async getProfileData(){
+      try {
+        const response = await axios.get(this.IP +"/supervisors/profile/" + localStorage.getItem("access_token"))
+        this.data = response.data
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.academicDegree = this.data.degree
+      this.department = this.data.department
+      this.faculty = this.data.faculty
+      this.email = this.data.email
+      this.phoneNumber = this.data.phone
+      this.rank = this.data.rank
+      this.position = this.data.position
     }
   },
   beforeMount() {
     if (store.getters.getType !== "supervisor"){
       this.$router.push('/wrongAccess')
     }
+    this.getProfileData()
+    this.showEmailField = localStorage.getItem('registered') === 'true'
   }
 }
 </script>
@@ -230,6 +398,29 @@ export default {
     color:#7C7F86;
     font-weight: 400;
     font-size: 1.2rem;
+  }
+
+  .textInput {
+    font-size: 1rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 
@@ -263,7 +454,7 @@ export default {
   }
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -280,7 +471,7 @@ export default {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     margin-bottom: 1%;
-    height: 5em;
+
   }
 
   .btnedit{
@@ -305,7 +496,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 3em;
+
     font-size: medium;
     padding-left: 0.5rem;
   }
@@ -323,12 +514,12 @@ export default {
   }
 
   .loggining {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
 
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.5 ;
+    padding: 0.3rem ;
     margin: 0 !important;
     color:white !important;
   }
@@ -349,6 +540,16 @@ export default {
     color:#7C7F86;
     font-weight: 400;
     font-size: 1rem;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 
@@ -423,7 +624,6 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2em;
     font-size: medium;
     padding-left: 0.5rem;
   }
@@ -440,13 +640,27 @@ export default {
     font-weight: 450;
   }
 
+  textInput {
+    font-size: 0.9rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
+  }
+
+
   .loggining {
-    font-size: 1.1rem !important;
+    font-size: 0.8rem !important;
 
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.25rem;
+    padding: 0.2rem;
     margin: 0 !important;
     color:white !important;
   }
@@ -473,6 +687,16 @@ export default {
 
     margin-left: 20%;
     margin-right: 20%;
+  }
+
+  .blockStyles {
+    height: 2rem;
+    margin: 0 !important;
+
+    border-radius: 10px;
+    border-color: #7C7F86;
+    border-width: 2px 2px 2px 2px !important;
+    padding: 0 0 0 0.5rem;
   }
 
 
@@ -537,13 +761,26 @@ export default {
   }
 
   .loggining {
-    font-size: 1rem !important;
+    font-size: 0.7rem !important;
     background-color: #0055bb !important;
     font-weight: 300 !important;
     border-radius: 0.7em !important;
-    padding: 0.25rem;
+    padding: 0.2rem;
     margin: 0 !important;
     color:white !important;
+  }
+
+  textInput {
+    font-size: 0.7rem;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    font-weight: 400;
+    border-width: 2px 2px 2px 2px !important;
+    border-color: #7c7f86 !important;
+    height: 2rem !important;
+    padding-left:0.5rem;
   }
 
   .wrongPassword {

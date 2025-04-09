@@ -7,13 +7,50 @@
     @btnScientificWorkClicked="$emit('btnScientificWorkClicked')"
     @btnTeachingLoadClicked="$emit('btnTeachingLoadClicked')"
     @btnProfileClicked="$emit('btnProfileClicked')"
+    @btnReportingClicked="$emit('btnReportingClicked')"
+    @updateStatusAllTeachersComponents = "$emit('updateStatusAllTeachersComponents')"
     :state-of-student-page = this.stateOfPage
+    :work-status = this.workStatus
+    :actual-semester = this.actualSemester
+    :supervisor-mark = this.supervisorMark
+
 ></header-of-student>
 
-    <teaching-load-table-for-teacher v-for="(elements,index) in arrayOfTeachingLoadByPeriod "
-                         :id = index
-                         :elements = elements
-    ></teaching-load-table-for-teacher>
+
+
+<teaching-load-table-for-teacher v-for="(n, index) in this.actualSemester"
+                                 :id = index
+                                 :classroom-work="array_classroom_load[index]"
+                                 :individual-work="array_individual_students_load[index]"
+                                 :other-work="array_additional_load[index]"
+                                 :actualSemester = this.actualSemester
+                                 :buttonIsOpened = this.buttonTabArrayState[index]
+                                  @changeTabState = changeTabState(index)
+></teaching-load-table-for-teacher>
+
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Комментарий аспиранта к педагогичкской нагрузке</p>-->
+<!--        </nav>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <textarea  disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="roundBlock">-->
+<!--      <div class="d-flex justify-content-between">-->
+<!--        <nav class="checkboxBlock">-->
+<!--          <p class="mainText">Предыдущий комментарий научного руководителя</p>-->
+<!--        </nav>-->
+<!--      </div>-->
+
+<!--      <div>-->
+<!--        <textarea   disabled rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
 
@@ -28,76 +65,107 @@ import axios from "axios";
 import store from "@/store/index.js";
 export default {
   name: "teachingLoadForTeacher",
-  props : ['stateOfPage'],
+  props : ['stateOfPage', "actualSemester", "workStatus", "supervisorMark"],
   components : {
     "headerOfStudent" : headerOfStudent,
     "teachingLoadTableForTeacher" : teachingLoadTableForTeacher
   },
   data() {
     return {
-      arrayOfTeachingLoadByPeriod:[],
-      numberOfSemesters : '',
+      array_classroom_load:[],
+      array_individual_students_load: [],
+      array_additional_load: [],
+
+      buttonTabArrayState: [],
+
     }
   },
   methods : {
-    fillArrayOfTeachingLoad(data, numberOfSemesters) {
 
-      this.arrayOfTeachingLoadByPeriod = Array(parseInt(numberOfSemesters))
+    async fillDataForTables(data){
 
-      for (var i = 0; i < this.arrayOfTeachingLoadByPeriod.length; i++){
-        this.arrayOfTeachingLoadByPeriod[i] = new Array()
+      this.array_classroom_load = new Array(this.actualSemester)
+      this.array_individual_students_load = new Array(this.actualSemester)
+      this.array_additional_load = new Array(this.actualSemester)
+
+      for (var i = 0; i < this.actualSemester; i++){
+        this.array_classroom_load[i] = new Array()
+        this.array_individual_students_load[i] = new Array()
+        this.array_additional_load[i] = new Array()
       }
 
-      for (var i = 0; i < data.length; i++){
-        if (data[i].semester === 1) {
-          this.arrayOfTeachingLoadByPeriod[0].push(data[i])
+
+
+      for (var i = 0; i<data.length; i++){
+        var semester = data[i].semester
+
+        try {
+          for (var j = 0; j < data[i].classroom_loads.length; j++){
+            var class_load = data[i].classroom_loads[j]
+            console.log(this.array_classroom_load[0])
+            this.array_classroom_load[semester - 1].push(class_load)
+          }
         }
-        if (data[i].semester === 2) {
-          this.arrayOfTeachingLoadByPeriod[1].push(data[i])
+        catch (e) {
+          console.log(e)
         }
-        if (data[i].semester === 3) {
-          this.arrayOfTeachingLoadByPeriod[2].push(data[i])
+
+        try {
+          for (var j = 0; j < data[i].individual_students_loads.length; j++){
+            var individual_load = data[i].individual_students_loads[j]
+            this.array_individual_students_load[semester-1].push(individual_load)
+          }
         }
-        if (data[i].semester === 4) {
-          this.arrayOfTeachingLoadByPeriod[3].push(data[i])
+        catch (e) {
+          console.log(e)
         }
-        if (data[i].semester === 5) {
-          this.arrayOfTeachingLoadByPeriod[4].push(data[i])
+
+        try {
+          for (var j = 0; j < data[i].additional_loads.length; j++){
+            var add_load = data[i].additional_loads[j]
+            this.array_additional_load[semester-1].push(add_load)
+          }
         }
-        if (data[i].semester === 6) {
-          this.arrayOfTeachingLoadByPeriod[5].push(data[i])
-        }
-        if (data[i].semester === 7) {
-          this.arrayOfTeachingLoadByPeriod[6].push(data[i])
-        }
-        if (data[i].semester === 8) {
-          this.arrayOfTeachingLoadByPeriod[7].push(data[i])
+        catch (e) {
+          console.log(e)
         }
       }
+      this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
     },
+
+    changeTabState(id){
+    
+    var currentState = this.buttonTabArrayState[id]
+    this.buttonTabArrayState = Array.from({ length: this.actualSemester }, (val, index) => false);
+
+    this.buttonTabArrayState[id] = !currentState
+},
+
+
     async loadTeachingLoad() {
       try {
-        const response = await axios.put(this.IP +'/supervisor/students/teaching_load/' + localStorage.getItem("access_token"),
+        const response = await axios.put(this.IP +'/supervisors/student/load/' + localStorage.getItem("access_token"),
             {
-              'studentID' : localStorage.getItem('studentID')
+              'student_id' : localStorage.getItem('studentID')
             }
         )
         this.data = await response.data;
-
+        console.log(this.data)
 
       }
       catch (e) {
         console.log(e)
       }
-      this.fillArrayOfTeachingLoad(this.data.array, this.data.years * 2)
-      this.numberOfSemesters = this.data.years * 2
-    }
+
+      await this.fillDataForTables(this.data)
+
+    },
+
   },
   async beforeMount() {
-    if (store.getters.getType === "student"){
-      this.$router.push('/wrongAccess')
-    }
     await this.loadTeachingLoad()
+
+
   },
 
 }
@@ -111,32 +179,38 @@ export default {
   box-sizing: border-box;
 }
 
+.textResult1 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#6BDB6B !important;
+}
+
+.textResult2 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #FF8000 !important
+}
+
+.textResult3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color:#FF3333 !important;
+}
+
+.textResult4 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 550;
+  color: #0000CC !important;
+}
+
 
 @media (min-width: 800px){
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
-
-  }
-
 
 
   .checkboxBlock{
     padding-top: 0.8%;
     padding-left: 0.8%;
     padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
   }
 
   .roundBlock {
@@ -150,31 +224,16 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:1.3rem;
     text-align: center;
 
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
 
   ul p{
     color: #000000;
@@ -188,7 +247,7 @@ export default {
 
 
   .mainPage {
-    width: 50% !important;
+    width: 70% !important;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -203,31 +262,7 @@ export default {
 }
 
 @media (max-width: 800px) {
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
 
-  }
-
-
-
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -240,31 +275,17 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:1.1rem;
     text-align: center;
 
 
   }
 
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
-  }
+
 
   ul p{
     color: #000000;
@@ -293,31 +314,9 @@ export default {
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
-  .textTableUp{
-    color: #7C7F86;
-    font-family: "Raleway", sans-serif;
-    font-weight: 400;
-    font-size:20px;
-    text-align: center;
-
-  }
 
 
 
-  .checkboxBlock{
-    padding-top: 0.8%;
-    padding-left: 0.8%;
-    padding-bottom: 2%;
-  }
-
-  .inputBox {
-    border: 0 !important;
-    font-weight: 450;
-    text-align: center;
-    border-radius: 0 !important;
-    outline: none !important;
-
-  }
 
   .roundBlock {
     border: solid 0.12em #DEDEDE;
@@ -330,30 +329,14 @@ export default {
   }
 
 
-  .underline {
-    border-bottom: solid 0.12em #DEDEDE;
-
-  }
-
-  .rightLine {
-    border-right:  solid 0.12em #DEDEDE !important;
-  }
-
-
 
   .mainText{
     color:#7C7F86;
-    font-weight: 300;
-    font-size:30px;
+    font-weight: 400;
+    font-size:0.8rem;
     text-align: center;
 
 
-  }
-
-  .editBtn2 {
-    color:#0055BB;
-    border: 0;
-    background-color: white;
   }
 
   ul p{

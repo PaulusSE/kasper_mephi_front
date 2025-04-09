@@ -28,6 +28,7 @@
              :state-of-admin-page = stateOfAdminPage
   ></report>
 
+
 </template>
 
 <script>
@@ -55,7 +56,9 @@ export default {
     }
   },
   async beforeMount() {
-
+    // if (store.getters.getType !== "admin"){
+    //   this.$router.push('/wrongAccess')
+    // }
   }
 }
 </script>

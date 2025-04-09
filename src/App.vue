@@ -9,8 +9,10 @@ export default {
     PageNotFound,
     "authorization" :authorization,
     "page-not-found" : PageNotFound
+  },
+  
   }
-}
+  
 </script>
 
 

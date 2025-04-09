@@ -3,13 +3,26 @@
 
   </page-header>
 
+  <div class="mainPageContainer mt-2">
+    <p class="textHeader">
+      Аспирант {{this.userName}}  {{this.group}}
+    </p>
+  </div>
+
   <div>
     <student-page-from-teacher v-if="stateOfPage === 1"
+
                                :state-of-page = this.stateOfPage
                                @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
+                               @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               @updateStatusAllTeachersComponents = updateStatus()
+
+                               :actual-semester = actualSemester
+                               :work-status = workStatusForTeacher
+                               :supervisor-mark = supervisorMark
 
     ></student-page-from-teacher>
     <scientific-work-for-teacher v-if="stateOfPage === 2"
@@ -18,12 +31,24 @@
                                  @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                  @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                  @btnProfileClicked="buttonManageStudentPageClicked(4)"
+                                 @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                                 @updateStatusAllTeachersComponents = updateStatus()
+
+                                 :actual-semester = actualSemester
+                                 :work-status = workStatusForTeacher
+                                 :supervisor-mark = this.supervisorMark
     ></scientific-work-for-teacher>
     <teaching-load-for-teacher v-if="stateOfPage === 3"
                                :state-of-page = this.stateOfPage
                                @btnDissertationClicked="buttonManageStudentPageClicked(1)"
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
+                               @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               @updateStatusAllTeachersComponents = updateStatus()
+
+                               :actual-semester = actualSemester
+                               :work-status = workStatusForTeacher
+                               :supervisor-mark = this.supervisorMark
     ></teaching-load-for-teacher>
     <student-profile-for-admin v-if="stateOfPage === 4"
                                :state-of-page = this.stateOfPage
@@ -31,7 +56,17 @@
                                @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
                                @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
                                @btnProfileClicked="buttonManageStudentPageClicked(4)"
+                               @btnReportingClicked="buttonManageStudentPageClicked(5)"
     ></student-profile-for-admin>
+    <report v-if="stateOfPage === 5"
+                               :stateOfStudentPage = this.stateOfPage
+                               @btnDissertationClicked="buttonManageStudentPageClicked(1)"
+                               @btnScientificWorkClicked="buttonManageStudentPageClicked(2)"
+                               @btnTeachingLoadClicked="buttonManageStudentPageClicked(3)"
+                               @btnProfileClicked="buttonManageStudentPageClicked(4)"
+                               @btnReportingClicked="buttonManageStudentPageClicked(5)"
+                               :actual-semester = actualSemester
+    ></report>
   </div>
 
 
@@ -46,24 +81,34 @@ import headerOfStudent from "@/components/layout/studentComponents/headerOfStude
 import scientificWorkForTeacher from "@/components/layout/teacherComponents/scientificWorkForTeacher.vue";
 import teachingLoadForTeacher from "@/components/layout/teacherComponents/teachingLoadForTeacher.vue";
 import studentProfileForAdmin from "@/components/layout/adminComponents/studentProfileForAdmin.vue";
+import report from "@/components/layout/studentComponents/report.vue";
 import store from "@/store/index.js";
 
 import {h} from "vue";
 import axios from "axios";
+import Report from "@/components/layout/adminComponents/report.vue";
 export default {
   name: "studentPageMainComponent",
   components : {
+    Report,
     "studentPageFromTeacher" : studentPageFromTeacher,
     "pageHeader" : header,
     "headerOfStudent" : headerOfStudent,
     "scientificWorkForTeacher" : scientificWorkForTeacher,
     "teachingLoadForTeacher" : teachingLoadForTeacher,
-    "studentProfileForAdmin" : studentProfileForAdmin
+    "studentProfileForAdmin" : studentProfileForAdmin,
+    "report" : report
   },
   data() {
     return {
       stateOfPage : 1,
       userType : '',
+      userName: '',
+      group: '',
+      actualSemester : '',
+      workStatusForTeacher : 'in progress',
+      supervisorMark: '',
+
     }
   },
   methods : {
@@ -72,12 +117,12 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
-
+        const response = await axios.get(this.IP +"/authorize/token/check/" + localStorage.getItem("access_token"))
         if (response.status === 200){
-          this.$store.dispatch("updateUserType", response.data.userType)
-          localStorage.setItem("userType", response.data.userType)
-          this.type = response.data.userType
+          this.$store.dispatch("updateUserType", response.data.user_type)
+          localStorage.setItem("userType", response.data.user_type)
+          localStorage.setItem("registered", response.data.registered)
+          this.type = response.data.user_type
         }
         else {
           this.$router.push('/auth')
@@ -88,16 +133,71 @@ export default {
         this.$router.push('/auth')
       }
     },
+
+    async getStudentName() {
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/info/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID")
+            }
+        )
+        this.data = response.data
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.userName = this.data.full_name
+      this.group = this.data.group_name
+      this.actualSemester = this.data.actual_semester
+      this.workStatusForTeacher = this.data.status
+    },
+
+    async getStudentMark() {
+
+      try {
+        const response = await axios.put(this.IP +"/supervisors/student/marks/" + localStorage.getItem("access_token"), {
+              "student_id" : localStorage.getItem("studentID")
+            }
+        )
+        this.data = response.data
+      }
+      catch (e) {
+        console.log(e)
+      }
+
+      try{
+        this.data.supervisor_marks.sort((a, b) => a.semester < b.semester ? 1 : -1);
+      }
+      catch (e){
+        console.log(e)
+      }
+
+      try{
+        this.supervisorMark = this.data.supervisor_marks[0].mark
+      }
+      catch (e){
+        console.log(e)
+      }
+
+    },
+
+    async updateStatus(){
+      await this.getStudentMark()
+      await this.getStudentName()
+    }
+
   },
   async beforeMount() {
-    if (localStorage.getItem('registered') === 'false')
-      this.$router.push('/registration')
-
     await this.checkAuth()
-
-    if (!(store.getters.getType === 'supervisor' || store.getters.getType === 'admin')){
-      this.$router.push("/wrongAccess")
+    if (localStorage.getItem("userType") === "student"){
+      this.$router.push('/wrongAccess')
     }
+    await this.getStudentMark()
+    await this.getStudentName()
+
+
+
+
+
 
 
   },
@@ -109,5 +209,50 @@ export default {
 </script>
 
 <style scoped>
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+@media (min-width: 800px) {
+
+  .mainPageContainer{
+    width: 70%;
+    margin: auto;
+  }
+
+  .textHeader{
+    color:#7C7F86;
+    font-size:1.5rem;
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 800px) {
+  .mainPageContainer{
+    width: 80%;
+    margin: auto;
+  }
+  .textHeader{
+    color:#7C7F86;
+    font-size:1.3rem;
+    font-weight: 400;
+  }
+
+}
+
+@media (pointer: coarse) and (max-width: 400px) {
+  .mainPageContainer{
+    width: 90%;
+    margin: auto;
+  }
+  .textHeader{
+    color:#7C7F86;
+    font-size:1.1rem;
+    font-weight: 400;
+  }
+
+}
 
 </style>

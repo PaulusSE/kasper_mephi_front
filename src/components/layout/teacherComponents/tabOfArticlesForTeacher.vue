@@ -1,13 +1,13 @@
 <template>
 
-
-
-
   <div class="roundBlock">
+
     <div class="d-flex justify-content-between">
 
-      <p class="headingSemester">{{id + 1}} семестр</p>
+      <p class="headingSemester highLightActualSemester" v-if="this.actualSemester === id+1">{{id + 1}} семестр (текущий)</p>
+      <p class="headingSemester" v-else>{{id + 1}} семестр</p>
 
+      
       <div v-if="buttonIsOpened">
         <button class="my-2 semestrButtonActive" @click=buttonClicked>
           <img src="../../../../static/figures/arrowleft.png" class="semestrImgActive">
@@ -22,231 +22,363 @@
 
     </div>
 
-    <div class="roundBlock p-0 mt-2" v-if="buttonIsOpened">
-      <div v-if="!deleteState">
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: articles.length !== 0}">
-          <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
-            №
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 30.5%; text-align: center">
-            Наименование<br>работы.
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
-            СТАТУС<br>(ВАК,<br>РИНЦ,<br>SCOPUS,<br>WoS)
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 9.21%; text-align: center">
-            Импакт<br>-<br>фактор<br>издания
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 25.07%; text-align: center">
-            Выходные<br>данные
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 6.926%; text-align: center">
-            Объем<br>в стр
-          </div>
-
-          <div class="textMiniTable" style="width: 12.26%; text-align: center">
-            Соавторы
-          </div>
-
-        </div>
-
-        <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(article,index) in articles">
-          <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
-
-            {{index + 1}}
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 30.5%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.name" readonly></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.name"></textarea>
-            </div>
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type" readonly></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.work_type"></textarea>
-            </div>
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 9.21%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.impact" readonly></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.impact"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 25.07%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data" readonly></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.output_data"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 6.926%; text-align: center">
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.volume" readonly></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.volume"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable" style="width: 12.26%; text-align: center; padding-right: 0" >
-            <div v-if="!smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.co_authors" readonly ></textarea>
-            </div>
-
-            <div v-if="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" rows=3 v-model="article.co_authors"></textarea>
-            </div>
-          </div>
-
-        </div>
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Публикация в изданиях</p>
+        </nav>
       </div>
+      <div class="roundBlock p-0 mt-2">
 
-      <div v-if="deleteState">
+        <div v-if="!smallTableEditing1">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: articles.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
+              №
+            </div>
 
-        <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: articles.length !== 0}">
-          <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
-            №
+            <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
+              Наименование<br>работы
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
+              Статус
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
+              Индексация
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 8.21%; text-align: center">
+              Импакт<br>-<br>фактор<br>издания
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 22.07%; text-align: center">
+              Выходные<br>данные
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 5.926%; text-align: center">
+              Объем<br>в стр
+            </div>
+
+            <div class="textMiniTable" style="width: 12.26%; text-align: center">
+              Соавторы
+            </div>
+
           </div>
 
-          <div class="rightLine textMiniTable" style="width: 29.5%; text-align: center">
-            Наименование<br>работы.
-          </div>
+          <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(article,index) in articles">
+
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{article.name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 10.15%;">
+              <div class="textWithCarry inputBox ">{{this.articlesMap[article.status]}}</div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 10.15%;">
+
+              <div style="height: 100%">
+                <label class="textCheckBox inputBox text-start " >
+                  <input type="checkbox"  v-model="article.wac" disabled/>ВАК</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.rinc" disabled/>РИНЦ</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.scopus" disabled/>Scopus</label>
+                <label class="textCheckBox inputBox text-start">
+                  <input type="checkbox" v-model="article.wos" disabled/>WoS</label>
+              </div>
 
 
-          <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
-            СТАТУС<br>(ВАК,<br>РИНЦ,<br>SCOPUS,<br>WoS)
+            </div>
 
-          </div>
 
-          <div class="rightLine textMiniTable" style="width: 8.21%; text-align: center">
-            Импакт<br>-<br>фактор<br>издания
-          </div>
+            <div class="rightLine textMiniTable" style="width: 8.21%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{article.impact}}</div>
+              </div>
 
-          <div class="rightLine textMiniTable" style="width: 24.07%; text-align: center">
-            Выходные<br>данные
-          </div>
+            </div>
+            <div class="rightLine textMiniTable" style="width: 22.07%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{article.output_data}}</div>
+              </div>
 
-          <div class="rightLine textMiniTable" style="width: 5.926%; text-align: center">
-            Объем<br>в стр
-          </div>
+            </div>
+            <div class="rightLine textMiniTable" style="width: 5.926%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox "> {{article.volume}}</div>
+              </div>
 
-          <div class="textMiniTable rightLine" style="width: 11.26%; text-align: center">
-            Соавторы
-          </div>
-
-          <div class="textMiniTable" style="width: 7%; text-align: center">
-
+            </div>
+            <div class="textMiniTable" style="width: 12.26%; text-align: center; padding-right: 0" >
+              <div class="pe-3">
+                <div class="ps-3">
+                  <div class="textWithCarry inputBox "> {{article.co_authors}}</div>
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(article,index) in articles">
-          <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
 
-            {{index + 1}}
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 29.5%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.name" readonly></textarea>
-            </div>
-
-            <div v-else="smallTableEditing">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.name"></textarea>
-            </div>
-          </div>
-
-
-          <div class="rightLine textMiniTable" style="width: 10.15%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.work_type"></textarea>
-            </div>
-
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 8.21%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.impact" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.impact"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 24.07%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.output_data"></textarea>
-            </div>
-          </div>
-
-          <div class="rightLine textMiniTable" style="width: 5.926%; text-align: center">
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.volume" readonly></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.volume"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable rightLine" style="width: 11.26%; text-align: center; padding-right: 0" >
-            <div v-if="!smallTableEditing || deleteState">
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.co_authors" readonly ></textarea>
-            </div>
-
-            <div v-else>
-              <textarea class="textWithCarry inputBox mt-1" v-model="article.co_authors"></textarea>
-            </div>
-          </div>
-
-          <div class="textMiniTable" style="width: 7%; text-align: center; padding-right: 0" >
-            <button class="btnAddDeleteFiles mt-2" @click="deleteArticle(index)">
-              <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
-            </button>
-          </div>
-
-        </div>
 
       </div>
-
     </div>
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Выступление на научных конференциях</p>
+        </nav>
+
+      </div>
+      <div class="roundBlock p-0 mt-2">
+
+        <div v-if="!smallTableEditing2">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: reports.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
+              Наименование<br>доклада
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 11.15%; text-align: center">
+              Статус
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 14.15%; text-align: center">
+              Индексация
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              Название конференции
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 14.07%; text-align: center">
+              Дата
+            </div>
+
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+              Место проведения
+            </div>
+
+          </div>
+
+          <div class="d-flex " :class="{ underline: index !== reports.length-1}" v-for="(report,index) in reports">
+
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 27.5%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{report.conference_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 11.15%;">
+              <div>
+                <div class="textWithCarry inputBox ">{{this.conferenceMap[report.status]}}</div>
+              </div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 14.15%;">
+              <div style="height: 100%">
+                <label class="textCheckBox inputBox text-start checkboxFont" >
+                  <input type="checkbox" v-model="report.wac" disabled/>ВАК</label>
+                <label class="textCheckBox inputBox text-start checkboxFont">
+                  <input type="checkbox" v-model="report.rinc" disabled/>РИНЦ</label>
+                <label class="textCheckBox inputBox text-start checkboxFont">
+                  <input type="checkbox" v-model="report.scopus" disabled/>Scopus</label>
+                <label class="textCheckBox inputBox text-start checkboxFont">
+                  <input type="checkbox" v-model="report.wos" disabled/>WoS</label>
+              </div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 18%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{report.report_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 14.07%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{report.reported_at}}</div>
+              </div>
+
+            </div>
+            <div class="textMiniTable" style="width: 10%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox "> {{report.location}}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Участие в научно-исследовательских проектах</p>
+        </nav>
+      </div>
+      <div class="roundBlock p-0 mt-2">
+
+        <div v-if="!smallTableEditing3">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: projects.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              Наименование проекта (гранта)
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+              Дата начала
+
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 12%; text-align: center">
+              Дата окончания
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              Дополнительная информация
+            </div>
+
+            <div class="textMiniTable" style="width: 20%; text-align: center">
+              Грантодатель
+            </div>
+
+
+          </div>
+
+          <div class="d-flex " :class="{ underline: index !== articles.length-1}" v-for="(project,index) in projects">
+
+            <div class="rightLine textMiniTable" style="width: 3.87%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{project.project_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 12%;">
+              <div class="textWithCarry inputBox ">{{formatDate(project.start_at)}}</div>
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 12%;">
+              <div class="textWithCarry inputBox ">{{formatDate(project.end_at)}}</div>
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 25%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{project.add_info}}</div>
+              </div>
+
+            </div>
+            <div class="textMiniTable" style="width: 20%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{project.grantee}}</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
+    <div class="roundBlock" v-if="buttonIsOpened">
+      <div class="d-flex justify-content-between">
+        <nav class="mt-3" style="margin-left: 2.5%">
+          <p class="headingSemester">Патенты</p>
+        </nav>
+      </div>
+      <div class="roundBlock p-0 mt-2">
+
+        <div v-if="!smallTableEditing4">
+          <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: patents.length !== 0}">
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center;">
+              №
+            </div>
+
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              Наименование патента
+            </div>
+
+
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              Тип
+
+            </div>
+
+            <div class=" textMiniTable" style="width: 20%; text-align: center">
+              Дата
+            </div>
+
+          </div>
+
+          <div class="d-flex " :class="{ underline: index !== patents.length-1}" v-for="(patent,index) in patents">
+
+            <div class="rightLine textMiniTable" style="width: 10%; text-align: center">
+
+              {{index + 1}}
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%; text-align: center">
+              <div>
+                <div class="textWithCarry inputBox ">{{patent.patent_name}}</div>
+              </div>
+
+            </div>
+            <div class="rightLine textMiniTable" style="width: 35%;">
+              <div class="textWithCarry inputBox ">{{this.patentsMap[patent.patent_type]}}</div>
+            </div>
+
+            <div class="textMiniTable" style="width: 18%;">
+              <div class="textWithCarry inputBox ">{{patent.date.slice(0,10)}}</div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+      </div>
+    </div>
+
+
   </div>
+
 
 
 </template>
@@ -254,25 +386,38 @@
 <script>
 export default {
   name: "tabOfArticles",
-  props: ["articles", "id"],
+  props: ["articles","reports","projects" , "id", "patents", "actualSemester", "buttonIsOpened"],
   data() {
     return {
-      buttonIsOpened : false,
-      smallTableEditing : false,
-      deleteState: false,
+
+      patentsMap: {
+        "software" : "Свидетельство о регистрации программ ЭВМ",
+        "database" : "Свидетельство о регистрации базы данных",
+      },
+      articlesMap: {
+        "to print" : "Принято в печать",
+        "published" : "Опубликовано",
+        "in progress" : "В процессе",
+      },
+      conferenceMap: {
+        "registered" : "Зарегистрировался",
+        "performed" : "Выступил",
+      },
     }
   },
   methods : {
     buttonClicked(){
-      if (this.buttonIsOpened === true)
-        this.smallTableEditing = false
-
-      this.buttonIsOpened = !this.buttonIsOpened
+      this.$emit('changeTabState')
+    },
+    formatDate(date){
+      return  date.slice(8,10) + '/' + date.slice(5,7) + '/' + date.slice(2,4)
     },
 
   },
 
   beforeMount() {
+    
+
   }
 }
 </script>
@@ -293,6 +438,22 @@ export default {
   box-sizing: border-box;
 }
 
+.highLightActualSemester{
+  color:#1c9931 !important;
+  font-weight: 800! important;
+  font-size:1.3rem !important
+}
+
+.textCheckBox {
+  border: 0 !important;
+  resize: none;
+  width: 100%;
+  overflow-x:hidden;
+  overflow-y:hidden;
+  font-size: 0.95rem;
+}
+
+
 @media (min-width: 800px){
   .headingSemester {
 
@@ -302,8 +463,13 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:22px;
-
   }
+
+  .checkboxFont {
+    font-size:15px !important;
+  }
+
+  
 
   .semestrButtonActive {
     border:0 !important;
@@ -404,6 +570,10 @@ export default {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
     font-size:1.1rem;
+  }
+
+  .checkboxFont {
+    font-size:13px !important;
   }
 
   .semestrImgActive{
@@ -512,6 +682,10 @@ export default {
 
   .semestrImgActive{
     width: 30px;
+  }
+
+  .checkboxFont {
+    font-size:12px !important;
   }
 
   .semestrButtonActive {

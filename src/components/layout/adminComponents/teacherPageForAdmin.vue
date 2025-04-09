@@ -7,12 +7,12 @@
         <p class="mainText">Основная информация</p>
       </nav>
 
-      <nav>
-        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>
-        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>
-        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>
+<!--      <nav>-->
+<!--        <button v-if="!stateOfEditing" type="button" class="btn btn-primar btnedit"  @click="editProfile()">Редактировать</button>-->
+<!--        <button v-if="stateOfEditing" type="button" class="btn btn-primar btnedit" @click="cancelChange()">Отменить</button>-->
+<!--        <button v-if="stateOfEditing && stateOfWriting" type="button" class="btn btn-primar btnedit" @click="saveChange()">Сохранить</button>-->
+<!--      </nav>-->
 
-      </nav>
     </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
@@ -34,7 +34,20 @@
         <label class="text ms-0">Ученая степень</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="academicDegree">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Звание</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="rank">
+      </nav>
+    </div>
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Должность</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="position">
+      </nav>
     </div>
 
 
@@ -49,10 +62,30 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text ms-0">Факультет</label>
+        <label class="text ms-0">Факультет (институт)</label>
         <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">
       </nav>
+    </div>
 
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Номер телефона</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="phoneNumber">
+      </nav>
+    </div>
+
+<!--    <div class="container-fluid justify-content-between d-flex">-->
+<!--      <nav style="width: 100%;">-->
+<!--        <label class="text ms-0">Звание</label>-->
+<!--        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="faculty">-->
+<!--      </nav>-->
+<!--    </div>-->
+
+    <div class="container-fluid justify-content-between d-flex">
+      <nav style="width: 100%;">
+        <label class="text ms-0">Статус</label>
+        <input type="text" :disabled="!stateOfEditing" @input="inputEvent" v-model="this.teacherStatusMap[status]">
+      </nav>
     </div>
 
 
@@ -64,12 +97,9 @@
     </div>
     <div v-for="student in arrayOfStudents">
       <tab-of-student
-          :full-name = student.fullName
-          :group = student.group
-          :topic = student.topic
-          :date-of-statement = student.dateOfStatement
-          :number-of-order-of-statement = student.numberOfOrderOfStatement
-          :student_id = student.studentID
+          :full-name = student.full_name
+          :group = student.group_name
+          :student_id = student.student_id
       ></tab-of-student>
 
     </div>
@@ -85,6 +115,7 @@ import header from "@/components/layout/header.vue";
 import tabOfStudent from "@/components/layout/studentComponents/tabOfStudent.vue";
 import axios from "axios";
 import store from "@/store/index.js";
+
 export default {
   name: "teacherPageForAdmin",
   components : {
@@ -105,7 +136,16 @@ export default {
       facultyCopy: '',
       stateOfEditing: false,
       stateOfWriting: false,
-      arrayOfStudents : []
+      arrayOfStudents : [],
+      phoneNumber : '',
+      status : '',
+      rank: '',
+      position:'',
+
+      teacherStatusMap : {
+        "false" : "Работает",
+        "true" : "Не работает",
+      }
     }
   },
   methods : {
@@ -144,11 +184,12 @@ export default {
     },
     async checkAuth() {
       try {
-        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
+        const response = await axios.get(this.IP +"/authorize/token/check/" + localStorage.getItem("access_token"))
         if (response.status === 200){
-          this.$store.dispatch("updateUserType", response.data.userType)
-          localStorage.setItem("userType", response.data.userType)
-          this.type = response.data.userType
+          this.$store.dispatch("updateUserType", response.data.user_type)
+          localStorage.setItem("userType", response.data.user_type)
+          localStorage.setItem("registered", response.data.registered)
+          this.type = response.data.user_type
         }
         else {
           this.$router.push('/auth')
@@ -159,19 +200,59 @@ export default {
         this.$router.push('/auth')
       }
     },
+    async getStudents(){
+
+      try {
+        const response = await axios.put(this.IP +'/administrator/supervisor/students/' + localStorage.getItem("access_token"),
+            {
+              "supervisor_id" : localStorage.getItem("teacherID")
+                  }
+        )
+        this.data = await response.data;
+        this.arrayOfStudents = this.data
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
+    async getProfileData(){
+      try {
+        const response = await axios.put(this.IP +"/administrator/supervisors/profile/" + localStorage.getItem("access_token"), {
+          "supervisor_id" : localStorage.getItem("teacherID"),
+        })
+        this.data = response.data
+
+      }
+      catch (e) {
+        console.log(e)
+      }
+      this.fullName = this.data.full_name
+      this.academicDegree = this.data.degree
+      this.department = this.data.department
+      this.faculty = this.data.faculty
+      this.email = this.data.email
+      this.status = this.data.archived
+      this.phoneNumber = this.data.phone
+      this.rank = this.data.rank
+      this.position = this.data.position
+    }
   },
   async beforeMount() {
     await this.checkAuth()
     if (store.getters.getType !== 'admin'){
       this.$router.push("/wrongAccess")
     }
-
-
+    await this.getStudents()
+    await this.getProfileData()
   }
 }
 </script>
 
-<style scoped>
+<style scoped >
+@import 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap';
 
 
 * {
@@ -180,6 +261,10 @@ export default {
   box-sizing: border-box;
 }
 
+
+
+
+
 @media (min-width: 800px) {
   .mainText {
     color:#7C7F86;
@@ -187,9 +272,12 @@ export default {
     font-size: 1.2rem;
   }
 
+  input {
+    height: 2.5rem !important;
+  }
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -230,7 +318,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2.5rem;
+    border-width: 0.1rem !important;
     font-size: 1rem;
     padding-left: 0.5rem;
   }
@@ -270,6 +358,10 @@ export default {
     color:#7C7F86;
     font-weight: 300;
     font-size: 1rem;
+  }
+
+  input {
+    height: 2.2rem !important;
   }
 
 
@@ -315,7 +407,7 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2rem;
+    border-width: 0.1rem !important;
     font-size: 0.9rem;
     padding-left: 0.5rem;
   }
@@ -355,6 +447,10 @@ export default {
     color:#7C7F86;
     font-weight: 300;
     font-size: 0.8rem;
+  }
+
+  input {
+    height: 2rem !important;
   }
 
   .mainPage {
@@ -398,9 +494,9 @@ export default {
     width: 100%;
     border-color: #7c7f86 !important;
     border-radius: 0.7em;
-    height: 2rem;
     font-size: 0.8rem;
     padding-left: 0.5rem;
+    border-width: 0.1rem !important;
   }
 
   div nav label {

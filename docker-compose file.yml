@@ -1,9 +1,0 @@
-version: "3.7"
-services:
-  server:
-    image: "jackblack178/vue1:vue8"
-    ports:
-      - "80:5173"
-    restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"

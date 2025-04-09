@@ -2,18 +2,35 @@
 
 <template>
   <header>
-    <div class="container-fluid head-top d-flexms-0">
+    <div class="container-fluid head-top d-flex ms-0">
       <div class="myHeader d-flex justify-content-between">
-        <nav>
+        <nav class="d-flex">
           <router-link to="/" @click="redirectToMainPage" >
             <img src="../../../static/figures/Mephi_small_Logo.png" alt="mephi Logo" class="justify-content-center align-items-center imageButtons imageMephi">
           </router-link>
 
+          <router-link to="/" @click="redirectToMainPage" style="text-decoration: none;" class="ms-3" >
+            <div class="buttonProfileText">Главная страница</div>
+          </router-link>
+
         </nav>
-        <div class="d-flex justify-content-end gap-3">
-          <nav class="align-items-center justify-content-center me-">
+        <div class="d-flex justify-content-end gap-2">
+<!--          <nav class="align-items-center justify-content-center">-->
+<!--            <router-link to="/profile" class="d-flex gap-3" style="text-decoration: none">-->
+<!--              <img class= "imageButtons imageProfile" src="../../../static/figures/man_logo.png" alt="logo">-->
+<!--              <div class="buttonProfileText"> ФИО аспиранта</div>-->
+<!--            </router-link>-->
+<!--          </nav>-->
+
+          <nav class="align-items-center justify-content-center">
             <router-link to="/profile">
-              <img class= "imageButtons imageProfile" src="../../../static/figures/man_logo.png" alt="logo">
+              <img class= "imageButtons imageLogOut" style="width: 40px" src="../../../static/figures/man_logo.png" alt="logo">
+            </router-link>
+          </nav>
+
+          <nav class="align-items-center justify-content-center">
+            <router-link to="/profile" style="text-decoration: none">
+              <div class="buttonProfileText">{{userName}}</div>
             </router-link>
           </nav>
 
@@ -33,6 +50,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "header",
   methods: {
@@ -49,7 +68,45 @@ export default {
       localStorage.setItem("userType", '')
       localStorage.setItem("registered", '')
       localStorage.setItem("teacherId", '')
+    },
+    async getUserName() {
+      if (localStorage.getItem("userType") === 'student') {
+        try {
+          const response = await axios.get(this.IP +'/students/info/' + localStorage.getItem("access_token"))
+          this.data = await response.data;
+          this.userName = this.data.full_name
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
+
+      if (localStorage.getItem("userType") === 'supervisor') {
+        try {
+          const response = await axios.get(this.IP +'/supervisors/profile/' + localStorage.getItem("access_token"))
+          this.data = await response.data;
+          this.userName = this.data.full_name
+        }
+        catch (e) {
+          console.log(e)
+        }
+      }
     }
+  },
+  data(){
+    return {
+      userName : ''
+    }
+  },
+  async beforeMount() {
+    await this.getUserName()
+
+    if (localStorage.getItem("userType") === 'admin'){
+      this.userName = 'Администратор'
+    }
+
+
+
   }
 }
 </script>
@@ -68,7 +125,7 @@ export default {
 
   .myHeader {
     margin:auto;
-    width: 50%;
+    width: 70%;
     padding: 0 !important;
     margin-top: 0 !important;
 
@@ -111,13 +168,20 @@ export default {
   }
 
   .imageMephi{
-    width: 80px;
+    width: 80px !important;
   }
   .imageProfile{
-    width: 35px;
+    width: 35px !important;
   }
   .imageLogOut{
     width: 35px !important;
+  }
+
+  .buttonProfileText{
+    margin-top:14px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    color:rgb(206,224,229)
   }
 }
 
@@ -180,6 +244,13 @@ export default {
   .imageLogOut{
     width: 30px !important;
   }
+
+  .buttonProfileText{
+    margin-top:10px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    color:rgb(206,224,229)
+  }
 }
 
 @media (pointer: coarse) and (max-width: 400px) {
@@ -240,6 +311,12 @@ export default {
   }
   .imageLogOut{
     width: 20px !important;
+  }
+
+  .buttonProfileText{
+    text-decoration: none;
+    font-size: 0.8rem;
+    color:rgb(206,224,229)
   }
 }
 

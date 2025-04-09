@@ -18,7 +18,7 @@
     <div class="roundBlock pt-2">
 
       <div>
-        <p class="mainText text-start">Загрузить</p>
+        <p class="mainText text-start">Добавление пользователей</p>
       </div>
 
       <div class="roundBlock m-auto mt-4">
@@ -27,30 +27,21 @@
           <p class="loadText">Аспиранты</p>
         </div>
 
-        <div v-if="studentsFile.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
+        <div>
+          <textarea  v-model="newStudents"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ studentsFile.name }} загружен</p>
+        <div class="myBtn mt-2" >
+          <button class="sendFilesBtn p-2" @click="addStudents">
+            <div class="d-flex justify-content-around">
+              <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
+              <p class="loadText">
+                Добавить аспирантов
+              </p>
+            </div>
+
+          </button>
         </div>
-
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteStudentFile">
-              <img class="imgSize" v-if="studentsFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
-            </button>
-          </div>
-
-          <div class="image-upload">
-            <label for="file-input2">
-              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input2" type="file" @input="inputStudentFile"/>
-          </div>
-        </div>
-
 
       </div>
 
@@ -60,43 +51,148 @@
           <p class="loadText">Научные руководители</p>
         </div>
 
-        <div v-if="teachersFile.length === 0" class="ms-5 mt-2">
-          <p class="loadTextState">Файлы не выбраны</p>
+        <div>
+          <textarea  v-model="newTeachers"  rows=7 class="form-control" aria-label="With textarea" style="border-radius: 10px;font-size: 17px; resize: none; background-color: white"></textarea>
         </div>
 
-        <div v-else class="ms-5 mt-2">
-          <p class="loadTextState">Файл {{ teachersFile.name }} загружен</p>
+        <div class="myBtn mt-2" >
+          <button class="sendFilesBtn p-2" @click="addTeachers">
+            <div class="d-flex justify-content-around">
+              <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
+              <p class="loadText">
+                Добавить научных руководителей
+              </p>
+            </div>
+
+          </button>
         </div>
 
-        <div class="justify-content-end d-flex gap-1 image-upload">
-          <div class="image-upload">
-            <button class="btnAddDeleteFiles" @click="deleteTeacherFile">
-              <img class="imgSize" v-if="teachersFile.length === 0" src="../../../../static/figures/trash.png" alt="deleteFilesLogo"/>
-              <img class="imgSize" v-else src="../../../../static/figures/trashActive.png">
-            </button>
-          </div>
 
-          <div class="image-upload">
-            <label for="file-input">
-              <img class="imgSize" src="../../../../static/figures/addFile.png" alt="addFilesLogo"/>
-            </label>
-            <input id="file-input" type="file" @input="inputTeacherFile"/>
-          </div>
-        </div>
       </div>
 
-      <div class="myBtn" >
-        <button class="sendFilesBtn p-2" @click="sendFiles">
-          <div class="d-flex justify-content-around">
-            <img src="../../../../static/figures/documentupload.png" alt="logo" class="imgUploadFile">
-            <p class="loadText">
-              Сохранить
-            </p>
-          </div>
+      <div class="roundBlock">
+        <p class="loadText">
+          Формат для загрузки пользователей в систему
+        </p>
+        <p>
+          Адрес электронной почты через точку с запятой без пробела : email1@mail.com;email2@gmail.com;
+        </p>
+      </div>
 
-        </button>
+    </div>
+
+    <div class="roundBlock pt-2">
+
+<div>
+  <p class="mainText text-start">Пользователи не прошедшие регистрацию</p>
+</div>
+
+
+
+<div class="roundBlock mt-2">
+
+
+<div class="d-flex justify-content-between" style="margin-left: 2.5%">
+  <nav class="mt-3" >
+    <p class="headingSemester"></p>
+  </nav>
+  <nav class="text-end" style="margin-right: 2.5%">
+    <button v-if="!editTableWithUsers" @click="buttonEditUsers" class="editBtn mt-3">Редактировать</button>
+    <div v-else class="d-flex gap-1">
+      <button class="editBtn mt-3 " @click="buttonCancelUsers">Отменить</button>
+      <button class="editBtn mt-3 " @click="buttonSaveUsers">Сохранить</button>
+    </div>
+  </nav>
+</div>
+
+
+<div v-if="!editTableWithUsers">
+<div class="roundBlock p-0 mt-2">
+  <div>
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfUsers.length !== 0}">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        №
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Почта
+      </div>
+
+      <div class=" textMiniTable" style="width: 40%; text-align: center">
+        Тип
+      </div>
+
+
+
+    </div>
+
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfUsers.length}" v-for="(element,index) in arrayOfUsers">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        {{index + 1}}
+      </div>
+
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <p >{{element.email}}</p>
+      </div>
+
+      <div class="textMiniTable"  style="width: 40%; text-align: center">
+        <p >{{this.userTypeMap[element.user_type]}}</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+<div v-else>
+<div class="roundBlock p-0 mt-2">
+  <div>
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: arrayOfUsers.length !== 0}">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        №
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Группа
+      </div>
+
+      <div class=" textMiniTable rightLine" style="width: 40%; text-align: center">
+        Тип
+      </div>
+
+      <div class=" textMiniTable" style="width: 10%; text-align: center">
+
       </div>
     </div>
+
+    <div class="d-flex" style="vertical-align: baseline;" :class="{ underline: index+1 !== arrayOfUsers.length}" v-for="(element,index) in arrayOfUsers">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%; text-align: center;">
+        {{index + 1}}
+      </div>
+
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <input type="text" class="inputBox" v-model="element.email" disabled>
+      </div>
+      
+      <div class="textMiniTable rightLine"  style="width: 40%; text-align: center">
+        <p >{{this.userTypeMap[element.user_type]}}</p>
+      </div>
+
+      <div class="textMiniTable " style="width: 10%; text-align: center">
+        <button class="btnAddDeleteFiles mt-2" @click="deleteUser(index)">
+          <img class="trashLogo" src="../../../../static/figures/trashActive.png" alt="trashLogo">
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+</div>
+
+</div>
 
   </div>
 </template>
@@ -108,6 +204,8 @@ import sendingFilesWithUsersNotification
 import SendingFilesNotification
   from "@/components/layout/notifications/studentNotifications/sendingFilesNotification.vue";
 import store from "@/store/index.js";
+import axios from "axios";
+import utf8 from "utf8";
 export default {
   name: "addUser",
   props : ["stateOfAdminPage"],
@@ -118,40 +216,134 @@ export default {
   },
   data() {
     return {
-      studentsFile : [],
-      teachersFile : [],
+      newStudents : [],
+      newTeachers : [],
       stateOfSending : false,
-      resultOfSending : false,
+      resultOfSending: false,
+      editTableWithUsers : false,
+      arrayOfUsers: [],
+      arrayOfUsersCopy: [],
+      arrayOfIdsToDelete: [],
+
+      userTypeMap: {
+        "student" : "Аспирант",
+        "supervisor" : "Научный руководитель"
+      }
+
+
     }
   },
   methods: {
-    deleteStudentFile(){
-      this.studentsFile = []
+
+    async addStudents(){
+      try {
+        const response = await axios.post(this.IP +"/administrator/users/students/" + localStorage.getItem("access_token"),
+            {
+              "users" : this.newStudents
+            }
+        )
+        if (response.status === 200) {
+          this.resultOfSending = true
+        }
+
+
+      }
+      catch (e) {
+        this.resultOfSending = false
+      }
+      this.callNotification()
+      this.newStudents = ''
+
+      await this.getUsers()
+
     },
-    deleteTeacherFile(){
-      this.teachersFile = []
+
+    deleteUser(index){
+      this.arrayOfIdsToDelete.push(this.arrayOfUsers[index].user_id)
+      this.arrayOfUsers.splice(index, 1)
     },
-    inputStudentFile(){
-      this.studentsFile = event.target.files[0]
+
+
+    buttonEditUsers(){
+        this.editTableWithUsers = true
+        this.arrayOfUsersCopy = JSON.parse(JSON.stringify(this.arrayOfUsers));
     },
-    inputTeacherFile(){
-      this.teachersFile = event.target.files[0]
+
+    buttonCancelUsers(){
+      this.editTableWithUsers = false
+      this.arrayOfUsers = JSON.parse(JSON.stringify(this.arrayOfUsersCopy));
+      this.arrayOfIdsToDelete.length = 0
     },
-    sendFiles(){
+
+    async buttonSaveUsers(){
+      this.editTableWithUsers = !this.editTableWithUsers
+
+
+      if (this.arrayOfIdsToDelete.length === 0)
+        return
+      console.log(this.arrayOfIdsToDelete)
+      try {
+        const response = await axios.put(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"),{
+            "ids" : this.arrayOfIdsToDelete
+        })
+        this.data = response.data
+        this.arrayOfUsers = this.data
+
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+    },
+
+    async getUsers(){
+      try {
+        const response = await axios.get(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"))
+        this.data = response.data
+        this.arrayOfUsers = this.data
+
+      }
+      catch (e) {
+
+        console.log(e)
+      }
+    },
+
+    
+
+    async addTeachers(){
+      try {
+        const response = await axios.post(this.IP +"/administrator/users/supervisors/" + localStorage.getItem("access_token"),
+            {
+              "users" : this.newTeachers
+            }
+        )
+        if (response.status === 200) {
+          this.resultOfSending = true
+        }
+
+
+      }
+      catch (e) {
+        this.resultOfSending = false
+      }
+      this.callNotification()
+      this.newTeachers = ''
+
+      await this.getUsers()
+
+    },
+
+
+    callNotification(){
       this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
-
-      console.log("Sending files")
-      this.studentsFile = []
-      this.teachersFile = []
     }
   },
-  beforeMount() {
-    if (store.getters.getType !== "admin"){
-      this.$router.push('/wrongAccess')
-    }
+  async beforeMount() {
+  await this.getUsers()
   }
 }
 </script>
@@ -168,6 +360,21 @@ export default {
   box-sizing: border-box;
 }
 
+.rightLine {
+  border-right:  solid 0.12em #DEDEDE !important;
+}
+
+.inputBox {
+  border: 0 !important;
+  font-weight: 400;
+  text-align: center;
+  border-radius: 0 !important;
+  color:#000000;
+  background-color: white;
+  outline: none !important;
+  width: 100%;
+}
+
 @media (min-width: 800px) {
   .mainText {
     margin-left: 2.5% ;
@@ -176,11 +383,42 @@ export default {
     color:#7C7F86;
     font-weight: 400;
     font-size: 1.3rem;
+  }
 
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+  }
+
+  .trashLogo{
+    width:32px !important;
+    height: 32px !important;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:18px;
+    text-align: center;
+    word-break: break-all;
   }
 
   .mainPage {
-    width: 50%;
+    width: 70%;
 
     background: rgba(255, 255, 255, 1);
     opacity: 1;
@@ -241,6 +479,11 @@ export default {
   .loadTextState {
     font-size: 1.1rem;
   }
+
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
 }
 
 @media (max-width: 800px) {
@@ -252,6 +495,41 @@ export default {
     font-weight: 300;
     font-size: 1.2rem;
 
+  }
+
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.9rem;
+  }
+
+
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.9rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
   }
 
   .mainPage {
@@ -349,6 +627,33 @@ export default {
   }
 
 
+  .editBtnStudents{
+    width: 95%;
+    margin:auto;
+    text-align:right;
+    font-size: 0.8rem;
+  }
+
+  .editBtn {
+    color:#0055BB;
+    border: 0;
+    margin-right: 1%;
+    background-color: white;
+    font-size: 0.7rem !important;
+  }
+  .textMiniTable{
+    color: #7C7F86;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size:0.6rem;
+    text-align: center;
+    word-break: break-all;
+    padding-left:0.1rem;
+    padding-right: 0.1rem;
+  }
+
+  
+
   .roundBlock {
     border: solid 0.12em #DEDEDE;
     border-radius: 20px;
@@ -356,6 +661,20 @@ export default {
     margin:auto;
     margin-bottom: 2% !important;
     padding: 0 1% 1%;
+  }
+
+  .underline {
+    border-bottom: solid 0.12em #DEDEDE;
+    margin-left: 0;
+  }
+  .btnAddDeleteFiles {
+    border:0 !important;
+    background:white !important;
+  }
+
+  .trashLogo{
+    width:25px !important;
+    height: 25px !important;
   }
 
   .loadText {
