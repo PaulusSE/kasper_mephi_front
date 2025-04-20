@@ -11,6 +11,7 @@ import forgetPassword from "@/components/layout/forgetPassword.vue";
 import teacherPageForAdmin from "@/components/layout/adminComponents/teacherPageForAdmin.vue";
 import studentPageMainComponent from "@/components/layout/teacherComponents/studentPageMainComponent.vue";
 import techWorks from "@/components/layout/techWorks.vue";
+import pages from '@/pages/RequestSent.vue';
 
 
 
@@ -43,6 +44,9 @@ const router = createRouter({
         },
         {
             path: '/:pathMatch(.*)*', component: pageNotFound
+        },
+        { 
+            path:'/request-sent', component: pages
         },
     ]
 })

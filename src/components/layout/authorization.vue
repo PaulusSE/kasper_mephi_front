@@ -58,7 +58,15 @@
         <!-- <div style="text-align: center;">
           <router-link to="/passwordrecovery">Забыли пароль?</router-link>
         </div> -->
-
+        <div class="mt-2">
+        <router-link
+          to="/registration"
+          class="btn btn-secondary btn-sm"
+          style="opacity: 0.7;"
+          >
+            Регистрация
+          </router-link>
+        </div>
       </div>
     </div>
 

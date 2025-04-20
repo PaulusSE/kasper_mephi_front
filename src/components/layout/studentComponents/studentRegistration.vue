@@ -1,11 +1,48 @@
 <template>
-
+  <!-- всплывающее сообщение -->
+  <sending-files-notification
+      v-if="stateOfSending"
+      :result-of-sending="resultOfSending"
+  />
 
   <div class="mainPage">
     <div class="headerText">
       <p>Регистрация</p>
     </div>
 
+<!-- Email -->
+      <div class="container-fluid d-flex mb-3">
+        <nav style="width:100%">
+          <label class="text m-0">Email</label>
+          <input
+            v-model="email"
+            type="email"
+            class="blockStyles"
+            required
+            @input="errorMessage = ''"
+          />
+        </nav>
+      </div>
+      <!-- Пароль -->
+      <div class="container-fluid d-flex mb-3">
+        <nav style="width:100%">
+          <label class="text m-0">Пароль</label>
+          <input
+            v-model="password"
+            type="password"
+            :class="['blockStyles', {
+              'invalid-input': password.length > 0 && password.length < 8
+            }]"
+            required
+            @input="errorMessage = ''"
+            placeholder="••••••••"
+          />
+          <!-- здесь подсказка -->
+          <p :class="['hint', { 'invalid-text': password.length > 0 && password.length < 8 }]">
+            Пароль должен быть минимум 8 символов
+          </p>
+        </nav>
+      </div>
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
         <label class="text m-0">ФИО (полностью)</label>
@@ -43,7 +80,7 @@
 
     <div class="container-fluid justify-content-between d-flex">
       <nav style="width: 100%;">
-        <label class="text m-0">Номер телефона +7 (xxx) xx-xx-xx</label>
+        <label class="text m-0">Номер телефона +7 (xxx) xxx-xx-xx</label>
         <input v-maska data-maska="+7 (###) ###-##-##" class="blockStyles" v-model="phoneNumber" @click="inputEvent">
       </nav>
     </div>
@@ -105,216 +142,145 @@
 </template>
 
 <script>
-import header from "@/components/layout/header.vue"
-import axios from "axios";
+import header               from "@/components/layout/header.vue"
+import axios                from "axios"
+import SendingFilesNotification
+       from "@/components/layout/notifications/studentNotifications/sendingRegNotification.vue"
 
-const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-const regularSymbolForPassword = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const EMAIL_REGEXP           = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu
+const PASSWORD_REGEXP        = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
 
 export default {
   name: "studentRegistration",
-  components: {
-    "pageHeader": header,
-  },
-  data() {
-    return {
-      fullName: '',
-      email: '',
-      teacherID: '',
-      errorMessage: '',
-      phoneNumber: '',
-      department: '',
-      specializationID: '',
-      dateOfBeginning:'',
-      actualSemester:'',
-      groupID: '',
-      category: '',
+  components: { pageHeader: header, SendingFilesNotification },
 
-      maxSemester: '',
-      semesterID: '',
-      arrayOfTeachers: [],
-      arrayOfSpecialization : [],
-      numberOfGroups : [],
-      numberOfSemesters: [],
+  data () {
+    return {
+      /* поля формы */
+      email: "", password: "", fullName: "", phoneNumber: "",
+      groupID: "", specializationID: "", actualSemester: "",
+      dateOfBeginning: "", semesterID: "", category: "", teacherID: "",
+
+      /* выборки */
+      numberOfGroups: [], arrayOfSpecialization: [], arrayOfTeachers: [],
+      numberOfSemesters: [], maxSemester: "",
+
+      /* UI */
+      errorMessage   : "",
+      stateOfSending : false,  // показать/скрыть уведомление
+      resultOfSending: false   // true – успех / false – ошибка
     }
   },
+
   methods: {
-    isEmailValid(value) {
-      return EMAIL_REGEXP.test(value)},
+    /* ---------------- validation helpers ---------------- */
+    isEmailValid (v)     { return EMAIL_REGEXP.test(v) },
+    isPasswordValid (v)  { return PASSWORD_REGEXP.test(v) },
 
-    checkPassword(pass)
-    {
-      return regularSymbolForPassword.test(pass);
-    },
+    /* ---------------- основной submit ------------------- */
+    async registration () {
+      /* 1. валидация */
+      if (!this.fullName)            return this.setErr("Поле ФИО не должно быть пустым")
+      if (!this.groupID)             return this.setErr("Поле номер группы не должно быть пустым")
+      if (!this.actualSemester)      return this.setErr("Поле актуальный семестр не должно быть пустым")
+      if (!this.specializationID)    return this.setErr("Поле специализация не должно быть пустым")
+      if (!this.phoneNumber)         return this.setErr("Поле номер телефона не должно быть пустым")
+      if (!this.dateOfBeginning)     return this.setErr("Поле дата начала обучения не должно быть пустым")
+      if (!this.category)            return this.setErr("Поле категория не должно быть пустым")
+      if (!this.semesterID)          return this.setErr("Поле длительность обучения не должно быть пустым")
+      if (!this.teacherID)           return this.setErr("Поле научный руководитель не должно быть пустым")
+      if (!this.isEmailValid(this.email))
+        return this.setErr("Некорректный email")
+      if (!this.isPasswordValid(this.password))
+        return this.setErr("Пароль слишком простой")
 
-    async registration() {
-
-
-      if (this.fullName === ''){
-        this.errorMessage = 'Поле ФИО не должно быть пустым'
-        return;
-      }
-
-
-
-      if (this.numberOfGroup === ''){
-        this.errorMessage = 'Поле номер группы не должно быть пустым'
-        return;
-      }
-
-      if (this.actualSemester === ''){
-        this.errorMessage = 'Поле актуальный семестр не должно быть пустым'
-        return;
-      }
-
-      if (this.specializationID === ''){
-        this.errorMessage = "Поле специализация не должо быть пустым"
-        return
-      }
-
-      if (this.phoneNumber === ''){
-        this.errorMessage = 'Поле номер телефона не должно быть пустым'
-        return;
-      }
-
-      if (this.dateOfBeginning === ''){
-        this.errorMessage = 'Поле дата начала обучения не должно быть пустым'
-        return;
-      }
-
-      if (this.category === ''){
-        this.errorMessage = 'Поле категория  не должно быть пустым'
-        return;
-      }
-
-      if (this.semesterID === ''){
-        this.errorMessage = 'Поле длительность обучения не должно быть пустым'
-        return;
-      }
-
-      if (this.teacherID === ''){
-        this.errorMessage = 'Поле научный руководитель не должно быть пустым'
-        return;
-      }
-      if (await this.requestToRegister() === 200){
-        localStorage.setItem('registered', 'true')
-        this.redirectToMain()
-      }
-
-      this.errorMessage = 'Попробуйте еще раз'
-    },
-    async requestToRegister() {
+      /* 2. отправка */
       try {
-        const response = await axios.post(this.IP +"/authorize/registration/student/" + localStorage.getItem('access_token'),
-            {
-              "full_name" : this.fullName,
-              "group_number" : this.groupID,
-              "specialization_id" : this.specializationID,
-              "actual_semester" : parseInt(this.actualSemester),
-              "start_date" : this.dateOfBeginning,
-              "phone" : this.phoneNumber,
-              "number_of_years" : this.semesterID,
-              "supervisor_id" : this.teacherID,
-              "phone_number" : this.phoneNumber,
-              "category" : this.category
-            }
+        await axios.post(
+          `${this.IP}/authorize/registration/student/${localStorage.getItem("access_token")}`,
+          {
+            email            : this.email,
+            password         : this.password,
+            full_name        : this.fullName,
+            group_number     : this.groupID,
+            specialization_id: this.specializationID,
+            actual_semester  : +this.actualSemester,
+            start_date       : this.dateOfBeginning,
+            phone            : this.phoneNumber,
+            number_of_years  : this.semesterID,
+            supervisor_id    : this.teacherID,
+            category         : this.category
+          }
         )
 
-        return response.status
-      }
-
-      catch (e) {
-        console.log(e)
-      }
-      return 400
-    },
-    inputEvent() {
-      this.errorMessage = ''
-
-    },
-
-    redirectToMain() {
-      this.$router.push('/')
-    },
-    async getListOfTeachers() { //todo
-      try {
-        const response = await axios.get(this.IP +"/student/supervisors/list/" + localStorage.getItem('access_token'),
-        )
-        this.arrayOfTeachers = response.data
-        }
-
-      catch (e) {
-        this.showWrongAnswerString = true;
-      }
-    },
-
-    async getListOfGroups(){
-      try {
-        const response = await axios.get(this.IP +"/student/enum/groups/" + localStorage.getItem('access_token'),
-        )
-        this.numberOfGroups = response.data
-
-      }
-      catch (e) {
-        this.showWrongAnswerString = true;
-      }
-    },
-    async getListOfSpecializations(){
-      try {
-        const response = await axios.get(this.IP +"/student/enum/specializations/" + localStorage.getItem('access_token'),
-        )
-        this.data = response.data
-        this.arrayOfSpecialization = this.data
-
-
-      }
-
-      catch (e) {
-        this.showWrongAnswerString = true;
-      }
-    },
-
-    async getListOfSemesters(){
-      try {
-        const response = await axios.get(this.IP +"/students/enum/amounts/" + localStorage.getItem('access_token'),
-        )
-        this.data = response.data
-        this.numberOfSemesters = this.data
-      }
-
-      catch (e) {
-        this.showWrongAnswerString = true;
-      }
-
-      this.numberOfSemesters.sort((a, b) => a.amount > b.amount ? 1 : -1);
-      this.maxSemester = this.numberOfSemesters[this.numberOfSemesters.length - 1].amount;
-
-    },
-
-    async checkAuth() {
-      try {
-        const response = await axios.get(this.IP +"/authorization/check/" + localStorage.getItem("access_token"))
-
-        if (response.status === 200){
-          this.$store.dispatch("updateUserType", response.data.userType)
-          this.type = response.data.userType
-        }
-        else {
-          this.$router.push('/auth')
-        }
+        /* 3‑а. успех  */
+        this.showToast(true)
+        // даём увидеть тост и уводим на экран‑«заявка отправлена»
+        setTimeout(() => this.$router.push({
+          path : "/request-sent",
+          query: { email: this.email }
+        }), 2000)
 
       } catch (e) {
-        console.log(e)
-        this.$router.push('/auth')
+        /* 3‑б. ошибка */
+        const msg = e.response?.data?.error || "Ошибка при регистрации, попробуйте ещё раз"
+        this.setErr(msg)
+        this.showToast(false)
       }
     },
-  },
-  async beforeMount() {
-    await this.getListOfTeachers()
-    await this.getListOfGroups()
-    await this.getListOfSpecializations()
-    await this.getListOfSemesters()
 
+    /* ---------------- util/helpers ---------------------- */
+    setErr (msg) {
+      this.errorMessage = msg
+    },
+
+    showToast (ok) {
+      this.resultOfSending = ok
+      this.stateOfSending  = true
+      // авто‑закрытие: 5 сек для ошибки, 2 сек для успеха (redirect позже)
+      setTimeout(() => { this.stateOfSending = false }, ok ? 2000 : 5000)
+    },
+
+    inputEvent () { this.errorMessage = "" },
+
+    /* ---------------- получение справочных списков ------- */
+    async getListOfTeachers () {
+      try {
+        const { data } = await axios.get(`${this.IP}/student/supervisors/list/${localStorage.getItem("access_token")}`)
+        this.arrayOfTeachers = data
+      } catch { /* игнорируем, выпадет валидация */ }
+    },
+
+    async getListOfGroups () {
+      try {
+        const { data } = await axios.get(`${this.IP}/student/enum/groups/${localStorage.getItem("access_token")}`)
+        this.numberOfGroups = data
+      } catch {}
+    },
+
+    async getListOfSpecializations () {
+      try {
+        const { data } = await axios.get(`${this.IP}/student/enum/specializations/${localStorage.getItem("access_token")}`)
+        this.arrayOfSpecialization = data
+      } catch {}
+    },
+
+    async getListOfSemesters () {
+      try {
+        const { data } = await axios.get(`${this.IP}/students/enum/amounts/${localStorage.getItem("access_token")}`)
+        this.numberOfSemesters = data.sort((a, b) => a.amount - b.amount)
+        this.maxSemester       = this.numberOfSemesters.at(-1)?.amount ?? 0
+      } catch {}
+    }
+  },
+
+  async beforeMount () {
+    await Promise.all([
+      this.getListOfTeachers(),
+      this.getListOfGroups(),
+      this.getListOfSpecializations(),
+      this.getListOfSemesters()
+    ])
   }
 }
 </script>
@@ -463,6 +429,17 @@ div div {
   padding: 0.375rem 2.25rem 0.375rem 0.75rem;
 }
 
+.invalid-input {
+  border-right: 2px solid red;
+}
+.hint {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+.invalid-text {
+  color: red;
+}
 
 
 

@@ -11,7 +11,15 @@ export default defineConfig(({ command, mode }) => ({
       },
       host: true,
       strictPort: true,
-      port: 5173, // Используйте стандартный порт разработки
+      port: 5173,
+      proxy: {
+        '/api': {
+          target: process.env.VITE_API_URL || 'http://localhost:8080',
+          changeOrigin: true,
+          rewrite: (path) => path,
+          secure: false
+        }
+      }
     },
   }),
   resolve: {

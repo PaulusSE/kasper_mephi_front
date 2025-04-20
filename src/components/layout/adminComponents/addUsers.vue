@@ -194,6 +194,42 @@
 
 </div>
 
+
+<!-- ===== Заявки на регистрацию ====================================== -->
+<div class="roundBlock pt-2">
+  <p class="mainText text-start">Заявки на регистрацию</p>
+
+  <div class="roundBlock mt-2 p-0">
+    <div class="d-flex underline"
+         style="vertical-align: baseline;">
+      <div class="rightLine textMiniTable ps-3" style="width: 10%;text-align:center">№</div>
+      <div class="rightLine textMiniTable" style="width:35%;text-align:center">Почта</div>
+      <div class="rightLine textMiniTable" style="width:25%;text-align:center">Тип</div>
+      <div class="rightLine textMiniTable" style="width:20%;text-align:center">Дата</div>
+      <div class="textMiniTable"            style="width:10%;text-align:center"></div>
+    </div>
+
+    <div v-for="(r,idx) in requests"
+         :key="r.request_id"
+         class="d-flex"
+         :class="{underline: idx+1!==requests.length}"
+         style="vertical-align:baseline">
+      <div class="rightLine textMiniTable ps-3" style="width:10%;text-align:center">{{idx+1}}</div>
+      <div class="rightLine textMiniTable"      style="width:35%;text-align:center">{{r.email}}</div>
+      <div class="rightLine textMiniTable"      style="width:25%;text-align:center">{{userTypeMap[r.user_type]}}</div>
+      <div class="rightLine textMiniTable"      style="width:20%;text-align:center">
+        {{ new Date(r.created_at).toLocaleDateString() }}
+      </div>
+      <div class="textMiniTable d-flex gap-1 justify-content-center"
+           style="width:10%">
+        <button class="primaryBtn"  @click="review(r.request_id,true)">✓</button>
+        <button class="secondaryBtn" @click="review(r.request_id,false)">✗</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===== /Заявки ==================================================== -->
+
   </div>
 </template>
 
@@ -228,8 +264,8 @@ export default {
       userTypeMap: {
         "student" : "Аспирант",
         "supervisor" : "Научный руководитель"
-      }
-
+      },
+      requests: [],
 
     }
   },
@@ -283,7 +319,7 @@ export default {
         return
       console.log(this.arrayOfIdsToDelete)
       try {
-        const response = await axios.put(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"),{
+        const response = await axios.post(this.IP + "/administrator/users/not_registered/" + localStorage.getItem("access_token"),{
             "ids" : this.arrayOfIdsToDelete
         })
         this.data = response.data
@@ -309,8 +345,6 @@ export default {
       }
     },
 
-    
-
     async addTeachers(){
       try {
         const response = await axios.post(this.IP +"/administrator/users/supervisors/" + localStorage.getItem("access_token"),
@@ -331,20 +365,39 @@ export default {
       this.newTeachers = ''
 
       await this.getUsers()
-
     },
-
 
     callNotification(){
       this.stateOfSending = true
       setTimeout(() => {
         this.stateOfSending = false
       }, 5000);
+    },
+
+    async getRequests(){
+     try{
+       const resp = await axios.get(
+         this.IP + "/administrator/registration_requests/" +
+         localStorage.getItem("access_token"));
+       this.requests = resp.data;
+     }catch(e){ console.error("req‑list",e); }
+    },
+
+    /** approve = true|false */
+    async review(request_id, approve){
+      try{
+        await axios.post(
+          this.IP + "/administrator/registration_requests/" +
+          localStorage.getItem("access_token"),
+          {request_id, approve});
+        await this.getRequests();        // обновим список
+      }catch(e){ alert("Ошибка: не удалось обновить заявку"); }
+    },
+    },
+      async beforeMount() {
+      await this.getUsers();
+      await this.getRequests(); 
     }
-  },
-  async beforeMount() {
-  await this.getUsers()
-  }
 }
 </script>
 
@@ -733,5 +786,15 @@ export default {
   opacity: 0;
 }
 
+.primaryBtn{
+  background:#0055BB;   color:white; border:0; border-radius:6px;
+  width:32px; height:32px; font-size:1rem; line-height:1;
+}
+.secondaryBtn{
+  background:#7C7F86;   color:white; border:0; border-radius:6px;
+  width:32px; height:32px; font-size:1rem; line-height:1;
+}
+.primaryBtn:hover{opacity:.8}
+.secondaryBtn:hover{opacity:.8}
 
 </style>
