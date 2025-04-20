@@ -1,9 +1,6 @@
 <template>
   <div class="mainPage">
     <!-- Заголовок страницы -->
-    <div class="headerText">
-      <p>Заявка отправлена</p>
-    </div>
 
     <!-- Контент -->
     <div class="container-fluid d-flex flex-column align-items-center pt-4 pb-5">

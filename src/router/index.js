@@ -31,7 +31,7 @@ const router = createRouter({
             path: '/profile', component: profile
         },
         {
-          path: '/user', component: studentPageMainComponent
+            path: '/user', component: studentPageMainComponent
         },
         {
             path: '/user2', component: teacherPageForAdmin
