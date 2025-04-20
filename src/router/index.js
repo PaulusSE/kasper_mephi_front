@@ -42,11 +42,11 @@ const router = createRouter({
         {
             path: '/information', component: techWorks
         },
-        {
-            path: '/:pathMatch(.*)*', component: pageNotFound
-        },
         { 
             path:'/request-sent', component: pages
+        },
+        {
+            path: '/:pathMatch(.*)*', component: pageNotFound
         },
     ]
 })
