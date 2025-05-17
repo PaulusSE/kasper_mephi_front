@@ -27,13 +27,19 @@
 
     <div class="recommended-articles">
       <h3>Рекомендованные статьи</h3>
-      <ul v-if="recommendedArticles.length > 0">
+      <div v-if="isRecommendedLoading" style="text-align: center; margin: 1em 0;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Загрузка...</span>
+        </div>
+      </div>
+      <ul v-else-if="recommendedArticles.length > 0">
         <li v-for="(article, index) in recommendedArticles" :key="index">
           <a :href="article.url" target="_blank">{{ article.title }}</a>
         </li>
       </ul>
-      <p v-else-if="loadingRecommendations">Загрузка рекомендаций...</p>
-      <p v-else>Рекомендации недоступны.</p>
+      <div v-else-if="!isRecommendedLoading && recommendedArticles.length === 0" style="text-align: center; color: #aaa;">
+        Нет рекомендаций
+      </div>
     </div>
 
 
@@ -84,7 +90,7 @@ export default {
       recommendedArticles: [], // Рекомендованные статьи
       loadingRecommendations: true, // Флаг загрузки
       recommendationsError: false,  // Флаг ошибки
-
+      isRecommendedLoading: false,
     }
   },
   props : ['stateOfPage', "actualSemester", "workStatus", "supervisorMark"],
@@ -113,17 +119,25 @@ export default {
       await this.fillDataForTables(this.data)
     },
     async loadRecommendedArticles() {
-      this.loadingRecommendations = true; // Установить флаг загрузки
-      this.recommendationsError = false; // Сбросить ошибку
-
+      this.isRecommendedLoading = true;
+      this.recommendationsError = false;
       try {
-        const response = await axios.get(this.IP + '/supervisors/recommended-articles/' + localStorage.getItem("access_token"));
-        this.recommendedArticles = response.data; // Загрузка данных
+        const token = localStorage.getItem("access_token");
+        const url   = `${this.IP}/students/recommended-articles/${token}`;
+        const body  = {
+          student_id: localStorage.getItem("studentID") || "96c6cb02-2c0d-40e1-83f5-cde1c02223fd",
+          semester:   this.actualSemester
+        };
+        const resp = await axios.put(url, body, {
+          params: { top_n: 5 }
+        });
+        this.recommendedArticles = resp.data;
       } catch (e) {
-        console.error('Ошибка загрузки рекомендаций:', e);
-        this.recommendationsError = true; // Установить флаг ошибки
+        this.recommendationsError = true;
+        this.recommendedArticles = [];
+        console.error("Ошибка загрузки рекомендаций:", e);
       } finally {
-        this.loadingRecommendations = false; // Завершить загрузку
+        this.isRecommendedLoading = false;
       }
     },
     changeTabState(id){

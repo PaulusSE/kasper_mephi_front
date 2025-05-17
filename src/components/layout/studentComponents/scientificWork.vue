@@ -34,7 +34,7 @@
     ></header-of-student>
 
     <tab-of-articles v-for="(n, index) in this.actualSemester"
-                     v-if="isDataFetched"
+                     v-if="isMainDataFetched"
                      :id=index
                      :articles=this.arrayOfArticles[index]
                      :reports=this.arrayOfReports[index]
@@ -68,14 +68,26 @@
     ></tab-of-articles>
 
 
-    <div class="recommended-articles" v-if="recommendedArticles.length > 0">
+    <div class="recommended-articles">
       <h3>Рекомендованные статьи</h3>
-      <ul>
+      <div v-if="isRecommendedLoading" style="text-align: center; margin: 1em 0;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Загрузка...</span>
+        </div>
+      </div>
+      <ul v-else-if="recommendedArticles.length > 0">
         <li v-for="(article, index) in recommendedArticles" :key="index">
           <a :href="article.url" target="_blank">{{ article.title }}</a>
         </li>
       </ul>
+      <div v-else-if="recommendationsError" style="text-align: center; color: #ff3333;">
+        Ошибка загрузки рекомендаций
+      </div>
+      <div v-else style="text-align: center; color: #aaa;">
+        Нет рекомендаций
+      </div>
     </div>
+
 
     <!--    <div class="roundBlock">-->
     <!--      <div class="d-flex justify-content-between">-->
@@ -132,8 +144,11 @@ export default {
       arrayOfPatentsCopy: [],
       showEditError: false,
       recommendedArticles: [], // Массив для рекомендаций
-
+      isRecommendedLoading: false,
       isDataFetched: false,
+      isMainDataFetched: false,
+      isRecommendedLoading: false,
+      recommendationsError: false,
       resultOfSavingTables: false,
       showSavingTablesNotification: false,
       works_ids: new Map(),
@@ -226,13 +241,27 @@ export default {
 
     },
     async loadRecommendedArticles() {
-    try {
-      const response = await axios.get(this.IP + '/students/recommended-articles/' + localStorage.getItem("access_token"));
-      this.recommendedArticles = response.data; // Предполагается, что бэкенд возвращает массив объектов с `title` и `link`
-    } catch (e) {
-      console.log('Ошибка загрузки рекомендаций:', e);
-    }
-  },
+      this.isRecommendedLoading = true;
+      this.recommendationsError = false;
+      try {
+        const token = localStorage.getItem("access_token");
+        const url   = `${this.IP}/students/recommended-articles/${token}`;
+        const body  = {
+          student_id: localStorage.getItem("studentID") || "96c6cb02-2c0d-40e1-83f5-cde1c02223fd",
+          semester:   this.actualSemester
+        };
+        const resp = await axios.put(url, body, {
+          params: { top_n: 5 }
+        });
+        this.recommendedArticles = resp.data;
+      } catch (e) {
+        this.recommendationsError = true;
+        this.recommendedArticles = [];
+        console.error("Ошибка загрузки рекомендаций:", e);
+      } finally {
+        this.isRecommendedLoading = false;
+      }
+    },
 
     changeTabState(id){
 
@@ -583,6 +612,7 @@ export default {
     },
 
     async loadScientificWorks() {
+      this.isMainDataFetched = true;
       try {
         const response = await axios.get(this.IP + '/students/works/' + localStorage.getItem("access_token"))
         this.data = await response.data;
@@ -596,9 +626,8 @@ export default {
 
   },
   async beforeMount() {
-    await this.loadScientificWorks()
-    await this.loadRecommendedArticles()
-    this.isDataFetched = true
+    await this.loadScientificWorks();
+  this.loadRecommendedArticles();
   }
 }
 
